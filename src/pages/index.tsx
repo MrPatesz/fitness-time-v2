@@ -4,9 +4,11 @@ import Link from "next/link";
 import {signIn, signOut, useSession} from "next-auth/react";
 
 import {api} from "../utils/api";
+import {QueryComponent} from "../components/QueryComponent";
 
 const Home: NextPage = () => {
   const hello = api.example.hello.useQuery({text: "from tRPC"});
+  const allExamples = api.example.getAll.useQuery();
 
   return (
     <main className={styles.main}>
@@ -43,6 +45,9 @@ const Home: NextPage = () => {
             {hello.data ? hello.data.greeting : "Loading tRPC query..."}
           </p>
           <AuthShowcase/>
+          <QueryComponent resourceName={"Examples"} query={allExamples}>
+            {JSON.stringify(allExamples.data)}
+          </QueryComponent>
         </div>
       </div>
     </main>
