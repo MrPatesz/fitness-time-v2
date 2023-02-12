@@ -4,7 +4,7 @@ import {Button, Group, Text, Title} from "@mantine/core";
 import Link from "next/link";
 
 export const HeaderComponent: React.FunctionComponent<{
-  username: string | undefined;
+  username: string | undefined | null;
 }> = ({username}) => {
   return (
     <Group align="center" position="apart">

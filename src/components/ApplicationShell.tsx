@@ -49,7 +49,7 @@ export const ApplicationShell: React.FunctionComponent<{
       }
       header={
         <Header height={60} p="xs">
-          <HeaderComponent username={session?.user?.name ?? "Username"}/>
+          <HeaderComponent username={session?.user?.name}/>
         </Header>
       }
       styles={(theme) => ({
