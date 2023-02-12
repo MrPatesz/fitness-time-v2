@@ -1,30 +1,35 @@
-import {createTRPCRouter, protectedProcedure, publicProcedure} from "../trpc";
-import {EventSchema} from "../../../models/Event";
+import {createTRPCRouter, protectedProcedure} from "../trpc";
+import {CreateEventSchema} from "../../../models/Event";
 import {IdSchema} from "../../../models/Id";
 
 export const eventRouter = createTRPCRouter({
-  getAll: publicProcedure.query(() => {
+  getAll: protectedProcedure.query(() => {
   }),
-  getOwned: publicProcedure.query(() => {
+  getOwned: protectedProcedure.query(() => {
   }),
-  getFeed: publicProcedure.query(() => {
+  getFeed: protectedProcedure.query(() => {
   }),
-  getCalendar: publicProcedure.query(() => {
+  getCalendar: protectedProcedure.query(() => {
   }),
-  getById: publicProcedure.input(IdSchema).query(({input, ctx}) => {
-    // return ctx.prisma.event.findFirst({
-    //     where: {
-    //         id: input
-    //     }
-    // })
-  }),
+  getById: protectedProcedure
+    .input(IdSchema)
+    // .output(EventSchema)
+    .query(({input: _input, ctx: _ctx}) => {
+      // return ctx.prisma.event.findFirst({
+      //     where: {
+      //         id: input
+      //     }
+      // })
+    }),
 
-  create: publicProcedure
-    .input(EventSchema)
-    .mutation(({input}) => input),
+  create: protectedProcedure
+    .input(CreateEventSchema)
+    // .output(EventSchema)
+    .mutation(({input: _input}) => {
+    }),
   // participate: protectedProcedure.input().mutation(),
   // update: protectedProcedure.input().mutation(),
-  delete: protectedProcedure.input(IdSchema).mutation(({input, ctx}) => {
+  delete: protectedProcedure.input(IdSchema).mutation(({input: _input, ctx: _ctx}) => {
     // return ctx.prisma.event.delete({
     //     where: {
     //         id: input

@@ -61,6 +61,7 @@ export default function MyEventsPage() {
                 <td>{event.location.address}</td>
                 <td>{event.equipment}</td>
                 <td>{event.price && <>$ {event.price}</>}</td>
+                {/*TODO JavaScript formatter (refactor everywhere)*/}
                 <td>{event.limit}</td>
                 {/* <td>{event.recurring.toString()}</td> */}
                 <td>
