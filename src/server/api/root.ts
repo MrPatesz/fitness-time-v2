@@ -1,9 +1,8 @@
-import { createTRPCRouter } from "./trpc";
-import { exampleRouter } from "./routers/example";
+import {createTRPCRouter} from "./trpc";
+import {exampleRouter} from "./routers/example";
 import {eventRouter} from "./routers/event";
 import {userRouter} from "./routers/user";
 import {groupRouter} from "./routers/group";
-import {env} from "../../env.mjs";
 
 /**
  * This is the primary router for your server.

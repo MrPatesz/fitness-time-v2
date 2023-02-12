@@ -1,14 +1,14 @@
 import React from "react";
-import { GoogleMap, MarkerF, useJsApiLoader } from "@react-google-maps/api";
-import { Card, Loader } from "@mantine/core";
-import { googleMapsLibraries } from "./LocationPicker";
-import { Location } from "../models/Location";
+import {GoogleMap, MarkerF, useJsApiLoader} from "@react-google-maps/api";
+import {Card, Loader} from "@mantine/core";
+import {googleMapsLibraries} from "./LocationPicker";
+import {LocationType} from "../models/Location";
 import {env} from "../env.mjs";
 
 const MapComponent: React.FunctionComponent<{
-  locationDto: Location;
-}> = ({ locationDto }) => {
-  const { isLoaded, loadError } = useJsApiLoader({
+  locationDto: LocationType;
+}> = ({locationDto}) => {
+  const {isLoaded, loadError} = useJsApiLoader({
     googleMapsApiKey: `${env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`,
     libraries: googleMapsLibraries,
   });
@@ -31,10 +31,10 @@ const MapComponent: React.FunctionComponent<{
           center={location}
           zoom={17}
         >
-          <MarkerF title={locationDto.address} position={location} />
+          <MarkerF title={locationDto.address} position={location}/>
         </GoogleMap>
       ) : (
-        <Loader />
+        <Loader/>
       )}
     </>
   );

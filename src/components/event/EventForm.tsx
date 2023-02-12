@@ -1,16 +1,16 @@
-import { NumberInput, Stack, Textarea, TextInput } from "@mantine/core";
+import {NumberInput, Stack, Textarea, TextInput} from "@mantine/core";
 import React from "react";
-import {EventType} from "../../models/EventType";
-import { IntervalPicker } from "../IntervalPicker";
-import { LocationPicker } from "../LocationPicker";
+import {EventType} from "../../models/Event";
+import {IntervalPicker} from "../IntervalPicker";
+import {LocationPicker} from "../LocationPicker";
 
 export const EventForm: React.FunctionComponent<{
   event: EventType | undefined;
   setEvent: (newState: EventType) => void;
   submitButton: JSX.Element;
-}> = ({ event, setEvent, submitButton }) => {
+}> = ({event, setEvent, submitButton}) => {
   // TODO form: validation
-  if(!event) return <></>;
+  if (!event) return <></>;
 
   return (
     <Stack>
@@ -19,13 +19,13 @@ export const EventForm: React.FunctionComponent<{
         label="Name"
         placeholder="What is the event called?"
         value={event.name}
-        onChange={(e) => setEvent({ ...event, name: e.currentTarget.value })}
+        onChange={(e) => setEvent({...event, name: e.currentTarget.value})}
       />
       <IntervalPicker
         start={new Date(event.start)}
         end={new Date(event.end)}
         onChange={(newStart, newEnd) =>
-          setEvent({ ...event, start: newStart, end: newEnd })
+          setEvent({...event, start: newStart, end: newEnd})
         }
       />
       <LocationPicker
@@ -42,7 +42,7 @@ export const EventForm: React.FunctionComponent<{
         placeholder="What are the plans?"
         value={event.description ?? "" /*TODO not nullable?*/}
         onChange={(e) =>
-          setEvent({ ...event, description: e.currentTarget.value })
+          setEvent({...event, description: e.currentTarget.value})
         }
       />
       <TextInput
@@ -50,14 +50,14 @@ export const EventForm: React.FunctionComponent<{
         placeholder="Is any equipment needed?"
         value={event.equipment ?? ""}
         onChange={(e) =>
-          setEvent({ ...event, equipment: e.currentTarget.value })
+          setEvent({...event, equipment: e.currentTarget.value})
         }
       />
       <NumberInput
         label="Price"
         placeholder="Do participants need to pay for it?"
         value={event.price ?? undefined}
-        onChange={(newValue) => setEvent({ ...event, price: newValue ?? null })}
+        onChange={(newValue) => setEvent({...event, price: newValue ?? null})}
         min={1}
         parser={(value: string | undefined) =>
           value?.replace(/\$\s?|(,*)/g, "")
@@ -72,7 +72,7 @@ export const EventForm: React.FunctionComponent<{
         label="Limit"
         placeholder="Is there a maximum number of participants?"
         value={event.limit ?? undefined}
-        onChange={(newValue) => setEvent({ ...event, limit: newValue ?? null })}
+        onChange={(newValue) => setEvent({...event, limit: newValue ?? null})}
         min={1}
       />
       {/* <Checkbox

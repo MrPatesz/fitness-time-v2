@@ -1,11 +1,11 @@
-import { Badge, Button, Group, Card, Text, Stack } from "@mantine/core";
+import {Badge, Button, Card, Group, Stack, Text} from "@mantine/core";
 import Link from "next/link";
 import React from "react";
-import {EventType} from "../../models/EventType";
+import {EventType} from "../../models/Event";
 
 export const EventCard: React.FunctionComponent<{
   event: EventType;
-}> = ({ event }) => {
+}> = ({event}) => {
   return (
     <Card withBorder shadow="md" radius="md" p="lg">
       <Stack spacing="xs">

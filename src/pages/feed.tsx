@@ -1,10 +1,10 @@
-import { SimpleGrid, Stack } from "@mantine/core";
-import { useMediaQuery } from "@mantine/hooks";
-import React, { useState } from "react";
-import { EventCard } from "../components/event/EventCard";
-import { FilterEventsComponent } from "../components/event/FilterEventsComponent";
-import { QueryComponent } from "../components/QueryComponent";
-import {EventType} from "../models/EventType";
+import {SimpleGrid, Stack} from "@mantine/core";
+import {useMediaQuery} from "@mantine/hooks";
+import React, {useState} from "react";
+import {EventCard} from "../components/event/EventCard";
+import {FilterEventsComponent} from "../components/event/FilterEventsComponent";
+import {QueryComponent} from "../components/QueryComponent";
+import {EventType} from "../models/Event";
 
 export default function FeedPage() {
   return <>Feed Page</>;
@@ -28,7 +28,7 @@ export default function FeedPage() {
       <QueryComponent resourceName="Feed" query={eventsQuery}>
         <SimpleGrid cols={extraLarge ? 4 : large ? 3 : medium ? 2 : 1}>
           {filteredList.map((event) => (
-            <EventCard event={event} key={event.id} />
+            <EventCard event={event} key={event.id}/>
           ))}
         </SimpleGrid>
       </QueryComponent>

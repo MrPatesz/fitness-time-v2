@@ -1,24 +1,24 @@
-import { QueryComponent } from "../components/QueryComponent";
-import { useState } from "react";
-import { Affix, useMantineTheme } from "@mantine/core";
+import {QueryComponent} from "../components/QueryComponent";
+import {useState} from "react";
+import {Affix, useMantineTheme} from "@mantine/core";
 import dayjs from "dayjs";
-import { useRouter } from "next/router";
-import { CreateEventDialog } from "../components/event/CreateEventDialog";
+import {useRouter} from "next/router";
+import {CreateEventDialog} from "../components/event/CreateEventDialog";
 import dynamic from "next/dynamic";
-import { showNotification } from "@mantine/notifications";
-import {EventType} from "../models/EventType";
+import {showNotification} from "@mantine/notifications";
+import {EventType} from "../models/Event";
 
 const DayPilotNavigator: any = dynamic(
   () =>
     import("@daypilot/daypilot-lite-react").then(
       (mod) => mod.DayPilotNavigator
     ),
-  { ssr: false }
+  {ssr: false}
 );
 const DayPilotCalendar: any = dynamic(
   () =>
     import("@daypilot/daypilot-lite-react").then((mod) => mod.DayPilotCalendar),
-  { ssr: false }
+  {ssr: false}
 );
 
 export default function CalendarPage() {
@@ -124,7 +124,7 @@ export default function CalendarPage() {
           })}
         />
       </QueryComponent>
-      <Affix position={{ bottom: 0, left: -1 }}>
+      <Affix position={{bottom: 0, left: -1}}>
         <DayPilotNavigator
           theme={theme.colorScheme === "dark" ? "dark_navigator" : undefined}
           selectMode="week"

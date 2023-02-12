@@ -1,6 +1,6 @@
-import { Button, TextInput, Stack, Title } from "@mantine/core";
-import React, { useEffect, useState } from "react";
-import { QueryComponent } from "../components/QueryComponent";
+import {Button, Stack, TextInput, Title} from "@mantine/core";
+import React, {useEffect, useState} from "react";
+import {QueryComponent} from "../components/QueryComponent";
 
 export default function ProfilePage() {
   return <>Profile Page</>;

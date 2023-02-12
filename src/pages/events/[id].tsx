@@ -1,21 +1,12 @@
-import {
-  Affix,
-  ActionIcon,
-  Stack,
-  Button,
-  Group,
-  Text,
-  Card,
-  Badge,
-} from "@mantine/core";
-import { useSession } from "next-auth/react";
+import {ActionIcon, Affix, Badge, Button, Card, Group, Stack, Text,} from "@mantine/core";
+import {useSession} from "next-auth/react";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import React, { useState } from "react";
-import { EditEventDialog } from "../../components/event/EditEventDialog";
-import { QueryComponent } from "../../components/QueryComponent";
+import {useRouter} from "next/router";
+import React, {useState} from "react";
+import {EditEventDialog} from "../../components/event/EditEventDialog";
+import {QueryComponent} from "../../components/QueryComponent";
 import MapComponent from "../../components/MapComponent";
-import { getIntervalString } from "../../utils/utilFunctions";
+import {getIntervalString} from "../../utils/utilFunctions";
 import {User} from "../../models/User";
 import {Pencil} from "tabler-icons-react";
 
@@ -24,8 +15,8 @@ export default function EventDetailsPage() {
 
   const [openEdit, setOpenEdit] = useState(false);
 
-  const { data: session } = useSession();
-  const {query: { id }} = useRouter();
+  const {data: session} = useSession();
+  const {query: {id}} = useRouter();
 
   // const eventService = EventService();
   const eventService: any = undefined;
@@ -89,9 +80,9 @@ export default function EventDetailsPage() {
                     href={"/users/[id]"}
                     as={`/users/${eventQuery.data.owner?.id}`}
                     passHref
-                    style={{ textDecoration: "none" }}
+                    style={{textDecoration: "none"}}
                   >
-                    <Text size="lg" sx={{ cursor: "pointer" }}>
+                    <Text size="lg" sx={{cursor: "pointer"}}>
                       by {eventQuery.data.owner?.username}
                     </Text>
                   </Link>
@@ -119,7 +110,7 @@ export default function EventDetailsPage() {
                   <Text>Price: $ {eventQuery.data.price}</Text>
                 )}
               </Stack>
-              <MapComponent locationDto={eventQuery.data.location} />
+              <MapComponent locationDto={eventQuery.data.location}/>
             </Group>
             <Card withBorder shadow="md" radius="md" p="lg">
               {eventQuery.data.participants.length ? (
@@ -138,9 +129,9 @@ export default function EventDetailsPage() {
                         href={"/users/[id]"}
                         as={`/users/${p.id}`}
                         passHref
-                        style={{ textDecoration: "none" }}
+                        style={{textDecoration: "none"}}
                       >
-                        <Text sx={{ cursor: "pointer" }}>
+                        <Text sx={{cursor: "pointer"}}>
                           {p.username}
                           {index !==
                             eventQuery.data.participants.length - 1 && <>,</>}
@@ -169,13 +160,13 @@ export default function EventDetailsPage() {
             onClose={() => setOpenEdit(false)}
             eventId={parseInt(`${id?.toString()}`)}
           />
-          <Affix position={{ bottom: 20, right: 20 }}>
+          <Affix position={{bottom: 20, right: 20}}>
             <ActionIcon
               variant="filled"
               size="xl"
               onClick={() => setOpenEdit(true)}
             >
-              <Pencil />
+              <Pencil/>
             </ActionIcon>
           </Affix>
         </>

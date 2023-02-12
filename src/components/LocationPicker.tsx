@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { Autocomplete, useJsApiLoader } from "@react-google-maps/api";
-import { Card, Loader, TextInput } from "@mantine/core";
+import React, {useState} from "react";
+import {Autocomplete, useJsApiLoader} from "@react-google-maps/api";
+import {Card, Loader, TextInput} from "@mantine/core";
 import {env} from "../env.mjs";
-import { Location } from "../models/Location";
+import {LocationType} from "../models/Location";
 
 export const googleMapsLibraries: (
   | "places"
@@ -10,13 +10,13 @@ export const googleMapsLibraries: (
   | "geometry"
   | "localContext"
   | "visualization"
-)[] = ["places"];
+  )[] = ["places"];
 
 export const LocationPicker: React.FunctionComponent<{
   defaultLocation: string;
-  setLocation: (location: Location) => void;
-}> = ({ defaultLocation, setLocation }) => {
-  const { isLoaded, loadError } = useJsApiLoader({
+  setLocation: (location: LocationType) => void;
+}> = ({defaultLocation, setLocation}) => {
+  const {isLoaded, loadError} = useJsApiLoader({
     googleMapsApiKey: `${env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`,
     libraries: googleMapsLibraries,
   });
@@ -52,7 +52,7 @@ export const LocationPicker: React.FunctionComponent<{
           />
         </Autocomplete>
       ) : (
-        <Loader />
+        <Loader/>
       )}
     </>
   );

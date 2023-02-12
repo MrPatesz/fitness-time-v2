@@ -1,7 +1,7 @@
-import { Group } from "@mantine/core";
-import { DatePicker, TimeInput } from "@mantine/dates";
+import {Group} from "@mantine/core";
+import {DatePicker, TimeInput} from "@mantine/dates";
 import dayjs from "dayjs";
-import React, { useEffect } from "react";
+import React, {useEffect} from "react";
 
 const calculateDateTime = (date: Date, time: Date): Date => {
   const hour = dayjs(time).hour();
@@ -19,7 +19,7 @@ export const IntervalPicker: React.FunctionComponent<{
   start: Date;
   end: Date;
   onChange: (newStart: Date, newEnd: Date) => void;
-}> = ({ start, end, onChange }) => {
+}> = ({start, end, onChange}) => {
   useEffect(() => {
     onChange(calculateDateTime(start, start), calculateDateTime(end, end));
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -29,7 +29,7 @@ export const IntervalPicker: React.FunctionComponent<{
     <Group spacing="xs">
       <DatePicker
         withAsterisk
-        sx={{ width: "229px" }}
+        sx={{width: "229px"}}
         label="On"
         value={start}
         onChange={(newDate) => {

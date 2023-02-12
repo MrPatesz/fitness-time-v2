@@ -1,13 +1,7 @@
-import {
-  ActionIcon,
-  Group,
-  MultiSelect,
-  Select,
-  TextInput,
-} from "@mantine/core";
-import { useLocalStorage } from "@mantine/hooks";
-import React, { useEffect, useState } from "react";
-import {EventType} from "../../models/EventType";
+import {ActionIcon, Group, MultiSelect, Select, TextInput,} from "@mantine/core";
+import {useLocalStorage} from "@mantine/hooks";
+import React, {useEffect, useState} from "react";
+import {EventType} from "../../models/Event";
 import {ArrowDown, ArrowUp, Search} from "tabler-icons-react";
 
 enum OrderBy {
@@ -18,10 +12,10 @@ enum OrderBy {
 }
 
 const orderByValues = [
-  { value: OrderBy[OrderBy.NAME] ?? "", label: "Name" },
-  { value: OrderBy[OrderBy.DATE] ?? "", label: "Date" },
-  { value: OrderBy[OrderBy.LOCATION] ?? "", label: "Location" },
-  { value: OrderBy[OrderBy.PRICE] ?? "", label: "Price" },
+  {value: OrderBy[OrderBy.NAME] ?? "", label: "Name"},
+  {value: OrderBy[OrderBy.DATE] ?? "", label: "Date"},
+  {value: OrderBy[OrderBy.LOCATION] ?? "", label: "Location"},
+  {value: OrderBy[OrderBy.PRICE] ?? "", label: "Price"},
 ];
 
 enum FilterBy {
@@ -31,16 +25,16 @@ enum FilterBy {
 }
 
 const filterValues = [
-  { value: FilterBy[FilterBy.FREE] ?? "", label: "Free" },
-  { value: FilterBy[FilterBy.NO_EQUIPMENT] ?? "", label: "No Equipment" },
-  { value: FilterBy[FilterBy.LIMITED] ?? "", label: "Limited" },
+  {value: FilterBy[FilterBy.FREE] ?? "", label: "Free"},
+  {value: FilterBy[FilterBy.NO_EQUIPMENT] ?? "", label: "No Equipment"},
+  {value: FilterBy[FilterBy.LIMITED] ?? "", label: "Limited"},
 ];
 
 export const FilterEventsComponent: React.FunctionComponent<{
   filterKey: string;
   events: EventType[];
   setFilteredEvents: (filteredList: EventType[]) => void;
-}> = ({ filterKey, events, setFilteredEvents }) => {
+}> = ({filterKey, events, setFilteredEvents}) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [tags, setTags] = useLocalStorage<string[]>({
     key: filterKey,
@@ -97,14 +91,14 @@ export const FilterEventsComponent: React.FunctionComponent<{
   return (
     <Group align="end" position="apart">
       <TextInput
-        sx={{ width: "300px" }}
+        sx={{width: "300px"}}
         label="Search by Name"
         value={searchTerm}
         onChange={(event) => setSearchTerm(event.currentTarget.value)}
-        icon={<Search />}
+        icon={<Search/>}
       />
       <MultiSelect
-        sx={{ minWidth: "300px", maxWidth: "320px" }}
+        sx={{minWidth: "300px", maxWidth: "320px"}}
         data={filterValues}
         label="Filter by Attributes"
         value={tags}
@@ -113,10 +107,10 @@ export const FilterEventsComponent: React.FunctionComponent<{
       <Select
         rightSection={
           <ActionIcon onClick={() => setAscending(!ascending)}>
-            {ascending ? <ArrowUp /> : <ArrowDown />}
+            {ascending ? <ArrowUp/> : <ArrowDown/>}
           </ActionIcon>
         }
-        sx={{ width: "300px" }}
+        sx={{width: "300px"}}
         data={orderByValues}
         label="Order by"
         value={orderBy}

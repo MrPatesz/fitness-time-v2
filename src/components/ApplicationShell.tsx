@@ -1,17 +1,17 @@
-import { AppShell, Header, Navbar, NavLink } from "@mantine/core";
-import { useSession } from "next-auth/react";
+import {AppShell, Header, Navbar, NavLink} from "@mantine/core";
+import {useSession} from "next-auth/react";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { HeaderComponent } from "./HeaderComponent";
+import {useRouter} from "next/router";
+import {HeaderComponent} from "./HeaderComponent";
 import {Adjustments, CalendarEvent, News, Users} from "tabler-icons-react";
 
 export const ApplicationShell: React.FunctionComponent<{
   children: JSX.Element;
-}> = ({ children }) => {
+}> = ({children}) => {
   const welcomeRoute = "/welcome";
 
   const router = useRouter();
-  const { data: session } = useSession({
+  const {data: session} = useSession({
     required: true,
     onUnauthenticated() {
       if (router.route !== welcomeRoute) {
@@ -24,23 +24,23 @@ export const ApplicationShell: React.FunctionComponent<{
     <AppShell
       hidden={!session}
       navbar={
-        <Navbar width={{ base: 211 }} p="xs">
+        <Navbar width={{base: 211}} p="xs">
           {[
-            { label: "Calendar", route: "/calendar", icon: CalendarEvent },
-            { label: "Feed", route: "/feed", icon: News },
-            { label: "My Events", route: "/my-events", icon: Adjustments },
-            { label: "Users", route: "/users", icon: Users },
+            {label: "Calendar", route: "/calendar", icon: CalendarEvent},
+            {label: "Feed", route: "/feed", icon: News},
+            {label: "My Events", route: "/my-events", icon: Adjustments},
+            {label: "Users", route: "/users", icon: Users},
           ].map((link) => (
             <Link
               href={link.route}
               as={link.route}
               passHref
               key={link.label}
-              style={{ textDecoration: "none" }}
+              style={{textDecoration: "none"}}
             >
               <NavLink
                 label={link.label}
-                icon={<link.icon size={16} />}
+                icon={<link.icon size={16}/>}
                 active={router.route.includes(link.route)}
               />
             </Link>
@@ -49,7 +49,7 @@ export const ApplicationShell: React.FunctionComponent<{
       }
       header={
         <Header height={60} p="xs">
-          <HeaderComponent username={session?.user?.name ?? "Username"} />
+          <HeaderComponent username={session?.user?.name ?? "Username"}/>
         </Header>
       }
       styles={(theme) => ({

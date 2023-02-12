@@ -1,11 +1,11 @@
 import React from "react";
-import { signOut } from "next-auth/react";
-import { Button, Group, Title, Text } from "@mantine/core";
+import {signOut} from "next-auth/react";
+import {Button, Group, Text, Title} from "@mantine/core";
 import Link from "next/link";
 
 export const HeaderComponent: React.FunctionComponent<{
   username: string | undefined;
-}> = ({ username }) => {
+}> = ({username}) => {
   return (
     <Group align="center" position="apart">
       <Title order={2}>Fitness Time</Title>
@@ -15,15 +15,15 @@ export const HeaderComponent: React.FunctionComponent<{
           href="/profile"
           as="/profile"
           passHref
-          style={{ textDecoration: "none" }}
+          style={{textDecoration: "none"}}
         >
-          <Text sx={{ cursor: "pointer" }} size="lg" weight="bold">
+          <Text sx={{cursor: "pointer"}} size="lg" weight="bold">
             {username}
           </Text>
         </Link>
         <Button
           variant="light"
-          onClick={() => signOut({ callbackUrl: "/welcome" })}
+          onClick={() => signOut({callbackUrl: "/welcome"})}
         >
           Logout
         </Button>

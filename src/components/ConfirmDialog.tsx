@@ -1,4 +1,4 @@
-import { Button, Group, Modal } from "@mantine/core";
+import {Button, Group, Modal} from "@mantine/core";
 import React from "react";
 
 export const ConfirmDialog: React.FunctionComponent<{
@@ -6,7 +6,7 @@ export const ConfirmDialog: React.FunctionComponent<{
   onClose: () => void;
   onConfirm: () => void;
   title: string;
-}> = ({ title, open, onClose, onConfirm }) => {
+}> = ({title, open, onClose, onConfirm}) => {
   return (
     <Modal
       opened={open}
