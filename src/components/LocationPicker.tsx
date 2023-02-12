@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import {FunctionComponent, useState} from "react";
 import {Autocomplete, useJsApiLoader} from "@react-google-maps/api";
 import {Card, Loader, TextInput} from "@mantine/core";
 import {env} from "../env.mjs";
@@ -12,7 +12,7 @@ export const googleMapsLibraries: (
   | "visualization"
   )[] = ["places"];
 
-export const LocationPicker: React.FunctionComponent<{
+export const LocationPicker: FunctionComponent<{
   defaultLocation: string;
   setLocation: (location: LocationType) => void;
 }> = ({defaultLocation, setLocation}) => {

@@ -1,8 +1,8 @@
 import {Card, Loader} from "@mantine/core";
 import {UseTRPCQueryResult} from "@trpc/react-query/shared";
-import React, {useEffect} from "react";
+import {FunctionComponent, useEffect} from "react";
 
-export const QueryComponent: React.FunctionComponent<{
+export const QueryComponent: FunctionComponent<{
   resourceName: string;
   query: UseTRPCQueryResult<any, any>;
   children: JSX.Element | JSX.Element[] | string | undefined;

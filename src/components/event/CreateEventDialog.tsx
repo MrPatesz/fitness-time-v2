@@ -1,9 +1,9 @@
 import {Button, Modal} from "@mantine/core";
-import React, {useEffect, useState} from "react";
+import {FunctionComponent, useEffect, useState} from "react";
 import {EventType} from "../../models/Event";
 import {EventForm} from "./EventForm";
 
-export const CreateEventDialog: React.FunctionComponent<{
+export const CreateEventDialog: FunctionComponent<{
   open: boolean;
   onClose: () => void;
   defaultStart?: Date;

@@ -4,8 +4,9 @@ import Link from "next/link";
 import {useRouter} from "next/router";
 import {HeaderComponent} from "./HeaderComponent";
 import {Adjustments, CalendarEvent, News, Users} from "tabler-icons-react";
+import {FunctionComponent} from "react";
 
-export const ApplicationShell: React.FunctionComponent<{
+export const ApplicationShell: FunctionComponent<{
   children: JSX.Element;
 }> = ({children}) => {
   const welcomeRoute = "/welcome";
@@ -36,7 +37,6 @@ export const ApplicationShell: React.FunctionComponent<{
               as={link.route}
               passHref
               key={link.label}
-              style={{textDecoration: "none"}}
             >
               <NavLink
                 label={link.label}

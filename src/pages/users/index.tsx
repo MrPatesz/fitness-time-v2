@@ -56,11 +56,10 @@ export default function UsersPage() {
         <Stack>
           {filteredList.map((user: User) => (
             <Link
-              key={user.id}
               href={"/users/[id]"}
               as={`/users/${user.id}`}
               passHref
-              style={{textDecoration: "none"}}
+              key={user.id}
             >
               <Card withBorder>
                 <Text sx={{cursor: "pointer"}}>{user.username}</Text>

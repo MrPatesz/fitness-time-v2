@@ -1,6 +1,6 @@
 import {ActionIcon, Group, MultiSelect, Select, TextInput,} from "@mantine/core";
 import {useLocalStorage} from "@mantine/hooks";
-import React, {useEffect, useState} from "react";
+import {FunctionComponent, useEffect, useState} from "react";
 import {EventType} from "../../models/Event";
 import {ArrowDown, ArrowUp, Search} from "tabler-icons-react";
 
@@ -30,7 +30,7 @@ const filterValues = [
   {value: FilterBy[FilterBy.LIMITED] ?? "", label: "Limited"},
 ];
 
-export const FilterEventsComponent: React.FunctionComponent<{
+export const FilterEventsComponent: FunctionComponent<{
   filterKey: string;
   events: EventType[];
   setFilteredEvents: (filteredList: EventType[]) => void;

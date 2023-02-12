@@ -1,23 +1,20 @@
-import React from "react";
+import {FunctionComponent} from "react";
 import {signOut} from "next-auth/react";
 import {Button, Group, Text, Title} from "@mantine/core";
 import Link from "next/link";
 
-export const HeaderComponent: React.FunctionComponent<{
+export const HeaderComponent: FunctionComponent<{
   username: string | undefined | null;
 }> = ({username}) => {
   return (
     <Group align="center" position="apart">
-      <Title order={2}>Fitness Time</Title>
+      <Link href="/" as="/" passHref>
+        <Title order={2}>Fitness Time</Title>
+      </Link>
 
       <Group>
-        <Link
-          href="/profile"
-          as="/profile"
-          passHref
-          style={{textDecoration: "none"}}
-        >
-          <Text sx={{cursor: "pointer"}} size="lg" weight="bold">
+        <Link href="/profile" as="/profile" passHref>
+          <Text size="lg" weight="bold">
             {username}
           </Text>
         </Link>

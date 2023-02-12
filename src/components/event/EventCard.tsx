@@ -1,9 +1,9 @@
 import {Badge, Button, Card, Group, Stack, Text} from "@mantine/core";
 import Link from "next/link";
-import React from "react";
+import {FunctionComponent} from "react";
 import {EventType} from "../../models/Event";
 
-export const EventCard: React.FunctionComponent<{
+export const EventCard: FunctionComponent<{
   event: EventType;
 }> = ({event}) => {
   return (

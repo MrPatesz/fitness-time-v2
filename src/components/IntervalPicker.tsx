@@ -1,7 +1,7 @@
 import {Group} from "@mantine/core";
 import {DatePicker, TimeInput} from "@mantine/dates";
 import dayjs from "dayjs";
-import React, {useEffect} from "react";
+import {FunctionComponent, useEffect} from "react";
 
 const calculateDateTime = (date: Date, time: Date): Date => {
   const hour = dayjs(time).hour();
@@ -15,7 +15,7 @@ const calculateDateTime = (date: Date, time: Date): Date => {
   return dateAndTime.toDate();
 };
 
-export const IntervalPicker: React.FunctionComponent<{
+export const IntervalPicker: FunctionComponent<{
   start: Date;
   end: Date;
   onChange: (newStart: Date, newEnd: Date) => void;

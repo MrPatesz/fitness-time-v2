@@ -1,10 +1,10 @@
 import {NumberInput, Stack, Textarea, TextInput} from "@mantine/core";
-import React from "react";
+import {FunctionComponent} from "react";
 import {EventType} from "../../models/Event";
 import {IntervalPicker} from "../IntervalPicker";
 import {LocationPicker} from "../LocationPicker";
 
-export const EventForm: React.FunctionComponent<{
+export const EventForm: FunctionComponent<{
   event: EventType | undefined;
   setEvent: (newState: EventType) => void;
   submitButton: JSX.Element;

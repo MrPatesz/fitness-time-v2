@@ -1,10 +1,10 @@
 import {Button, Modal} from "@mantine/core";
-import React, {useState} from "react";
+import {FunctionComponent, useState} from "react";
 import {EventType} from "../../models/Event";
 import {QueryComponent} from "../QueryComponent";
 import {EventForm} from "./EventForm";
 
-export const EditEventDialog: React.FunctionComponent<{
+export const EditEventDialog: FunctionComponent<{
   open: boolean;
   onClose: () => void;
   eventId: number;

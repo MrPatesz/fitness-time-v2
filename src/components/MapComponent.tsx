@@ -1,11 +1,11 @@
-import React from "react";
+import {FunctionComponent, memo} from "react";
 import {GoogleMap, MarkerF, useJsApiLoader} from "@react-google-maps/api";
 import {Card, Loader} from "@mantine/core";
 import {googleMapsLibraries} from "./LocationPicker";
 import {LocationType} from "../models/Location";
 import {env} from "../env.mjs";
 
-const MapComponent: React.FunctionComponent<{
+const MapComponent: FunctionComponent<{
   locationDto: LocationType;
 }> = ({locationDto}) => {
   const {isLoaded, loadError} = useJsApiLoader({
@@ -40,4 +40,4 @@ const MapComponent: React.FunctionComponent<{
   );
 };
 
-export default React.memo(MapComponent);
+export default memo(MapComponent);

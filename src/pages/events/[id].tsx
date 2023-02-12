@@ -80,7 +80,6 @@ export default function EventDetailsPage() {
                     href={"/users/[id]"}
                     as={`/users/${eventQuery.data.owner?.id}`}
                     passHref
-                    style={{textDecoration: "none"}}
                   >
                     <Text size="lg" sx={{cursor: "pointer"}}>
                       by {eventQuery.data.owner?.username}
@@ -125,11 +124,10 @@ export default function EventDetailsPage() {
                   <Group spacing="xs">
                     {eventQuery.data.participants.map((p: User, index: number) => (
                       <Link
-                        key={p.id}
                         href={"/users/[id]"}
                         as={`/users/${p.id}`}
                         passHref
-                        style={{textDecoration: "none"}}
+                        key={p.id}
                       >
                         <Text sx={{cursor: "pointer"}}>
                           {p.username}
