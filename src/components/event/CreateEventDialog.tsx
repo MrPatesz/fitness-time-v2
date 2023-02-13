@@ -1,7 +1,18 @@
 import {Button, Modal} from "@mantine/core";
 import {FunctionComponent, useEffect, useState} from "react";
-import {EventType} from "../../models/Event";
+import {CreateEventType} from "../../models/Event";
 import {EventForm} from "./EventForm";
+import {api} from "../../utils/api";
+
+const defaultCreateEvent = {
+  name: "",
+  start: new Date(),
+  end: new Date(),
+  description: null,
+  equipment: null,
+  limit: null,
+  price: null,
+};
 
 export const CreateEventDialog: FunctionComponent<{
   open: boolean;
@@ -9,12 +20,16 @@ export const CreateEventDialog: FunctionComponent<{
   defaultStart?: Date;
   defaultEnd?: Date;
 }> = ({open, onClose, defaultStart, defaultEnd}) => {
-  return <>Create Event Dialog</>;
+  const [event, setEvent] = useState<CreateEventType>(defaultCreateEvent);
+  // const utils = trpc.useContext(); TODO useContext to invalidate
 
-  const [event, setEvent] = useState<EventType | undefined>(undefined);
-
-  const eventService: any = undefined; // EventService();
-  const useCreate = eventService.useCreate();
+  const useCreate = api.event.create.useMutation(// {
+    //   onSuccess: () => {
+    //   utils.event.getCalendar.invalidate();
+    //   utils.event.getAllCreated.invalidate();
+    //   }
+    // }
+  );
 
   useEffect(() => {
     if (event && defaultStart && defaultEnd) {
@@ -35,12 +50,14 @@ export const CreateEventDialog: FunctionComponent<{
         setEvent={setEvent}
         submitButton={
           <Button
-            disabled={!event?.name || !event?.location.address}
+            disabled={!event?.name} // || !event?.location.address}
             onClick={() => {
-              useCreate.mutateAsync(event).then(() => {
-                onClose();
-                setEvent(undefined);
-              });
+              if (event) {
+                useCreate.mutateAsync(event).then(() => {
+                  onClose();
+                  setEvent(defaultCreateEvent);
+                });
+              }
             }}
           >
             Create

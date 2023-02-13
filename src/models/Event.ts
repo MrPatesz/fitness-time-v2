@@ -16,9 +16,9 @@ export const CreateEventSchema = z.object({
 
 export const EventSchema = CreateEventSchema.merge(z.object({
   id: IdSchema,
-  ownedByCaller: z.boolean(),
-  ownerId: z.number(),
-  owner: UserSchema,
+  // ownedByCaller: z.boolean(),
+  creatorId: z.string(),
+  creator: UserSchema,
   participants: z.lazy(() => UserSchema.array()),
 }));
 

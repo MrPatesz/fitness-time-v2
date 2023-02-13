@@ -70,10 +70,10 @@ export const FilterEventsComponent: FunctionComponent<{
               result = new Date(a.start).getTime() - new Date(b.start).getTime();
               break;
             }
-            case OrderBy[OrderBy.LOCATION]: {
-              result = a.location.address.localeCompare(b.location.address);
-              break;
-            }
+            // case OrderBy[OrderBy.LOCATION]: {
+            //   result = a.location.address.localeCompare(b.location.address);
+            //   break;
+            // }
             case OrderBy[OrderBy.PRICE]: {
               result = (a.price ?? 0) - (b.price ?? 0);
               break;

@@ -5,7 +5,7 @@ import {FunctionComponent, useEffect} from "react";
 export const QueryComponent: FunctionComponent<{
   resourceName: string;
   query: UseTRPCQueryResult<any, any>;
-  children: JSX.Element | JSX.Element[] | string | undefined;
+  children: JSX.Element | JSX.Element[] | string | undefined | null;
   setState?: (newState: any) => void;
 }> = ({resourceName, query, children, setState}) => {
   useEffect(() => {

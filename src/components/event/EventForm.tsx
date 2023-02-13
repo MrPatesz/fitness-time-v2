@@ -1,12 +1,11 @@
 import {NumberInput, Stack, Textarea, TextInput} from "@mantine/core";
 import {FunctionComponent} from "react";
-import {EventType} from "../../models/Event";
+import {CreateEventType} from "../../models/Event";
 import {IntervalPicker} from "../IntervalPicker";
-import {LocationPicker} from "../LocationPicker";
 
 export const EventForm: FunctionComponent<{
-  event: EventType | undefined;
-  setEvent: (newState: EventType) => void;
+  event: CreateEventType | undefined;
+  setEvent: (newState: CreateEventType) => void;
   submitButton: JSX.Element;
 }> = ({event, setEvent, submitButton}) => {
   // TODO form: validation
@@ -28,7 +27,7 @@ export const EventForm: FunctionComponent<{
           setEvent({...event, start: newStart, end: newEnd})
         }
       />
-      <LocationPicker
+      {/*<LocationPicker
         defaultLocation={event.location.address}
         setLocation={(newLocation) =>
           setEvent({
@@ -36,7 +35,7 @@ export const EventForm: FunctionComponent<{
             location: newLocation,
           })
         }
-      />
+      />*/}
       <Textarea
         label="Description"
         placeholder="What are the plans?"

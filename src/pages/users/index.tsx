@@ -4,15 +4,13 @@ import React, {useMemo, useState} from "react";
 import {QueryComponent} from "../../components/QueryComponent";
 import {UserType} from "../../models/User";
 import {ArrowDown, ArrowUp, Search} from "tabler-icons-react";
+import {api} from "../../utils/api";
 
 export default function UsersPage() {
-  return <>Users Page</>;
-
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [ascending, setAscending] = useState<boolean>(true);
 
-  const userService: any = undefined; // UserService();
-  const usersQuery = userService.useGetAll();
+  const usersQuery = api.user.getAll.useQuery();
 
   const filteredList = useMemo(() => {
     if (!usersQuery.data) return [];

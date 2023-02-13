@@ -7,6 +7,7 @@ import {CreateEventDialog} from "../components/event/CreateEventDialog";
 import dynamic from "next/dynamic";
 import {showNotification} from "@mantine/notifications";
 import {EventType} from "../models/Event";
+import {api} from "../utils/api";
 
 const DayPilotNavigator: any = dynamic(
   () =>
@@ -22,16 +23,13 @@ const DayPilotCalendar: any = dynamic(
 );
 
 export default function CalendarPage() {
-  return <>Calendar Page</>;
-
   const [startDate, setStartDate] = useState(new Date());
   const [openCreate, setOpenCreate] = useState(false);
   const [defaultStart, setDefaultStart] = useState(new Date());
   const [defaultEnd, setDefaultEnd] = useState(new Date());
 
-  const eventService: any = undefined; // EventService();
-  const eventsQuery = eventService.useGetCalendar();
-  const updateEvent = eventService.useUpdate();
+  const eventsQuery = api.event.getCalendar.useQuery();
+  const updateEvent = api.event.update.useMutation();
   const theme = useMantineTheme();
   const router = useRouter();
 
@@ -82,7 +80,7 @@ export default function CalendarPage() {
             ctrl: boolean;
             shift: boolean;
           }) => {
-            if (event.e.data.resource.ownedByCaller) {
+            if (event.e.data.resource.ownedByCaller) { // TODO
               updateEvent.mutate({
                 ...event.e.data.resource,
                 from: new Date(event.newStart.value),
@@ -115,9 +113,9 @@ export default function CalendarPage() {
               text: event.name,
               start,
               end,
-              backColor: event.ownedByCaller
-                ? theme.colors.violet[8]
-                : theme.colors.blue[8],
+              backColor: // event.ownedByCaller ?
+                theme.colors.violet[8],
+              // : theme.colors.blue[8],
               fontColor: "white",
               resource: event,
             };

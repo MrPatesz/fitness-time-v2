@@ -5,18 +5,15 @@ import {EventCard} from "../components/event/EventCard";
 import {FilterEventsComponent} from "../components/event/FilterEventsComponent";
 import {QueryComponent} from "../components/QueryComponent";
 import {EventType} from "../models/Event";
+import {api} from "../utils/api";
 
 export default function FeedPage() {
-  return <>Feed Page</>;
-
   const [filteredList, setFilteredList] = useState<EventType[]>([]);
+  const eventsQuery = api.event.getFeed.useQuery();
 
   const medium = useMediaQuery("(min-width: 600px)");
   const large = useMediaQuery("(min-width: 950px)");
   const extraLarge = useMediaQuery("(min-width: 1300px)");
-
-  const eventService: any = undefined; // EventService();
-  const eventsQuery = eventService.useGetFeed();
 
   return (
     <Stack>

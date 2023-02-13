@@ -8,8 +8,11 @@ const CreateGroupSchema = z.object({
 
 const GroupSchema = CreateGroupSchema.merge(z.object({
   id: IdSchema,
-  ownerId: z.number(),
-  owner: UserSchema,
+  creatorId: z.number(),
+  creator: UserSchema,
+  members: UserSchema.array(),
+  // events
+  // posts
 }));
 
 export type CreateGroupType = z.infer<typeof CreateGroupSchema>;
