@@ -2,7 +2,6 @@ import {ActionIcon, Card, Group, Stack, Text, TextInput} from "@mantine/core";
 import Link from "next/link";
 import React, {useMemo, useState} from "react";
 import {QueryComponent} from "../../components/QueryComponent";
-import {UserType} from "../../models/User";
 import {ArrowDown, ArrowUp, Search} from "tabler-icons-react";
 import {api} from "../../utils/api";
 
@@ -16,10 +15,10 @@ export default function UsersPage() {
     if (!usersQuery.data) return [];
 
     return usersQuery.data
-      ?.filter((a: UserType) =>
+      ?.filter((a) =>
         a.name.toLowerCase().includes(searchTerm.toLowerCase())
       )
-      ?.sort((a: UserType, b: UserType) => {
+      ?.sort((a, b) => {
         let result = a.name.localeCompare(b.name);
         if (!ascending) {
           result *= -1;
@@ -52,7 +51,7 @@ export default function UsersPage() {
       </Group>
       <QueryComponent resourceName={"Users"} query={usersQuery}>
         <Stack>
-          {filteredList.map((user: UserType) => (
+          {filteredList.map((user) => (
             <Link
               href={"/users/[id]"}
               as={`/users/${user.id}`}

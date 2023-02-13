@@ -6,7 +6,6 @@ import {useRouter} from "next/router";
 import {CreateEventDialog} from "../components/event/CreateEventDialog";
 import dynamic from "next/dynamic";
 import {showNotification} from "@mantine/notifications";
-import {EventType} from "../models/Event";
 import {api} from "../utils/api";
 
 const DayPilotNavigator: any = dynamic(
@@ -99,7 +98,7 @@ export default function CalendarPage() {
           businessEndsHour={17}
           startDate={startDate}
           onEventClick={(e: any) => router.replace(`events/${e.e.data.id}`)}
-          events={eventsQuery.data?.map((event: EventType) => {
+          events={eventsQuery.data?.map((event) => {
             const offsetInHours =
               (new Date(event.start).getTimezoneOffset() / 60) * -1;
             const start = dayjs(event.start)

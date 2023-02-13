@@ -1,59 +1,52 @@
-import {ActionIcon, Affix, Badge, Button, Card, Group, Stack, Text,} from "@mantine/core";
+import {Badge, Card, Group, Stack, Text,} from "@mantine/core";
 import {useSession} from "next-auth/react";
 import Link from "next/link";
 import {useRouter} from "next/router";
 import React, {useState} from "react";
-import {EditEventDialog} from "../../components/event/EditEventDialog";
 import {QueryComponent} from "../../components/QueryComponent";
-import MapComponent from "../../components/MapComponent";
 import {getIntervalString} from "../../utils/utilFunctions";
-import {UserType} from "../../models/User";
-import {Pencil} from "tabler-icons-react";
+import {api} from "../../utils/api";
 
 export default function EventDetailsPage() {
-  return <>Event Details</>;
-
   const [openEdit, setOpenEdit] = useState(false);
 
   const {data: session} = useSession();
   const {query: {id}} = useRouter();
 
-  // const eventService = EventService();
-  const eventService: any = undefined;
-  const eventQuery = eventService.useGetSingle(id?.toString());
-  const participate = eventService.useParticipate();
+  const eventQuery = api.event.getById.useQuery(parseInt(`${id}`));
+  // const participate = eventService.useParticipate();
 
-  const participateButton = () => {
-    if (eventQuery.data?.ownedByCaller) {
-      return;
-    }
-
-    return eventQuery.data?.participants.find(
-      (p: UserType) => p.id === session?.user.id
-    ) ? (
-      <Button
-        onClick={() =>
-          participate.mutate({
-            id: id?.toString(),
-            status: false,
-          })
-        }
-      >
-        Remove participation
-      </Button>
-    ) : (
-      <Button
-        onClick={() =>
-          participate.mutate({
-            id: id?.toString(),
-            status: true,
-          })
-        }
-      >
-        Participate
-      </Button>
-    );
-  };
+  // const participateButton = () => {
+  //   if (eventQuery.data?.ownedByCaller) {
+  //     return;
+  //   }
+  //
+  //   return eventQuery.data?.participants.find(
+  //     (p: UserType) => p.id === session?.user.id
+  //   ) ? (
+  //     <Button
+  //       onClick={() =>
+  //         participate.mutate({
+  //           id: id?.toString(),
+  //           status: false,
+  //         })
+  //       }
+  //     >
+  //       Remove participation
+  //     </Button>
+  //   ) : (
+  //     <Button
+  //       onClick={() =>
+  //         participate.mutate({
+  //           id: id?.toString(),
+  //           status: true,
+  //         })
+  //       }
+  //     >
+  //       Participate
+  //     </Button>
+  //   );
+  // };
 
   const limitBadge = () => {
     if (eventQuery.data?.limit) {
@@ -78,22 +71,22 @@ export default function EventDetailsPage() {
                   </Text>
                   <Link
                     href={"/users/[id]"}
-                    as={`/users/${eventQuery.data.owner?.id}`}
+                    as={`/users/${eventQuery.data.creator?.id}`}
                     passHref
                   >
                     <Text size="lg" sx={{cursor: "pointer"}}>
-                      by {eventQuery.data.owner?.username}
+                      by {eventQuery.data.creator?.name}
                     </Text>
                   </Link>
                 </Group>
                 <Group spacing="xs">
                   <Text>
-                    {new Date(eventQuery.data.from).toLocaleDateString()}
+                    {new Date(eventQuery.data.start).toLocaleDateString()}
                   </Text>
                   <Text>
                     {getIntervalString(
-                      eventQuery.data.from,
-                      eventQuery.data.to
+                      eventQuery.data.start,
+                      eventQuery.data.end
                     )}
                   </Text>
                 </Group>
@@ -109,7 +102,7 @@ export default function EventDetailsPage() {
                   <Text>Price: $ {eventQuery.data.price}</Text>
                 )}
               </Stack>
-              <MapComponent locationDto={eventQuery.data.location}/>
+              {/*<MapComponent locationDto={eventQuery.data.location}/>*/}
             </Group>
             <Card withBorder shadow="md" radius="md" p="lg">
               {eventQuery.data.participants.length ? (
@@ -119,10 +112,10 @@ export default function EventDetailsPage() {
                       {limitBadge()}
                       <Text>They will also be there:</Text>
                     </Group>
-                    {participateButton()}
+                    {/*{participateButton()}*/}
                   </Group>
                   <Group spacing="xs">
-                    {eventQuery.data.participants.map((p: UserType, index: number) => (
+                    {eventQuery.data.participants.map((p, index: number) => (
                       <Link
                         href={"/users/[id]"}
                         as={`/users/${p.id}`}
@@ -144,14 +137,14 @@ export default function EventDetailsPage() {
                     {limitBadge()}
                     <Text>There are no participants yet.</Text>
                   </Group>
-                  {participateButton()}
+                  {/*{participateButton()}*/}
                 </Group>
               )}
             </Card>
           </Stack>
         )}
       </QueryComponent>
-      {eventQuery.data?.ownedByCaller && (
+      {/*{eventQuery.data?.ownedByCaller && (
         <>
           <EditEventDialog
             open={openEdit}
@@ -168,7 +161,7 @@ export default function EventDetailsPage() {
             </ActionIcon>
           </Affix>
         </>
-      )}
+      )}*/}
     </>
   );
 }
