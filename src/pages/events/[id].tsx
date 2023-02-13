@@ -7,7 +7,7 @@ import {EditEventDialog} from "../../components/event/EditEventDialog";
 import {QueryComponent} from "../../components/QueryComponent";
 import MapComponent from "../../components/MapComponent";
 import {getIntervalString} from "../../utils/utilFunctions";
-import {User} from "../../models/User";
+import {UserType} from "../../models/User";
 import {Pencil} from "tabler-icons-react";
 
 export default function EventDetailsPage() {
@@ -29,7 +29,7 @@ export default function EventDetailsPage() {
     }
 
     return eventQuery.data?.participants.find(
-      (p: User) => p.id === session?.user.id
+      (p: UserType) => p.id === session?.user.id
     ) ? (
       <Button
         onClick={() =>
@@ -122,7 +122,7 @@ export default function EventDetailsPage() {
                     {participateButton()}
                   </Group>
                   <Group spacing="xs">
-                    {eventQuery.data.participants.map((p: User, index: number) => (
+                    {eventQuery.data.participants.map((p: UserType, index: number) => (
                       <Link
                         href={"/users/[id]"}
                         as={`/users/${p.id}`}
@@ -130,7 +130,7 @@ export default function EventDetailsPage() {
                         key={p.id}
                       >
                         <Text sx={{cursor: "pointer"}}>
-                          {p.username}
+                          {p.name}
                           {index !==
                             eventQuery.data.participants.length - 1 && <>,</>}
                         </Text>

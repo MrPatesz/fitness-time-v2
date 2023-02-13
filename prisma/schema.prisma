@@ -57,32 +57,55 @@ model VerificationToken {
 
 // TODO modify User model
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
-  // participatedEvents
-  // maybe merge these and arrays and have a flag for this?
-  createdEvents Event[] // default needed?
-  // createdGroups
-  // memberships / joinedGroups
+  id                 String    @id @default(cuid())
+  name               String?
+  email              String?   @unique
+  emailVerified      DateTime?
+  image              String?
+  accounts           Account[]
+  sessions           Session[]
+  // TODO maybe need defaults for all custom fields
+  // locationId         Int?
+  // location           Location? @relation(fields: [locationId], references: [id], onDelete: Restrict)
+  introduction       String?
+  createdEvents      Event[]   @relation(name: "createdEvents")
+  participatedEvents Event[]   @relation(name: "participatedEvents")
+  // createdGroups      Group[]   @relation(name: "createdGroups")
+  // joinedGroups       Group[]   @relation(name: "joinedGroups")
 }
 
 model Event {
-  id          Int      @id @default(autoincrement())
-  name        String
-  start       DateTime
-  end         DateTime
-  // location: LocationSchema,
-  // recurring: z.boolean(),
-  description String?
-  equipment   String?
-  limit       Int?
-  price       Float?
-  ownerId     String
-  owner       User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  // participants User[]
+  id           Int      @id @default(autoincrement())
+  name         String
+  start        DateTime
+  end          DateTime
+  // locationId   Int
+  // location     Location @relation(fields: [locationId], references: [id], onDelete: Restrict)
+  // recurring    Boolean
+  description  String?
+  equipment    String?
+  limit        Int?
+  price        Int?
+  creatorId    String
+  creator      User     @relation(name: "createdEvents", fields: [creatorId], references: [id], onDelete: Restrict)
+  participants User[]   @relation(name: "participatedEvents")
 }
+
+// model Location {
+//   id        Int     @id @default(autoincrement())
+//   address   String  @unique
+//   latitude  Float
+//   longitude Float
+//   users     User[]
+//   events    Event[]
+// }
+//
+// model Group {
+//   id        Int    @id @default(autoincrement())
+//   name      String @unique
+//   creatorId String
+//   creator   User   @relation(name: "createdGroups", fields: [creatorId], references: [id], onDelete: Restrict)
+//   members   User[] @relation(name: "joinedGroups")
+//   // events Event[]
+//   // posts Post[]
+// }

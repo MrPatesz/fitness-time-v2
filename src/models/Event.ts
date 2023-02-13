@@ -1,13 +1,12 @@
 import {z} from "zod";
 import {UserSchema} from "./User";
-import {LocationSchema} from "./Location";
 import {IdSchema} from "./Id";
 
 export const CreateEventSchema = z.object({
   name: z.string().min(1),
   start: z.date(),
   end: z.date(),
-  location: LocationSchema,
+  // location: LocationSchema,
   // recurring: z.boolean(),
   description: z.string().nullable(),
   equipment: z.string().nullable(),
@@ -20,7 +19,7 @@ export const EventSchema = CreateEventSchema.merge(z.object({
   ownedByCaller: z.boolean(),
   ownerId: z.number(),
   owner: UserSchema,
-  participants: z.array(UserSchema),
+  participants: z.lazy(() => UserSchema.array()),
 }));
 
 export type CreateEventType = z.infer<typeof CreateEventSchema>;

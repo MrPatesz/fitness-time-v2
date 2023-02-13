@@ -2,9 +2,14 @@ import {z} from "zod";
 
 export const UserSchema = z.object({
   id: z.string(),
-  username: z.string().min(1),
+  name: z.string().min(1),
+  // location: LocationSchema.nullable(),
   introduction: z.string().nullable(),
-  // ownedEvents: z.lazy(() => z.array(EventSchema).nullable()),
+  image: z.string().nullable(),
+  email: z.string().nullable(),
+  emailVerified: z.date().nullable(),
+  // createdEvents: z.lazy(() => EventSchema.array()),
+  // participatedEvents: z.lazy(() => EventSchema.array())
 });
 
-export type User = z.infer<typeof UserSchema>;
+export type UserType = z.infer<typeof UserSchema>;

@@ -2,7 +2,7 @@ import {ActionIcon, Card, Group, Stack, Text, TextInput} from "@mantine/core";
 import Link from "next/link";
 import React, {useMemo, useState} from "react";
 import {QueryComponent} from "../../components/QueryComponent";
-import {User} from "../../models/User";
+import {UserType} from "../../models/User";
 import {ArrowDown, ArrowUp, Search} from "tabler-icons-react";
 
 export default function UsersPage() {
@@ -18,11 +18,11 @@ export default function UsersPage() {
     if (!usersQuery.data) return [];
 
     return usersQuery.data
-      ?.filter((a: User) =>
-        a.username.toLowerCase().includes(searchTerm.toLowerCase())
+      ?.filter((a: UserType) =>
+        a.name.toLowerCase().includes(searchTerm.toLowerCase())
       )
-      ?.sort((a: User, b: User) => {
-        let result = a.username.localeCompare(b.username);
+      ?.sort((a: UserType, b: UserType) => {
+        let result = a.name.localeCompare(b.name);
         if (!ascending) {
           result *= -1;
         }
@@ -54,7 +54,7 @@ export default function UsersPage() {
       </Group>
       <QueryComponent resourceName={"Users"} query={usersQuery}>
         <Stack>
-          {filteredList.map((user: User) => (
+          {filteredList.map((user: UserType) => (
             <Link
               href={"/users/[id]"}
               as={`/users/${user.id}`}
@@ -62,7 +62,7 @@ export default function UsersPage() {
               key={user.id}
             >
               <Card withBorder>
-                <Text sx={{cursor: "pointer"}}>{user.username}</Text>
+                <Text sx={{cursor: "pointer"}}>{user.name}</Text>
               </Card>
             </Link>
           ))}
