@@ -1,6 +1,6 @@
 import {z} from "zod";
 import {IdSchema} from "./Id";
-import {UserSchema} from "./User";
+import {BasicUserSchema} from "./User";
 
 const CreateGroupSchema = z.object({
   name: z.string().min(1),
@@ -9,8 +9,8 @@ const CreateGroupSchema = z.object({
 const GroupSchema = CreateGroupSchema.merge(z.object({
   id: IdSchema,
   creatorId: z.number(),
-  creator: UserSchema,
-  members: UserSchema.array(),
+  creator: BasicUserSchema,
+  members: BasicUserSchema.array(),
   // events
   // posts
 }));

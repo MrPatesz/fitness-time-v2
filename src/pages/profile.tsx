@@ -5,7 +5,7 @@ import {api} from "../utils/api";
 
 export default function ProfilePage() {
   const userDetailsQuery = api.user.profile.useQuery();
-  const useUpdate: any = undefined; // TODO
+  const useUpdate = api.user.update.useMutation();
 
   const [introduction, setIntroduction] = useState<string>("");
 

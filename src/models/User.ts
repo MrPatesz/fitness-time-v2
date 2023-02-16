@@ -1,15 +1,21 @@
 import {z} from "zod";
+import {BasicEventSchema} from "./Event";
 
-export const UserSchema = z.object({
+export const BasicUserSchema = z.object({
   id: z.string(),
   name: z.string().min(1),
   // location: LocationSchema.nullable(),
   introduction: z.string().nullable(),
   image: z.string().nullable(),
-  email: z.string().nullable(),
-  emailVerified: z.date().nullable(),
-  // createdEvents: z.lazy(() => EventSchema.array()),
-  // participatedEvents: z.lazy(() => EventSchema.array())
+  // email: z.string().nullable(), TODO
+  // emailVerified: z.date().nullable(),
 });
 
-export type UserType = z.infer<typeof UserSchema>;
+export const DetailedUserSchema = BasicUserSchema.extend({
+  createdEvents: BasicEventSchema.array(),
+  participatedEvents: BasicEventSchema.array(),
+});
+
+export type BasicUserType = z.infer<typeof BasicUserSchema>;
+
+export type DetailedUserType = z.infer<typeof DetailedUserSchema>;

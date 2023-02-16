@@ -1,5 +1,5 @@
 import {z} from "zod";
-import {UserSchema} from "./User";
+import {BasicUserSchema} from "./User";
 import {IdSchema} from "./Id";
 
 export const CreateEventSchema = z.object({
@@ -14,14 +14,19 @@ export const CreateEventSchema = z.object({
   price: z.number().min(1).nullable(),
 });
 
-export const EventSchema = CreateEventSchema.merge(z.object({
+export const BasicEventSchema = CreateEventSchema.extend({
   id: IdSchema,
-  // ownedByCaller: z.boolean(),
   creatorId: z.string(),
-  creator: UserSchema,
-  participants: z.lazy(() => UserSchema.array()),
-}));
+  // ownedByCaller: z.boolean(),
+});
+
+export const DetailedEventSchema = BasicEventSchema.extend({
+  creator: BasicUserSchema,
+  participants: BasicUserSchema.array(),
+});
 
 export type CreateEventType = z.infer<typeof CreateEventSchema>;
 
-export type EventType = z.infer<typeof EventSchema>;
+export type BasicEventType = z.infer<typeof BasicEventSchema>;
+
+export type DetailedEventType = z.infer<typeof DetailedEventSchema>;

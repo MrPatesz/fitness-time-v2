@@ -4,12 +4,12 @@ import React, {useState} from "react";
 import {EventCard} from "../components/event/EventCard";
 import {FilterEventsComponent} from "../components/event/FilterEventsComponent";
 import {QueryComponent} from "../components/QueryComponent";
-import {EventType} from "../models/Event";
+import {BasicEventType} from "../models/Event";
 import {api} from "../utils/api";
 
 export default function FeedPage() {
-  const [filteredList, setFilteredList] = useState<EventType[]>([]);
-  const eventsQuery = api.event.getFeed.useQuery();
+  const [filteredList, setFilteredList] = useState<BasicEventType[]>([]);
+  const eventsQuery = api.event.getAll.useQuery(); // TODO getFeed
 
   const medium = useMediaQuery("(min-width: 600px)");
   const large = useMediaQuery("(min-width: 950px)");

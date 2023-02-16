@@ -1,7 +1,7 @@
 import {ActionIcon, Group, MultiSelect, Select, TextInput,} from "@mantine/core";
 import {useLocalStorage} from "@mantine/hooks";
 import {FunctionComponent, useEffect, useState} from "react";
-import {EventType} from "../../models/Event";
+import {BasicEventType} from "../../models/Event";
 import {ArrowDown, ArrowUp, Search} from "tabler-icons-react";
 
 enum OrderBy {
@@ -32,8 +32,8 @@ const filterValues = [
 
 export const FilterEventsComponent: FunctionComponent<{
   filterKey: string;
-  events: EventType[];
-  setFilteredEvents: (filteredList: EventType[]) => void;
+  events: BasicEventType[];
+  setFilteredEvents: (filteredList: BasicEventType[]) => void;
 }> = ({filterKey, events, setFilteredEvents}) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [tags, setTags] = useLocalStorage<string[]>({

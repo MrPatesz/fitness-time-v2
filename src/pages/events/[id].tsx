@@ -1,4 +1,4 @@
-import {Badge, Card, Group, Stack, Text,} from "@mantine/core";
+import {ActionIcon, Affix, Badge, Card, Group, Stack, Text,} from "@mantine/core";
 import {useSession} from "next-auth/react";
 import Link from "next/link";
 import {useRouter} from "next/router";
@@ -6,6 +6,8 @@ import React, {useState} from "react";
 import {QueryComponent} from "../../components/QueryComponent";
 import {getIntervalString} from "../../utils/utilFunctions";
 import {api} from "../../utils/api";
+import {EditEventDialog} from "../../components/event/EditEventDialog";
+import {Pencil} from "tabler-icons-react";
 
 export default function EventDetailsPage() {
   const [openEdit, setOpenEdit] = useState(false);
@@ -71,11 +73,11 @@ export default function EventDetailsPage() {
                   </Text>
                   <Link
                     href={"/users/[id]"}
-                    as={`/users/${eventQuery.data.creator?.id}`}
+                    as={`/users/${eventQuery.data.creator.id}`}
                     passHref
                   >
                     <Text size="lg" sx={{cursor: "pointer"}}>
-                      by {eventQuery.data.creator?.name}
+                      by {eventQuery.data.creator.name}
                     </Text>
                   </Link>
                 </Group>
@@ -144,7 +146,7 @@ export default function EventDetailsPage() {
           </Stack>
         )}
       </QueryComponent>
-      {/*{eventQuery.data?.ownedByCaller && (
+      {eventQuery.data?.creatorId === session?.user.id && (
         <>
           <EditEventDialog
             open={openEdit}
@@ -161,7 +163,7 @@ export default function EventDetailsPage() {
             </ActionIcon>
           </Affix>
         </>
-      )}*/}
+      )}
     </>
   );
 }

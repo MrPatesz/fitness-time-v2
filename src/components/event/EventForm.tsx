@@ -1,11 +1,11 @@
 import {NumberInput, Stack, Textarea, TextInput} from "@mantine/core";
 import {FunctionComponent} from "react";
-import {CreateEventType, EventType} from "../../models/Event";
+import {BasicEventType, CreateEventType} from "../../models/Event";
 import {IntervalPicker} from "../IntervalPicker";
 
 export const EventForm: FunctionComponent<{
-  event: CreateEventType | EventType | undefined;
-  setEvent: (newState: CreateEventType | EventType | undefined) => void;
+  event: CreateEventType | BasicEventType | undefined;
+  setEvent: (newState: CreateEventType | BasicEventType) => void;
   submitButton: JSX.Element;
 }> = ({event, setEvent, submitButton}) => {
   // TODO form: validation

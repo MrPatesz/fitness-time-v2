@@ -1,37 +1,31 @@
 import {createTRPCRouter, protectedProcedure} from "../trpc";
-import {CreateEventSchema, EventSchema} from "../../../models/Event";
+import {BasicEventSchema, CreateEventSchema, DetailedEventSchema} from "../../../models/Event";
 import {IdSchema} from "../../../models/Id";
+import {z} from "zod";
 
 export const eventRouter = createTRPCRouter({
   getAll: protectedProcedure
-    .output(EventSchema.array())
+    .output(BasicEventSchema.array())
     .query(async ({ctx}) => {
-      const events = await ctx.prisma.event.findMany({
-        include: {creator: true}
-      });
-
-      return EventSchema.array().parse(events);
+      const events = await ctx.prisma.event.findMany();
+      return BasicEventSchema.array().parse(events);
     }),
   getAllCreated: protectedProcedure
-    .output(EventSchema.array())
-    .query(async ({ctx}) => {
-      const callerId = ctx.session.user.id;
-
-      const caller = await ctx.prisma.user.findFirst({
+    .output(BasicEventSchema.array())
+    .query(async ({ctx: {session: {user: {id: callerId}}, prisma}}) => {
+      const caller = await prisma.user.findFirst({
         where: {id: callerId},
-        include: {createdEvents: {include: {creator: true, participants: true}}}
+        include: {createdEvents: true}
       });
 
       if (!caller) return [];
 
-      return EventSchema.array().parse(caller.createdEvents);
+      return BasicEventSchema.array().parse(caller.createdEvents);
     }),
   getFeed: protectedProcedure
-    .output(EventSchema.array())
-    .query(async ({ctx}) => {
-      const callerId = ctx.session.user.id;
-
-      const events = await ctx.prisma.event.findMany({
+    .output(BasicEventSchema.array())
+    .query(async ({ctx: {session: {user: {id: callerId}}, prisma}}) => {
+      const events = await prisma.event.findMany({
         where: {
           creatorId: {
             not: callerId
@@ -40,77 +34,71 @@ export const eventRouter = createTRPCRouter({
         include: {creator: true, participants: true}
       });
 
-      return EventSchema.array().parse(events);
+      return BasicEventSchema.array().parse(events);
     }),
   getCalendar: protectedProcedure
-    .output(EventSchema.array())
-    .query(async ({ctx}) => {
-      const callerId = ctx.session.user.id;
-
-      const caller = await ctx.prisma.user.findFirst({
+    .output(BasicEventSchema.array())
+    .query(async ({ctx: {session: {user: {id: callerId}}, prisma}}) => {
+      const caller = await prisma.user.findFirst({
         where: {id: callerId},
         include: {
-          createdEvents: {include: {creator: true, participants: true}},
-          participatedEvents: {include: {creator: true, participants: true}}
+          createdEvents: true,
+          participatedEvents: true
         }
       });
 
       if (!caller) return [];
 
-      return EventSchema.array().parse([...caller.createdEvents, ...caller.participatedEvents]);
+      return BasicEventSchema.array().parse([...caller.createdEvents, ...caller.participatedEvents]);
     }),
   getById: protectedProcedure
     .input(IdSchema)
-    .output(EventSchema)
-    .query(async ({input, ctx}) => {
+    .output(DetailedEventSchema)
+    .query(async ({input: id, ctx}) => {
       const event = await ctx.prisma.event.findFirst({
-        where: {id: input},
+        where: {id},
         include: {creator: true, participants: true}
       });
 
-      return EventSchema.parse(event);
+      return DetailedEventSchema.parse(event);
     }),
 
   create: protectedProcedure
     .input(CreateEventSchema)
-    .output(EventSchema)
-    .mutation(async ({input, ctx}) => {
-      const callerId = ctx.session.user.id;
-
-      const event = await ctx.prisma.event.create({
+    .output(BasicEventSchema)
+    .mutation(async ({input: createEvent, ctx: {session: {user: {id: callerId}}, prisma}}) => {
+      const event = await prisma.event.create({
         data: {
-          ...input,
+          ...createEvent,
           creatorId: callerId
         },
-        include: {
-          creator: true,
-          participants: true
-        },
       });
 
-      return EventSchema.parse(event);
+      return BasicEventSchema.parse(event);
     }),
-  // TODO participate: protectedProcedure.input().mutation(),
+  // TODO participate: protectedProcedure.input().output().mutation(),
+  //  is this needed? maybe use update endpoint?
   update: protectedProcedure
     .input(CreateEventSchema.extend({id: IdSchema}))
-    .output(EventSchema)
-    .mutation(async ({input, ctx}) => {
+    .output(BasicEventSchema)
+    .mutation(async ({input: createEvent, ctx}) => {
       const updatedEvent = await ctx.prisma.event.update({
-        where: {id: input.id},
-        data: input
+        where: {id: createEvent.id},
+        data: createEvent,
       });
-      return EventSchema.parse(updatedEvent);
+      return BasicEventSchema.parse(updatedEvent);
     }),
   delete: protectedProcedure
     .input(IdSchema)
-    .mutation(({input, ctx}) => {
-      // const callerId = ctx.session.user.id;
-
-      return ctx.prisma.event.delete({
+    .output(z.boolean())
+    .mutation(async ({input, ctx: {session: {user: {id: callerId}}, prisma}}) => {
+      const {count} = await prisma.event.deleteMany({
         where: {
           id: input,
-          // TODO creatorId: callerId
+          creatorId: callerId
         }
-      })
+      });
+
+      return !!count;
     }),
 });

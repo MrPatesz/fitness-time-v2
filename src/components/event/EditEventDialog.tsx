@@ -1,6 +1,6 @@
 import {Button, Modal} from "@mantine/core";
 import {FunctionComponent, useState} from "react";
-import {EventType} from "../../models/Event";
+import {BasicEventType} from "../../models/Event";
 import {QueryComponent} from "../QueryComponent";
 import {EventForm} from "./EventForm";
 import {api} from "../../utils/api";
@@ -10,7 +10,7 @@ export const EditEventDialog: FunctionComponent<{
   onClose: () => void;
   eventId: number;
 }> = ({open, onClose, eventId}) => {
-  const [event, setEvent] = useState<EventType | undefined>(undefined);
+  const [event, setEvent] = useState<BasicEventType | undefined>(undefined);
 
   const useUpdate = api.event.update.useMutation();
   const eventQuery = api.event.getById.useQuery(eventId);

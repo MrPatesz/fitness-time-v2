@@ -7,12 +7,12 @@ import {EditEventDialog} from "../components/event/EditEventDialog";
 import {getIntervalString} from "../utils/utilFunctions";
 import {FilterEventsComponent} from "../components/event/FilterEventsComponent";
 import {ConfirmDialog} from "../components/ConfirmDialog";
-import {EventType} from "../models/Event";
+import {BasicEventType} from "../models/Event";
 import {Pencil, Plus, Trash} from "tabler-icons-react";
 import {api} from "../utils/api";
 
 export default function MyEventsPage() {
-  const [filteredList, setFilteredList] = useState<EventType[]>([]);
+  const [filteredList, setFilteredList] = useState<BasicEventType[]>([]);
   const [openCreate, setOpenCreate] = useState(false);
   const [editId, setEditId] = useState<number | null>(null);
   const [deleteId, setDeleteId] = useState<number | null>(null);
@@ -37,7 +37,7 @@ export default function MyEventsPage() {
               <th>Name</th>
               <th>Date</th>
               <th>Interval</th>
-              <th>Location</th>
+              {/*<th>Location</th>*/}
               <th>Equipment</th>
               <th>Price</th>
               <th>Limit</th>
