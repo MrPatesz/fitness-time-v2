@@ -12,8 +12,8 @@ export const BasicUserSchema = z.object({
 });
 
 export const DetailedUserSchema = BasicUserSchema.extend({
-  createdEvents: BasicEventSchema.array(),
-  participatedEvents: BasicEventSchema.array(),
+  createdEvents: z.lazy(() => BasicEventSchema.array()),
+  participatedEvents: z.lazy(() => BasicEventSchema.array()),
 });
 
 export type BasicUserType = z.infer<typeof BasicUserSchema>;

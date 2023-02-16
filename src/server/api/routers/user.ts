@@ -1,35 +1,30 @@
 import {createTRPCRouter, protectedProcedure} from "../trpc";
 import {z} from "zod";
-import {BasicUserSchema} from "../../../models/User";
+import {BasicUserSchema, DetailedUserSchema} from "../../../models/User";
 
 export const userRouter = createTRPCRouter({
   getAll: protectedProcedure
     .output(BasicUserSchema.array())
     .query(async ({ctx}) => {
-      const events = await ctx.prisma.user.findMany({
-        include: {createdEvents: true, participatedEvents: true}
-      });
-
+      const events = await ctx.prisma.user.findMany();
       return BasicUserSchema.array().parse(events);
     }),
   profile: protectedProcedure
-    .output(BasicUserSchema)
-    .query(async ({ctx}) => {
-      const user = await ctx.prisma.user.findUnique({
-        where: {
-          id: ctx.session.user.id,
-        },
+    .output(DetailedUserSchema)
+    .query(async ({ctx: {prisma, session: {user: {id: userId}}}}) => {
+      const user = await prisma.user.findUnique({
+        where: {id: userId},
+        include: {createdEvents: true, participatedEvents: true}
       });
 
-      return BasicUserSchema.parse(user);
+      return DetailedUserSchema.parse(user);
     }),
   getById: protectedProcedure
     .input(z.string())
     .output(BasicUserSchema)
-    .query(async ({input, ctx}) => {
+    .query(async ({input: id, ctx}) => {
       const user = await ctx.prisma.user.findFirst({
-        where: {id: input},
-        include: {createdEvents: true, participatedEvents: true}
+        where: {id},
       });
 
       return BasicUserSchema.parse(user)
