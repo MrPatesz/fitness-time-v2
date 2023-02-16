@@ -19,7 +19,7 @@ export const eventRouter = createTRPCRouter({
 
       const caller = await ctx.prisma.user.findFirst({
         where: {id: callerId},
-        include: {createdEvents: {include: {creator: true}}}
+        include: {createdEvents: {include: {creator: true, participants: true}}}
       });
 
       if (!caller) return [];
@@ -92,16 +92,12 @@ export const eventRouter = createTRPCRouter({
     }),
   // TODO participate: protectedProcedure.input().mutation(),
   update: protectedProcedure
-    .input(EventSchema)
+    .input(CreateEventSchema.extend({id: IdSchema}))
     .output(EventSchema)
     .mutation(async ({input, ctx}) => {
       const updatedEvent = await ctx.prisma.event.update({
-        where: {
-          id: input.id
-        },
-        data: {
-          ...input
-        }
+        where: {id: input.id},
+        data: input
       });
       return EventSchema.parse(updatedEvent);
     }),

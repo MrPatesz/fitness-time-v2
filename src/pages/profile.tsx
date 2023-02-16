@@ -1,14 +1,11 @@
 import {Button, Stack, TextInput, Title} from "@mantine/core";
 import React, {useEffect, useState} from "react";
 import {QueryComponent} from "../components/QueryComponent";
+import {api} from "../utils/api";
 
 export default function ProfilePage() {
-  return <>Profile Page</>;
-
-  // const userService = UserService();
-  const userService: any = undefined;
-  const userDetailsQuery = userService.useGetProfile();
-  const useUpdate = userService.useUpdate();
+  const userDetailsQuery = api.user.profile.useQuery();
+  const useUpdate: any = undefined; // TODO
 
   const [introduction, setIntroduction] = useState<string>("");
 
@@ -27,12 +24,12 @@ export default function ProfilePage() {
     }
   };
 
-  // TODO change password, profile picture, location
+  // TODO change profile picture, location
 
   return (
     <QueryComponent resourceName={"Profile"} query={userDetailsQuery}>
       <Stack>
-        <Title order={2}>{userDetailsQuery.data?.username}</Title>
+        <Title order={2}>{userDetailsQuery.data?.name}</Title>
         <TextInput
           label="Introduction"
           placeholder="Introduction"

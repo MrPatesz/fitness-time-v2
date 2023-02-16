@@ -9,10 +9,9 @@ import {FilterEventsComponent} from "../components/event/FilterEventsComponent";
 import {ConfirmDialog} from "../components/ConfirmDialog";
 import {EventType} from "../models/Event";
 import {Pencil, Plus, Trash} from "tabler-icons-react";
+import {api} from "../utils/api";
 
 export default function MyEventsPage() {
-  return <>My Events Page</>;
-
   const [filteredList, setFilteredList] = useState<EventType[]>([]);
   const [openCreate, setOpenCreate] = useState(false);
   const [editId, setEditId] = useState<number | null>(null);
@@ -20,10 +19,8 @@ export default function MyEventsPage() {
 
   const router = useRouter();
 
-  // const eventService = EventService();
-  const eventService: any = undefined;
-  const eventsQuery = eventService.useGetAllOwned();
-  const deleteEvent = eventService.useDelete();
+  const eventsQuery = api.event.getAllCreated.useQuery();
+  const deleteEvent = api.event.delete.useMutation();
 
   return (
     <>
@@ -58,7 +55,7 @@ export default function MyEventsPage() {
                 <td>{event.name}</td>
                 <td>{new Date(event.start).toLocaleDateString()}</td>
                 <td>{getIntervalString(event.start, event.end)}</td>
-                <td>{event.location.address}</td>
+                {/*<td>{event.location.address}</td>*/}
                 <td>{event.equipment}</td>
                 <td>{event.price && <>$ {event.price}</>}</td>
                 {/*TODO JavaScript formatter (refactor everywhere)*/}
