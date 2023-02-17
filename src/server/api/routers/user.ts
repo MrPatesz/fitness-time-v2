@@ -1,12 +1,15 @@
 import {createTRPCRouter, protectedProcedure} from "../trpc";
 import {z} from "zod";
 import {BasicUserSchema, DetailedUserSchema} from "../../../models/User";
+import {Prisma} from ".prisma/client";
 
 export const userRouter = createTRPCRouter({
   getAll: protectedProcedure
     .output(BasicUserSchema.array())
     .query(async ({ctx}) => {
-      const events = await ctx.prisma.user.findMany();
+      const events = await ctx.prisma.user.findMany({
+        orderBy: {name: Prisma.SortOrder.asc}
+      });
       return BasicUserSchema.array().parse(events);
     }),
   profile: protectedProcedure
@@ -28,7 +31,7 @@ export const userRouter = createTRPCRouter({
         include: {createdEvents: true, participatedEvents: true}
       });
 
-      return DetailedUserSchema.parse(user)
+      return DetailedUserSchema.parse(user);
     }),
   update: protectedProcedure
     .input(BasicUserSchema)

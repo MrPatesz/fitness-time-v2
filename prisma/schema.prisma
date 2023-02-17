@@ -80,8 +80,8 @@ model Event {
   // locationId   Int
   // location     Location @relation(fields: [locationId], references: [id], onDelete: Restrict)
   // recurring    Boolean
-  description  String?
-  equipment    String?
+  description  String
+  equipment    String
   limit        Int?
   price        Int?
   creatorId    String
