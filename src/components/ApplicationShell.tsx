@@ -2,9 +2,9 @@ import {AppShell, Header, Navbar, NavLink} from "@mantine/core";
 import {useSession} from "next-auth/react";
 import Link from "next/link";
 import {useRouter} from "next/router";
-import {HeaderComponent} from "./HeaderComponent";
-import {Adjustments, CalendarEvent, News, Users} from "tabler-icons-react";
 import {FunctionComponent} from "react";
+import {Adjustments, CalendarEvent, News, Users} from "tabler-icons-react";
+import {HeaderComponent} from "./HeaderComponent";
 
 export const ApplicationShell: FunctionComponent<{
   children: JSX.Element;
@@ -25,7 +25,7 @@ export const ApplicationShell: FunctionComponent<{
     <AppShell
       hidden={!session}
       navbar={
-        <Navbar width={{base: 211}} p="xs">
+        <Navbar width={{base: 200}} p="xs">
           {[
             {label: "Calendar", route: "/calendar", icon: CalendarEvent},
             {label: "Feed", route: "/feed", icon: News},
@@ -40,7 +40,7 @@ export const ApplicationShell: FunctionComponent<{
             >
               <NavLink
                 label={link.label}
-                icon={<link.icon size={16}/>}
+                icon={<link.icon size={20}/>}
                 active={router.route.includes(link.route)}
               />
             </Link>
@@ -48,7 +48,7 @@ export const ApplicationShell: FunctionComponent<{
         </Navbar>
       }
       header={
-        <Header height={60} p="xs">
+        <Header height={56} p="xs">
           <HeaderComponent username={session?.user?.name}/>
         </Header>
       }

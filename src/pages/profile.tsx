@@ -4,8 +4,11 @@ import {QueryComponent} from "../components/QueryComponent";
 import {api} from "../utils/api";
 
 export default function ProfilePage() {
+  const queryContext = api.useContext();
   const userDetailsQuery = api.user.profile.useQuery();
-  const useUpdate = api.user.update.useMutation();
+  const useUpdate = api.user.update.useMutation({
+    onSuccess: () => queryContext.user.invalidate(),
+  });
 
   const [introduction, setIntroduction] = useState<string>("");
 

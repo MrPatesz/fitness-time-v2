@@ -1,13 +1,13 @@
-import {QueryComponent} from "../components/QueryComponent";
-import {useState} from "react";
 import {Affix, useMantineTheme} from "@mantine/core";
-import dayjs from "dayjs";
-import {useRouter} from "next/router";
-import {CreateEventDialog} from "../components/event/CreateEventDialog";
-import dynamic from "next/dynamic";
 import {showNotification} from "@mantine/notifications";
-import {api} from "../utils/api";
+import dayjs from "dayjs";
 import {useSession} from "next-auth/react";
+import dynamic from "next/dynamic";
+import {useRouter} from "next/router";
+import {useState} from "react";
+import {CreateEventDialog} from "../components/event/CreateEventDialog";
+import {QueryComponent} from "../components/QueryComponent";
+import {api} from "../utils/api";
 
 const DayPilotNavigator: any = dynamic(
   () =>
@@ -28,8 +28,11 @@ export default function CalendarPage() {
   const [defaultStart, setDefaultStart] = useState(new Date());
   const [defaultEnd, setDefaultEnd] = useState(new Date());
 
+  const queryContext = api.useContext();
   const eventsQuery = api.event.getCalendar.useQuery();
-  const updateEvent = api.event.update.useMutation();
+  const updateEvent = api.event.update.useMutation({
+    onSuccess: () => queryContext.event.invalidate(),
+  });
   const theme = useMantineTheme();
   const router = useRouter();
   const {data: session} = useSession();

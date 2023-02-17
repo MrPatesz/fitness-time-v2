@@ -1,15 +1,15 @@
 import {ActionIcon, Affix, Group, Stack, Table} from "@mantine/core";
-import React, {useState} from "react";
-import {QueryComponent} from "../components/QueryComponent";
-import {CreateEventDialog} from "../components/event/CreateEventDialog";
 import {useRouter} from "next/router";
-import {EditEventDialog} from "../components/event/EditEventDialog";
-import {getIntervalString, priceFormatter} from "../utils/utilFunctions";
-import {FilterEventsComponent} from "../components/event/FilterEventsComponent";
-import {ConfirmDialog} from "../components/ConfirmDialog";
-import {BasicEventType} from "../models/Event";
+import React, {useState} from "react";
 import {Pencil, Plus, Trash} from "tabler-icons-react";
+import {ConfirmDialog} from "../components/ConfirmDialog";
+import {CreateEventDialog} from "../components/event/CreateEventDialog";
+import {EditEventDialog} from "../components/event/EditEventDialog";
+import {FilterEventsComponent} from "../components/event/FilterEventsComponent";
+import {QueryComponent} from "../components/QueryComponent";
+import {BasicEventType} from "../models/Event";
 import {api} from "../utils/api";
+import {getIntervalString, priceFormatter} from "../utils/utilFunctions";
 
 export default function MyEventsPage() {
   const [filteredList, setFilteredList] = useState<BasicEventType[]>([]);
@@ -19,8 +19,11 @@ export default function MyEventsPage() {
 
   const router = useRouter();
 
+  const queryContext = api.useContext();
   const eventsQuery = api.event.getAllCreated.useQuery();
-  const deleteEvent = api.event.delete.useMutation();
+  const deleteEvent = api.event.delete.useMutation({
+    onSuccess: () => queryContext.event.invalidate(),
+  });
 
   return (
     <>

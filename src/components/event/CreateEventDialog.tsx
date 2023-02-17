@@ -1,8 +1,8 @@
 import {Modal} from "@mantine/core";
 import {FunctionComponent} from "react";
 import {CreateEventType} from "../../models/Event";
-import {EventForm} from "./EventForm";
 import {api} from "../../utils/api";
+import {EventForm} from "./EventForm";
 
 const defaultCreateEvent: CreateEventType = {
   name: "",
@@ -22,15 +22,10 @@ export const CreateEventDialog: FunctionComponent<{
     end: Date;
   };
 }> = ({open, onClose, initialInterval}) => {
-  // const utils = trpc.useContext(); TODO useContext to invalidate
-
-  const useCreate = api.event.create.useMutation();
-  // {
-  //   onSuccess: () => {
-  //   utils.event.getCalendar.invalidate();
-  //   utils.event.getAllCreated.invalidate();
-  //   }
-  // }
+  const queryContext = api.useContext();
+  const useCreate = api.event.create.useMutation({
+    onSuccess: () => queryContext.event.invalidate(),
+  });
 
   return (
     <Modal

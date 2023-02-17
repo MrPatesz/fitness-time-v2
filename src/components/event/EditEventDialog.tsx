@@ -1,16 +1,19 @@
 import {Modal} from "@mantine/core";
 import {FunctionComponent} from "react";
+import {api} from "../../utils/api";
 import {QueryComponent} from "../QueryComponent";
 import {EventForm} from "./EventForm";
-import {api} from "../../utils/api";
 
 export const EditEventDialog: FunctionComponent<{
   open: boolean;
   onClose: () => void;
   eventId: number;
 }> = ({open, onClose, eventId}) => {
+  const queryContext = api.useContext();
   const eventQuery = api.event.getById.useQuery(eventId);
-  const useUpdate = api.event.update.useMutation();
+  const useUpdate = api.event.update.useMutation({
+    onSuccess: () => queryContext.event.invalidate(),
+  });
 
   return (
     <Modal

@@ -1,13 +1,13 @@
-import {FunctionComponent} from "react";
-import {signOut} from "next-auth/react";
 import {Button, Group, Text, Title} from "@mantine/core";
+import {signOut} from "next-auth/react";
 import Link from "next/link";
+import {FunctionComponent} from "react";
 
 export const HeaderComponent: FunctionComponent<{
   username: string | undefined | null;
 }> = ({username}) => {
   return (
-    <Group align="center" position="apart">
+    <Group align="center" position="apart" pl="sm">
       <Link href="/" as="/" passHref>
         <Title order={2}>Fitness Time</Title>
       </Link>
