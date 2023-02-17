@@ -1,7 +1,7 @@
 import {Group} from "@mantine/core";
 import {DatePicker, TimeInput} from "@mantine/dates";
 import dayjs from "dayjs";
-import {FunctionComponent, useEffect} from "react";
+import {FunctionComponent} from "react";
 
 const calculateDateTime = (date: Date, time: Date): Date => {
   const hour = dayjs(time).hour();
@@ -19,17 +19,14 @@ export const IntervalPicker: FunctionComponent<{
   start: Date;
   end: Date;
   onChange: (newStart: Date, newEnd: Date) => void;
-}> = ({start, end, onChange}) => {
-  useEffect(() => {
-    onChange(calculateDateTime(start, start), calculateDateTime(end, end));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
+  startError: string | undefined;
+  endError: string | undefined;
+}> = ({start, end, onChange, startError, endError}) => {
   return (
     <Group spacing="xs">
       <DatePicker
         withAsterisk
-        sx={{width: "229px"}}
+        sx={{width: "229px", marginBottom: "auto"}}
         label="On"
         value={start}
         onChange={(newDate) => {
@@ -43,18 +40,23 @@ export const IntervalPicker: FunctionComponent<{
         clearable={false}
         minDate={new Date()}
         firstDayOfWeek="sunday"
+        error={(startError || endError) ? " " : undefined}
       />
       <TimeInput
         withAsterisk
-        label="From"
+        sx={{marginBottom: "auto"}}
+        label="Start"
         value={start}
         onChange={(event) => onChange(calculateDateTime(start, event), end)}
+        error={startError}
       />
       <TimeInput
         withAsterisk
-        label="To"
+        sx={{marginBottom: "auto"}}
+        label="End"
         value={end}
         onChange={(event) => onChange(start, calculateDateTime(end, event))}
+        error={endError}
       />
     </Group>
   );

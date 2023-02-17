@@ -1,6 +1,5 @@
-import {Button, Modal} from "@mantine/core";
-import {FunctionComponent, useState} from "react";
-import {BasicEventType} from "../../models/Event";
+import {Modal} from "@mantine/core";
+import {FunctionComponent} from "react";
 import {QueryComponent} from "../QueryComponent";
 import {EventForm} from "./EventForm";
 import {api} from "../../utils/api";
@@ -10,10 +9,8 @@ export const EditEventDialog: FunctionComponent<{
   onClose: () => void;
   eventId: number;
 }> = ({open, onClose, eventId}) => {
-  const [event, setEvent] = useState<BasicEventType | undefined>(undefined);
-
-  const useUpdate = api.event.update.useMutation();
   const eventQuery = api.event.getById.useQuery(eventId);
+  const useUpdate = api.event.update.useMutation();
 
   return (
     <Modal
@@ -25,27 +22,14 @@ export const EditEventDialog: FunctionComponent<{
       <QueryComponent
         resourceName={"Event Details"}
         query={eventQuery}
-        setState={setEvent}
       >
         <EventForm
-          event={event}
-          setEvent={createEvent => {
-            if (event) {
-              setEvent({...event, ...createEvent});
+          originalEvent={eventQuery.data}
+          onSubmit={(data) => {
+            if (eventQuery.data) {
+              useUpdate.mutateAsync({...data, id: eventId}).then(onClose);
             }
           }}
-          submitButton={
-            <Button
-              disabled={!event?.name/* || !event?.location.address*/}
-              onClick={() => {
-                if (event) {
-                  useUpdate.mutateAsync(event).then(onClose);
-                }
-              }}
-            >
-              Update
-            </Button>
-          }
         />
       </QueryComponent>
     </Modal>

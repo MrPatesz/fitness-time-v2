@@ -131,8 +131,7 @@ export default function CalendarPage() {
       <CreateEventDialog
         open={openCreate}
         onClose={() => setOpenCreate(false)}
-        defaultStart={defaultStart}
-        defaultEnd={defaultEnd}
+        initialInterval={{start: defaultStart, end: defaultEnd}}
       />
     </>
   );

@@ -1,15 +1,15 @@
-import {Button, Modal} from "@mantine/core";
-import {FunctionComponent, useEffect, useState} from "react";
+import {Modal} from "@mantine/core";
+import {FunctionComponent} from "react";
 import {CreateEventType} from "../../models/Event";
 import {EventForm} from "./EventForm";
 import {api} from "../../utils/api";
 
-const defaultCreateEvent = {
+const defaultCreateEvent: CreateEventType = {
   name: "",
   start: new Date(),
   end: new Date(),
-  description: null,
-  equipment: null,
+  description: "",
+  equipment: "",
   limit: null,
   price: null,
 };
@@ -17,26 +17,20 @@ const defaultCreateEvent = {
 export const CreateEventDialog: FunctionComponent<{
   open: boolean;
   onClose: () => void;
-  defaultStart?: Date;
-  defaultEnd?: Date;
-}> = ({open, onClose, defaultStart, defaultEnd}) => {
-  const [event, setEvent] = useState<CreateEventType>(defaultCreateEvent);
+  initialInterval?: {
+    start: Date;
+    end: Date;
+  };
+}> = ({open, onClose, initialInterval}) => {
   // const utils = trpc.useContext(); TODO useContext to invalidate
 
-  const useCreate = api.event.create.useMutation(// {
-    //   onSuccess: () => {
-    //   utils.event.getCalendar.invalidate();
-    //   utils.event.getAllCreated.invalidate();
-    //   }
-    // }
-  );
-
-  useEffect(() => {
-    if (event && defaultStart && defaultEnd) {
-      setEvent({...event, start: defaultStart, end: defaultEnd});
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [defaultStart, defaultEnd]);
+  const useCreate = api.event.create.useMutation();
+  // {
+  //   onSuccess: () => {
+  //   utils.event.getCalendar.invalidate();
+  //   utils.event.getAllCreated.invalidate();
+  //   }
+  // }
 
   return (
     <Modal
@@ -46,23 +40,14 @@ export const CreateEventDialog: FunctionComponent<{
       closeOnClickOutside={false}
     >
       <EventForm
-        event={event}
-        setEvent={setEvent}
-        submitButton={
-          <Button
-            disabled={!event?.name} // || !event?.location.address}
-            onClick={() => {
-              if (event) {
-                useCreate.mutateAsync(event).then(() => {
-                  onClose();
-                  setEvent(defaultCreateEvent);
-                });
-              }
-            }}
-          >
-            Create
-          </Button>
+        originalEvent={
+          initialInterval ? {
+            ...defaultCreateEvent,
+            start: initialInterval.start,
+            end: initialInterval.end
+          } : undefined
         }
+        onSubmit={(data) => useCreate.mutateAsync(data).then(onClose)}
       />
     </Modal>
   );

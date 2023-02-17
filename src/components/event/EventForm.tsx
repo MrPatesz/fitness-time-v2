@@ -1,33 +1,59 @@
-import {NumberInput, Stack, Textarea, TextInput} from "@mantine/core";
+import {Button, NumberInput, Stack, Textarea, TextInput} from "@mantine/core";
 import {FunctionComponent} from "react";
 import {BasicEventType, CreateEventType} from "../../models/Event";
 import {IntervalPicker} from "../IntervalPicker";
+import {useForm} from "@mantine/form";
+
+const getDefaultCreateEvent = (): CreateEventType => ({
+  name: "",
+  start: new Date(new Date().setHours(new Date().getHours() + 1)),
+  end: new Date(new Date().setHours(new Date().getHours() + 2)),
+  description: "",
+  equipment: "",
+  limit: null,
+  price: null,
+});
 
 export const EventForm: FunctionComponent<{
-  event: CreateEventType | BasicEventType | undefined;
-  setEvent: (newState: CreateEventType | BasicEventType) => void;
-  submitButton: JSX.Element;
-}> = ({event, setEvent, submitButton}) => {
-  // TODO form: validation
-  if (!event) return <></>;
+  originalEvent?: CreateEventType | BasicEventType | undefined;
+  onSubmit: (data: CreateEventType) => void;
+}> = ({originalEvent, onSubmit}) => {
+  const now = new Date();
+
+  const form = useForm<CreateEventType>({
+    initialValues: originalEvent ?? getDefaultCreateEvent(),
+    initialDirty: {name: !originalEvent},
+    clearInputErrorOnChange: false,
+    validateInputOnChange: true,
+
+    validate: {
+      name: (value) => value ? null : 'Name is required',
+      start: (value) => value.getTime() > now.getTime() ? null : "Invalid start",
+      end: (value, formData) =>
+        (value.getTime() > now.getTime() && value.getTime() > formData.start.getTime()) ? null : "Invalid end",
+    },
+  });
 
   return (
-    <Stack>
-      <TextInput
-        withAsterisk
-        label="Name"
-        placeholder="What is the event called?"
-        value={event.name}
-        onChange={(e) => setEvent({...event, name: e.currentTarget.value})}
-      />
-      <IntervalPicker
-        start={new Date(event.start)}
-        end={new Date(event.end)}
-        onChange={(newStart, newEnd) =>
-          setEvent({...event, start: newStart, end: newEnd})
-        }
-      />
-      {/*<LocationPicker
+    <form onSubmit={form.onSubmit(onSubmit)}>
+      <Stack>
+        <TextInput
+          withAsterisk
+          label="Name"
+          placeholder="What is the event called?"
+          {...form.getInputProps('name')}
+        />
+        <IntervalPicker
+          start={form.getInputProps('start').value}
+          end={form.getInputProps('end').value}
+          onChange={(newStart, newEnd) => {
+            form.getInputProps('start').onChange(newStart);
+            form.getInputProps('end').onChange(newEnd);
+          }}
+          startError={form.getInputProps('start').error}
+          endError={form.getInputProps('end').error}
+        />
+        {/*<LocationPicker
         defaultLocation={event.location.address}
         setLocation={(newLocation) =>
           setEvent({
@@ -36,52 +62,47 @@ export const EventForm: FunctionComponent<{
           })
         }
       />*/}
-      <Textarea
-        label="Description"
-        placeholder="What are the plans?"
-        value={event.description ?? "" /*TODO not nullable?*/}
-        onChange={(e) =>
-          setEvent({...event, description: e.currentTarget.value})
-        }
-      />
-      <TextInput
-        label="Equipment"
-        placeholder="Is any equipment needed?"
-        value={event.equipment ?? ""}
-        onChange={(e) =>
-          setEvent({...event, equipment: e.currentTarget.value})
-        }
-      />
-      <NumberInput
-        label="Price"
-        placeholder="Do participants need to pay for it?"
-        value={event.price ?? undefined}
-        onChange={(newValue) => setEvent({...event, price: newValue ?? null})}
-        min={1}
-        parser={(value: string | undefined) =>
-          value?.replace(/\$\s?|(,*)/g, "")
-        }
-        formatter={(value: string | undefined) =>
-          !Number.isNaN(parseFloat(`${value}`))
-            ? `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-            : "$ "
-        }
-      />
-      <NumberInput
-        label="Limit"
-        placeholder="Is there a maximum number of participants?"
-        value={event.limit ?? undefined}
-        onChange={(newValue) => setEvent({...event, limit: newValue ?? null})}
-        min={1}
-      />
-      {/* <Checkbox
+        <Textarea
+          label="Description"
+          placeholder="What are the plans?"
+          {...form.getInputProps('description')}
+        />
+        <TextInput
+          label="Equipment"
+          placeholder="Is any equipment needed?"
+          {...form.getInputProps('equipment')}
+        />
+        <NumberInput
+          label="Price"
+          placeholder="Do participants need to pay for it?"
+          {...form.getInputProps('price')}
+          min={1}
+          parser={(value: string | undefined) =>
+            value?.replace(/\$\s?|(,*)/g, "")
+          }
+          formatter={(value: string | undefined) =>
+            !Number.isNaN(parseFloat(`${value}`))
+              ? `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+              : "$ "
+          }
+        />
+        <NumberInput
+          label="Limit"
+          placeholder="Is there a maximum number of participants?"
+          {...form.getInputProps('limit')}
+          min={1}
+        />
+        {/* <Checkbox
         label="Is it recurring every week?"
         checked={event.recurring}
         onChange={(e) =>
           setEvent({ ...event, recurring: e.currentTarget.checked })
         }
       /> */}
-      {submitButton}
-    </Stack>
+        <Button type="submit" disabled={!form.isDirty() || !form.isValid()}>
+          Submit
+        </Button>
+      </Stack>
+    </form>
   );
 };
