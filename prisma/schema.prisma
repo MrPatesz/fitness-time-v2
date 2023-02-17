@@ -55,7 +55,6 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-// TODO modify User model
 model User {
   id                 String    @id @default(cuid())
   name               String?
@@ -64,7 +63,6 @@ model User {
   image              String?
   accounts           Account[]
   sessions           Session[]
-  // TODO maybe need defaults for all custom fields
   // locationId         Int?
   // location           Location? @relation(fields: [locationId], references: [id], onDelete: Restrict)
   introduction       String?

@@ -41,7 +41,7 @@ export const FilterEventsComponent: FunctionComponent<{
     defaultValue: [],
   });
   const [orderBy, setOrderBy] = useState<string>(OrderBy[OrderBy.DATE] ?? "");
-  const [ascending, setAscending] = useState<boolean>(true);
+  const [ascending, setAscending] = useState<boolean>(false);
 
   useEffect(() => {
     setFilteredEvents(

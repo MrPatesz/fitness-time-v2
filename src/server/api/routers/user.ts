@@ -21,13 +21,14 @@ export const userRouter = createTRPCRouter({
     }),
   getById: protectedProcedure
     .input(z.string())
-    .output(BasicUserSchema)
+    .output(DetailedUserSchema)
     .query(async ({input: id, ctx}) => {
       const user = await ctx.prisma.user.findFirst({
         where: {id},
+        include: {createdEvents: true, participatedEvents: true}
       });
 
-      return BasicUserSchema.parse(user)
+      return DetailedUserSchema.parse(user)
     }),
   update: protectedProcedure
     .input(BasicUserSchema)

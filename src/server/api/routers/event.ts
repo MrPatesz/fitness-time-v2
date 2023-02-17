@@ -2,12 +2,15 @@ import {createTRPCRouter, protectedProcedure} from "../trpc";
 import {BasicEventSchema, CreateEventSchema, DetailedEventSchema} from "../../../models/Event";
 import {IdSchema} from "../../../models/Id";
 import {z} from "zod";
+import {Prisma} from ".prisma/client";
 
 export const eventRouter = createTRPCRouter({
   getAll: protectedProcedure
     .output(BasicEventSchema.array())
     .query(async ({ctx}) => {
-      const events = await ctx.prisma.event.findMany();
+      const events = await ctx.prisma.event.findMany({
+        orderBy: {name: Prisma.SortOrder.asc}
+      });
       return BasicEventSchema.array().parse(events);
     }),
   getAllCreated: protectedProcedure
@@ -26,12 +29,8 @@ export const eventRouter = createTRPCRouter({
     .output(BasicEventSchema.array())
     .query(async ({ctx: {session: {user: {id: callerId}}, prisma}}) => {
       const events = await prisma.event.findMany({
-        where: {
-          creatorId: {
-            not: callerId
-          }
-        },
-        include: {creator: true, participants: true}
+        where: {creatorId: {not: callerId}},
+        orderBy: {start: Prisma.SortOrder.desc}
       });
 
       return BasicEventSchema.array().parse(events);
