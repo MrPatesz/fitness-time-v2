@@ -7,6 +7,7 @@ import {CreateEventDialog} from "../components/event/CreateEventDialog";
 import dynamic from "next/dynamic";
 import {showNotification} from "@mantine/notifications";
 import {api} from "../utils/api";
+import {useSession} from "next-auth/react";
 
 const DayPilotNavigator: any = dynamic(
   () =>
@@ -31,6 +32,7 @@ export default function CalendarPage() {
   const updateEvent = api.event.update.useMutation();
   const theme = useMantineTheme();
   const router = useRouter();
+  const {data: session} = useSession();
 
   return (
     <>
@@ -56,7 +58,7 @@ export default function CalendarPage() {
             newStart: { value: string };
             newEnd: { value: string };
           }) => {
-            if (event.e.data.resource.ownedByCaller) {
+            if (session?.user.id === event.e.data.resource.creatorId) {
               updateEvent.mutate({
                 ...event.e.data.resource,
                 from: new Date(event.newStart.value),
@@ -79,7 +81,7 @@ export default function CalendarPage() {
             ctrl: boolean;
             shift: boolean;
           }) => {
-            if (event.e.data.resource.ownedByCaller) { // TODO
+            if (session?.user.id === event.e.data.resource.creatorId) {
               updateEvent.mutate({
                 ...event.e.data.resource,
                 from: new Date(event.newStart.value),
@@ -112,9 +114,9 @@ export default function CalendarPage() {
               text: event.name,
               start,
               end,
-              backColor: // event.ownedByCaller ?
-                theme.colors.violet[8],
-              // : theme.colors.blue[8],
+              backColor: session?.user.id === event.creatorId ?
+                theme.colors.violet[8]
+                : theme.colors.blue[8],
               fontColor: "white",
               resource: event,
             };

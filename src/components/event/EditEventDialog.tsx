@@ -19,10 +19,7 @@ export const EditEventDialog: FunctionComponent<{
       title="Edit Event"
       closeOnClickOutside={false}
     >
-      <QueryComponent
-        resourceName={"Event Details"}
-        query={eventQuery}
-      >
+      <QueryComponent resourceName={"Event Details"} query={eventQuery}>
         <EventForm
           originalEvent={eventQuery.data}
           onSubmit={(data) => {

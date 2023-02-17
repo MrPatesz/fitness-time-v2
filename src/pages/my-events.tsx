@@ -4,7 +4,7 @@ import {QueryComponent} from "../components/QueryComponent";
 import {CreateEventDialog} from "../components/event/CreateEventDialog";
 import {useRouter} from "next/router";
 import {EditEventDialog} from "../components/event/EditEventDialog";
-import {getIntervalString} from "../utils/utilFunctions";
+import {getIntervalString, priceFormatter} from "../utils/utilFunctions";
 import {FilterEventsComponent} from "../components/event/FilterEventsComponent";
 import {ConfirmDialog} from "../components/ConfirmDialog";
 import {BasicEventType} from "../models/Event";
@@ -57,7 +57,7 @@ export default function MyEventsPage() {
                 <td>{getIntervalString(event.start, event.end)}</td>
                 {/*<td>{event.location.address}</td>*/}
                 <td>{event.equipment}</td>
-                <td>{event.price && <>$ {event.price}</>}</td>
+                <td>{event.price && priceFormatter.format(event.price)}</td>
                 {/*TODO JavaScript formatter (refactor everywhere)*/}
                 <td>{event.limit}</td>
                 {/* <td>{event.recurring.toString()}</td> */}

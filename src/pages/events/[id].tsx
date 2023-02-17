@@ -1,10 +1,10 @@
-import {ActionIcon, Affix, Badge, Card, Group, Stack, Text,} from "@mantine/core";
+import {ActionIcon, Affix, Badge, Button, Card, Group, Stack, Text,} from "@mantine/core";
 import {useSession} from "next-auth/react";
 import Link from "next/link";
 import {useRouter} from "next/router";
 import React, {useState} from "react";
 import {QueryComponent} from "../../components/QueryComponent";
-import {getIntervalString} from "../../utils/utilFunctions";
+import {getIntervalString, priceFormatter} from "../../utils/utilFunctions";
 import {api} from "../../utils/api";
 import {EditEventDialog} from "../../components/event/EditEventDialog";
 import {Pencil} from "tabler-icons-react";
@@ -16,39 +16,39 @@ export default function EventDetailsPage() {
   const {query: {id}} = useRouter();
 
   const eventQuery = api.event.getById.useQuery(parseInt(`${id}`));
-  // const participate = eventService.useParticipate();
+  const participate: any = undefined; // TODO
 
-  // const participateButton = () => {
-  //   if (eventQuery.data?.ownedByCaller) {
-  //     return;
-  //   }
-  //
-  //   return eventQuery.data?.participants.find(
-  //     (p: UserType) => p.id === session?.user.id
-  //   ) ? (
-  //     <Button
-  //       onClick={() =>
-  //         participate.mutate({
-  //           id: id?.toString(),
-  //           status: false,
-  //         })
-  //       }
-  //     >
-  //       Remove participation
-  //     </Button>
-  //   ) : (
-  //     <Button
-  //       onClick={() =>
-  //         participate.mutate({
-  //           id: id?.toString(),
-  //           status: true,
-  //         })
-  //       }
-  //     >
-  //       Participate
-  //     </Button>
-  //   );
-  // };
+  const participateButton = () => {
+    if (eventQuery.data?.creatorId === session?.user.id) {
+      return;
+    }
+
+    return eventQuery.data?.participants.find(
+      (p) => p.id === session?.user.id
+    ) ? (
+      <Button
+        onClick={() =>
+          participate.mutate({
+            id: id?.toString(),
+            status: false,
+          })
+        }
+      >
+        Remove participation
+      </Button>
+    ) : (
+      <Button
+        onClick={() =>
+          participate.mutate({
+            id: id?.toString(),
+            status: true,
+          })
+        }
+      >
+        Participate
+      </Button>
+    );
+  };
 
   const limitBadge = () => {
     if (eventQuery.data?.limit) {
@@ -83,7 +83,7 @@ export default function EventDetailsPage() {
                 </Group>
                 <Group spacing="xs">
                   <Text>
-                    {new Date(eventQuery.data.start).toLocaleDateString()}
+                    {eventQuery.data.start.toLocaleDateString()}
                   </Text>
                   <Text>
                     {getIntervalString(
@@ -101,7 +101,7 @@ export default function EventDetailsPage() {
                   </Text>
                 )}
                 {eventQuery.data.price && (
-                  <Text>Price: $ {eventQuery.data.price}</Text>
+                  <Text>Price: {priceFormatter.format(eventQuery.data.price)}</Text>
                 )}
               </Stack>
               {/*<MapComponent locationDto={eventQuery.data.location}/>*/}
@@ -114,7 +114,7 @@ export default function EventDetailsPage() {
                       {limitBadge()}
                       <Text>They will also be there:</Text>
                     </Group>
-                    {/*{participateButton()}*/}
+                    {participateButton()}
                   </Group>
                   <Group spacing="xs">
                     {eventQuery.data.participants.map((p, index: number) => (
@@ -139,7 +139,7 @@ export default function EventDetailsPage() {
                     {limitBadge()}
                     <Text>There are no participants yet.</Text>
                   </Group>
-                  {/*{participateButton()}*/}
+                  {participateButton()}
                 </Group>
               )}
             </Card>

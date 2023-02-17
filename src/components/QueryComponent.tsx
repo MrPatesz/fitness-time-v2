@@ -1,12 +1,13 @@
-import {Card, Loader} from "@mantine/core";
+import {Card, Loader, LoadingOverlay} from "@mantine/core";
 import {UseTRPCQueryResult} from "@trpc/react-query/shared";
-import {FunctionComponent, useEffect} from "react";
+import React, {FunctionComponent, useEffect} from "react";
 
 export const QueryComponent: FunctionComponent<{
   resourceName: string;
   query: UseTRPCQueryResult<any, any>;
   children: JSX.Element | JSX.Element[] | string | undefined | null;
   setState?: (newState: any) => void;
+  // TODO placeholder (mock while loading)
 }> = ({resourceName, query, children, setState}) => {
   useEffect(() => {
     if (setState && query.data) {
@@ -18,11 +19,14 @@ export const QueryComponent: FunctionComponent<{
     <>
       {query.error ? (
         <Card withBorder>An error occurred while fetching {resourceName}!</Card>
-      ) : query.data ? (
-        children
-      ) : (
-        query.isFetching && <Loader/>
-      )}
+      ) : query.isLoading ? (
+        <Loader/>
+      ) : query.isFetching ? (
+        <div style={{position: 'relative'}}>
+          <LoadingOverlay visible={true} radius={"md"}/>
+          {children}
+        </div>
+      ) : children}
     </>
   );
 };

@@ -9,3 +9,9 @@ export const getIntervalString = (start: Date, end: Date) => {
     endString
   )}`;
 };
+
+export const priceFormatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  maximumFractionDigits: 0,
+});
