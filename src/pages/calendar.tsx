@@ -7,6 +7,7 @@ import {useRouter} from "next/router";
 import {useState} from "react";
 import {CreateEventDialog} from "../components/event/CreateEventDialog";
 import {QueryComponent} from "../components/QueryComponent";
+import {BasicEventType} from "../models/Event";
 import {api} from "../utils/api";
 
 const DayPilotNavigator: any = dynamic(
@@ -37,6 +38,30 @@ export default function CalendarPage() {
   const router = useRouter();
   const {data: session} = useSession();
 
+  const onIntervalChange = (event: {
+    e: { data: { resource: BasicEventType } };
+    newStart: { value: string };
+    newEnd: { value: string };
+  }) => {
+    // TODO fix update call
+    if (session?.user.id === event.e.data.resource.creatorId) {
+      updateEvent.mutate({
+        id: event.e.data.resource.id,
+        event: {
+          ...event.e.data.resource,
+          start: new Date(event.newStart.value),
+          end: new Date(event.newEnd.value),
+        }
+      });
+    } else {
+      showNotification({
+        color: "red",
+        title: "Could not update event!",
+        message: "You do not own this event!",
+      });
+    }
+  };
+
   return (
     <>
       <QueryComponent resourceName="Calendar" query={eventsQuery}>
@@ -56,48 +81,8 @@ export default function CalendarPage() {
             setDefaultEnd(new Date(event.end.value));
             setOpenCreate(true);
           }}
-          onEventResize={(event: {
-            e: any;
-            newStart: { value: string };
-            newEnd: { value: string };
-          }) => {
-            if (session?.user.id === event.e.data.resource.creatorId) {
-              updateEvent.mutate({
-                ...event.e.data.resource,
-                from: new Date(event.newStart.value),
-                to: new Date(event.newEnd.value),
-              });
-            } else {
-              showNotification({
-                color: "red",
-                title: "Could not update event!",
-                message: "You do not own this event!",
-              });
-            }
-          }}
-          onEventMove={(event: {
-            e: any;
-            newStart: { value: string };
-            newEnd: { value: string };
-            newResource: any;
-            external: boolean;
-            ctrl: boolean;
-            shift: boolean;
-          }) => {
-            if (session?.user.id === event.e.data.resource.creatorId) {
-              updateEvent.mutate({
-                ...event.e.data.resource,
-                from: new Date(event.newStart.value),
-                to: new Date(event.newEnd.value),
-              });
-            } else {
-              showNotification({
-                color: "red",
-                title: "Could not update event!",
-                message: "You do not own this event!",
-              });
-            }
-          }}
+          onEventResize={onIntervalChange}
+          onEventMove={onIntervalChange}
           durationBarVisible={false}
           businessBeginsHour={8}
           businessEndsHour={17}
@@ -118,9 +103,9 @@ export default function CalendarPage() {
               start,
               end,
               backColor: session?.user.id === event.creatorId ?
-                theme.colors.violet[8]
-                : theme.colors.blue[8],
-              fontColor: "white",
+                theme.fn.themeColor(theme.primaryColor)
+                : theme.fn.themeColor(theme.primaryColor, 6), // TODO creatorColor
+              cssClass: "calendar-event",
               resource: event,
             };
           })}

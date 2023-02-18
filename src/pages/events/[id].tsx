@@ -107,7 +107,7 @@ export default function EventDetailsPage() {
               </Stack>
               <MapComponent locationDto={eventQuery.data.location}/>
             </Group>
-            <Card withBorder shadow="md" radius="md" p="lg">
+            <Card withBorder shadow="md" p="lg">
               {eventQuery.data.participants.length ? (
                 <Stack>
                   <Group position="apart">

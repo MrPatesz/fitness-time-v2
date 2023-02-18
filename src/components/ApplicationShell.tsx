@@ -25,7 +25,7 @@ export const ApplicationShell: FunctionComponent<{
     <AppShell
       hidden={!session}
       navbar={
-        <Navbar width={{base: 200}} p="xs">
+        <Navbar width={{base: 211}} p="xs">
           {[
             {label: "Calendar", route: "/calendar", icon: CalendarEvent},
             {label: "Feed", route: "/feed", icon: News},

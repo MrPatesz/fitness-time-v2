@@ -1,4 +1,4 @@
-import {SimpleGrid, Stack} from "@mantine/core";
+import {SimpleGrid, Stack, useMantineTheme} from "@mantine/core";
 import {useMediaQuery} from "@mantine/hooks";
 import React, {useState} from "react";
 import {EventCard} from "../components/event/EventCard";
@@ -11,9 +11,10 @@ export default function FeedPage() {
   const [filteredList, setFilteredList] = useState<BasicEventType[]>([]);
   const eventsQuery = api.event.getAll.useQuery(); // TODO getFeed
 
-  const medium = useMediaQuery("(min-width: 600px)");
-  const large = useMediaQuery("(min-width: 950px)");
-  const extraLarge = useMediaQuery("(min-width: 1300px)");
+  const theme = useMantineTheme();
+  const medium = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
+  const large = useMediaQuery(`(min-width: ${theme.breakpoints.md}px)`);
+  const extraLarge = useMediaQuery(`(min-width: ${theme.breakpoints.xl}px)`);
 
   return (
     <Stack>

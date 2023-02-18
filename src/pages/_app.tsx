@@ -1,29 +1,32 @@
-import {type AppType} from "next/app";
+import {MantineProvider, MantineThemeOverride} from "@mantine/core";
+import {useColorScheme} from "@mantine/hooks";
+import {NotificationsProvider} from "@mantine/notifications";
 import {type Session} from "next-auth";
 import {SessionProvider} from "next-auth/react";
+import {type AppType} from "next/app";
 import Head from "next/head";
+import {useMemo} from "react";
+import {ApplicationShell} from "../components/ApplicationShell";
+
+import "../styles/globals.css";
 
 import {api} from "../utils/api";
 
-import "../styles/globals.css";
-import {NotificationsProvider} from "@mantine/notifications";
-import {MantineProvider, MantineThemeOverride} from "@mantine/core";
-import {useColorScheme} from "@mantine/hooks";
-import {ApplicationShell} from "../components/ApplicationShell";
-
 const App: AppType<{ session: Session | null }> = ({
-    Component,
-    pageProps: {session, ...pageProps},
-}) => {
+                                                     Component,
+                                                     pageProps: {session, ...pageProps},
+                                                   }) => {
   const colorScheme = useColorScheme();
 
-  const myTheme: MantineThemeOverride = {
-    colorScheme,
-    primaryColor: "violet",
-    loader: "dots",
-    cursorType: "pointer",
-    dateFormat: "MMMM DD, YYYY",
-  };
+  const myTheme = useMemo((): MantineThemeOverride => ({
+      colorScheme,
+      primaryColor: "violet", // TODO color: session?.user.color ?? "violet"
+      loader: "dots",
+      cursorType: "pointer",
+      dateFormat: "MMMM DD, YYYY",
+      defaultRadius: "md"
+    }), [colorScheme, session?.user] // TODO color: session?.user.color]
+  );
 
   return (
     <>

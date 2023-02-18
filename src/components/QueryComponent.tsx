@@ -1,4 +1,4 @@
-import {Card, Loader, LoadingOverlay} from "@mantine/core";
+import {Box, Card, Loader, LoadingOverlay} from "@mantine/core";
 import {UseTRPCQueryResult} from "@trpc/react-query/shared";
 import React, {FunctionComponent, useEffect} from "react";
 
@@ -22,10 +22,10 @@ export const QueryComponent: FunctionComponent<{
       ) : query.isLoading ? (
         <Loader/>
       ) : query.isFetching ? (
-        <div style={{position: 'relative'}}>
-          <LoadingOverlay visible={true} radius={"md"}/>
+        <Box sx={{position: "relative"}}>
+          <LoadingOverlay visible={true} sx={theme => ({borderRadius: theme.fn.radius(theme.defaultRadius)})}/>
           {children}
-        </div>
+        </Box>
       ) : children}
     </>
   );

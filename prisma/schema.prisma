@@ -64,6 +64,7 @@ model User {
   accounts           Account[]
   sessions           Session[]
   introduction       String?
+  // TODO color              String?
   locationId         Int?
   location           Location? @relation(fields: [locationId], references: [id], onDelete: Restrict)
   createdEvents      Event[]   @relation(name: "createdEvents")

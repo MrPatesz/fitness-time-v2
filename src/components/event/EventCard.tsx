@@ -7,7 +7,7 @@ export const EventCard: FunctionComponent<{
   event: BasicEventType;
 }> = ({event}) => {
   return (
-    <Card withBorder shadow="md" radius="md" p="lg">
+    <Card withBorder shadow="md" p="lg">
       <Stack spacing="xs">
         <Group position="apart">
           <Text weight="bold">{event.name}</Text>
