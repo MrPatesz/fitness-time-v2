@@ -1,5 +1,6 @@
 import {z} from "zod";
-import {BasicUserSchema, DetailedUserSchema, ProfileUserSchema} from "../../../models/User";
+import {LocationSchema} from "../../../models/Location";
+import {BasicUserSchema, DetailedUserSchema, ProfileSchema} from "../../../models/User";
 import {createTRPCRouter, protectedProcedure} from "../trpc";
 import {Prisma} from ".prisma/client";
 
@@ -13,7 +14,7 @@ export const userRouter = createTRPCRouter({
       return BasicUserSchema.array().parse(events);
     }),
   profile: protectedProcedure
-    .output(ProfileUserSchema)
+    .output(ProfileSchema)
     .query(async ({ctx: {prisma, session: {user: {id: userId}}}}) => {
       const user = await prisma.user.findUnique({
         where: {id: userId},
@@ -24,7 +25,7 @@ export const userRouter = createTRPCRouter({
         }
       });
 
-      return ProfileUserSchema.parse(user);
+      return ProfileSchema.parse(user);
     }),
   getById: protectedProcedure
     .input(z.string())
@@ -41,14 +42,28 @@ export const userRouter = createTRPCRouter({
       return DetailedUserSchema.parse(user);
     }),
   update: protectedProcedure
-    .input(BasicUserSchema)
-    .output(BasicUserSchema)
+    .input(BasicUserSchema.extend({
+      location: LocationSchema.nullable(),
+    }))
+    .output(BasicUserSchema.extend({
+      location: LocationSchema.nullable(),
+    }))
     .mutation(async ({input, ctx}) => {
       // TODO update location
       const updatedEvent = await ctx.prisma.user.update({
         where: {id: input.id},
-        data: input,
+        data: {
+          ...input,
+          location: input.location ? {
+            connectOrCreate: {
+              where: {
+                address: input.location.address
+              },
+              create: input.location
+            }
+          } : {disconnect: true}
+        },
       });
-      return BasicUserSchema.parse(updatedEvent);
+      return ProfileSchema.parse(updatedEvent);
     }),
 });

@@ -11,12 +11,16 @@ export const BasicUserSchema = z.object({
   // emailVerified: z.date().nullable(),
 });
 
+export const UpdateProfileSchema = BasicUserSchema.extend({
+  location: LocationSchema.nullable(),
+});
+
 export const DetailedUserSchema = BasicUserSchema.extend({
   createdEvents: z.lazy(() => BasicEventSchema.array()),
   participatedEvents: z.lazy(() => BasicEventSchema.array()),
 });
 
-export const ProfileUserSchema = DetailedUserSchema.extend({
+export const ProfileSchema = DetailedUserSchema.extend({
   location: LocationSchema.nullable(),
 });
 
@@ -24,4 +28,6 @@ export type BasicUserType = z.infer<typeof BasicUserSchema>;
 
 export type DetailedUserType = z.infer<typeof DetailedUserSchema>;
 
-export type ProfileUserType = z.infer<typeof ProfileUserSchema>;
+export type ProfileType = z.infer<typeof ProfileSchema>;
+
+export type UpdateProfileType = z.infer<typeof UpdateProfileSchema>;
