@@ -27,7 +27,7 @@ export const EditEventDialog: FunctionComponent<{
           originalEvent={eventQuery.data}
           onSubmit={(data) => {
             if (eventQuery.data) {
-              useUpdate.mutateAsync({...data, id: eventId}).then(onClose);
+              useUpdate.mutateAsync({id: eventId, event: data}).then(onClose);
             }
           }}
         />

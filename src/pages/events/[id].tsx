@@ -3,11 +3,12 @@ import {useSession} from "next-auth/react";
 import Link from "next/link";
 import {useRouter} from "next/router";
 import React, {useState} from "react";
-import {QueryComponent} from "../../components/QueryComponent";
-import {getIntervalString, priceFormatter} from "../../utils/utilFunctions";
-import {api} from "../../utils/api";
-import {EditEventDialog} from "../../components/event/EditEventDialog";
 import {Pencil} from "tabler-icons-react";
+import {EditEventDialog} from "../../components/event/EditEventDialog";
+import MapComponent from "../../components/MapComponent";
+import {QueryComponent} from "../../components/QueryComponent";
+import {api} from "../../utils/api";
+import {getIntervalString, priceFormatter} from "../../utils/utilFunctions";
 
 export default function EventDetailsPage() {
   const [openEdit, setOpenEdit] = useState(false);
@@ -104,7 +105,7 @@ export default function EventDetailsPage() {
                   <Text>Price: {priceFormatter.format(eventQuery.data.price)}</Text>
                 )}
               </Stack>
-              {/*<MapComponent locationDto={eventQuery.data.location}/>*/}
+              <MapComponent locationDto={eventQuery.data.location}/>
             </Group>
             <Card withBorder shadow="md" radius="md" p="lg">
               {eventQuery.data.participants.length ? (

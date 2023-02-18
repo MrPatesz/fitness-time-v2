@@ -1,7 +1,7 @@
-import {createTRPCRouter, protectedProcedure} from "../trpc";
+import {z} from "zod";
 import {BasicEventSchema, CreateEventSchema, DetailedEventSchema} from "../../../models/Event";
 import {IdSchema} from "../../../models/Id";
-import {z} from "zod";
+import {createTRPCRouter, protectedProcedure} from "../trpc";
 import {Prisma} from ".prisma/client";
 
 export const eventRouter = createTRPCRouter({
@@ -9,7 +9,8 @@ export const eventRouter = createTRPCRouter({
     .output(BasicEventSchema.array())
     .query(async ({ctx}) => {
       const events = await ctx.prisma.event.findMany({
-        orderBy: {name: Prisma.SortOrder.asc}
+        orderBy: {name: Prisma.SortOrder.asc},
+        include: {location: true},
       });
       return BasicEventSchema.array().parse(events);
     }),
@@ -18,7 +19,7 @@ export const eventRouter = createTRPCRouter({
     .query(async ({ctx: {session: {user: {id: callerId}}, prisma}}) => {
       const caller = await prisma.user.findFirst({
         where: {id: callerId},
-        include: {createdEvents: true}
+        include: {createdEvents: {include: {location: true}}},
       });
 
       if (!caller) return [];
@@ -30,7 +31,8 @@ export const eventRouter = createTRPCRouter({
     .query(async ({ctx: {session: {user: {id: callerId}}, prisma}}) => {
       const events = await prisma.event.findMany({
         where: {creatorId: {not: callerId}},
-        orderBy: {start: Prisma.SortOrder.desc}
+        orderBy: {start: Prisma.SortOrder.desc},
+        include: {location: true},
       });
 
       return BasicEventSchema.array().parse(events);
@@ -41,8 +43,8 @@ export const eventRouter = createTRPCRouter({
       const caller = await prisma.user.findFirst({
         where: {id: callerId},
         include: {
-          createdEvents: true,
-          participatedEvents: true
+          createdEvents: {include: {location: true}},
+          participatedEvents: {include: {location: true}},
         }
       });
 
@@ -56,7 +58,7 @@ export const eventRouter = createTRPCRouter({
     .query(async ({input: id, ctx}) => {
       const event = await ctx.prisma.event.findFirst({
         where: {id},
-        include: {creator: true, participants: true}
+        include: {creator: true, participants: true, location: true}
       });
 
       return DetailedEventSchema.parse(event);
@@ -69,7 +71,15 @@ export const eventRouter = createTRPCRouter({
       const event = await prisma.event.create({
         data: {
           ...createEvent,
-          creatorId: callerId
+          creator: {connect: {id: callerId}},
+          location: {
+            connectOrCreate: {
+              where: {
+                address: createEvent.location.address
+              },
+              create: createEvent.location
+            }
+          }
         },
       });
 
@@ -78,12 +88,23 @@ export const eventRouter = createTRPCRouter({
   // TODO participate: protectedProcedure.input().output().mutation(),
   //  is this needed? maybe use update endpoint?
   update: protectedProcedure
-    .input(CreateEventSchema.extend({id: IdSchema}))
+    .input(z.object({event: CreateEventSchema, id: IdSchema}))
     .output(BasicEventSchema)
-    .mutation(async ({input: createEvent, ctx}) => {
-      const updatedEvent = await ctx.prisma.event.update({
-        where: {id: createEvent.id},
-        data: createEvent,
+    .mutation(async ({input, ctx: {session: {user: {id: callerId}}, prisma}}) => {
+      const updatedEvent = await prisma.event.update({
+        where: {id: input.id},
+        data: {
+          ...input.event,
+          creator: {connect: {id: callerId}},
+          location: {
+            connectOrCreate: {
+              where: {
+                address: input.event.location.address
+              },
+              create: input.event.location
+            }
+          }
+        },
       });
       return BasicEventSchema.parse(updatedEvent);
     }),

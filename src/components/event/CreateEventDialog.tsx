@@ -1,18 +1,8 @@
 import {Modal} from "@mantine/core";
 import {FunctionComponent} from "react";
-import {CreateEventType} from "../../models/Event";
 import {api} from "../../utils/api";
+import {getDefaultCreateEvent} from "../../utils/defaultObjects";
 import {EventForm} from "./EventForm";
-
-const defaultCreateEvent: CreateEventType = {
-  name: "",
-  start: new Date(),
-  end: new Date(),
-  description: "",
-  equipment: "",
-  limit: null,
-  price: null,
-};
 
 export const CreateEventDialog: FunctionComponent<{
   open: boolean;
@@ -35,13 +25,7 @@ export const CreateEventDialog: FunctionComponent<{
       closeOnClickOutside={false}
     >
       <EventForm
-        originalEvent={
-          initialInterval ? {
-            ...defaultCreateEvent,
-            start: initialInterval.start,
-            end: initialInterval.end
-          } : undefined
-        }
+        originalEvent={initialInterval ? getDefaultCreateEvent(initialInterval) : undefined}
         onSubmit={(data) => useCreate.mutateAsync(data).then(onClose)}
       />
     </Modal>

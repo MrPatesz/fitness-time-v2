@@ -63,9 +63,9 @@ model User {
   image              String?
   accounts           Account[]
   sessions           Session[]
-  // locationId         Int?
-  // location           Location? @relation(fields: [locationId], references: [id], onDelete: Restrict)
   introduction       String?
+  locationId         Int?
+  location           Location? @relation(fields: [locationId], references: [id], onDelete: Restrict)
   createdEvents      Event[]   @relation(name: "createdEvents")
   participatedEvents Event[]   @relation(name: "participatedEvents")
   // createdGroups      Group[]   @relation(name: "createdGroups")
@@ -77,27 +77,27 @@ model Event {
   name         String
   start        DateTime
   end          DateTime
-  // locationId   Int
-  // location     Location @relation(fields: [locationId], references: [id], onDelete: Restrict)
   // recurring    Boolean
   description  String
   equipment    String
   limit        Int?
   price        Int?
+  locationId   Int
+  location     Location @relation(fields: [locationId], references: [id], onDelete: Restrict)
   creatorId    String
   creator      User     @relation(name: "createdEvents", fields: [creatorId], references: [id], onDelete: Restrict)
   participants User[]   @relation(name: "participatedEvents")
 }
 
-// model Location {
-//   id        Int     @id @default(autoincrement())
-//   address   String  @unique
-//   latitude  Float
-//   longitude Float
-//   users     User[]
-//   events    Event[]
-// }
-//
+model Location {
+  id        Int     @id @default(autoincrement())
+  address   String  @unique
+  latitude  Float
+  longitude Float
+  users     User[]
+  events    Event[]
+}
+
 // model Group {
 //   id        Int    @id @default(autoincrement())
 //   name      String @unique
