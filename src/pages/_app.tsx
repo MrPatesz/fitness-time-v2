@@ -7,15 +7,17 @@ import {type AppType} from "next/app";
 import Head from "next/head";
 import {useMemo} from "react";
 import {ApplicationShell} from "../components/ApplicationShell";
+import "../styles/calendar.css";
 
 import "../styles/globals.css";
+import "../styles/navigator.css";
 
 import {api} from "../utils/api";
 
 const App: AppType<{ session: Session | null }> = ({
-                                                     Component,
-                                                     pageProps: {session, ...pageProps},
-                                                   }) => {
+  Component,
+  pageProps: {session, ...pageProps},
+}) => {
   const colorScheme = useColorScheme();
 
   const myTheme = useMemo((): MantineThemeOverride => ({
