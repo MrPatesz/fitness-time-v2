@@ -1,13 +1,13 @@
-import {Button, NumberInput, Stack, Textarea, TextInput} from "@mantine/core";
+import {Button, Group, NumberInput, Stack, Textarea, TextInput} from "@mantine/core";
 import {useForm} from "@mantine/form";
 import {FunctionComponent} from "react";
-import {BasicEventType, CreateEventType} from "../../models/Event";
+import {CreateEventType} from "../../models/Event";
 import {getDefaultCreateEvent} from "../../utils/defaultObjects";
 import {IntervalPicker} from "../IntervalPicker";
 import {LocationPicker} from "../LocationPicker";
 
 export const EventForm: FunctionComponent<{
-  originalEvent?: CreateEventType | BasicEventType | undefined;
+  originalEvent: CreateEventType | undefined;
   onSubmit: (data: CreateEventType) => void;
 }> = ({originalEvent, onSubmit}) => {
   const now = new Date();
@@ -49,6 +49,7 @@ export const EventForm: FunctionComponent<{
           endError={form.getInputProps("end").error}
         />
         <LocationPicker
+          location={form.getInputProps("location").value}
           required={true}
           placeholder="Where will it take place?"
           initialAddress={form.getInputProps("location").value.address}
@@ -92,9 +93,14 @@ export const EventForm: FunctionComponent<{
           setEvent({ ...event, recurring: e.currentTarget.checked })
         }
       /> */}
-        <Button type="submit" disabled={!form.isValid()}>
-          Submit
-        </Button>
+        <Group position="apart">
+          <Button onClick={form.reset} color="gray" disabled={!form.isDirty()}>
+            Reset
+          </Button>
+          <Button type="submit" disabled={!form.isValid() || !form.isDirty()}>
+            Submit
+          </Button>
+        </Group>
       </Stack>
     </form>
   );

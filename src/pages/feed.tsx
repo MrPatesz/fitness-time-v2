@@ -9,7 +9,7 @@ import {api} from "../utils/api";
 
 export default function FeedPage() {
   const [filteredList, setFilteredList] = useState<BasicEventType[]>([]);
-  const eventsQuery = api.event.getAll.useQuery(); // TODO getFeed
+  const eventsQuery = api.event.getFeed.useQuery();
 
   const theme = useMantineTheme();
   const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);

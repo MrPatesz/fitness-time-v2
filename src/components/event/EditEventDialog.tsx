@@ -23,14 +23,14 @@ export const EditEventDialog: FunctionComponent<{
       closeOnClickOutside={false}
     >
       <QueryComponent resourceName={"Event Details"} query={eventQuery}>
-        <EventForm
-          originalEvent={eventQuery.data}
-          onSubmit={(data) => {
-            if (eventQuery.data) {
-              useUpdate.mutateAsync({id: eventId, event: data}).then(onClose);
+        {eventQuery.data && (
+          <EventForm
+            originalEvent={eventQuery.data}
+            onSubmit={(data) =>
+              useUpdate.mutateAsync({id: eventId, event: data}).then(onClose)
             }
-          }}
-        />
+          />
+        )}
       </QueryComponent>
     </Modal>
   );

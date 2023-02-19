@@ -1,6 +1,6 @@
 import {Card, Loader, TextInput} from "@mantine/core";
 import {Autocomplete, useJsApiLoader} from "@react-google-maps/api";
-import {FunctionComponent, useState} from "react";
+import {FunctionComponent, useEffect, useState} from "react";
 import {env} from "../env.mjs";
 import {CreateLocationType} from "../models/Location";
 import {defaultCreateLocation} from "../utils/defaultObjects";
@@ -15,17 +15,24 @@ export const googleMapsLibraries: (
 
 export const LocationPicker: FunctionComponent<{
   initialAddress: string;
+  location: CreateLocationType;
   setLocation: (location: CreateLocationType) => void;
   error?: string | undefined;
   required: boolean;
   placeholder: string;
-}> = ({initialAddress, setLocation, error, required, placeholder}) => {
+  description?: string;
+}> = ({location, initialAddress, setLocation, error, required, placeholder, description}) => {
   const {isLoaded, loadError} = useJsApiLoader({
     googleMapsApiKey: `${env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`,
     libraries: googleMapsLibraries,
   });
 
   const [autocomplete, setAutocomplete] = useState<google.maps.places.Autocomplete | null>(null);
+  const [address, setAddress] = useState(initialAddress);
+
+  useEffect(() => {
+    setAddress(location.address);
+  }, [location]);
 
   return (
     <>
@@ -53,10 +60,12 @@ export const LocationPicker: FunctionComponent<{
             withAsterisk={required}
             label="Location"
             placeholder={placeholder}
-            defaultValue={initialAddress}
+            description={description}
+            value={address}
+            onChange={event => setAddress(event.currentTarget.value)}
             error={error}
-            onBlur={event => {
-              if (!!event.currentTarget.value) {
+            onBlur={() => {
+              if (!address) {
                 setLocation(defaultCreateLocation);
               }
             }}

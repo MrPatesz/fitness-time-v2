@@ -34,39 +34,43 @@ export default function MyEventsPage() {
           filterKey="MyEventsPageFilter"
         />
         <QueryComponent resourceName={"My Events"} query={eventsQuery}>
-          <Table highlightOnHover>
+          <Table highlightOnHover withBorder withColumnBorders>
             <thead>
             <tr>
               <th>Name</th>
               <th>Date</th>
               <th>Interval</th>
-              {/*<th>Location</th>*/}
+              <th>Location</th>
               <th>Equipment</th>
               <th>Price</th>
               <th>Limit</th>
-              <th></th>
               {/* <th>Recurring</th> */}
+              <th>Actions</th>
             </tr>
             </thead>
             <tbody>
             {filteredList.map((event) => (
               <tr
                 key={event.id}
-                onClick={() => router.replace(`events/${event.id}`)}
+                onClick={() => {
+                  if (!editId) {
+                    router.replace(`events/${event.id}`);
+                  }
+                }}
                 style={{cursor: "pointer"}}
               >
                 <td>{event.name}</td>
                 <td>{new Date(event.start).toLocaleDateString()}</td>
                 <td>{getIntervalString(event.start, event.end)}</td>
-                {/*<td>{event.location.address}</td>*/}
+                <td>{event.location.address}</td>
                 <td>{event.equipment}</td>
                 <td>{event.price && priceFormatter.format(event.price)}</td>
-                {/*TODO JavaScript formatter (refactor everywhere)*/}
                 <td>{event.limit}</td>
                 {/* <td>{event.recurring.toString()}</td> */}
                 <td>
                   <Group spacing="xs">
                     <ActionIcon
+                      // disabled={event.isArchive}
                       variant="filled"
                       size="md"
                       onClick={(e: any) => {
@@ -77,6 +81,7 @@ export default function MyEventsPage() {
                       <Pencil/>
                     </ActionIcon>
                     <ActionIcon
+                      // disabled={event.isArchive}
                       variant="filled"
                       size="md"
                       onClick={(e: any) => {
