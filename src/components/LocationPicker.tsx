@@ -16,8 +16,10 @@ export const googleMapsLibraries: (
 export const LocationPicker: FunctionComponent<{
   initialAddress: string;
   setLocation: (location: CreateLocationType) => void;
-  error: string | undefined;
-}> = ({initialAddress, setLocation, error}) => {
+  error?: string | undefined;
+  required: boolean;
+  placeholder: string;
+}> = ({initialAddress, setLocation, error, required, placeholder}) => {
   const {isLoaded, loadError} = useJsApiLoader({
     googleMapsApiKey: `${env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`,
     libraries: googleMapsLibraries,
@@ -48,9 +50,9 @@ export const LocationPicker: FunctionComponent<{
           }}
         >
           <TextInput
-            withAsterisk
+            withAsterisk={required}
             label="Location"
-            placeholder="Where will it take place?"
+            placeholder={placeholder}
             defaultValue={initialAddress}
             error={error}
             onBlur={event => {

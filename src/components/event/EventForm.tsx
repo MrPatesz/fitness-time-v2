@@ -49,6 +49,8 @@ export const EventForm: FunctionComponent<{
           endError={form.getInputProps("end").error}
         />
         <LocationPicker
+          required={true}
+          placeholder="Where will it take place?"
           initialAddress={form.getInputProps("location").value.address}
           setLocation={form.getInputProps("location").onChange}
           error={form.getInputProps("location").error}

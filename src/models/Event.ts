@@ -20,12 +20,12 @@ export const CreateEventSchema = z.object({
 export const BasicEventSchema = CreateEventSchema.extend({
   id: IdSchema,
   creatorId: z.string(),
+  creator: BasicUserSchema,
   locationId: IdSchema,
   location: LocationSchema,
 });
 
 export const DetailedEventSchema = BasicEventSchema.extend({
-  creator: BasicUserSchema,
   participants: BasicUserSchema.array(),
 });
 

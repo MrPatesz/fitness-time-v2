@@ -10,7 +10,7 @@ export const eventRouter = createTRPCRouter({
     .query(async ({ctx}) => {
       const events = await ctx.prisma.event.findMany({
         orderBy: {name: Prisma.SortOrder.asc},
-        include: {location: true},
+        include: {location: true, creator: true},
       });
       return BasicEventSchema.array().parse(events);
     }),
@@ -19,7 +19,7 @@ export const eventRouter = createTRPCRouter({
     .query(async ({ctx: {session: {user: {id: callerId}}, prisma}}) => {
       const caller = await prisma.user.findFirst({
         where: {id: callerId},
-        include: {createdEvents: {include: {location: true}}},
+        include: {createdEvents: {include: {location: true, creator: true}}},
       });
 
       if (!caller) return [];
@@ -32,7 +32,7 @@ export const eventRouter = createTRPCRouter({
       const events = await prisma.event.findMany({
         where: {creatorId: {not: callerId}},
         orderBy: {start: Prisma.SortOrder.desc},
-        include: {location: true},
+        include: {location: true, creator: true},
       });
 
       return BasicEventSchema.array().parse(events);
@@ -43,8 +43,8 @@ export const eventRouter = createTRPCRouter({
       const caller = await prisma.user.findFirst({
         where: {id: callerId},
         include: {
-          createdEvents: {include: {location: true}},
-          participatedEvents: {include: {location: true}},
+          createdEvents: {include: {location: true, creator: true}},
+          participatedEvents: {include: {location: true, creator: true}},
         }
       });
 
@@ -81,6 +81,7 @@ export const eventRouter = createTRPCRouter({
             }
           }
         },
+        include: {location: true, creator: true}
       });
 
       return BasicEventSchema.parse(event);
@@ -105,6 +106,7 @@ export const eventRouter = createTRPCRouter({
             }
           }
         },
+        include: {location: true, creator: true}
       });
       return BasicEventSchema.parse(updatedEvent);
     }),

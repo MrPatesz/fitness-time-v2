@@ -12,9 +12,12 @@ export default function FeedPage() {
   const eventsQuery = api.event.getAll.useQuery(); // TODO getFeed
 
   const theme = useMantineTheme();
-  const medium = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
-  const large = useMediaQuery(`(min-width: ${theme.breakpoints.md}px)`);
-  const extraLarge = useMediaQuery(`(min-width: ${theme.breakpoints.xl}px)`);
+  const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
+  const md = useMediaQuery(`(min-width: ${theme.breakpoints.md}px)`);
+  const xl = useMediaQuery(`(min-width: ${theme.breakpoints.xl}px)`);
+  const xxl = useMediaQuery(`(min-width: ${theme.breakpoints.xs + theme.breakpoints.lg}px)`);
+  const txl = useMediaQuery(`(min-width: ${theme.breakpoints.md + theme.breakpoints.lg}px)`);
+  const qxl = useMediaQuery(`(min-width: ${theme.breakpoints.md + theme.breakpoints.xl}px)`);
 
   return (
     <Stack>
@@ -24,7 +27,7 @@ export default function FeedPage() {
         filterKey="FeedPageFilter"
       />
       <QueryComponent resourceName="Feed" query={eventsQuery}>
-        <SimpleGrid cols={extraLarge ? 4 : large ? 3 : medium ? 2 : 1}>
+        <SimpleGrid cols={qxl ? 7 : txl ? 6 : xxl ? 5 : xl ? 4 : md ? 3 : xs ? 2 : 1}>
           {filteredList.map((event) => (
             <EventCard event={event} key={event.id}/>
           ))}

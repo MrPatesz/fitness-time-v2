@@ -1,6 +1,5 @@
 import {z} from "zod";
-import {LocationSchema} from "../../../models/Location";
-import {BasicUserSchema, DetailedUserSchema, ProfileSchema} from "../../../models/User";
+import {BasicUserSchema, DetailedUserSchema, ProfileSchema, UpdateProfileSchema} from "../../../models/User";
 import {createTRPCRouter, protectedProcedure} from "../trpc";
 import {Prisma} from ".prisma/client";
 
@@ -18,11 +17,7 @@ export const userRouter = createTRPCRouter({
     .query(async ({ctx: {prisma, session: {user: {id: userId}}}}) => {
       const user = await prisma.user.findUnique({
         where: {id: userId},
-        include: {
-          createdEvents: {include: {location: true}},
-          participatedEvents: {include: {location: true}},
-          location: true
-        }
+        include: {location: true}
       });
 
       return ProfileSchema.parse(user);
@@ -34,22 +29,17 @@ export const userRouter = createTRPCRouter({
       const user = await ctx.prisma.user.findFirst({
         where: {id},
         include: {
-          createdEvents: {include: {location: true}},
-          participatedEvents: {include: {location: true}}
+          createdEvents: {include: {location: true, creator: true}},
+          participatedEvents: {include: {location: true, creator: true}}
         }
       });
 
       return DetailedUserSchema.parse(user);
     }),
   update: protectedProcedure
-    .input(BasicUserSchema.extend({
-      location: LocationSchema.nullable(),
-    }))
-    .output(BasicUserSchema.extend({
-      location: LocationSchema.nullable(),
-    }))
+    .input(UpdateProfileSchema)
+    .output(UpdateProfileSchema)
     .mutation(async ({input, ctx}) => {
-      // TODO update location
       const updatedEvent = await ctx.prisma.user.update({
         where: {id: input.id},
         data: {
@@ -63,6 +53,7 @@ export const userRouter = createTRPCRouter({
             }
           } : {disconnect: true}
         },
+        include: {location: true}
       });
       return ProfileSchema.parse(updatedEvent);
     }),

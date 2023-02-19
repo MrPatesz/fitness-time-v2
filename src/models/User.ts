@@ -1,6 +1,6 @@
 import {z} from "zod";
 import {BasicEventSchema} from "./Event";
-import {LocationSchema} from "./Location";
+import {CreateLocationSchema, LocationSchema} from "./Location";
 
 enum Colors {
   DARK = "dark",
@@ -25,12 +25,6 @@ export const BasicUserSchema = z.object({
   introduction: z.string().nullable(),
   image: z.string().nullable(),
   // TODO color: z.string().nullable(),
-  // email: z.string().nullable(), TODO
-  // emailVerified: z.date().nullable(),
-});
-
-export const UpdateProfileSchema = BasicUserSchema.extend({
-  location: LocationSchema.nullable(),
 });
 
 export const DetailedUserSchema = BasicUserSchema.extend({
@@ -38,14 +32,20 @@ export const DetailedUserSchema = BasicUserSchema.extend({
   participatedEvents: z.lazy(() => BasicEventSchema.array()),
 });
 
-export const ProfileSchema = DetailedUserSchema.extend({
+export const UpdateProfileSchema = BasicUserSchema.extend({
+  location: CreateLocationSchema.nullable(),
+});
+
+export const ProfileSchema = BasicUserSchema.extend({
   location: LocationSchema.nullable(),
+  // email: z.string().nullable(),
+  // emailVerified: z.date().nullable(),
 });
 
 export type BasicUserType = z.infer<typeof BasicUserSchema>;
 
 export type DetailedUserType = z.infer<typeof DetailedUserSchema>;
 
-export type ProfileType = z.infer<typeof ProfileSchema>;
-
 export type UpdateProfileType = z.infer<typeof UpdateProfileSchema>;
+
+export type ProfileType = z.infer<typeof ProfileSchema>;

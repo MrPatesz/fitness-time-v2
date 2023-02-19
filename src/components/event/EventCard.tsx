@@ -36,9 +36,12 @@ export const EventCard: FunctionComponent<{
           )} */}
         </Group>
         <Text>{event.description}</Text>
-        <Link href={"/events/[id]"} as={`/events/${event.id}`} passHref>
-          <Button>Details</Button>
-        </Link>
+        <Group position="apart">
+          <Link href={"/events/[id]"} as={`/events/${event.id}`} passHref>
+            <Button>Details</Button>
+          </Link>
+          {event.creator.name}
+        </Group>
       </Stack>
     </Card>
   );
