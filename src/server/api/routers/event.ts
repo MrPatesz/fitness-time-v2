@@ -13,6 +13,7 @@ export const eventRouter = createTRPCRouter({
         orderBy: {name: Prisma.SortOrder.asc},
         include: {location: true, creator: true},
       });
+
       return BasicEventSchema.array().parse(events);
     }),
   getAllCreated: protectedProcedure
@@ -23,7 +24,9 @@ export const eventRouter = createTRPCRouter({
         include: {createdEvents: {include: {location: true, creator: true}}},
       });
 
-      if (!caller) return [];
+      if (!caller) {
+        throw new TRPCError({code: "UNAUTHORIZED", message: "User doesn't exist!"});
+      }
 
       return BasicEventSchema.array().parse(caller.createdEvents);
     }),
@@ -46,10 +49,12 @@ export const eventRouter = createTRPCRouter({
         include: {
           createdEvents: {include: {location: true, creator: true}},
           participatedEvents: {include: {location: true, creator: true}},
-        }
+        },
       });
 
-      if (!caller) return [];
+      if (!caller) {
+        throw new TRPCError({code: "UNAUTHORIZED", message: "User doesn't exist!"});
+      }
 
       return BasicEventSchema.array().parse([...caller.createdEvents, ...caller.participatedEvents]);
     }),
@@ -59,7 +64,7 @@ export const eventRouter = createTRPCRouter({
     .query(async ({input: id, ctx}) => {
       const event = await ctx.prisma.event.findUnique({
         where: {id},
-        include: {creator: true, participants: true, location: true}
+        include: {creator: true, participants: true, location: true},
       });
 
       return DetailedEventSchema.parse(event);
@@ -75,13 +80,13 @@ export const eventRouter = createTRPCRouter({
           location: {
             connectOrCreate: {
               where: {
-                address: createEvent.location.address
+                address: createEvent.location.address,
               },
-              create: createEvent.location
-            }
-          }
+              create: createEvent.location,
+            },
+          },
         },
-        include: {location: true, creator: true}
+        include: {location: true, creator: true},
       });
 
       return BasicEventSchema.parse(event);
@@ -92,7 +97,7 @@ export const eventRouter = createTRPCRouter({
     .mutation(async ({input, ctx: {session: {user: {id: callerId}}, prisma}}) => {
       const event = await prisma.event.findUnique({
         where: {id: input.id},
-        include: {participants: true}
+        include: {participants: true},
       });
 
       if (event?.limit && (event.participants.length >= event.limit)) {
@@ -103,12 +108,12 @@ export const eventRouter = createTRPCRouter({
         where: {id: input.id},
         data: {
           participants: input.participate ? {
-            connect: {id: callerId}
+            connect: {id: callerId},
           } : {
-            disconnect: {id: callerId}
-          }
+            disconnect: {id: callerId},
+          },
         },
-        include: {creator: true, location: true}
+        include: {creator: true, location: true},
       });
 
       return BasicEventSchema.parse(result);
@@ -125,14 +130,15 @@ export const eventRouter = createTRPCRouter({
           location: {
             connectOrCreate: {
               where: {
-                address: input.event.location.address
+                address: input.event.location.address,
               },
-              create: input.event.location
-            }
-          }
+              create: input.event.location,
+            },
+          },
         },
-        include: {location: true, creator: true}
+        include: {location: true, creator: true},
       });
+
       return BasicEventSchema.parse(updatedEvent);
     }),
   delete: protectedProcedure
@@ -142,8 +148,8 @@ export const eventRouter = createTRPCRouter({
       const {count} = await prisma.event.deleteMany({
         where: {
           id: input,
-          creatorId: callerId
-        }
+          creatorId: callerId,
+        },
       });
 
       return !!count;
