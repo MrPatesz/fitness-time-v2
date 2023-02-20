@@ -63,7 +63,6 @@ export const eventRouter = createTRPCRouter({
 
       return DetailedEventSchema.parse(event);
     }),
-
   create: protectedProcedure
     .input(CreateEventSchema)
     .output(BasicEventSchema)
@@ -86,8 +85,24 @@ export const eventRouter = createTRPCRouter({
 
       return BasicEventSchema.parse(event);
     }),
-  // TODO participate: protectedProcedure.input().output().mutation(),
-  //  is this needed? maybe use update endpoint?
+  participate: protectedProcedure
+    .input(z.object({id: IdSchema, participate: z.boolean()}))
+    .output(BasicEventSchema)
+    .mutation(async ({input, ctx: {session: {user: {id: callerId}}, prisma}}) => {
+      const event = await prisma.event.update({
+        where: {id: input.id},
+        data: {
+          participants: input.participate ? {
+            connect: {id: callerId}
+          } : {
+            disconnect: {id: callerId}
+          }
+        },
+        include: {creator: true, location: true}
+      });
+
+      return BasicEventSchema.parse(event);
+    }),
   update: protectedProcedure
     .input(z.object({event: CreateEventSchema, id: IdSchema}))
     .output(BasicEventSchema)

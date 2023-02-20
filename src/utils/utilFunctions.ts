@@ -10,8 +10,7 @@ export const getIntervalString = (start: Date, end: Date) => {
   )}`;
 };
 
-export const priceFormatter = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-  maximumFractionDigits: 0,
-});
+export const refreshSession = () => {
+  const event = new Event("visibilitychange");
+  document.dispatchEvent(event);
+};

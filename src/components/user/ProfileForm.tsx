@@ -4,13 +4,14 @@ import React, {FunctionComponent} from "react";
 import {ProfileType, UpdateProfileType} from "../../models/User";
 import {api} from "../../utils/api";
 import {LocationPicker} from "../LocationPicker";
+import {refreshSession} from "../../utils/utilFunctions";
 
 export const ProfileForm: FunctionComponent<{
   user: ProfileType;
 }> = ({user}) => {
   const queryContext = api.useContext();
   const useUpdate = api.user.update.useMutation({
-    onSuccess: () => queryContext.user.invalidate(),
+    onSuccess: () => queryContext.user.invalidate().then(refreshSession),
   });
 
   const form = useForm<UpdateProfileType>({

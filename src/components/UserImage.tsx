@@ -20,7 +20,7 @@ const UserImage: FunctionComponent<{
     }, [user]
   );
 
-  if (!!user.image) {
+  /*if (!!user.image) {
     return (
       <img
         src={user.image}
@@ -29,7 +29,7 @@ const UserImage: FunctionComponent<{
         style={{borderRadius: radius}}
       />
     );
-  }
+  }*/
 
   if (!!user.name) {
     return (

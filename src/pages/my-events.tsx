@@ -9,7 +9,8 @@ import {FilterEventsComponent} from "../components/event/FilterEventsComponent";
 import {QueryComponent} from "../components/QueryComponent";
 import {BasicEventType} from "../models/Event";
 import {api} from "../utils/api";
-import {getIntervalString, priceFormatter} from "../utils/utilFunctions";
+import {getIntervalString} from "../utils/utilFunctions";
+import {priceFormatter} from "../utils/formatters";
 
 export default function MyEventsPage() {
   const [filteredList, setFilteredList] = useState<BasicEventType[]>([]);

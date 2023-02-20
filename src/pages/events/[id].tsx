@@ -8,7 +8,8 @@ import {EditEventDialog} from "../../components/event/EditEventDialog";
 import MapComponent from "../../components/MapComponent";
 import {QueryComponent} from "../../components/QueryComponent";
 import {api} from "../../utils/api";
-import {getIntervalString, priceFormatter} from "../../utils/utilFunctions";
+import {getIntervalString} from "../../utils/utilFunctions";
+import {priceFormatter} from "../../utils/formatters";
 
 export default function EventDetailsPage() {
   const [openEdit, setOpenEdit] = useState(false);
@@ -16,37 +17,27 @@ export default function EventDetailsPage() {
   const {data: session} = useSession();
   const {query: {id}} = useRouter();
 
-  const eventQuery = api.event.getById.useQuery(parseInt(`${id}`));
-  const participate: any = undefined; // TODO
+  const queryContext = api.useContext();
+  const eventQuery = api.event.getById.useQuery(+`${id}`);
+  const participate = api.event.participate.useMutation({
+    onSuccess: () => queryContext.event.invalidate(),
+  });
 
   const participateButton = () => {
     if (eventQuery.data?.creatorId === session?.user.id) {
       return;
     }
 
-    return eventQuery.data?.participants.find(
-      (p) => p.id === session?.user.id
-    ) ? (
+    const isParticipated = !!eventQuery.data?.participants.find(p => p.id === session?.user.id);
+
+    return (
       <Button
-        onClick={() =>
-          participate.mutate({
-            id: id?.toString(),
-            status: false,
-          })
-        }
+        onClick={() => participate.mutate({
+          id: +`${id}`,
+          participate: !isParticipated,
+        })}
       >
-        Remove participation
-      </Button>
-    ) : (
-      <Button
-        onClick={() =>
-          participate.mutate({
-            id: id?.toString(),
-            status: true,
-          })
-        }
-      >
-        Participate
+        {isParticipated ? "Remove participation" : "Participate"}
       </Button>
     );
   };
@@ -105,7 +96,7 @@ export default function EventDetailsPage() {
                   <Text>Price: {priceFormatter.format(eventQuery.data.price)}</Text>
                 )}
               </Stack>
-              <MapComponent locationDto={eventQuery.data.location}/>
+              <MapComponent location={eventQuery.data.location}/>
             </Group>
             <Card withBorder shadow="md" p="lg">
               {eventQuery.data.participants.length ? (
@@ -152,7 +143,7 @@ export default function EventDetailsPage() {
           <EditEventDialog
             open={openEdit}
             onClose={() => setOpenEdit(false)}
-            eventId={parseInt(`${id?.toString()}`)}
+            eventId={+`${id}`}
           />
           <Affix position={{bottom: 20, right: 20}}>
             <ActionIcon

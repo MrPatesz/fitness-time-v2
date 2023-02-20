@@ -1,6 +1,14 @@
 import {CreateEventType} from "../models/Event";
 import {CreateLocationType} from "../models/Location";
 
+export const googleMapsLibraries: (
+  | "places"
+  | "drawing"
+  | "geometry"
+  | "localContext"
+  | "visualization"
+  )[] = ["places"];
+
 export const defaultCreateLocation: CreateLocationType = {
   address: "",
   latitude: 0,

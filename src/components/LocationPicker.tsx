@@ -1,22 +1,14 @@
-import {Card, Loader, TextInput} from "@mantine/core";
+import {Card, Center, Loader, TextInput} from "@mantine/core";
 import {Autocomplete, useJsApiLoader} from "@react-google-maps/api";
-import {FunctionComponent, useEffect, useState} from "react";
+import React, {FunctionComponent, useEffect, useState} from "react";
 import {env} from "../env.mjs";
 import {CreateLocationType} from "../models/Location";
-import {defaultCreateLocation} from "../utils/defaultObjects";
-
-export const googleMapsLibraries: (
-  | "places"
-  | "drawing"
-  | "geometry"
-  | "localContext"
-  | "visualization"
-  )[] = ["places"];
+import {googleMapsLibraries} from "../utils/defaultObjects";
 
 export const LocationPicker: FunctionComponent<{
   initialAddress: string;
-  location: CreateLocationType;
-  setLocation: (location: CreateLocationType) => void;
+  location: CreateLocationType | null;
+  setLocation: (location: CreateLocationType | null) => void;
   error?: string | undefined;
   required: boolean;
   placeholder: string;
@@ -31,7 +23,9 @@ export const LocationPicker: FunctionComponent<{
   const [address, setAddress] = useState(initialAddress);
 
   useEffect(() => {
-    setAddress(location.address);
+    if (location) {
+      setAddress(location.address);
+    }
   }, [location]);
 
   return (
@@ -52,7 +46,7 @@ export const LocationPicker: FunctionComponent<{
                 address: `${place.formatted_address}`,
               });
             } else {
-              setLocation(defaultCreateLocation);
+              setLocation(null);
             }
           }}
         >
@@ -66,13 +60,15 @@ export const LocationPicker: FunctionComponent<{
             error={error}
             onBlur={() => {
               if (!address) {
-                setLocation(defaultCreateLocation);
+                setLocation(null);
               }
             }}
           />
         </Autocomplete>
       ) : (
-        <Loader/>
+        <Center sx={{height: "100%", width: "100%"}}>
+          <Loader/>
+        </Center>
       )}
     </>
   );

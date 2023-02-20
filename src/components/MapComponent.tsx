@@ -1,43 +1,53 @@
-import {FunctionComponent, memo} from "react";
+import React, {FunctionComponent, useMemo} from "react";
 import {GoogleMap, MarkerF, useJsApiLoader} from "@react-google-maps/api";
-import {Card, Loader} from "@mantine/core";
-import {googleMapsLibraries} from "./LocationPicker";
+import {Card, Center, LoadingOverlay} from "@mantine/core";
 import {LocationType} from "../models/Location";
 import {env} from "../env.mjs";
+import {googleMapsLibraries} from "../utils/defaultObjects";
 
 const MapComponent: FunctionComponent<{
-  locationDto: LocationType;
-}> = ({locationDto}) => {
+  location: LocationType;
+  size?: { width: number, height: number }
+}> = ({location, size = {width: 400, height: 400}}) => {
   const {isLoaded, loadError} = useJsApiLoader({
     googleMapsApiKey: `${env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`,
     libraries: googleMapsLibraries,
   });
 
-  const location = {
-    lat: locationDto.latitude,
-    lng: locationDto.longitude,
-  };
+  const map = useMemo(() => {
+    const coordinates = {
+      lat: location.latitude,
+      lng: location.longitude,
+    };
+    return (
+      <GoogleMap
+        zoom={17}
+        center={coordinates}
+        mapContainerStyle={size}
+      >
+        <MarkerF title={location.address} position={coordinates}/>
+      </GoogleMap>
+    );
+  }, [location, isLoaded, loadError]);
 
   return (
     <>
       {loadError ? (
-        <Card withBorder>An error occurred while loading map!</Card>
-      ) : isLoaded ? (
-        <GoogleMap
-          mapContainerStyle={{
-            width: "400px",
-            height: "400px",
-          }}
-          center={location}
-          zoom={17}
-        >
-          <MarkerF title={locationDto.address} position={location}/>
-        </GoogleMap>
-      ) : (
-        <Loader/>
-      )}
+        <Card withBorder sx={size}>
+          <Center sx={{height: "100%", width: "100%"}}>
+            An error occurred while loading map!
+          </Center>
+        </Card>
+      ) : !isLoaded ? (
+        <Card withBorder sx={{
+          ...size,
+          position: "relative"
+        }}>
+          <LoadingOverlay visible={true} sx={theme => ({borderRadius: theme.fn.radius(theme.defaultRadius)})}/>
+        </Card>
+      ) : map}
     </>
   );
 };
 
-export default memo(MapComponent);
+export default MapComponent;
