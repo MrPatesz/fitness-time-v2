@@ -1,8 +1,8 @@
-import React, {FunctionComponent, useMemo} from "react";
-import {GoogleMap, MarkerF, useJsApiLoader} from "@react-google-maps/api";
 import {Card, Center, LoadingOverlay} from "@mantine/core";
-import {LocationType} from "../models/Location";
+import {GoogleMap, MarkerF, useJsApiLoader} from "@react-google-maps/api";
+import React, {FunctionComponent, useMemo} from "react";
 import {env} from "../env.mjs";
+import {LocationType} from "../models/Location";
 import {googleMapsLibraries} from "../utils/defaultObjects";
 
 const MapComponent: FunctionComponent<{
@@ -32,7 +32,7 @@ const MapComponent: FunctionComponent<{
 
   return (
     <>
-      {loadError ? (
+      {(loadError || true) ? ( // TODO remove true to show map
         <Card withBorder sx={size}>
           <Center sx={{height: "100%", width: "100%"}}>
             An error occurred while loading map!
@@ -41,7 +41,7 @@ const MapComponent: FunctionComponent<{
       ) : !isLoaded ? (
         <Card withBorder sx={{
           ...size,
-          position: "relative"
+          position: "relative",
         }}>
           <LoadingOverlay visible={true} sx={theme => ({borderRadius: theme.fn.radius(theme.defaultRadius)})}/>
         </Card>

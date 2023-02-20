@@ -2,6 +2,7 @@ import {Badge, Button, Card, Group, Stack, Text} from "@mantine/core";
 import Link from "next/link";
 import {FunctionComponent} from "react";
 import {BasicEventType} from "../../models/Event";
+import UserImage from "../UserImage";
 
 export const EventCard: FunctionComponent<{
   event: BasicEventType;
@@ -40,7 +41,9 @@ export const EventCard: FunctionComponent<{
           <Link href={"/events/[id]"} as={`/events/${event.id}`} passHref>
             <Button>Details</Button>
           </Link>
-          {event.creator.name}
+          <Link href={"/users/[id]"} as={`/users/${event.creator.id}`} passHref>
+            <UserImage user={event.creator} size={36}/>
+          </Link>
         </Group>
       </Stack>
     </Card>

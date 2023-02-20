@@ -7,7 +7,8 @@ import {BasicUserType} from "../models/User";
 
 const UserImage: FunctionComponent<{
   user: BasicUserType;
-}> = ({user}) => {
+  size?: number;
+}> = ({user, size = 100}) => {
   const theme = useMantineTheme();
   const radius = theme.fn.radius(theme.defaultRadius);
   const themeColor = theme.fn.themeColor(theme.primaryColor);
@@ -17,7 +18,7 @@ const UserImage: FunctionComponent<{
         seed: user.name,
         backgroundColor: [themeColor.slice(1)],
       }).toDataUriSync();
-    }, [user]
+    }, [user],
   );
 
   /*if (!!user.image) {
@@ -25,7 +26,7 @@ const UserImage: FunctionComponent<{
       <img
         src={user.image}
         alt="Avatar"
-        width={100} height={100}
+        width={size} height={size}
         style={{borderRadius: radius}}
       />
     );
@@ -36,7 +37,7 @@ const UserImage: FunctionComponent<{
       <Image
         src={avatar}
         alt="Avatar"
-        width={100} height={100}
+        width={size} height={size}
         style={{borderRadius: radius}}
       />
     );
@@ -44,8 +45,8 @@ const UserImage: FunctionComponent<{
 
   return (
     <Box sx={{
-      width: 100,
-      height: 100,
+      width: size,
+      height: size,
       borderRadius: radius,
       backgroundColor: themeColor,
     }}/>
