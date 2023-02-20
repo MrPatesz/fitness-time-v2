@@ -3,6 +3,7 @@ import {BasicEventSchema, CreateEventSchema, DetailedEventSchema} from "../../..
 import {IdSchema} from "../../../models/Id";
 import {createTRPCRouter, protectedProcedure} from "../trpc";
 import {Prisma} from ".prisma/client";
+import {TRPCError} from "@trpc/server";
 
 export const eventRouter = createTRPCRouter({
   getAll: protectedProcedure
@@ -17,7 +18,7 @@ export const eventRouter = createTRPCRouter({
   getAllCreated: protectedProcedure
     .output(BasicEventSchema.array())
     .query(async ({ctx: {session: {user: {id: callerId}}, prisma}}) => {
-      const caller = await prisma.user.findFirst({
+      const caller = await prisma.user.findUnique({
         where: {id: callerId},
         include: {createdEvents: {include: {location: true, creator: true}}},
       });
@@ -40,7 +41,7 @@ export const eventRouter = createTRPCRouter({
   getCalendar: protectedProcedure
     .output(BasicEventSchema.array())
     .query(async ({ctx: {session: {user: {id: callerId}}, prisma}}) => {
-      const caller = await prisma.user.findFirst({
+      const caller = await prisma.user.findUnique({
         where: {id: callerId},
         include: {
           createdEvents: {include: {location: true, creator: true}},
@@ -56,7 +57,7 @@ export const eventRouter = createTRPCRouter({
     .input(IdSchema)
     .output(DetailedEventSchema)
     .query(async ({input: id, ctx}) => {
-      const event = await ctx.prisma.event.findFirst({
+      const event = await ctx.prisma.event.findUnique({
         where: {id},
         include: {creator: true, participants: true, location: true}
       });
@@ -89,7 +90,16 @@ export const eventRouter = createTRPCRouter({
     .input(z.object({id: IdSchema, participate: z.boolean()}))
     .output(BasicEventSchema)
     .mutation(async ({input, ctx: {session: {user: {id: callerId}}, prisma}}) => {
-      const event = await prisma.event.update({
+      const event = await prisma.event.findUnique({
+        where: {id: input.id},
+        include: {participants: true}
+      });
+
+      if (event?.limit && (event.participants.length >= event.limit)) {
+        throw new TRPCError({code: "BAD_REQUEST", message: "Event is already full!"});
+      }
+
+      const result = await prisma.event.update({
         where: {id: input.id},
         data: {
           participants: input.participate ? {
@@ -101,7 +111,7 @@ export const eventRouter = createTRPCRouter({
         include: {creator: true, location: true}
       });
 
-      return BasicEventSchema.parse(event);
+      return BasicEventSchema.parse(result);
     }),
   update: protectedProcedure
     .input(z.object({event: CreateEventSchema, id: IdSchema}))

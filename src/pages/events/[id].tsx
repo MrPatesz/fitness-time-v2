@@ -1,4 +1,4 @@
-import {ActionIcon, Affix, Badge, Button, Card, Group, Stack, Text,} from "@mantine/core";
+import {ActionIcon, Affix, Badge, Button, Card, Group, Stack, Text, useMantineTheme,} from "@mantine/core";
 import {useSession} from "next-auth/react";
 import Link from "next/link";
 import {useRouter} from "next/router";
@@ -10,10 +10,12 @@ import {QueryComponent} from "../../components/QueryComponent";
 import {api} from "../../utils/api";
 import {getIntervalString} from "../../utils/utilFunctions";
 import {priceFormatter} from "../../utils/formatters";
+import {DetailedEventType} from "../../models/Event";
 
 export default function EventDetailsPage() {
   const [openEdit, setOpenEdit] = useState(false);
 
+  const theme = useMantineTheme();
   const {data: session} = useSession();
   const {query: {id}} = useRouter();
 
@@ -23,12 +25,16 @@ export default function EventDetailsPage() {
     onSuccess: () => queryContext.event.invalidate(),
   });
 
-  const participateButton = () => {
-    if (eventQuery.data?.creatorId === session?.user.id) {
+  const participateButton = (event: DetailedEventType) => {
+    if (event.creatorId === session?.user.id) {
       return;
     }
 
-    const isParticipated = !!eventQuery.data?.participants.find(p => p.id === session?.user.id);
+    const isParticipated = !!event.participants.find(p => p.id === session?.user.id);
+
+    if (!isParticipated && event.limit && (event.participants.length >= event.limit)) {
+      return;
+    }
 
     return (
       <Button
@@ -106,7 +112,7 @@ export default function EventDetailsPage() {
                       {limitBadge()}
                       <Text>They will also be there:</Text>
                     </Group>
-                    {participateButton()}
+                    {participateButton(eventQuery.data)}
                   </Group>
                   <Group spacing="xs">
                     {eventQuery.data.participants.map((p, index: number) => (
@@ -131,7 +137,7 @@ export default function EventDetailsPage() {
                     {limitBadge()}
                     <Text>There are no participants yet.</Text>
                   </Group>
-                  {participateButton()}
+                  {participateButton(eventQuery.data)}
                 </Group>
               )}
             </Card>
@@ -145,7 +151,7 @@ export default function EventDetailsPage() {
             onClose={() => setOpenEdit(false)}
             eventId={+`${id}`}
           />
-          <Affix position={{bottom: 20, right: 20}}>
+          <Affix position={{bottom: theme.spacing.md, right: theme.spacing.md}}>
             <ActionIcon
               variant="filled"
               size="xl"

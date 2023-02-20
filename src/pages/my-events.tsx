@@ -1,4 +1,4 @@
-import {ActionIcon, Affix, Group, Stack, Table} from "@mantine/core";
+import {ActionIcon, Affix, Group, Stack, Table, useMantineTheme} from "@mantine/core";
 import {useRouter} from "next/router";
 import React, {useState} from "react";
 import {Pencil, Plus, Trash} from "tabler-icons-react";
@@ -19,6 +19,7 @@ export default function MyEventsPage() {
   const [deleteId, setDeleteId] = useState<number | null>(null);
 
   const router = useRouter();
+  const theme = useMantineTheme();
 
   const queryContext = api.useContext();
   const eventsQuery = api.event.getAllCreated.useQuery();
@@ -115,7 +116,7 @@ export default function MyEventsPage() {
         open={openCreate}
         onClose={() => setOpenCreate(false)}
       />
-      <Affix position={{bottom: 20, right: 20}}>
+      <Affix position={{bottom: theme.spacing.md, right: theme.spacing.md}}>
         <ActionIcon
           variant="filled"
           size="xl"
