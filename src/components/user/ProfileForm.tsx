@@ -3,7 +3,7 @@ import {useForm} from "@mantine/form";
 import React, {FunctionComponent} from "react";
 import {ProfileType, UpdateProfileType} from "../../models/User";
 import {api} from "../../utils/api";
-import {LocationPicker} from "../LocationPicker";
+import {LocationPicker} from "../location/LocationPicker";
 import {refreshSession} from "../../utils/utilFunctions";
 
 export const ProfileForm: FunctionComponent<{
@@ -27,6 +27,7 @@ export const ProfileForm: FunctionComponent<{
       <Stack>
         <Title order={2}>{user.name}</Title>
         <TextInput
+          withAsterisk
           label="Display name"
           placeholder="Other users will see this name."
           {...form.getInputProps("name")}

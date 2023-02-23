@@ -1,8 +1,8 @@
 import {Modal} from "@mantine/core";
 import {FunctionComponent} from "react";
-import {api} from "../../utils/api";
-import {getDefaultCreateEvent} from "../../utils/defaultObjects";
-import {EventForm} from "./EventForm";
+import {api} from "../../../utils/api";
+import {getDefaultCreateEvent} from "../../../utils/defaultObjects";
+import {EventForm} from "../EventForm";
 
 export const CreateEventDialog: FunctionComponent<{
   open: boolean;

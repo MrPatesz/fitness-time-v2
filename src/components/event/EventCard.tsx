@@ -2,7 +2,7 @@ import {Badge, Button, Card, Group, Stack, Text} from "@mantine/core";
 import Link from "next/link";
 import {FunctionComponent} from "react";
 import {BasicEventType} from "../../models/Event";
-import UserImage from "../UserImage";
+import UserImage from "../user/UserImage";
 
 export const EventCard: FunctionComponent<{
   event: BasicEventType;

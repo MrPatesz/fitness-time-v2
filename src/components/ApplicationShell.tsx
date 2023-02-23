@@ -1,16 +1,34 @@
-import {AppShell, Header, Navbar, NavLink} from "@mantine/core";
-import {useSession} from "next-auth/react";
+import {
+  ActionIcon,
+  AppShell,
+  Burger,
+  Button,
+  Group,
+  Header,
+  MediaQuery,
+  Navbar,
+  NavLink,
+  Title,
+  useMantineTheme
+} from "@mantine/core";
+import {useMediaQuery} from "@mantine/hooks";
+import {signOut, useSession} from "next-auth/react";
 import Link from "next/link";
 import {useRouter} from "next/router";
-import {FunctionComponent} from "react";
-import {Adjustments, CalendarEvent, News, Users} from "tabler-icons-react";
-import {HeaderComponent} from "./HeaderComponent";
+import React, {FunctionComponent, useState} from "react";
+import {Adjustments, CalendarEvent, Logout, News, UserCircle, Users} from "tabler-icons-react";
 
 export const ApplicationShell: FunctionComponent<{
   children: JSX.Element;
 }> = ({children}) => {
+  const calendarRoute = "/calendar";
+  const profileRoute = "/profile";
   const welcomeRoute = "/welcome";
 
+  const [isNavbarOpen, setIsNavbarOpen] = useState<boolean>(false);
+
+  const theme = useMantineTheme();
+  const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
   const router = useRouter();
   const {data: session} = useSession({
     required: true,
@@ -24,42 +42,85 @@ export const ApplicationShell: FunctionComponent<{
   return (
     <AppShell
       hidden={!session}
-      navbar={
-        <Navbar width={{base: 211}} p="xs">
-          {[
-            {label: "Calendar", route: "/calendar", icon: CalendarEvent},
-            {label: "Feed", route: "/feed", icon: News},
-            {label: "My Events", route: "/my-events", icon: Adjustments},
-            {label: "Users", route: "/users", icon: Users},
-          ].map((link) => (
-            <Link
-              href={link.route}
-              as={link.route}
-              passHref
-              key={link.label}
-            >
-              <NavLink
-                label={link.label}
-                icon={<link.icon size={20}/>}
-                active={router.route.includes(link.route)}
-              />
-            </Link>
-          ))}
-        </Navbar>
-      }
       header={
         <Header height={56} p="xs">
-          <HeaderComponent username={session?.user?.name}/>
+          <Group align="center" position="apart" pl={xs ? "xs" : 1}>
+            <Group>
+              <MediaQuery largerThan="xs" styles={{display: "none"}}>
+                <Burger
+                  opened={isNavbarOpen}
+                  onClick={() => setIsNavbarOpen(o => !o)}
+                  size="sm"
+                  color={theme.colors.gray[6]}
+                />
+              </MediaQuery>
+              <Link href="/" as="/" passHref>
+                <Title order={2}>Fitness Time</Title>
+              </Link>
+            </Group>
+
+            {xs ? (
+              <Button
+                variant="light"
+                onClick={() => signOut({callbackUrl: welcomeRoute})}
+              >
+                Logout
+              </Button>
+            ) : (
+              <ActionIcon
+                size="lg"
+                color={theme.primaryColor}
+                onClick={() => signOut({callbackUrl: welcomeRoute})}
+              >
+                <Logout/>
+              </ActionIcon>
+            )}
+          </Group>
         </Header>
       }
-      styles={(theme) => ({
+      navbarOffsetBreakpoint="xs"
+      navbar={
+        <Navbar width={{base: 211}} p="xs" hiddenBreakpoint="xs" hidden={!isNavbarOpen}>
+          <Navbar.Section grow>
+            {[
+              {label: "Calendar", route: calendarRoute, icon: CalendarEvent},
+              {label: "Feed", route: "/feed", icon: News},
+              {label: "My Events", route: "/my-events", icon: Adjustments},
+              {label: "Users", route: "/users", icon: Users},
+            ].map((link) => (
+              <Link
+                href={link.route}
+                as={link.route}
+                passHref
+                key={link.label}
+              >
+                <NavLink
+                  label={link.label}
+                  icon={<link.icon size={20}/>}
+                  active={router.route.includes(link.route)}
+                />
+              </Link>
+            ))}
+          </Navbar.Section>
+          <Navbar.Section sx={(xs && router.route.includes(calendarRoute)) ? {marginBottom: 241} : undefined}>
+            <Link href={profileRoute} as={profileRoute} passHref>
+              <NavLink
+                label={session?.user?.name}
+                icon={<UserCircle size={20}/>}
+                active={router.route.includes(profileRoute)}
+              />
+            </Link>
+          </Navbar.Section>
+        </Navbar>
+      }
+      styles={{
         main: {
           backgroundColor:
             theme.colorScheme === "dark"
               ? theme.colors.dark[8]
               : theme.colors.gray[0],
-        },
-      })}
+        }
+      }}
     >
       {children}
     </AppShell>

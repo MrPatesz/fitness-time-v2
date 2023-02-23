@@ -1,9 +1,9 @@
 import {Card, Center, LoadingOverlay} from "@mantine/core";
 import {GoogleMap, MarkerF, useJsApiLoader} from "@react-google-maps/api";
 import React, {FunctionComponent, useMemo} from "react";
-import {env} from "../env.mjs";
-import {LocationType} from "../models/Location";
-import {googleMapsLibraries} from "../utils/defaultObjects";
+import {env} from "../../env.mjs";
+import {LocationType} from "../../models/Location";
+import {googleMapsLibraries} from "../../utils/defaultObjects";
 
 const MapComponent: FunctionComponent<{
   location: LocationType;

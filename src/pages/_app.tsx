@@ -21,14 +21,13 @@ const App: AppType<{ session: Session | null }> = ({
   const colorScheme = useColorScheme();
 
   const myTheme = useMemo((): MantineThemeOverride => ({
-      colorScheme,
-      primaryColor: "violet", // TODO color: session?.user.color ?? "violet"
-      loader: "dots",
-      cursorType: "pointer",
-      dateFormat: "MMMM DD, YYYY",
-      defaultRadius: "md"
-    }), [colorScheme, session?.user] // TODO color: session?.user.color]
-  );
+    colorScheme,
+    primaryColor: "violet", // TODO color: session?.user.color ?? "violet"
+    loader: "dots",
+    cursorType: "pointer",
+    dateFormat: "MMMM DD, YYYY",
+    defaultRadius: "md",
+  }), [colorScheme, session?.user]); // TODO color: session?.user.color]
 
   return (
     <>

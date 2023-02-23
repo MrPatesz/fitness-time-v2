@@ -3,7 +3,7 @@ import {createAvatar} from "@dicebear/core";
 import {Box, useMantineTheme} from "@mantine/core";
 import Image from "next/image";
 import React, {FunctionComponent, useMemo} from "react";
-import {BasicUserType} from "../models/User";
+import {BasicUserType} from "../../models/User";
 
 const UserImage: FunctionComponent<{
   user: BasicUserType;

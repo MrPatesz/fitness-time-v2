@@ -3,7 +3,7 @@ import {useRouter} from "next/router";
 import React from "react";
 import {EventCard} from "../../components/event/EventCard";
 import {QueryComponent} from "../../components/QueryComponent";
-import UserImage from "../../components/UserImage";
+import UserImage from "../../components/user/UserImage";
 import {api} from "../../utils/api";
 
 export default function UserDetailsPage() {

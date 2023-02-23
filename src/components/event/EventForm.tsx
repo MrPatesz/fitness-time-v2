@@ -3,8 +3,8 @@ import {useForm} from "@mantine/form";
 import {FunctionComponent} from "react";
 import {CreateEventType} from "../../models/Event";
 import {getDefaultCreateEvent} from "../../utils/defaultObjects";
-import {IntervalPicker} from "../IntervalPicker";
-import {LocationPicker} from "../LocationPicker";
+import {IntervalPicker} from "./IntervalPicker";
+import {LocationPicker} from "../location/LocationPicker";
 
 export const EventForm: FunctionComponent<{
   originalEvent: CreateEventType | undefined;

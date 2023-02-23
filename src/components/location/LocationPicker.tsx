@@ -1,9 +1,9 @@
 import {Card, Center, Loader, TextInput} from "@mantine/core";
 import {Autocomplete, useJsApiLoader} from "@react-google-maps/api";
 import React, {FunctionComponent, useEffect, useState} from "react";
-import {env} from "../env.mjs";
-import {CreateLocationType} from "../models/Location";
-import {googleMapsLibraries} from "../utils/defaultObjects";
+import {env} from "../../env.mjs";
+import {CreateLocationType} from "../../models/Location";
+import {googleMapsLibraries} from "../../utils/defaultObjects";
 
 export const LocationPicker: FunctionComponent<{
   initialAddress: string;
