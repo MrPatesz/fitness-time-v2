@@ -1,5 +1,6 @@
 import {Button, Group, Stack, TextInput, Title} from "@mantine/core";
 import {useForm} from "@mantine/form";
+import {showNotification} from "@mantine/notifications";
 import React, {FunctionComponent} from "react";
 import {ProfileType, UpdateProfileType} from "../../models/User";
 import {api} from "../../utils/api";
@@ -12,7 +13,14 @@ export const ProfileForm: FunctionComponent<{
 }> = ({user}) => {
   const queryContext = api.useContext();
   const useUpdate = api.user.update.useMutation({
-    onSuccess: () => queryContext.user.invalidate().then(refreshSession),
+    onSuccess: () => queryContext.user.invalidate().then(() => {
+      refreshSession();
+      showNotification({
+        color: "green",
+        title: "Updated profile!",
+        message: "Your profile has been modified.",
+      });
+    })
   });
 
   const form = useForm<UpdateProfileType>({

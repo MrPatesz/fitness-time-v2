@@ -1,4 +1,5 @@
 import {Modal} from "@mantine/core";
+import {showNotification} from "@mantine/notifications";
 import {FunctionComponent} from "react";
 import {api} from "../../../utils/api";
 import {QueryComponent} from "../../QueryComponent";
@@ -12,7 +13,13 @@ export const EditEventDialog: FunctionComponent<{
   const queryContext = api.useContext();
   const eventQuery = api.event.getById.useQuery(eventId);
   const useUpdate = api.event.update.useMutation({
-    onSuccess: () => queryContext.event.invalidate(),
+    onSuccess: () => queryContext.event.invalidate().then(() =>
+      showNotification({
+        color: "green",
+        title: "Updated event!",
+        message: "The event has been modified.",
+      })
+    ),
   });
 
   return (

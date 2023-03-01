@@ -1,4 +1,5 @@
 import {ActionIcon, Affix, Badge, Button, Card, Group, Stack, Text, useMantineTheme,} from "@mantine/core";
+import {showNotification} from "@mantine/notifications";
 import {useSession} from "next-auth/react";
 import Link from "next/link";
 import {useRouter} from "next/router";
@@ -7,10 +8,10 @@ import {Pencil} from "tabler-icons-react";
 import {EditEventDialog} from "../../components/event/dialogs/EditEventDialog";
 import MapComponent from "../../components/location/MapComponent";
 import {QueryComponent} from "../../components/QueryComponent";
-import {api} from "../../utils/api";
-import {getIntervalString} from "../../utils/utilFunctions";
-import {priceFormatter} from "../../utils/formatters";
 import {DetailedEventType} from "../../models/Event";
+import {api} from "../../utils/api";
+import {priceFormatter} from "../../utils/formatters";
+import {getIntervalString} from "../../utils/utilFunctions";
 
 export default function EventDetailsPage() {
   const [openEdit, setOpenEdit] = useState(false);
@@ -22,7 +23,13 @@ export default function EventDetailsPage() {
   const queryContext = api.useContext();
   const eventQuery = api.event.getById.useQuery(+`${id}`);
   const participate = api.event.participate.useMutation({
-    onSuccess: () => queryContext.event.invalidate(),
+    onSuccess: () => queryContext.event.invalidate().then(() =>
+      showNotification({
+        color: "green",
+        title: "Updated participation!",
+        message: "Your participation status has been modified.",
+      })
+    ),
   });
 
   const participateButton = (event: DetailedEventType) => {

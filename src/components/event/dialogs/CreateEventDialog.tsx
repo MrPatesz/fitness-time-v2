@@ -1,4 +1,5 @@
 import {Modal} from "@mantine/core";
+import {showNotification} from "@mantine/notifications";
 import {FunctionComponent} from "react";
 import {api} from "../../../utils/api";
 import {getDefaultCreateEvent} from "../../../utils/defaultObjects";
@@ -14,7 +15,13 @@ export const CreateEventDialog: FunctionComponent<{
 }> = ({open, onClose, initialInterval}) => {
   const queryContext = api.useContext();
   const useCreate = api.event.create.useMutation({
-    onSuccess: () => queryContext.event.invalidate(),
+    onSuccess: () => queryContext.event.invalidate().then(() =>
+      showNotification({
+        color: "green",
+        title: "Created event!",
+        message: "A new event has been created.",
+      })
+    ),
   });
 
   return (

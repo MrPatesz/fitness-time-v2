@@ -33,7 +33,13 @@ export default function CalendarPage() {
   const queryContext = api.useContext();
   const eventsQuery = api.event.getCalendar.useQuery();
   const updateEvent = api.event.update.useMutation({
-    onSuccess: () => queryContext.event.invalidate(),
+    onSuccess: () => queryContext.event.invalidate().then(() =>
+      showNotification({
+        color: "green",
+        title: "Updated event!",
+        message: "The event has been moved.",
+      })
+    ),
   });
   const theme = useMantineTheme();
   const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
@@ -45,7 +51,6 @@ export default function CalendarPage() {
     newStart: { value: string };
     newEnd: { value: string };
   }) => {
-    // TODO fix update call
     if (session?.user.id === event.e.data.resource.creatorId) {
       updateEvent.mutate({
         id: event.e.data.resource.id,

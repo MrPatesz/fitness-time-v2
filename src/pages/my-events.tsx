@@ -1,4 +1,5 @@
 import {ActionIcon, Affix, Group, Stack, Table, useMantineTheme} from "@mantine/core";
+import {showNotification} from "@mantine/notifications";
 import {useRouter} from "next/router";
 import React, {useState} from "react";
 import {Pencil, Plus, Trash} from "tabler-icons-react";
@@ -9,8 +10,8 @@ import {FilterEventsComponent} from "../components/event/FilterEventsComponent";
 import {QueryComponent} from "../components/QueryComponent";
 import {BasicEventType} from "../models/Event";
 import {api} from "../utils/api";
-import {getIntervalString} from "../utils/utilFunctions";
 import {priceFormatter} from "../utils/formatters";
+import {getIntervalString} from "../utils/utilFunctions";
 
 export default function MyEventsPage() {
   const [filteredList, setFilteredList] = useState<BasicEventType[]>([]);
@@ -24,7 +25,12 @@ export default function MyEventsPage() {
   const queryContext = api.useContext();
   const eventsQuery = api.event.getAllCreated.useQuery();
   const deleteEvent = api.event.delete.useMutation({
-    onSuccess: () => queryContext.event.invalidate(),
+    onSuccess: () => queryContext.event.invalidate().then(() =>
+      showNotification({
+        color: "green",
+        title: "Deleted event!",
+        message: "The event has been deleted.",
+      })),
   });
 
   return (
