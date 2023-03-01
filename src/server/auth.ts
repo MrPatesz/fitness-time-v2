@@ -1,8 +1,9 @@
+import {DefaultMantineColor} from "@mantine/core";
+import {PrismaAdapter} from "@next-auth/prisma-adapter";
 import type {GetServerSidePropsContext} from "next";
-import {type DefaultSession, getServerSession, type NextAuthOptions,} from "next-auth";
+import {type DefaultSession, getServerSession, type NextAuthOptions} from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
 import GoogleProvider from "next-auth/providers/google";
-import {PrismaAdapter} from "@next-auth/prisma-adapter";
 import {env} from "../env.mjs";
 import {prisma} from "./db";
 
@@ -18,15 +19,17 @@ declare module "next-auth" {
     user: {
       id: string;
       name: string | null | undefined;
+      themeColor: DefaultMantineColor | null;
       // ...other properties
       // role: UserRole;
     } & DefaultSession["user"];
   }
 
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
+  interface User {
+    themeColor: DefaultMantineColor | null;
+    // ...other properties
+    // role: UserRole;
+  }
 }
 
 /**
@@ -41,6 +44,7 @@ export const authOptions: NextAuthOptions = {
       if (session.user) {
         session.user.id = user.id;
         session.user.name = user.name;
+        session.user.themeColor = user.themeColor;
         // session.user.role = user.role; <-- put other properties on the session here
       }
       return session;

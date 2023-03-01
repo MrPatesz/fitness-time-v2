@@ -3,8 +3,9 @@ import {useForm} from "@mantine/form";
 import React, {FunctionComponent} from "react";
 import {ProfileType, UpdateProfileType} from "../../models/User";
 import {api} from "../../utils/api";
-import {LocationPicker} from "../location/LocationPicker";
 import {refreshSession} from "../../utils/utilFunctions";
+import {LocationPicker} from "../location/LocationPicker";
+import {ThemeColorPicker} from "./ThemeColorPicker";
 
 export const ProfileForm: FunctionComponent<{
   user: ProfileType;
@@ -42,8 +43,12 @@ export const ProfileForm: FunctionComponent<{
           required={false}
           placeholder="Where do you stay?"
           description="This is used to filter events by distance. Only you can see this information."
-          initialAddress={form.getInputProps("location").value?.address}
+          initialAddress={form.getInputProps("location").value?.address ?? ""}
           setLocation={form.getInputProps("location").onChange}
+        />
+        <ThemeColorPicker
+          value={form.getInputProps("themeColor").value}
+          onChange={form.getInputProps("themeColor").onChange}
         />
         <Group position="apart">
           <Button onClick={form.reset} color="gray" disabled={!form.isDirty()}>

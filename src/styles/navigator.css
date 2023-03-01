@@ -72,10 +72,10 @@ Theme Designer Version: 2021.09.25.67272
     font-weight: bold;
 }
 .dark_navigator_select .dark_navigator_cell_box {
-    background-color: #6741d9;
+    background-color: #343a40;
     opacity: 0.5;
 }
 .navigator_default_select .navigator_default_cell_box {
-    background-color: #6741d9 !important;
+    background-color: #343a40 !important;
     opacity: 0.5;
 }

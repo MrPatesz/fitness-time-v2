@@ -1,30 +1,14 @@
 import {z} from "zod";
+import {ThemeColor} from "../components/user/ThemeColorPicker";
 import {BasicEventSchema} from "./Event";
 import {CreateLocationSchema, LocationSchema} from "./Location";
-
-enum Colors {
-  DARK = "dark",
-  GRAY = "gray",
-  RED = "red",
-  PINK = "pink",
-  GRAPE = "grape",
-  VIOLET = "violet",
-  INDIGO = "indigo",
-  BLUE = "blue",
-  CYAN = "cyan",
-  TEAL = "teal",
-  GREEN = "green",
-  LIME = "lime",
-  YELLOW = "yellow",
-  ORANGE = "orange",
-}
 
 export const BasicUserSchema = z.object({
   id: z.string(),
   name: z.string().min(1),
   introduction: z.string().nullable(), // TODO should not be nullable (same with all string properties)
   image: z.string().nullable(),
-  // TODO color: z.string().nullable(),
+  themeColor: z.nativeEnum(ThemeColor).nullable()
 });
 
 export const DetailedUserSchema = BasicUserSchema.extend({

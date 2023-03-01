@@ -64,7 +64,7 @@ model User {
   accounts           Account[]
   sessions           Session[]
   introduction       String?
-  // TODO color              String?
+  themeColor         String? // TODO enum (migrate to PostgreSQL first)
   locationId         Int?
   location           Location? @relation(fields: [locationId], references: [id], onDelete: Restrict)
   createdEvents      Event[]   @relation(name: "createdEvents")

@@ -1,33 +1,33 @@
 import {ActionIcon, Group, MultiSelect, Select, TextInput,} from "@mantine/core";
 import {useLocalStorage} from "@mantine/hooks";
 import {FunctionComponent, useEffect, useState} from "react";
-import {BasicEventType} from "../../models/Event";
 import {ArrowDown, ArrowUp, Search} from "tabler-icons-react";
+import {BasicEventType} from "../../models/Event";
 
 enum OrderBy {
-  NAME,
-  DATE,
-  LOCATION,
-  PRICE,
+  NAME = "name",
+  DATE = "date",
+  LOCATION = "location",
+  PRICE = "price",
 }
 
 const orderByValues = [
-  {value: OrderBy[OrderBy.NAME] ?? "", label: "Name"},
-  {value: OrderBy[OrderBy.DATE] ?? "", label: "Date"},
-  {value: OrderBy[OrderBy.LOCATION] ?? "", label: "Location"},
-  {value: OrderBy[OrderBy.PRICE] ?? "", label: "Price"},
+  {value: OrderBy.NAME, label: "Name"},
+  {value: OrderBy.DATE, label: "Date"},
+  {value: OrderBy.LOCATION, label: "Location"},
+  {value: OrderBy.PRICE, label: "Price"},
 ];
 
 enum FilterBy {
-  FREE,
-  NO_EQUIPMENT,
-  LIMITED,
+  FREE = "free",
+  NO_EQUIPMENT = "no_equipment",
+  LIMITED = "limited",
 }
 
 const filterValues = [
-  {value: FilterBy[FilterBy.FREE] ?? "", label: "Free"},
-  {value: FilterBy[FilterBy.NO_EQUIPMENT] ?? "", label: "No Equipment"},
-  {value: FilterBy[FilterBy.LIMITED] ?? "", label: "Limited"},
+  {value: FilterBy.FREE, label: "Free"},
+  {value: FilterBy.NO_EQUIPMENT, label: "No Equipment"},
+  {value: FilterBy.LIMITED, label: "Limited"},
 ];
 
 export const FilterEventsComponent: FunctionComponent<{
@@ -40,7 +40,7 @@ export const FilterEventsComponent: FunctionComponent<{
     key: filterKey,
     defaultValue: [],
   });
-  const [orderBy, setOrderBy] = useState<string>(OrderBy[OrderBy.DATE] ?? "");
+  const [orderBy, setOrderBy] = useState<OrderBy>(OrderBy.DATE);
   const [ascending, setAscending] = useState<boolean>(false);
 
   useEffect(() => {
@@ -52,29 +52,28 @@ export const FilterEventsComponent: FunctionComponent<{
           const limited = !!a.limit;
 
           return (
-            (!tags.includes(FilterBy[FilterBy.FREE] ?? "") || free) &&
-            (!tags.includes(FilterBy[FilterBy.NO_EQUIPMENT] ?? "") ||
-              noEquipment) &&
-            (!tags.includes(FilterBy[FilterBy.LIMITED] ?? "") || limited)
+            (!tags.includes(FilterBy.FREE) || free) &&
+            (!tags.includes(FilterBy.NO_EQUIPMENT) || noEquipment) &&
+            (!tags.includes(FilterBy.LIMITED) || limited)
           );
         })
         ?.filter((a) => a.name.toLowerCase().includes(searchTerm.toLowerCase()))
         ?.sort((a, b) => {
           let result = 0;
           switch (orderBy) {
-            case OrderBy[OrderBy.NAME]: {
+            case OrderBy.NAME: {
               result = a.name.localeCompare(b.name);
               break;
             }
-            case OrderBy[OrderBy.DATE]: {
+            case OrderBy.DATE: {
               result = new Date(a.start).getTime() - new Date(b.start).getTime();
               break;
             }
-            // case OrderBy[OrderBy.LOCATION]: {
+            // case OrderBy.LOCATION: {
             //   result = a.location.address.localeCompare(b.location.address);
             //   break;
             // }
-            case OrderBy[OrderBy.PRICE]: {
+            case OrderBy.PRICE: {
               result = (a.price ?? 0) - (b.price ?? 0);
               break;
             }
@@ -102,7 +101,7 @@ export const FilterEventsComponent: FunctionComponent<{
         data={filterValues}
         label="Filter by Attributes"
         value={tags}
-        onChange={(event) => setTags(event)}
+        onChange={setTags}
       />
       <Select
         rightSection={
@@ -114,7 +113,11 @@ export const FilterEventsComponent: FunctionComponent<{
         data={orderByValues}
         label="Order by"
         value={orderBy}
-        onChange={(event) => setOrderBy(event ?? "Name")}
+        onChange={(event) => {
+          if (event) {
+            setOrderBy(event as OrderBy);
+          }
+        }}
       />
     </Group>
   );
