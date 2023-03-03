@@ -28,6 +28,7 @@ export const EditEventDialog: FunctionComponent<{
       onClose={onClose}
       title="Edit Event"
       closeOnClickOutside={false}
+      zIndex={402}
     >
       <QueryComponent resourceName={"Event Details"} query={eventQuery}>
         {eventQuery.data && (

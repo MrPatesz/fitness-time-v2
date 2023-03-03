@@ -130,7 +130,7 @@ export default function CalendarPage() {
         </QueryComponent>
       </Stack>
       {xs && (
-        <Affix position={{bottom: 0, left: -1}}>
+        <Affix position={{bottom: 0, left: -1}} zIndex={401}>
           {navigator}
         </Affix>
       )}
