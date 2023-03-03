@@ -3,8 +3,8 @@ import {useForm} from "@mantine/form";
 import {FunctionComponent} from "react";
 import {CreateEventType} from "../../models/Event";
 import {getDefaultCreateEvent} from "../../utils/defaultObjects";
-import {IntervalPicker} from "./IntervalPicker";
 import {LocationPicker} from "../location/LocationPicker";
+import {IntervalPicker} from "./IntervalPicker";
 
 export const EventForm: FunctionComponent<{
   originalEvent: CreateEventType | undefined;
@@ -34,6 +34,7 @@ export const EventForm: FunctionComponent<{
       <Stack>
         <TextInput
           withAsterisk
+          data-autofocus
           label="Name"
           placeholder="What is the event called?"
           {...form.getInputProps("name")}

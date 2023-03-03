@@ -1,9 +1,9 @@
 import {ActionIcon, Affix, Badge, Button, Card, Group, Stack, Text, useMantineTheme,} from "@mantine/core";
+import {useDisclosure} from "@mantine/hooks";
 import {showNotification} from "@mantine/notifications";
 import {useSession} from "next-auth/react";
 import Link from "next/link";
 import {useRouter} from "next/router";
-import React, {useState} from "react";
 import {Pencil} from "tabler-icons-react";
 import {EditEventDialog} from "../../components/event/dialogs/EditEventDialog";
 import MapComponent from "../../components/location/MapComponent";
@@ -14,7 +14,7 @@ import {priceFormatter} from "../../utils/formatters";
 import {getIntervalString} from "../../utils/utilFunctions";
 
 export default function EventDetailsPage() {
-  const [openEdit, setOpenEdit] = useState(false);
+  const [showEditDialog, {open: openEditDialog, close: closeEditDialog}] = useDisclosure(false);
 
   const theme = useMantineTheme();
   const {data: session} = useSession();
@@ -154,15 +154,15 @@ export default function EventDetailsPage() {
       {eventQuery.data?.creatorId === session?.user.id && (
         <>
           <EditEventDialog
-            open={openEdit}
-            onClose={() => setOpenEdit(false)}
+            open={showEditDialog}
+            onClose={closeEditDialog}
             eventId={+`${id}`}
           />
           <Affix position={{bottom: theme.spacing.md, right: theme.spacing.md}}>
             <ActionIcon
               variant="filled"
               size="xl"
-              onClick={() => setOpenEdit(true)}
+              onClick={openEditDialog}
             >
               <Pencil/>
             </ActionIcon>

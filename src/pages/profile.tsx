@@ -1,4 +1,3 @@
-import React from "react";
 import {QueryComponent} from "../components/QueryComponent";
 import {ProfileForm} from "../components/user/ProfileForm";
 import {api} from "../utils/api";

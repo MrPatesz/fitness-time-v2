@@ -1,7 +1,8 @@
 import {ActionIcon, Affix, Group, Stack, Table, useMantineTheme} from "@mantine/core";
+import {useDisclosure} from "@mantine/hooks";
 import {showNotification} from "@mantine/notifications";
 import {useRouter} from "next/router";
-import React, {useState} from "react";
+import {useState} from "react";
 import {Pencil, Plus, Trash} from "tabler-icons-react";
 import {ConfirmDialog} from "../components/ConfirmDialog";
 import {CreateEventDialog} from "../components/event/dialogs/CreateEventDialog";
@@ -15,7 +16,7 @@ import {getIntervalString} from "../utils/utilFunctions";
 
 export default function MyEventsPage() {
   const [filteredList, setFilteredList] = useState<BasicEventType[]>([]);
-  const [openCreate, setOpenCreate] = useState(false);
+  const [showCreateDialog, {open: openCreateDialog, close: closeCreateDialog}] = useDisclosure(false);
   const [editId, setEditId] = useState<number | null>(null);
   const [deleteId, setDeleteId] = useState<number | null>(null);
 
@@ -119,14 +120,14 @@ export default function MyEventsPage() {
         </QueryComponent>
       </Stack>
       <CreateEventDialog
-        open={openCreate}
-        onClose={() => setOpenCreate(false)}
+        open={showCreateDialog}
+        onClose={closeCreateDialog}
       />
       <Affix position={{bottom: theme.spacing.md, right: theme.spacing.md}}>
         <ActionIcon
           variant="filled"
           size="xl"
-          onClick={() => setOpenCreate(true)}
+          onClick={openCreateDialog}
         >
           <Plus/>
         </ActionIcon>

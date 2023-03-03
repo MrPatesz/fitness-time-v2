@@ -2,7 +2,7 @@ import {initials} from "@dicebear/collection";
 import {createAvatar} from "@dicebear/core";
 import {Box, useMantineTheme} from "@mantine/core";
 import Image from "next/image";
-import React, {FunctionComponent, useMemo} from "react";
+import {FunctionComponent, useMemo} from "react";
 import {BasicUserType} from "../../models/User";
 
 const UserImage: FunctionComponent<{
@@ -11,7 +11,7 @@ const UserImage: FunctionComponent<{
 }> = ({user, size = 100}) => {
   const theme = useMantineTheme();
   const radius = theme.fn.radius(theme.defaultRadius);
-  const themeColor = theme.fn.themeColor(theme.primaryColor);
+  const themeColor = theme.fn.themeColor(user.themeColor ?? theme.primaryColor);
 
   const avatar = useMemo(() => {
       return createAvatar(initials, {
@@ -21,35 +21,24 @@ const UserImage: FunctionComponent<{
     }, [user],
   );
 
-  /*if (!!user.image) {
+  if (!user.name) {
     return (
-      <img
-        src={user.image}
-        alt="Avatar"
-        width={size} height={size}
-        style={{borderRadius: radius}}
-      />
-    );
-  }*/
-
-  if (!!user.name) {
-    return (
-      <Image
-        src={avatar}
-        alt="Avatar"
-        width={size} height={size}
-        style={{borderRadius: radius}}
-      />
+      <Box sx={{
+        width: size,
+        height: size,
+        borderRadius: radius,
+        backgroundColor: themeColor,
+      }}/>
     );
   }
 
   return (
-    <Box sx={{
-      width: size,
-      height: size,
-      borderRadius: radius,
-      backgroundColor: themeColor,
-    }}/>
+    <Image
+      src={avatar}
+      alt="Avatar"
+      width={size} height={size}
+      style={{borderRadius: radius}}
+    />
   );
 };
 

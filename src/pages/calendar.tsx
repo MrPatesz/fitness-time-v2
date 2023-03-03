@@ -1,5 +1,5 @@
 import {Affix, Stack, useMantineTheme} from "@mantine/core";
-import {useMediaQuery} from "@mantine/hooks";
+import {useDisclosure, useMediaQuery} from "@mantine/hooks";
 import {showNotification} from "@mantine/notifications";
 import dayjs from "dayjs";
 import {useSession} from "next-auth/react";
@@ -26,7 +26,7 @@ const DayPilotCalendar: any = dynamic(
 
 export default function CalendarPage() {
   const [startDate, setStartDate] = useState(new Date());
-  const [openCreate, setOpenCreate] = useState(false);
+  const [showCreateDialog, {open: openCreateDialog, close: closeCreateDialog}] = useDisclosure(false);
   const [defaultStart, setDefaultStart] = useState(new Date());
   const [defaultEnd, setDefaultEnd] = useState(new Date());
 
@@ -96,7 +96,7 @@ export default function CalendarPage() {
             }) => {
               setDefaultStart(new Date(event.start.value));
               setDefaultEnd(new Date(event.end.value));
-              setOpenCreate(true);
+              openCreateDialog();
             }}
             onEventResize={onIntervalChange}
             onEventMove={onIntervalChange}
@@ -135,8 +135,8 @@ export default function CalendarPage() {
         </Affix>
       )}
       <CreateEventDialog
-        open={openCreate}
-        onClose={() => setOpenCreate(false)}
+        open={showCreateDialog}
+        onClose={closeCreateDialog}
         initialInterval={{start: defaultStart, end: defaultEnd}}
       />
     </>

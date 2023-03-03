@@ -1,7 +1,6 @@
-import React from "react";
+import {Button, Card, Group, Stack,} from "@mantine/core";
 import {signIn, useSession} from "next-auth/react";
 import {useRouter} from "next/router";
-import {Button, Card, Group, Stack,} from "@mantine/core";
 
 export default function WelcomePage() {
   const router = useRouter();

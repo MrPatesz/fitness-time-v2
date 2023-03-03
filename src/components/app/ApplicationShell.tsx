@@ -11,11 +11,11 @@ import {
   Title,
   useMantineTheme
 } from "@mantine/core";
-import {useMediaQuery} from "@mantine/hooks";
+import {useDisclosure, useMediaQuery} from "@mantine/hooks";
 import {signOut, useSession} from "next-auth/react";
 import Link from "next/link";
 import {useRouter} from "next/router";
-import React, {FunctionComponent, useState} from "react";
+import {FunctionComponent} from "react";
 import {Adjustments, CalendarEvent, Logout, News, UserCircle, Users} from "tabler-icons-react";
 
 export const ApplicationShell: FunctionComponent<{
@@ -25,7 +25,7 @@ export const ApplicationShell: FunctionComponent<{
   const profileRoute = "/profile";
   const welcomeRoute = "/welcome";
 
-  const [isNavbarOpen, setIsNavbarOpen] = useState<boolean>(false);
+  const [showNavbar, {close: closeNavbar, toggle: toggleNavbar}] = useDisclosure(false);
 
   const theme = useMantineTheme();
   const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
@@ -48,8 +48,8 @@ export const ApplicationShell: FunctionComponent<{
             <Group>
               <MediaQuery largerThan="xs" styles={{display: "none"}}>
                 <Burger
-                  opened={isNavbarOpen}
-                  onClick={() => setIsNavbarOpen(o => !o)}
+                  opened={showNavbar}
+                  onClick={toggleNavbar}
                   size="sm"
                   color={theme.colors.gray[6]}
                 />
@@ -80,7 +80,7 @@ export const ApplicationShell: FunctionComponent<{
       }
       navbarOffsetBreakpoint="xs"
       navbar={
-        <Navbar width={{base: 211}} p="xs" hiddenBreakpoint="xs" hidden={!isNavbarOpen}>
+        <Navbar width={{base: 211}} p="xs" hiddenBreakpoint="xs" hidden={!showNavbar} zIndex={401}>
           <Navbar.Section grow>
             {[
               {label: "Calendar", route: calendarRoute, icon: CalendarEvent},
@@ -98,6 +98,7 @@ export const ApplicationShell: FunctionComponent<{
                   label={link.label}
                   icon={<link.icon size={20}/>}
                   active={router.route.includes(link.route)}
+                  onClick={closeNavbar}
                 />
               </Link>
             ))}
@@ -108,6 +109,7 @@ export const ApplicationShell: FunctionComponent<{
                 label={session?.user?.name}
                 icon={<UserCircle size={20}/>}
                 active={router.route.includes(profileRoute)}
+                onClick={closeNavbar}
               />
             </Link>
           </Navbar.Section>

@@ -30,6 +30,7 @@ export const CreateEventDialog: FunctionComponent<{
       onClose={onClose}
       title="Create Event"
       closeOnClickOutside={false}
+      zIndex={201}
     >
       <EventForm
         originalEvent={initialInterval ? getDefaultCreateEvent(initialInterval) : undefined}

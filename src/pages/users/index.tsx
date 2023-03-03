@@ -1,8 +1,8 @@
 import {ActionIcon, Card, Group, Stack, Text, TextInput} from "@mantine/core";
 import Link from "next/link";
-import React, {useMemo, useState} from "react";
-import {QueryComponent} from "../../components/QueryComponent";
+import {useMemo, useState} from "react";
 import {ArrowDown, ArrowUp, Search} from "tabler-icons-react";
+import {QueryComponent} from "../../components/QueryComponent";
 import {api} from "../../utils/api";
 
 export default function UsersPage() {

@@ -1,6 +1,6 @@
 import {SimpleGrid, Stack, useMantineTheme} from "@mantine/core";
 import {useMediaQuery} from "@mantine/hooks";
-import React, {useState} from "react";
+import {useState} from "react";
 import {EventCard} from "../components/event/EventCard";
 import {FilterEventsComponent} from "../components/event/FilterEventsComponent";
 import {QueryComponent} from "../components/QueryComponent";

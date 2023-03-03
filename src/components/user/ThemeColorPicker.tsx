@@ -1,5 +1,5 @@
 import {ColorSwatch, DefaultMantineColor, Group, Select, Text, useMantineTheme} from "@mantine/core";
-import React, {forwardRef, FunctionComponent} from "react";
+import {forwardRef, FunctionComponent} from "react";
 
 export enum ThemeColor {
   RED = "red",

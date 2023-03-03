@@ -1,7 +1,7 @@
 import {Button, Group, Stack, TextInput, Title} from "@mantine/core";
 import {useForm} from "@mantine/form";
 import {showNotification} from "@mantine/notifications";
-import React, {FunctionComponent} from "react";
+import {FunctionComponent} from "react";
 import {ProfileType, UpdateProfileType} from "../../models/User";
 import {api} from "../../utils/api";
 import {refreshSession} from "../../utils/utilFunctions";
@@ -37,6 +37,7 @@ export const ProfileForm: FunctionComponent<{
         <Title order={2}>{user.name}</Title>
         <TextInput
           withAsterisk
+          data-autofocus
           label="Display name"
           placeholder="Other users will see this name."
           {...form.getInputProps("name")}

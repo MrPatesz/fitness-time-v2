@@ -1,6 +1,6 @@
 import {Box, Card, Center, Loader, LoadingOverlay} from "@mantine/core";
 import {UseTRPCQueryResult} from "@trpc/react-query/shared";
-import React, {FunctionComponent, useEffect} from "react";
+import {FunctionComponent, useEffect} from "react";
 
 export const QueryComponent: FunctionComponent<{
   resourceName: string;
