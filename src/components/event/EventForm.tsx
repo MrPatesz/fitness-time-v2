@@ -1,36 +1,81 @@
 import {Button, Group, NumberInput, Stack, Textarea, TextInput} from "@mantine/core";
 import {useForm} from "@mantine/form";
-import {FunctionComponent} from "react";
+import {closeAllModals} from "@mantine/modals";
+import {showNotification} from "@mantine/notifications";
+import {now} from "next-auth/client/_utils";
+import {FunctionComponent, useMemo} from "react";
 import {CreateEventType} from "../../models/Event";
+import {api} from "../../utils/api";
 import {getDefaultCreateEvent} from "../../utils/defaultObjects";
 import {LocationPicker} from "../location/LocationPicker";
 import {IntervalPicker} from "./IntervalPicker";
 
-export const EventForm: FunctionComponent<{
-  originalEvent: CreateEventType | undefined;
-  onSubmit: (data: CreateEventType) => void;
-}> = ({originalEvent, onSubmit}) => {
-  const now = new Date();
-  const initialValues = originalEvent ?? getDefaultCreateEvent();
+const getErrors = (data: CreateEventType) => ({
+  start: data.start.getTime() > (1000 * now()) ? null : "Invalid start",
+  end: (data.end.getTime() > (1000 * now()) && data.end.getTime() > data.start.getTime()) ? null : "Invalid end",
+});
 
-  const form = useForm<CreateEventType>({
-    initialValues,
-    initialErrors: {
-      start: initialValues.start.getTime() > now.getTime() ? null : "Invalid start",
-      end: (initialValues.end.getTime() > now.getTime() && initialValues.end.getTime() > initialValues.start.getTime()) ? null : "Invalid end",
-    },
-    validateInputOnChange: true,
-    validate: {
-      name: (value) => value ? null : "Name is required",
-      location: (value) => !!value.address ? null : "Location is required",
-      start: (value) => value.getTime() > now.getTime() ? null : "Invalid start",
-      end: (value, formData) =>
-        (value.getTime() > now.getTime() && value.getTime() > formData.start.getTime()) ? null : "Invalid end",
+export const EventForm: FunctionComponent<{
+  editedEventId?: number;
+  initialInterval?: {
+    start: Date;
+    end: Date;
+  };
+}> = ({editedEventId, initialInterval}) => {
+  const queryContext = api.useContext();
+  const editedEventQuery = api.event.getById.useQuery(editedEventId ?? 0, {
+    enabled: !!editedEventId,
+    initialData: getDefaultCreateEvent(),
+    onSuccess: (data) => {
+      form.setValues(data);
+      form.setErrors(getErrors(data));
     },
   });
 
+  const formData = useMemo(() => {
+    return initialInterval ? {...getDefaultCreateEvent(), ...initialInterval} : editedEventQuery.data;
+  }, [initialInterval, editedEventQuery.data]);
+
+  const form = useForm<CreateEventType>({
+    initialValues: formData,
+    initialErrors: getErrors(formData),
+    validateInputOnChange: true,
+    validate: {
+      name: (value) => value ? null : "Name is required",
+      location: (value) => !!value?.address ? null : "Location is required",
+      start: (value) => value.getTime() > (1000 * now()) ? null : "Invalid start",
+      end: (value, formData) =>
+        (value.getTime() > (1000 * now()) && value.getTime() > formData.start.getTime()) ? null : "Invalid end",
+    },
+  });
+
+  const useUpdate = api.event.update.useMutation({
+    onSuccess: () => queryContext.event.invalidate().then(() => {
+      closeAllModals();
+      showNotification({
+        color: "green",
+        title: "Updated event!",
+        message: "The event has been modified.",
+      });
+    }),
+  });
+  const useCreate = api.event.create.useMutation({
+    onSuccess: () => queryContext.event.invalidate().then(() => {
+      closeAllModals();
+      showNotification({
+        color: "green",
+        title: "Created event!",
+        message: "A new event has been created.",
+      });
+    }),
+  });
+
   return (
-    <form onSubmit={form.onSubmit(onSubmit)}>
+    <form
+      onSubmit={form.onSubmit((data) =>
+        editedEventId ? useUpdate.mutate({id: editedEventId, event: data}) : useCreate.mutate(data)
+      )}
+    >
       <Stack>
         <TextInput
           withAsterisk
@@ -53,7 +98,7 @@ export const EventForm: FunctionComponent<{
           location={form.getInputProps("location").value}
           required={true}
           placeholder="Where will it take place?"
-          initialAddress={form.getInputProps("location").value.address}
+          initialAddress={form.getInputProps("location").value?.address ?? ""}
           setLocation={form.getInputProps("location").onChange}
           error={form.getInputProps("location").error}
         />
@@ -94,8 +139,8 @@ export const EventForm: FunctionComponent<{
           setEvent({ ...event, recurring: e.currentTarget.checked })
         }
       /> */}
-        <Group position="apart">
-          <Button onClick={form.reset} color="gray" disabled={!form.isDirty()}>
+        <Group position="right">
+          <Button variant="default" onClick={form.reset} disabled={!form.isDirty()}>
             Reset
           </Button>
           <Button type="submit" disabled={!form.isValid() || !form.isDirty()}>

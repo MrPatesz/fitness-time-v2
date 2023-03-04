@@ -1,5 +1,6 @@
 import {MantineProvider, MantineThemeOverride} from "@mantine/core";
 import {useColorScheme} from "@mantine/hooks";
+import {ModalsProvider} from "@mantine/modals";
 import {NotificationsProvider} from "@mantine/notifications";
 import {useSession} from "next-auth/react";
 import {FunctionComponent, useMemo} from "react";
@@ -22,9 +23,11 @@ export const ThemeProvider: FunctionComponent<{
 
   return (
     <MantineProvider withGlobalStyles withNormalizeCSS theme={myTheme}>
-      <NotificationsProvider>
-        {children}
-      </NotificationsProvider>
+      <ModalsProvider>
+        <NotificationsProvider>
+          {children}
+        </NotificationsProvider>
+      </ModalsProvider>
     </MantineProvider>
   );
 };

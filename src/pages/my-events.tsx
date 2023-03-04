@@ -1,12 +1,10 @@
-import {ActionIcon, Affix, Group, Stack, Table, useMantineTheme} from "@mantine/core";
-import {useDisclosure} from "@mantine/hooks";
+import {ActionIcon, Affix, Flex, Group, Stack, Table, Text, useMantineTheme} from "@mantine/core";
+import {openConfirmModal, openModal} from "@mantine/modals";
 import {showNotification} from "@mantine/notifications";
 import {useRouter} from "next/router";
 import {useState} from "react";
 import {Pencil, Plus, Trash} from "tabler-icons-react";
-import {ConfirmDialog} from "../components/ConfirmDialog";
-import {CreateEventDialog} from "../components/event/dialogs/CreateEventDialog";
-import {EditEventDialog} from "../components/event/dialogs/EditEventDialog";
+import {EventForm} from "../components/event/EventForm";
 import {FilterEventsComponent} from "../components/event/FilterEventsComponent";
 import {QueryComponent} from "../components/QueryComponent";
 import {BasicEventType} from "../models/Event";
@@ -16,9 +14,6 @@ import {getIntervalString} from "../utils/utilFunctions";
 
 export default function MyEventsPage() {
   const [filteredList, setFilteredList] = useState<BasicEventType[]>([]);
-  const [showCreateDialog, {open: openCreateDialog, close: closeCreateDialog}] = useDisclosure(false);
-  const [editId, setEditId] = useState<number | null>(null);
-  const [deleteId, setDeleteId] = useState<number | null>(null);
 
   const router = useRouter();
   const theme = useMantineTheme();
@@ -32,6 +27,26 @@ export default function MyEventsPage() {
         title: "Deleted event!",
         message: "The event has been deleted.",
       })),
+  });
+
+  const onDeleteClick = (event: BasicEventType) => openConfirmModal({
+    title: "Delete",
+    children: (
+      <Flex>
+        <Text>
+          Are you sure you want to delete this event:
+        </Text>
+        <Text weight="bold">
+          &nbsp;{event.name}
+        </Text>
+        <Text>
+          ?
+        </Text>
+      </Flex>
+    ),
+    labels: {confirm: "Confirm", cancel: "Cancel"},
+    onConfirm: () => deleteEvent.mutate(event.id),
+    zIndex: 401,
   });
 
   return (
@@ -61,11 +76,7 @@ export default function MyEventsPage() {
             {filteredList.map((event) => (
               <tr
                 key={event.id}
-                onClick={() => {
-                  if (!editId) {
-                    router.replace(`events/${event.id}`);
-                  }
-                }}
+                onClick={() => router.push(`events/${event.id}`)}
                 style={{cursor: "pointer"}}
               >
                 <td>{event.name}</td>
@@ -82,9 +93,14 @@ export default function MyEventsPage() {
                       // disabled={event.isArchive}
                       variant="filled"
                       size="md"
-                      onClick={(e: any) => {
+                      onClick={(e) => {
                         e.stopPropagation();
-                        setEditId(event.id);
+                        openModal({
+                          title: "Edit Event",
+                          zIndex: 401,
+                          closeOnClickOutside: false,
+                          children: <EventForm editedEventId={event.id}/>,
+                        });
                       }}
                     >
                       <Pencil/>
@@ -95,22 +111,11 @@ export default function MyEventsPage() {
                       size="md"
                       onClick={(e: any) => {
                         e.stopPropagation();
-                        setDeleteId(event.id);
+                        onDeleteClick(event);
                       }}
                     >
                       <Trash/>
                     </ActionIcon>
-                    <EditEventDialog
-                      open={editId === event.id}
-                      onClose={() => setEditId(null)}
-                      eventId={event.id}
-                    />
-                    <ConfirmDialog
-                      title={`Are you sure you want to delete this event: ${event.name}?`}
-                      open={deleteId === event.id}
-                      onClose={() => setDeleteId(null)}
-                      onConfirm={() => deleteEvent.mutate(event.id)}
-                    />
                   </Group>
                 </td>
               </tr>
@@ -119,15 +124,16 @@ export default function MyEventsPage() {
           </Table>
         </QueryComponent>
       </Stack>
-      <CreateEventDialog
-        open={showCreateDialog}
-        onClose={closeCreateDialog}
-      />
       <Affix position={{bottom: theme.spacing.md, right: theme.spacing.md}}>
         <ActionIcon
           variant="filled"
           size="xl"
-          onClick={openCreateDialog}
+          onClick={() => openModal({
+            title: "Create Event",
+            zIndex: 401,
+            closeOnClickOutside: false,
+            children: <EventForm/>,
+          })}
         >
           <Plus/>
         </ActionIcon>

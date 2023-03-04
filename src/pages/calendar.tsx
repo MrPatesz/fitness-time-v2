@@ -1,12 +1,13 @@
 import {Affix, Stack, useMantineTheme} from "@mantine/core";
-import {useDisclosure, useMediaQuery} from "@mantine/hooks";
+import {useMediaQuery} from "@mantine/hooks";
+import {openModal} from "@mantine/modals";
 import {showNotification} from "@mantine/notifications";
 import dayjs from "dayjs";
 import {useSession} from "next-auth/react";
 import dynamic from "next/dynamic";
 import {useRouter} from "next/router";
 import {useState} from "react";
-import {CreateEventDialog} from "../components/event/dialogs/CreateEventDialog";
+import {EventForm} from "../components/event/EventForm";
 import {QueryComponent} from "../components/QueryComponent";
 import {BasicEventType} from "../models/Event";
 import {api} from "../utils/api";
@@ -26,9 +27,6 @@ const DayPilotCalendar: any = dynamic(
 
 export default function CalendarPage() {
   const [startDate, setStartDate] = useState(new Date());
-  const [showCreateDialog, {open: openCreateDialog, close: closeCreateDialog}] = useDisclosure(false);
-  const [defaultStart, setDefaultStart] = useState(new Date());
-  const [defaultEnd, setDefaultEnd] = useState(new Date());
 
   const queryContext = api.useContext();
   const eventsQuery = api.event.getCalendar.useQuery();
@@ -94,9 +92,19 @@ export default function CalendarPage() {
               start: { value: string };
               end: { value: string };
             }) => {
-              setDefaultStart(new Date(event.start.value));
-              setDefaultEnd(new Date(event.end.value));
-              openCreateDialog();
+              openModal({
+                title: "Create Event",
+                zIndex: 402,
+                closeOnClickOutside: false,
+                children: (
+                  <EventForm
+                    initialInterval={{
+                      start: new Date(event.start.value),
+                      end: new Date(event.end.value),
+                    }}
+                  />
+                ),
+              });
             }}
             onEventResize={onIntervalChange}
             onEventMove={onIntervalChange}
@@ -104,7 +112,7 @@ export default function CalendarPage() {
             businessBeginsHour={8}
             businessEndsHour={17}
             startDate={startDate}
-            onEventClick={(e: any) => router.replace(`events/${e.e.data.id}`)}
+            onEventClick={(e: any) => router.push(`events/${e.e.data.id}`)}
             events={eventsQuery.data?.map((event) => {
               const offsetInHours =
                 (new Date(event.start).getTimezoneOffset() / 60) * -1;
@@ -120,8 +128,11 @@ export default function CalendarPage() {
                 start,
                 end,
                 backColor: session?.user.id === event.creatorId ?
-                  theme.fn.themeColor(theme.primaryColor)
-                  : theme.fn.themeColor(theme.primaryColor, 6), // TODO creatorColor
+                  theme.fn.themeColor(theme.primaryColor) :
+                  (event.creator.themeColor ?
+                      theme.fn.themeColor(event.creator.themeColor) :
+                      theme.fn.themeColor(theme.primaryColor, 5)
+                  ),
                 cssClass: "calendar-event",
                 resource: event,
               };
@@ -134,11 +145,6 @@ export default function CalendarPage() {
           {navigator}
         </Affix>
       )}
-      <CreateEventDialog
-        open={showCreateDialog}
-        onClose={closeCreateDialog}
-        initialInterval={{start: defaultStart, end: defaultEnd}}
-      />
     </>
   );
 }
