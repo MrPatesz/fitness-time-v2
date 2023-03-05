@@ -2,17 +2,18 @@ import {Button, Group, NumberInput, Stack, Textarea, TextInput} from "@mantine/c
 import {useForm} from "@mantine/form";
 import {closeAllModals} from "@mantine/modals";
 import {showNotification} from "@mantine/notifications";
-import {now} from "next-auth/client/_utils";
-import {FunctionComponent, useMemo} from "react";
+import {FunctionComponent} from "react";
 import {CreateEventType} from "../../models/Event";
 import {api} from "../../utils/api";
 import {getDefaultCreateEvent} from "../../utils/defaultObjects";
 import {LocationPicker} from "../location/LocationPicker";
 import {IntervalPicker} from "./IntervalPicker";
 
-const getErrors = (data: CreateEventType) => ({
-  start: data.start.getTime() > (1000 * now()) ? null : "Invalid start",
-  end: (data.end.getTime() > (1000 * now()) && data.end.getTime() > data.start.getTime()) ? null : "Invalid end",
+const getErrors = (data: CreateEventType, isCreation: boolean) => ({
+  name: (isCreation || data.name) ? null : "Name is required",
+  location: (isCreation || !!data.location?.address) ? null : "Location is required",
+  start: data.start > new Date() ? null : "Invalid start",
+  end: (data.end > new Date() && data.end > data.start) ? null : "Invalid end",
 });
 
 export const EventForm: FunctionComponent<{
@@ -22,30 +23,28 @@ export const EventForm: FunctionComponent<{
     end: Date;
   };
 }> = ({editedEventId, initialInterval}) => {
+  const resetForm = (data: CreateEventType) => {
+    form.setValues(data);
+    form.setErrors(getErrors(data, !editedEventId));
+  };
+
   const queryContext = api.useContext();
   const editedEventQuery = api.event.getById.useQuery(editedEventId ?? 0, {
     enabled: !!editedEventId,
-    initialData: getDefaultCreateEvent(),
-    onSuccess: (data) => {
-      form.setValues(data);
-      form.setErrors(getErrors(data));
-    },
+    initialData: getDefaultCreateEvent(initialInterval),
+    onSuccess: resetForm,
   });
 
-  const formData = useMemo(() => {
-    return initialInterval ? {...getDefaultCreateEvent(), ...initialInterval} : editedEventQuery.data;
-  }, [initialInterval, editedEventQuery.data]);
-
   const form = useForm<CreateEventType>({
-    initialValues: formData,
-    initialErrors: getErrors(formData),
+    initialValues: editedEventQuery.data,
+    initialErrors: getErrors(editedEventQuery.data, !editedEventId),
     validateInputOnChange: true,
     validate: {
       name: (value) => value ? null : "Name is required",
       location: (value) => !!value?.address ? null : "Location is required",
-      start: (value) => value.getTime() > (1000 * now()) ? null : "Invalid start",
+      start: (value) => value > new Date() ? null : "Invalid start",
       end: (value, formData) =>
-        (value.getTime() > (1000 * now()) && value.getTime() > formData.start.getTime()) ? null : "Invalid end",
+        (value > new Date() && value > formData.start) ? null : "Invalid end",
     },
   });
 
@@ -69,6 +68,8 @@ export const EventForm: FunctionComponent<{
       });
     }),
   });
+
+  const isFormDirty = () => JSON.stringify(form.values) !== JSON.stringify(editedEventQuery.data);
 
   return (
     <form
@@ -140,10 +141,14 @@ export const EventForm: FunctionComponent<{
         }
       /> */}
         <Group position="right">
-          <Button variant="default" onClick={form.reset} disabled={!form.isDirty()}>
+          <Button
+            variant="default"
+            onClick={() => resetForm(editedEventQuery.data)}
+            disabled={!isFormDirty()}
+          >
             Reset
           </Button>
-          <Button type="submit" disabled={!form.isValid() || !form.isDirty()}>
+          <Button type="submit" disabled={!form.isValid() || !isFormDirty()}>
             Submit
           </Button>
         </Group>
