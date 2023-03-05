@@ -23,7 +23,7 @@ export default function UserDetailsPage() {
             </Stack>
             <UserImage user={userDetailsQuery.data}/>
           </Group>
-          {userDetailsQuery.data.createdEvents.length !== 0 && ( // TODO EventGrid component here and on feed page
+          {!!userDetailsQuery.data.createdEvents.length && ( // TODO EventGrid component here and on feed page
             <>
               <Text size="lg">Owned Events</Text>
               <SimpleGrid cols={3}>

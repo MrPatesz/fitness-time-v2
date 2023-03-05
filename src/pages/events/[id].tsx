@@ -10,8 +10,7 @@ import MapComponent from "../../components/location/MapComponent";
 import {QueryComponent} from "../../components/QueryComponent";
 import {DetailedEventType} from "../../models/Event";
 import {api} from "../../utils/api";
-import {priceFormatter} from "../../utils/formatters";
-import {getIntervalString} from "../../utils/utilFunctions";
+import {dateFormatter, priceFormatter} from "../../utils/formatters";
 
 export default function EventDetailsPage() {
   const theme = useMantineTheme();
@@ -86,13 +85,7 @@ export default function EventDetailsPage() {
                 </Group>
                 <Group spacing="xs">
                   <Text>
-                    {eventQuery.data.start.toLocaleDateString()}
-                  </Text>
-                  <Text>
-                    {getIntervalString(
-                      eventQuery.data.start,
-                      eventQuery.data.end
-                    )}
+                    {dateFormatter.formatRange(eventQuery.data.start, eventQuery.data.end)}
                   </Text>
                 </Group>
                 {eventQuery.data.description && (
@@ -110,7 +103,7 @@ export default function EventDetailsPage() {
               <MapComponent location={eventQuery.data.location}/>
             </Group>
             <Card withBorder shadow="md" p="lg">
-              {eventQuery.data.participants.length ? (
+              {!!eventQuery.data.participants.length ? (
                 <Stack>
                   <Group position="apart">
                     <Group spacing={"xs"}>

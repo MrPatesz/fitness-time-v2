@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import {CreateEventType} from "../models/Event";
 import {CreateLocationType} from "../models/Location";
 
@@ -19,12 +20,8 @@ export const getDefaultCreateEvent = (initialInterval?: {
   end: Date;
 }): CreateEventType => ({
   name: "",
-  start: initialInterval ?
-    initialInterval.start :
-    new Date(new Date().setHours(new Date().getHours() + 1)),
-  end: initialInterval ?
-    initialInterval.end :
-    new Date(new Date().setHours(new Date().getHours() + 2)),
+  start: initialInterval?.start ?? dayjs(new Date()).add(1, "hours").toDate(),
+  end: initialInterval?.end ?? dayjs(new Date()).add(2, "hours").toDate(),
   description: "",
   equipment: "",
   limit: null,

@@ -9,8 +9,7 @@ import {FilterEventsComponent} from "../components/event/FilterEventsComponent";
 import {QueryComponent} from "../components/QueryComponent";
 import {BasicEventType} from "../models/Event";
 import {api} from "../utils/api";
-import {priceFormatter} from "../utils/formatters";
-import {getIntervalString} from "../utils/utilFunctions";
+import {dateFormatter, priceFormatter} from "../utils/formatters";
 
 export default function MyEventsPage() {
   const [filteredList, setFilteredList] = useState<BasicEventType[]>([]);
@@ -62,8 +61,7 @@ export default function MyEventsPage() {
             <thead>
             <tr>
               <th>Name</th>
-              <th>Date</th>
-              <th>Interval</th>
+              <th>Date and Time</th>
               <th>Location</th>
               <th>Equipment</th>
               <th>Price</th>
@@ -80,8 +78,7 @@ export default function MyEventsPage() {
                 style={{cursor: "pointer"}}
               >
                 <td>{event.name}</td>
-                <td>{new Date(event.start).toLocaleDateString()}</td>
-                <td>{getIntervalString(event.start, event.end)}</td>
+                <td>{dateFormatter.formatRange(event.start, event.end)}</td>
                 <td>{event.location.address}</td>
                 <td>{event.equipment}</td>
                 <td>{event.price && priceFormatter.format(event.price)}</td>
