@@ -28,10 +28,9 @@ const DayPilotCalendar: any = dynamic(
 export default function CalendarPage() {
   const [startDate, setStartDate] = useState(new Date());
 
-  const queryContext = api.useContext();
   const eventsQuery = api.event.getCalendar.useQuery();
   const updateEvent = api.event.update.useMutation({
-    onSuccess: () => queryContext.event.invalidate().then(() =>
+    onSuccess: () => eventsQuery.refetch().then(() =>
       showNotification({
         color: "green",
         title: "Updated event!",

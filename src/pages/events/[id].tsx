@@ -1,32 +1,47 @@
 import {ActionIcon, Affix, Badge, Button, Card, Group, Stack, Text, useMantineTheme,} from "@mantine/core";
-import {openModal} from "@mantine/modals";
+import {openConfirmModal, openModal} from "@mantine/modals";
 import {showNotification} from "@mantine/notifications";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
 import {useSession} from "next-auth/react";
 import Link from "next/link";
 import {useRouter} from "next/router";
-import {Pencil} from "tabler-icons-react";
+import {Pencil, Trash} from "tabler-icons-react";
+import {CommentForm} from "../../components/event/CommentForm";
 import {EventForm} from "../../components/event/EventForm";
 import MapComponent from "../../components/location/MapComponent";
 import {QueryComponent} from "../../components/QueryComponent";
+import UserImage from "../../components/user/UserImage";
 import {DetailedEventType} from "../../models/Event";
 import {api} from "../../utils/api";
 import {dateFormatter, priceFormatter} from "../../utils/formatters";
+
+dayjs.extend(relativeTime);
 
 export default function EventDetailsPage() {
   const theme = useMantineTheme();
   const {data: session} = useSession();
   const {query: {id}} = useRouter();
 
-  const queryContext = api.useContext();
   const eventQuery = api.event.getById.useQuery(+`${id}`);
   const participate = api.event.participate.useMutation({
-    onSuccess: () => queryContext.event.invalidate().then(() =>
+    onSuccess: () => eventQuery.refetch().then(() =>
       showNotification({
         color: "green",
         title: "Updated participation!",
         message: "Your participation status has been modified.",
       })
     ),
+  });
+
+  const deleteComment = api.comment.delete.useMutation({
+    onSuccess: () => eventQuery.refetch().then(() =>
+      showNotification({
+        color: "green",
+        title: "Deleted comment!",
+        message: "The comment has been deleted."
+      })
+    )
   });
 
   const participateButton = (event: DetailedEventType) => {
@@ -78,7 +93,7 @@ export default function EventDetailsPage() {
                     as={`/users/${eventQuery.data.creator.id}`}
                     passHref
                   >
-                    <Text size="lg" sx={{cursor: "pointer"}}>
+                    <Text size="lg">
                       by {eventQuery.data.creator.name}
                     </Text>
                   </Link>
@@ -139,26 +154,95 @@ export default function EventDetailsPage() {
                 </Group>
               )}
             </Card>
+            <Card withBorder sx={{backgroundColor: theme.colors.dark[9]}}>
+              <Stack>
+                <CommentForm eventId={+`${id}`}/>
+                {eventQuery.data.comments.map(c => (
+                  <Card withBorder key={c.id}>
+                    <Group position="apart" align="start">
+                      <Group>
+                        <UserImage user={c.user} size={45}/>
+                        <Stack spacing="xs">
+                          <Link
+                            href={"/users/[id]"}
+                            as={`/users/${c.user.id}`}
+                            passHref
+                          >
+                            <Text weight="bold">
+                              {c.user.name}
+                            </Text>
+                          </Link>
+                          <Text>
+                            {c.message}
+                          </Text>
+                        </Stack>
+                      </Group>
+                      <Stack justify={"apart"}>
+                        <Group position={"right"} spacing={"xs"}>
+                          {c.userId === session?.user.id && (
+                            <>
+                              <ActionIcon
+                                size="sm"
+                                onClick={() => openModal({
+                                  title: "Edit Comment",
+                                  zIndex: 401,
+                                  closeOnClickOutside: false,
+                                  children: <CommentForm eventId={+`${id}`} editedComment={c}/>,
+                                })}
+                              >
+                                <Pencil/>
+                              </ActionIcon>
+                              <ActionIcon
+                                size="sm"
+                                onClick={() => openConfirmModal({
+                                  title: "Delete",
+                                  children: (
+                                    <Stack>
+                                      <Text>
+                                        Are you sure you want to delete this comment?
+                                      </Text>
+                                      <Text weight="bold">
+                                        "{c.message}"
+                                      </Text>
+                                    </Stack>
+                                  ),
+                                  labels: {confirm: "Confirm", cancel: "Cancel"},
+                                  onConfirm: () => deleteComment.mutate(c.id),
+                                  zIndex: 401,
+                                })}
+                              >
+                                <Trash/>
+                              </ActionIcon>
+                            </>
+                          )}
+                        </Group>
+                        <Text>
+                          {dayjs(c.postedAt).fromNow()}
+                        </Text>
+                      </Stack>
+                    </Group>
+                  </Card>
+                ))}
+              </Stack>
+            </Card>
           </Stack>
         )}
       </QueryComponent>
       {eventQuery.data?.creatorId === session?.user.id && (
-        <>
-          <Affix position={{bottom: theme.spacing.md, right: theme.spacing.md}}>
-            <ActionIcon
-              variant="filled"
-              size="xl"
-              onClick={() => openModal({
-                title: "Edit Event",
-                zIndex: 401,
-                closeOnClickOutside: false,
-                children: <EventForm editedEventId={+`${id}`}/>,
-              })}
-            >
-              <Pencil/>
-            </ActionIcon>
-          </Affix>
-        </>
+        <Affix position={{bottom: theme.spacing.md, right: theme.spacing.md}}>
+          <ActionIcon
+            variant="default"
+            size="xl"
+            onClick={() => openModal({
+              title: "Edit Event",
+              zIndex: 401,
+              closeOnClickOutside: false,
+              children: <EventForm editedEventId={+`${id}`}/>,
+            })}
+          >
+            <Pencil/>
+          </ActionIcon>
+        </Affix>
       )}
     </>
   );

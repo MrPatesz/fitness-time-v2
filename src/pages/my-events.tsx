@@ -1,4 +1,4 @@
-import {ActionIcon, Affix, Flex, Group, Stack, Table, Text, useMantineTheme} from "@mantine/core";
+import {ActionIcon, Affix, Group, Stack, Table, Text, useMantineTheme} from "@mantine/core";
 import {openConfirmModal, openModal} from "@mantine/modals";
 import {showNotification} from "@mantine/notifications";
 import {useRouter} from "next/router";
@@ -17,10 +17,9 @@ export default function MyEventsPage() {
   const router = useRouter();
   const theme = useMantineTheme();
 
-  const queryContext = api.useContext();
   const eventsQuery = api.event.getAllCreated.useQuery();
   const deleteEvent = api.event.delete.useMutation({
-    onSuccess: () => queryContext.event.invalidate().then(() =>
+    onSuccess: () => eventsQuery.refetch().then(() =>
       showNotification({
         color: "green",
         title: "Deleted event!",
@@ -31,17 +30,14 @@ export default function MyEventsPage() {
   const onDeleteClick = (event: BasicEventType) => openConfirmModal({
     title: "Delete",
     children: (
-      <Flex>
+      <Stack>
         <Text>
-          Are you sure you want to delete this event:
+          Are you sure you want to delete this event?
         </Text>
         <Text weight="bold">
-          &nbsp;{event.name}
+          "{event.name}"
         </Text>
-        <Text>
-          ?
-        </Text>
-      </Flex>
+      </Stack>
     ),
     labels: {confirm: "Confirm", cancel: "Cancel"},
     onConfirm: () => deleteEvent.mutate(event.id),
@@ -88,7 +84,6 @@ export default function MyEventsPage() {
                   <Group spacing="xs">
                     <ActionIcon
                       // disabled={event.isArchive}
-                      variant="filled"
                       size="md"
                       onClick={(e) => {
                         e.stopPropagation();
@@ -104,7 +99,6 @@ export default function MyEventsPage() {
                     </ActionIcon>
                     <ActionIcon
                       // disabled={event.isArchive}
-                      variant="filled"
                       size="md"
                       onClick={(e: any) => {
                         e.stopPropagation();
@@ -123,7 +117,7 @@ export default function MyEventsPage() {
       </Stack>
       <Affix position={{bottom: theme.spacing.md, right: theme.spacing.md}}>
         <ActionIcon
-          variant="filled"
+          variant="default"
           size="xl"
           onClick={() => openModal({
             title: "Create Event",

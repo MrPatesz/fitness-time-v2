@@ -69,12 +69,13 @@ model User {
   location           Location? @relation(fields: [locationId], references: [id], onDelete: Restrict)
   createdEvents      Event[]   @relation(name: "createdEvents")
   participatedEvents Event[]   @relation(name: "participatedEvents")
+  comments           Comment[]
   // createdGroups      Group[]   @relation(name: "createdGroups")
   // joinedGroups       Group[]   @relation(name: "joinedGroups")
 }
 
 model Event {
-  id           Int      @id @default(autoincrement())
+  id           Int       @id @default(autoincrement())
   name         String
   start        DateTime
   end          DateTime
@@ -84,10 +85,11 @@ model Event {
   limit        Int?
   price        Int?
   locationId   Int
-  location     Location @relation(fields: [locationId], references: [id], onDelete: Restrict)
+  location     Location  @relation(fields: [locationId], references: [id], onDelete: Restrict)
   creatorId    String
-  creator      User     @relation(name: "createdEvents", fields: [creatorId], references: [id], onDelete: Restrict)
-  participants User[]   @relation(name: "participatedEvents")
+  creator      User      @relation(name: "createdEvents", fields: [creatorId], references: [id], onDelete: Restrict)
+  participants User[]    @relation(name: "participatedEvents")
+  comments     Comment[]
 }
 
 model Location {
@@ -97,6 +99,16 @@ model Location {
   longitude Float
   users     User[]
   events    Event[]
+}
+
+model Comment {
+  id       Int      @id @default(autoincrement())
+  message  String
+  postedAt DateTime @default(now())
+  userId   String
+  user     User     @relation(fields: [userId], references: [id])
+  eventId  Int
+  event    Event    @relation(fields: [eventId], references: [id])
 }
 
 // model Group {

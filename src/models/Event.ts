@@ -1,4 +1,5 @@
 import {z} from "zod";
+import {BasicCommentSchema} from "./Comment";
 import {IdSchema} from "./Id";
 import {CreateLocationSchema, LocationSchema} from "./Location";
 import {BasicUserSchema} from "./User";
@@ -27,6 +28,7 @@ export const BasicEventSchema = CreateEventSchema.extend({
 
 export const DetailedEventSchema = BasicEventSchema.extend({
   participants: BasicUserSchema.array(),
+  comments: BasicCommentSchema.array(),
 });
 
 export type CreateEventType = z.infer<typeof CreateEventSchema>;
