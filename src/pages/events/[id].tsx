@@ -14,16 +14,18 @@ import {QueryComponent} from "../../components/QueryComponent";
 import UserImage from "../../components/user/UserImage";
 import {DetailedEventType} from "../../models/Event";
 import {api} from "../../utils/api";
-import {dateFormatter, priceFormatter} from "../../utils/formatters";
+import {longDateFormatter, priceFormatter} from "../../utils/formatters";
 
 dayjs.extend(relativeTime);
 
 export default function EventDetailsPage() {
   const theme = useMantineTheme();
   const {data: session} = useSession();
-  const {query: {id}} = useRouter();
+  const {query: {id}, isReady} = useRouter();
 
-  const eventQuery = api.event.getById.useQuery(+`${id}`);
+  const eventQuery = api.event.getById.useQuery(parseInt(id as string), {
+    enabled: isReady,
+  });
   const participate = api.event.participate.useMutation({
     onSuccess: () => eventQuery.refetch().then(() =>
       showNotification({
@@ -89,8 +91,7 @@ export default function EventDetailsPage() {
                     {eventQuery.data.name}
                   </Text>
                   <Link
-                    href={"/users/[id]"}
-                    as={`/users/${eventQuery.data.creator.id}`}
+                    href={`/users/${eventQuery.data.creator.id}`}
                     passHref
                   >
                     <Text size="lg">
@@ -100,7 +101,7 @@ export default function EventDetailsPage() {
                 </Group>
                 <Group spacing="xs">
                   <Text>
-                    {dateFormatter.formatRange(eventQuery.data.start, eventQuery.data.end)}
+                    {longDateFormatter.formatRange(eventQuery.data.start, eventQuery.data.end)}
                   </Text>
                 </Group>
                 {eventQuery.data.description && (
@@ -130,8 +131,7 @@ export default function EventDetailsPage() {
                   <Group spacing="xs">
                     {eventQuery.data.participants.map((p, index: number) => (
                       <Link
-                        href={"/users/[id]"}
-                        as={`/users/${p.id}`}
+                        href={`/users/${p.id}`}
                         passHref
                         key={p.id}
                       >
@@ -164,8 +164,7 @@ export default function EventDetailsPage() {
                         <UserImage user={c.user} size={45}/>
                         <Stack spacing="xs">
                           <Link
-                            href={"/users/[id]"}
-                            as={`/users/${c.user.id}`}
+                            href={`/users/${c.user.id}`}
                             passHref
                           >
                             <Text weight="bold">

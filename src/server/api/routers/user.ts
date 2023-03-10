@@ -8,7 +8,7 @@ export const userRouter = createTRPCRouter({
     .output(BasicUserSchema.array())
     .query(async ({ctx}) => {
       const events = await ctx.prisma.user.findMany({
-        orderBy: {name: Prisma.SortOrder.asc}
+        orderBy: {name: Prisma.SortOrder.asc},
       });
       return BasicUserSchema.array().parse(events);
     }),
@@ -17,7 +17,7 @@ export const userRouter = createTRPCRouter({
     .query(async ({ctx: {prisma, session: {user: {id: userId}}}}) => {
       const user = await prisma.user.findUnique({
         where: {id: userId},
-        include: {location: true}
+        include: {location: true},
       });
 
       return ProfileSchema.parse(user);
@@ -29,9 +29,9 @@ export const userRouter = createTRPCRouter({
       const user = await ctx.prisma.user.findFirst({
         where: {id},
         include: {
-          createdEvents: {include: {location: true, creator: true}},
-          participatedEvents: {include: {location: true, creator: true}}
-        }
+          createdEvents: {include: {location: true, creator: true}, orderBy: {start: Prisma.SortOrder.desc}},
+          participatedEvents: {include: {location: true, creator: true}},
+        },
       });
 
       return DetailedUserSchema.parse(user);

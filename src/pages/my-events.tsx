@@ -9,7 +9,7 @@ import {FilterEventsComponent} from "../components/event/FilterEventsComponent";
 import {QueryComponent} from "../components/QueryComponent";
 import {BasicEventType} from "../models/Event";
 import {api} from "../utils/api";
-import {dateFormatter, priceFormatter} from "../utils/formatters";
+import {longDateFormatter, priceFormatter} from "../utils/formatters";
 
 export default function MyEventsPage() {
   const [filteredList, setFilteredList] = useState<BasicEventType[]>([]);
@@ -74,7 +74,7 @@ export default function MyEventsPage() {
                 style={{cursor: "pointer"}}
               >
                 <td>{event.name}</td>
-                <td>{dateFormatter.formatRange(event.start, event.end)}</td>
+                <td>{longDateFormatter.formatRange(event.start, event.end)}</td>
                 <td>{event.location.address}</td>
                 <td>{event.equipment}</td>
                 <td>{event.price && priceFormatter.format(event.price)}</td>

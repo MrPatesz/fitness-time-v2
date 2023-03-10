@@ -53,8 +53,7 @@ export default function UsersPage() {
         <Stack>
           {filteredList.map((user) => (
             <Link
-              href={"/users/[id]"}
-              as={`/users/${user.id}`}
+              href={`/users/${user.id}`}
               passHref
               key={user.id}
             >

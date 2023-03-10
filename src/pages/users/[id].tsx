@@ -6,9 +6,11 @@ import UserImage from "../../components/user/UserImage";
 import {api} from "../../utils/api";
 
 export default function UserDetailsPage() {
-  const {query: {id}} = useRouter();
+  const {query: {id}, isReady} = useRouter();
 
-  const userDetailsQuery = api.user.getById.useQuery(`${id}`);
+  const userDetailsQuery = api.user.getById.useQuery(id as string, {
+    enabled: isReady,
+  });
 
   return (
     <QueryComponent resourceName={"User Details"} query={userDetailsQuery}>

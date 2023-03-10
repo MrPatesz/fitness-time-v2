@@ -29,12 +29,12 @@ export const ApplicationShell: FunctionComponent<{
 
   const theme = useMantineTheme();
   const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
-  const router = useRouter();
+  const {route, replace: replaceRoute} = useRouter();
   const {data: session} = useSession({
     required: true,
     onUnauthenticated() {
-      if (router.route !== welcomeRoute) {
-        router.replace(welcomeRoute);
+      if (route !== welcomeRoute) {
+        replaceRoute(welcomeRoute);
       }
     },
   });
@@ -90,26 +90,28 @@ export const ApplicationShell: FunctionComponent<{
             ].map((link) => (
               <Link
                 href={link.route}
-                as={link.route}
                 passHref
                 key={link.label}
+                onClick={closeNavbar}
               >
                 <NavLink
                   label={link.label}
                   icon={<link.icon size={20}/>}
-                  active={router.route.includes(link.route)}
-                  onClick={closeNavbar}
+                  active={route.includes(link.route)}
                 />
               </Link>
             ))}
           </Navbar.Section>
-          <Navbar.Section sx={(xs && router.route.includes(calendarRoute)) ? {marginBottom: 241} : undefined}>
-            <Link href={profileRoute} as={profileRoute} passHref>
+          <Navbar.Section sx={(xs && route.includes(calendarRoute)) ? {marginBottom: 241} : undefined}>
+            <Link
+              href={profileRoute}
+              passHref
+              onClick={closeNavbar}
+            >
               <NavLink
                 label={session?.user?.name}
                 icon={<UserCircle size={20}/>}
-                active={router.route.includes(profileRoute)}
-                onClick={closeNavbar}
+                active={route.includes(profileRoute)}
               />
             </Link>
           </Navbar.Section>

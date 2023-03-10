@@ -73,9 +73,10 @@ export const EventForm: FunctionComponent<{
 
   return (
     <form
-      onSubmit={form.onSubmit((data) =>
-        editedEventId ? useUpdate.mutate({id: editedEventId, event: data}) : useCreate.mutate(data)
-      )}
+      onSubmit={form.onSubmit((data) => {
+        const changedEvent = {...data, price: data.price ?? null, limit: data.limit ?? null};
+        editedEventId ? useUpdate.mutate({id: editedEventId, event: changedEvent}) : useCreate.mutate(changedEvent);
+      })}
     >
       <Stack>
         <TextInput
