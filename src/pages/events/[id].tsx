@@ -23,9 +23,14 @@ export default function EventDetailsPage() {
   const {data: session} = useSession();
   const {query: {id}, isReady} = useRouter();
 
-  const eventQuery = api.event.getById.useQuery(parseInt(id as string), {
+  const eventId = parseInt(id as string);
+  const eventQuery = api.event.getById.useQuery(eventId, {
     enabled: isReady,
   });
+  const commentsQuery = api.comment.getAllByEventId.useQuery(eventId, {
+    enabled: isReady,
+  });
+
   const participate = api.event.participate.useMutation({
     onSuccess: () => eventQuery.refetch().then(() =>
       showNotification({
@@ -37,11 +42,11 @@ export default function EventDetailsPage() {
   });
 
   const deleteComment = api.comment.delete.useMutation({
-    onSuccess: () => eventQuery.refetch().then(() =>
+    onSuccess: () => commentsQuery.refetch().then(() =>
       showNotification({
         color: "green",
         title: "Deleted comment!",
-        message: "The comment has been deleted."
+        message: "The comment has been deleted.",
       })
     )
   });
@@ -60,7 +65,7 @@ export default function EventDetailsPage() {
     return (
       <Button
         onClick={() => participate.mutate({
-          id: +`${id}`,
+          id: eventId,
           participate: !isParticipated,
         })}
       >
@@ -80,7 +85,7 @@ export default function EventDetailsPage() {
   };
 
   return (
-    <>
+    <Stack>
       <QueryComponent resourceName={"Event Details"} query={eventQuery}>
         {eventQuery.data && (
           <Stack>
@@ -154,78 +159,80 @@ export default function EventDetailsPage() {
                 </Group>
               )}
             </Card>
-            <Card withBorder sx={{backgroundColor: theme.colors.dark[9]}}>
-              <Stack>
-                <CommentForm eventId={+`${id}`}/>
-                {eventQuery.data.comments.map(c => (
-                  <Card withBorder key={c.id}>
-                    <Group position="apart" align="start">
-                      <Group>
-                        <UserImage user={c.user} size={45}/>
-                        <Stack spacing="xs">
-                          <Link
-                            href={`/users/${c.user.id}`}
-                            passHref
-                          >
-                            <Text weight="bold">
-                              {c.user.name}
-                            </Text>
-                          </Link>
-                          <Text>
-                            {c.message}
-                          </Text>
-                        </Stack>
-                      </Group>
-                      <Stack justify={"apart"}>
-                        <Group position={"right"} spacing={"xs"}>
-                          {c.userId === session?.user.id && (
-                            <>
-                              <ActionIcon
-                                size="sm"
-                                onClick={() => openModal({
-                                  title: "Edit Comment",
-                                  zIndex: 401,
-                                  closeOnClickOutside: false,
-                                  children: <CommentForm eventId={+`${id}`} editedComment={c}/>,
-                                })}
-                              >
-                                <Pencil/>
-                              </ActionIcon>
-                              <ActionIcon
-                                size="sm"
-                                onClick={() => openConfirmModal({
-                                  title: "Delete",
-                                  children: (
-                                    <Stack>
-                                      <Text>
-                                        Are you sure you want to delete this comment?
-                                      </Text>
-                                      <Text weight="bold">
-                                        "{c.message}"
-                                      </Text>
-                                    </Stack>
-                                  ),
-                                  labels: {confirm: "Confirm", cancel: "Cancel"},
-                                  onConfirm: () => deleteComment.mutate(c.id),
-                                  zIndex: 401,
-                                })}
-                              >
-                                <Trash/>
-                              </ActionIcon>
-                            </>
-                          )}
-                        </Group>
-                        <Text>
-                          {dayjs(c.postedAt).fromNow()}
-                        </Text>
-                      </Stack>
-                    </Group>
-                  </Card>
-                ))}
-              </Stack>
-            </Card>
           </Stack>
         )}
+      </QueryComponent>
+      <QueryComponent resourceName={"Comments"} query={commentsQuery}>
+        <Card withBorder sx={{backgroundColor: theme.colors.dark[9]}}>
+          <Stack>
+            <CommentForm eventId={eventId}/>
+            {commentsQuery.data?.map(c => (
+              <Card withBorder key={c.id}>
+                <Group position="apart" align="start">
+                  <Group>
+                    <UserImage user={c.user} size={45}/>
+                    <Stack spacing="xs">
+                      <Link
+                        href={`/users/${c.user.id}`}
+                        passHref
+                      >
+                        <Text weight="bold">
+                          {c.user.name}
+                        </Text>
+                      </Link>
+                      <Text>
+                        {c.message}
+                      </Text>
+                    </Stack>
+                  </Group>
+                  <Stack justify={"apart"}>
+                    <Group position={"right"} spacing={"xs"}>
+                      {c.userId === session?.user.id && (
+                        <>
+                          <ActionIcon
+                            size="sm"
+                            onClick={() => openModal({
+                              title: "Edit Comment",
+                              zIndex: 401,
+                              closeOnClickOutside: false,
+                              children: <CommentForm eventId={eventId} editedComment={c}/>,
+                            })}
+                          >
+                            <Pencil/>
+                          </ActionIcon>
+                          <ActionIcon
+                            size="sm"
+                            onClick={() => openConfirmModal({
+                              title: "Delete",
+                              children: (
+                                <Stack>
+                                  <Text>
+                                    Are you sure you want to delete this comment?
+                                  </Text>
+                                  <Text weight="bold">
+                                    "{c.message}"
+                                  </Text>
+                                </Stack>
+                              ),
+                              labels: {confirm: "Confirm", cancel: "Cancel"},
+                              onConfirm: () => deleteComment.mutate(c.id),
+                              zIndex: 401,
+                            })}
+                          >
+                            <Trash/>
+                          </ActionIcon>
+                        </>
+                      )}
+                    </Group>
+                    <Text>
+                      {dayjs(c.postedAt).fromNow()}
+                    </Text>
+                  </Stack>
+                </Group>
+              </Card>
+            ))}
+          </Stack>
+        </Card>
       </QueryComponent>
       {eventQuery.data?.creatorId === session?.user.id && (
         <Affix position={{bottom: theme.spacing.md, right: theme.spacing.md}}>
@@ -236,13 +243,13 @@ export default function EventDetailsPage() {
               title: "Edit Event",
               zIndex: 401,
               closeOnClickOutside: false,
-              children: <EventForm editedEventId={+`${id}`}/>,
+              children: <EventForm editedEventId={eventId}/>,
             })}
           >
             <Pencil/>
           </ActionIcon>
         </Affix>
       )}
-    </>
+    </Stack>
   );
 }

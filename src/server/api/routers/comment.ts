@@ -2,6 +2,7 @@ import {z} from "zod";
 import {BasicCommentSchema, CreateCommentSchema} from "../../../models/Comment";
 import {IdSchema} from "../../../models/Id";
 import {createTRPCRouter, protectedProcedure} from "../trpc";
+import {Prisma} from ".prisma/client";
 
 export const commentRouter = createTRPCRouter({
   getAllByEventId: protectedProcedure
@@ -11,6 +12,7 @@ export const commentRouter = createTRPCRouter({
       const comments = await ctx.prisma.comment.findMany({
         where: {eventId},
         include: {user: true},
+        orderBy: {postedAt: Prisma.SortOrder.desc},
       });
 
       return BasicCommentSchema.array().parse(comments);
