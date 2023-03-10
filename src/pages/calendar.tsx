@@ -128,10 +128,7 @@ export default function CalendarPage() {
                 end,
                 backColor: session?.user.id === event.creatorId ?
                   theme.fn.themeColor(theme.primaryColor) :
-                  (event.creator.themeColor ?
-                      theme.fn.themeColor(event.creator.themeColor) :
-                      theme.fn.themeColor(theme.primaryColor, 5)
-                  ),
+                  theme.fn.themeColor(event.creator.themeColor),
                 cssClass: "calendar-event",
                 resource: event,
               };

@@ -11,7 +11,7 @@ const UserImage: FunctionComponent<{
 }> = ({user, size = 100}) => {
   const theme = useMantineTheme();
   const radius = theme.fn.radius(theme.defaultRadius);
-  const themeColor = theme.fn.themeColor(user.themeColor ?? theme.primaryColor);
+  const themeColor = theme.fn.themeColor(user.themeColor);
 
   const avatar = useMemo(() => {
       return createAvatar(initials, {
