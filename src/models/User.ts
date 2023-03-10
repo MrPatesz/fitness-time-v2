@@ -6,8 +6,7 @@ import {CreateLocationSchema, LocationSchema} from "./Location";
 export const BasicUserSchema = z.object({
   id: z.string(),
   name: z.string().min(1),
-  introduction: z.string().nullable(), // TODO should not be nullable (same with all string properties)
-  image: z.string().nullable(),
+  introduction: z.string(),
   themeColor: z.nativeEnum(ThemeColor).nullable()
 });
 

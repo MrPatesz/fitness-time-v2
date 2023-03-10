@@ -24,7 +24,7 @@ export const ProfileForm: FunctionComponent<{
   });
 
   const form = useForm<UpdateProfileType>({
-    initialValues: {...user, introduction: user.introduction ?? ""},
+    initialValues: user,
     validateInputOnChange: true,
     validate: {name: (value) => value ? null : "Display name is required"},
   });
