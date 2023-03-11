@@ -1,7 +1,9 @@
 import {type Session} from "next-auth";
 import {SessionProvider} from "next-auth/react";
+import {appWithTranslation} from "next-i18next";
 import {type AppType} from "next/app";
 import Head from "next/head";
+import i18nConfig from "../../next-i18next.config.mjs";
 import {ApplicationShell} from "../components/app/ApplicationShell";
 import {ThemeProvider} from "../components/app/ThemeProvider";
 import "../styles/calendar.css";
@@ -29,4 +31,6 @@ const App: AppType<{ session: Session | null }> = ({
   );
 };
 
-export default api.withTRPC(App);
+const i18nApp = appWithTranslation(App, i18nConfig);
+
+export default api.withTRPC(i18nApp);

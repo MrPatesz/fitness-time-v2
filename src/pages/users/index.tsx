@@ -1,15 +1,22 @@
 import {ActionIcon, Card, Group, Stack, Text, TextInput} from "@mantine/core";
+import {useTranslation} from "next-i18next";
+import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import Link from "next/link";
+import {useRouter} from "next/router";
 import {useMemo, useState} from "react";
 import {ArrowDown, ArrowUp, Search} from "tabler-icons-react";
+import i18nConfig from "../../../next-i18next.config.mjs";
 import {QueryComponent} from "../../components/QueryComponent";
 import {api} from "../../utils/api";
 
 export default function UsersPage() {
-  const [searchTerm, setSearchTerm] = useState<string>("");
-  const [ascending, setAscending] = useState<boolean>(true);
+  const {locale} = useRouter();
+  const {t} = useTranslation("common");
 
   const usersQuery = api.user.getAll.useQuery();
+
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [ascending, setAscending] = useState<boolean>(true);
 
   const filteredList = useMemo(() => {
     if (!usersQuery.data) return [];
@@ -32,16 +39,16 @@ export default function UsersPage() {
       <Group align="end" position="apart">
         <TextInput
           sx={{width: "300px"}}
-          label="Search by Username"
+          label={t("usersPage.search")}
           value={searchTerm}
           onChange={(event) => setSearchTerm(event.currentTarget.value)}
           icon={<Search/>}
         />
         <TextInput
           sx={{width: "300px"}}
-          label="Order by"
+          label={t("common.orderBy")}
           readOnly
-          value="Username"
+          value={t("common.name") as string}
           rightSection={
             <ActionIcon onClick={() => setAscending(!ascending)}>
               {ascending ? <ArrowUp/> : <ArrowDown/>}
@@ -49,11 +56,12 @@ export default function UsersPage() {
           }
         />
       </Group>
-      <QueryComponent resourceName={"Users"} query={usersQuery}>
+      <QueryComponent resourceName={t("resource.users")} query={usersQuery}>
         <Stack>
           {filteredList.map((user) => (
             <Link
               href={`/users/${user.id}`}
+              locale={locale}
               passHref
               key={user.id}
             >
@@ -67,3 +75,7 @@ export default function UsersPage() {
     </Stack>
   );
 }
+
+export const getServerSideProps = async ({locale}: { locale: string }) => ({
+  props: {...(await serverSideTranslations(locale, ["common"], i18nConfig))},
+});

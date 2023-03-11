@@ -1,6 +1,7 @@
 import {Button, Group, Stack, TextInput, Title} from "@mantine/core";
 import {useForm} from "@mantine/form";
 import {showNotification} from "@mantine/notifications";
+import {useTranslation} from "next-i18next";
 import {FunctionComponent} from "react";
 import {ProfileType, UpdateProfileType} from "../../models/User";
 import {api} from "../../utils/api";
@@ -11,14 +12,16 @@ import {ThemeColorPicker} from "./ThemeColorPicker";
 export const ProfileForm: FunctionComponent<{
   user: ProfileType;
 }> = ({user}) => {
+  const {t} = useTranslation("common");
+
   const queryContext = api.useContext();
   const useUpdate = api.user.update.useMutation({
     onSuccess: () => queryContext.user.invalidate().then(() => {
       refreshSession();
       showNotification({
         color: "green",
-        title: "Updated profile!",
-        message: "Your profile has been modified.",
+        title: t("notification.profile.update.title"),
+        message: t("notification.profile.update.message"),
       });
     })
   });
@@ -26,7 +29,7 @@ export const ProfileForm: FunctionComponent<{
   const form = useForm<UpdateProfileType>({
     initialValues: user,
     validateInputOnChange: true,
-    validate: {name: (value) => value ? null : "Display name is required"},
+    validate: {name: (value) => value ? null : t("profileForm.displayName.error")},
   });
 
   // TODO public/private information sections: edit button to open form
@@ -38,20 +41,20 @@ export const ProfileForm: FunctionComponent<{
         <TextInput
           withAsterisk
           data-autofocus
-          label="Display name"
-          placeholder="Other users will see this name."
+          label={t("profileForm.displayName.label")}
+          placeholder={t("profileForm.displayName.placeholder") as string}
           {...form.getInputProps("name")}
         />
         <TextInput
-          label="Introduction"
-          placeholder="Introduction"
+          label={t("profileForm.introduction")}
+          placeholder={t("profileForm.introduction") as string}
           {...form.getInputProps("introduction")}
         />
         <LocationPicker
           location={form.getInputProps("location").value}
           required={false}
-          placeholder="Where do you stay?"
-          description="This is used to filter events by distance. Only you can see this information."
+          placeholder={t("profileForm.location.placeholder") as string}
+          description={t("profileForm.location.description") as string}
           initialAddress={form.getInputProps("location").value?.address ?? ""}
           setLocation={form.getInputProps("location").onChange}
         />
@@ -61,10 +64,10 @@ export const ProfileForm: FunctionComponent<{
         />
         <Group position="apart">
           <Button onClick={form.reset} color="gray" disabled={!form.isDirty()}>
-            Reset
+            {t("button.reset")}
           </Button>
           <Button type="submit" disabled={!form.isValid() || !form.isDirty()}>
-            Submit
+            {t("button.submit")}
           </Button>
         </Group>
       </Stack>

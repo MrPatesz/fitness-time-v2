@@ -1,5 +1,6 @@
 import {Card, Center, Loader, TextInput} from "@mantine/core";
 import {Autocomplete, useJsApiLoader} from "@react-google-maps/api";
+import {useTranslation} from "next-i18next";
 import {FunctionComponent, useEffect, useState} from "react";
 import {env} from "../../env.mjs";
 import {CreateLocationType} from "../../models/Location";
@@ -14,6 +15,7 @@ export const LocationPicker: FunctionComponent<{
   placeholder: string;
   description?: string;
 }> = ({location, initialAddress, setLocation, error, required, placeholder, description}) => {
+  const {t} = useTranslation("common");
   const {isLoaded, loadError} = useJsApiLoader({
     googleMapsApiKey: `${env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`,
     libraries: googleMapsLibraries,
@@ -31,7 +33,7 @@ export const LocationPicker: FunctionComponent<{
   return (
     <>
       {loadError ? (
-        <Card withBorder>An error occurred while loading places!</Card>
+        <Card withBorder>{t("locationPicker.error")}</Card>
       ) : isLoaded ? (
         <Autocomplete
           onLoad={setAutocomplete}
@@ -52,7 +54,7 @@ export const LocationPicker: FunctionComponent<{
         >
           <TextInput
             withAsterisk={required}
-            label="Location"
+            label={t("common.location")}
             placeholder={placeholder}
             description={description}
             value={address}

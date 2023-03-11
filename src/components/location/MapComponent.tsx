@@ -1,5 +1,6 @@
 import {Card, Center, LoadingOverlay} from "@mantine/core";
 import {GoogleMap, MarkerF, useJsApiLoader} from "@react-google-maps/api";
+import {useTranslation} from "next-i18next";
 import {FunctionComponent, useMemo} from "react";
 import {env} from "../../env.mjs";
 import {LocationType} from "../../models/Location";
@@ -9,6 +10,7 @@ const MapComponent: FunctionComponent<{
   location: LocationType;
   size?: { width: number, height: number }
 }> = ({location, size = {width: 400, height: 400}}) => {
+  const {t} = useTranslation("common");
   const {isLoaded, loadError} = useJsApiLoader({
     googleMapsApiKey: `${env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`,
     libraries: googleMapsLibraries,
@@ -35,7 +37,7 @@ const MapComponent: FunctionComponent<{
       {(loadError || true) ? ( // TODO remove true to show map
         <Card withBorder sx={size}>
           <Center sx={{height: "100%", width: "100%"}}>
-            An error occurred while loading map!
+            {t("mapComponent.error")}
           </Center>
         </Card>
       ) : !isLoaded ? (

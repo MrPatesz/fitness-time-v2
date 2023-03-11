@@ -1,0 +1,209 @@
+{
+  "application": {
+    "name": "Fitness Time",
+    "welcome": "Welcome to Fitness Time!"
+  },
+  "navbar": {
+    "calendar": "Calendar",
+    "feed": "Feed",
+    "myEvents": "My Events",
+    "users": "Users"
+  },
+  "button": {
+    "login": "Login",
+    "logout": "Logout",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "reset": "Reset",
+    "submit": "Submit"
+  },
+  "resource": {
+    "calendar": "Calendar",
+    "comments": "Comments",
+    "eventDetails": "Event Details",
+    "feed": "Feed",
+    "myEvents": "My Events",
+    "profile": "Profile",
+    "userDetails": "User Details",
+    "users": "Users"
+  },
+  "notification": {
+    "event": {
+      "create": {
+        "title": "Created event!",
+        "message": "A new event has been created."
+      },
+      "delete": {
+        "title": "Deleted event!",
+        "message": "The event has been deleted."
+      },
+      "update": {
+        "title": "Updated event!",
+        "message": "The event has been modified."
+      },
+      "failedToUpdate": {
+        "title": "Could not update event!",
+        "message": "You do not own this event!"
+      },
+      "participation": {
+        "title": "Updated participation!",
+        "message": "Your participation status has been modified."
+      }
+    },
+    "comment": {
+      "delete": {
+        "title": "Deleted comment!",
+        "message": "The comment has been deleted."
+      },
+      "create": {
+        "title": "Created comment!",
+        "message": "A new comment has been created."
+      },
+      "update": {
+        "title": "Updated comment!",
+        "message": "The comment has been modified."
+      }
+    },
+    "profile": {
+      "update": {
+        "title": "Updated profile!",
+        "message": "Your profile has been modified."
+      }
+    }
+  },
+  "modal": {
+    "event": {
+      "edit": "Edit Event",
+      "create": "Create Event",
+      "delete": {
+        "title": "Delete Event",
+        "message": "Are you sure you want to delete this event?"
+      }
+    },
+    "comment": {
+      "edit": "Edit Comment",
+      "delete": {
+        "title": "Delete Comment",
+        "message": "Are you sure you want to delete this comment?"
+      }
+    }
+  },
+  "common": {
+    "name": "Name",
+    "location": "Location",
+    "price": "Price",
+    "date": "Date",
+    "orderBy": "Order by",
+    "free": "Free"
+  },
+  "myEvents": {
+    "dateTime": "Date and Time",
+    "equipment": "Equipment",
+    "limit": "Limit",
+    "recurring": "Recurring",
+    "actions": "Actions"
+  },
+  "filterEvents": {
+    "search": "Search by Name",
+    "noEquipment": "No Equipment",
+    "limited": "Limited",
+    "filter": "Filter by Attributes"
+  },
+  "usersPage": {
+    "search": "Search by Name"
+  },
+  "userDetails": {
+    "createdEvents": "Created Events"
+  },
+  "eventDetails": {
+    "participate": "Participate",
+    "removeParticipation": "Remove participation",
+    "requiredEquipment": "Required equipment:",
+    "participants": "They will also be there:",
+    "noParticipants": "There are no participants yet."
+  },
+  "queryComponent": {
+    "error": "An error occurred while fetching {{resourceName}}!"
+  },
+  "themeColorPicker": {
+    "label": "Theme Color"
+  },
+  "color": {
+    "red": "Red",
+    "pink": "Pink",
+    "grape": "Grape",
+    "violet": "Violet",
+    "indigo": "Indigo",
+    "blue": "Blue",
+    "cyan": "Cyan",
+    "teal": "Teal",
+    "green": "Green",
+    "lime": "Lime",
+    "yellow": "Yellow",
+    "orange": "Orange"
+  },
+  "profileForm": {
+    "introduction": "Introduction",
+    "displayName": {
+      "error": "Display name is required!",
+      "label": "Display Name",
+      "placeholder": "Other users will see this name."
+    },
+    "location": {
+      "placeholder": "Where do you stay?",
+      "description": "This is used to filter events by distance. Only you can see this information."
+    }
+  },
+  "mapComponent": {
+    "error": "An error occurred while loading map!"
+  },
+  "locationPicker": {
+    "error": "An error occurred while loading places!"
+  },
+  "intervalPicker": {
+    "on": "On",
+    "start": {
+      "label": "Start"
+    },
+    "end": {
+      "label": "End"
+    }
+  },
+  "eventForm": {
+    "name": {
+      "error": "Name is required",
+      "placeholder": "What is the event called?"
+    },
+    "location": {
+      "error": "Location is required",
+      "placeholder": "Where will it take place?"
+    },
+    "start": {
+      "error": "Invalid start"
+    },
+    "end": {
+      "error": "Invalid end"
+    },
+    "description": {
+      "label": "Description",
+      "placeholder": "What are the plans?"
+    },
+    "equipment": {
+      "label": "Equipment",
+      "placeholder": "Is any equipment needed?"
+    },
+    "price": {
+      "label": "Price",
+      "placeholder": "Do participants need to pay for it?"
+    },
+    "limit": {
+      "label": "Limit",
+      "placeholder": "Is there a maximum number of participants?"
+    }
+  },
+  "commentFrom": {
+    "messageError": "Message is required",
+    "addComment": "Add comment...",
+    "update": "Update"
+  }
+}

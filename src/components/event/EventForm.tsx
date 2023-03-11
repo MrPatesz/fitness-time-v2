@@ -2,19 +2,13 @@ import {Button, Group, NumberInput, Stack, Textarea, TextInput} from "@mantine/c
 import {useForm} from "@mantine/form";
 import {closeAllModals} from "@mantine/modals";
 import {showNotification} from "@mantine/notifications";
+import {useTranslation} from "next-i18next";
 import {FunctionComponent} from "react";
 import {CreateEventType} from "../../models/Event";
 import {api} from "../../utils/api";
 import {getDefaultCreateEvent} from "../../utils/defaultObjects";
 import {LocationPicker} from "../location/LocationPicker";
 import {IntervalPicker} from "./IntervalPicker";
-
-const getErrors = (data: CreateEventType, isCreation: boolean) => ({
-  name: (isCreation || data.name) ? null : "Name is required",
-  location: (isCreation || !!data.location?.address) ? null : "Location is required",
-  start: data.start > new Date() ? null : "Invalid start",
-  end: (data.end > new Date() && data.end > data.start) ? null : "Invalid end",
-});
 
 export const EventForm: FunctionComponent<{
   editedEventId?: number;
@@ -23,6 +17,15 @@ export const EventForm: FunctionComponent<{
     end: Date;
   };
 }> = ({editedEventId, initialInterval}) => {
+  const {t} = useTranslation("common");
+
+  const getErrors = (data: CreateEventType, isCreation: boolean) => ({
+    name: (isCreation || data.name) ? null : t("eventForm.name.error"),
+    location: (isCreation || !!data.location?.address) ? null : t("eventForm.location.error"),
+    start: data.start > new Date() ? null : t("eventForm.start.error"),
+    end: (data.end > new Date() && data.end > data.start) ? null : t("eventForm.end.error"),
+  });
+
   const resetForm = (data: CreateEventType) => {
     form.setValues(data);
     form.setErrors(getErrors(data, !editedEventId));
@@ -40,11 +43,10 @@ export const EventForm: FunctionComponent<{
     initialErrors: getErrors(editedEventQuery.data, !editedEventId),
     validateInputOnChange: true,
     validate: {
-      name: (value) => value ? null : "Name is required",
-      location: (value) => !!value?.address ? null : "Location is required",
-      start: (value) => value > new Date() ? null : "Invalid start",
-      end: (value, formData) =>
-        (value > new Date() && value > formData.start) ? null : "Invalid end",
+      name: (value) => value ? null : t("eventForm.name.error"),
+      location: (value) => !!value?.address ? null : t("eventForm.location.error"),
+      start: (value) => value > new Date() ? null : t("eventForm.start.error"),
+      end: (value, formData) => (value > new Date() && value > formData.start) ? null : t("eventForm.end.error"),
     },
   });
 
@@ -53,8 +55,8 @@ export const EventForm: FunctionComponent<{
       closeAllModals();
       showNotification({
         color: "green",
-        title: "Updated event!",
-        message: "The event has been modified.",
+        title: t("notification.event.update.title"),
+        message: t("notification.event.update.message"),
       });
     }),
   });
@@ -63,8 +65,8 @@ export const EventForm: FunctionComponent<{
       closeAllModals();
       showNotification({
         color: "green",
-        title: "Created event!",
-        message: "A new event has been created.",
+        title: t("notification.event.create.title"),
+        message: t("notification.event.create.message"),
       });
     }),
   });
@@ -82,8 +84,8 @@ export const EventForm: FunctionComponent<{
         <TextInput
           withAsterisk
           data-autofocus
-          label="Name"
-          placeholder="What is the event called?"
+          label={t("common.name")}
+          placeholder={t("eventForm.name.placeholder") as string}
           {...form.getInputProps("name")}
         />
         <IntervalPicker
@@ -99,24 +101,24 @@ export const EventForm: FunctionComponent<{
         <LocationPicker
           location={form.getInputProps("location").value}
           required={true}
-          placeholder="Where will it take place?"
+          placeholder={t("eventForm.location.placeholder")}
           initialAddress={form.getInputProps("location").value?.address ?? ""}
           setLocation={form.getInputProps("location").onChange}
           error={form.getInputProps("location").error}
         />
         <Textarea
-          label="Description"
-          placeholder="What are the plans?"
+          label={t("eventForm.description.label")}
+          placeholder={t("eventForm.description.placeholder") as string}
           {...form.getInputProps("description")}
         />
         <TextInput
-          label="Equipment"
-          placeholder="Is any equipment needed?"
+          label={t("eventForm.equipment.label")}
+          placeholder={t("eventForm.equipment.placeholder") as string}
           {...form.getInputProps("equipment")}
         />
         <NumberInput
-          label="Price"
-          placeholder="Do participants need to pay for it?"
+          label={t("eventForm.price.label")}
+          placeholder={t("eventForm.price.placeholder") as string}
           {...form.getInputProps("price")}
           min={1}
           parser={(value: string | undefined) =>
@@ -129,8 +131,8 @@ export const EventForm: FunctionComponent<{
           }
         />
         <NumberInput
-          label="Limit"
-          placeholder="Is there a maximum number of participants?"
+          label={t("eventForm.limit.label")}
+          placeholder={t("eventForm.limit.placeholder") as string}
           {...form.getInputProps("limit")}
           min={1}
         />
@@ -147,10 +149,10 @@ export const EventForm: FunctionComponent<{
             onClick={() => resetForm(editedEventQuery.data)}
             disabled={!isFormDirty()}
           >
-            Reset
+            {t("button.reset")}
           </Button>
           <Button type="submit" disabled={!form.isValid() || !isFormDirty()}>
-            Submit
+            {t("button.submit")}
           </Button>
         </Group>
       </Stack>

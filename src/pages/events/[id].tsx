@@ -4,9 +4,12 @@ import {showNotification} from "@mantine/notifications";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import {useSession} from "next-auth/react";
+import {useTranslation} from "next-i18next";
+import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import Link from "next/link";
 import {useRouter} from "next/router";
 import {Pencil, Trash} from "tabler-icons-react";
+import i18nConfig from "../../../next-i18next.config.mjs";
 import {CommentForm} from "../../components/event/CommentForm";
 import {EventForm} from "../../components/event/EventForm";
 import MapComponent from "../../components/location/MapComponent";
@@ -15,13 +18,15 @@ import UserImage from "../../components/user/UserImage";
 import {DetailedEventType} from "../../models/Event";
 import {api} from "../../utils/api";
 import {longDateFormatter, priceFormatter} from "../../utils/formatters";
+import {getBackgroundColor} from "../../utils/utilFunctions";
 
 dayjs.extend(relativeTime);
 
 export default function EventDetailsPage() {
   const theme = useMantineTheme();
+  const {query: {id}, isReady, locale} = useRouter();
   const {data: session} = useSession();
-  const {query: {id}, isReady} = useRouter();
+  const {t} = useTranslation("common");
 
   const eventId = parseInt(id as string);
   const eventQuery = api.event.getById.useQuery(eventId, {
@@ -35,8 +40,8 @@ export default function EventDetailsPage() {
     onSuccess: () => eventQuery.refetch().then(() =>
       showNotification({
         color: "green",
-        title: "Updated participation!",
-        message: "Your participation status has been modified.",
+        title: t("notification.event.participation.title"),
+        message: t("notification.event.participation.message"),
       })
     ),
   });
@@ -45,8 +50,8 @@ export default function EventDetailsPage() {
     onSuccess: () => commentsQuery.refetch().then(() =>
       showNotification({
         color: "green",
-        title: "Deleted comment!",
-        message: "The comment has been deleted.",
+        title: t("notification.comment.delete.title"),
+        message: t("notification.comment.delete.message"),
       })
     )
   });
@@ -69,28 +74,29 @@ export default function EventDetailsPage() {
           participate: !isParticipated,
         })}
       >
-        {isParticipated ? "Remove participation" : "Participate"}
+        {isParticipated ? t("eventDetails.removeParticipation") : t("eventDetails.participate")}
       </Button>
     );
   };
 
   return (
     <Stack>
-      <QueryComponent resourceName={"Event Details"} query={eventQuery}>
+      <QueryComponent resourceName={t("resource.eventDetails")} query={eventQuery}>
         {eventQuery.data && (
           <Stack>
-            <Group align={"start"} position={"apart"}>
+            <Group align="start" position="apart">
               <Stack>
-                <Group align={"end"}>
+                <Group align="end">
                   <Text weight="bold" size="xl">
                     {eventQuery.data.name}
                   </Text>
                   <Link
                     href={`/users/${eventQuery.data.creator.id}`}
+                    locale={locale}
                     passHref
                   >
-                    <Text size="lg">
-                      by {eventQuery.data.creator.name}
+                    <Text color="dimmed">
+                      {eventQuery.data.creator.name}
                     </Text>
                   </Link>
                 </Group>
@@ -99,16 +105,24 @@ export default function EventDetailsPage() {
                     {longDateFormatter.formatRange(eventQuery.data.start, eventQuery.data.end)}
                   </Text>
                 </Group>
-                {eventQuery.data.description && (
-                  <Text inherit>{eventQuery.data.description}</Text>
-                )}
+                <Text color="dimmed">{eventQuery.data.description}</Text>
                 {eventQuery.data.equipment && (
-                  <Text weight={"bold"}>
-                    {eventQuery.data.equipment} shall be brought to the event!
-                  </Text>
+                  <Group spacing="xs">
+                    <Text>
+                      {t("eventDetails.requiredEquipment")}
+                    </Text>
+                    <Text underline>
+                      {eventQuery.data.equipment}
+                    </Text>
+                  </Group>
                 )}
                 {eventQuery.data.price && (
-                  <Text>Price: {priceFormatter.format(eventQuery.data.price)}</Text>
+                  <Group spacing="xs">
+                    <Text>
+                      {t("common.price")}:
+                    </Text>
+                    <Text weight="bold">{priceFormatter.format(eventQuery.data.price)}</Text>
+                  </Group>
                 )}
               </Stack>
               <MapComponent location={eventQuery.data.location}/>
@@ -116,16 +130,16 @@ export default function EventDetailsPage() {
             <Card withBorder>
               <Stack>
                 <Group position="apart">
-                  <Group spacing={"xs"}>
+                  <Group spacing="xs">
                     {eventQuery.data.limit && (
-                      <Badge color={"red"}>
+                      <Badge color="red">
                         {eventQuery.data.participants.length}/{eventQuery.data.limit}
                       </Badge>
                     )}
                     <Text>
                       {!!eventQuery.data.participants.length ?
-                        "They will also be there:" :
-                        "There are no participants yet"}
+                        t("eventDetails.participants") :
+                        t("eventDetails.noParticipants")}
                     </Text>
                   </Group>
                   {participateButton(eventQuery.data)}
@@ -135,13 +149,13 @@ export default function EventDetailsPage() {
                     {eventQuery.data.participants.map((p, index: number) => (
                       <Link
                         href={`/users/${p.id}`}
+                        locale={locale}
                         passHref
                         key={p.id}
                       >
                         <Text sx={{cursor: "pointer"}}>
                           {p.name}
-                          {index !==
-                            eventQuery.data.participants.length - 1 && <>,</>}
+                          {index !== eventQuery.data.participants.length - 1 && ","}
                         </Text>
                       </Link>
                     ))}
@@ -152,12 +166,10 @@ export default function EventDetailsPage() {
           </Stack>
         )}
       </QueryComponent>
-      <QueryComponent resourceName={"Comments"} query={commentsQuery}>
+      <QueryComponent resourceName={t("resource.comments")} query={commentsQuery}>
         <Card
           withBorder sx={{
-          backgroundColor: theme.colorScheme === "dark"
-            ? theme.colors.dark[8]
-            : theme.colors.gray[0],
+          backgroundColor: getBackgroundColor(theme),
         }}
         >
           <Stack>
@@ -168,7 +180,7 @@ export default function EventDetailsPage() {
                   <Group>
                     <UserImage user={c.user} size={45}/>
                     <Stack spacing="xs">
-                      <Link href={`/users/${c.user.id}`} passHref>
+                      <Link href={`/users/${c.user.id}`} locale={locale} passHref>
                         <Text weight="bold">
                           {c.user.name}
                         </Text>
@@ -178,14 +190,14 @@ export default function EventDetailsPage() {
                       </Text>
                     </Stack>
                   </Group>
-                  <Stack justify={"apart"}>
-                    <Group position={"right"} spacing={"xs"}>
+                  <Stack justify="apart">
+                    <Group position="right" spacing="xs">
                       {c.userId === session?.user.id && (
                         <>
                           <ActionIcon
                             size="sm"
                             onClick={() => openModal({
-                              title: "Edit Comment",
+                              title: t("modal.comment.edit"),
                               zIndex: 401,
                               closeOnClickOutside: false,
                               children: <CommentForm eventId={eventId} editedComment={c}/>,
@@ -196,18 +208,18 @@ export default function EventDetailsPage() {
                           <ActionIcon
                             size="sm"
                             onClick={() => openConfirmModal({
-                              title: "Delete",
+                              title: t("modal.comment.delete.title"),
                               children: (
                                 <Stack>
                                   <Text>
-                                    Are you sure you want to delete this comment?
+                                    {t("modal.comment.delete.message")}
                                   </Text>
                                   <Text weight="bold">
                                     "{c.message}"
                                   </Text>
                                 </Stack>
                               ),
-                              labels: {confirm: "Confirm", cancel: "Cancel"},
+                              labels: {confirm: t("button.confirm"), cancel: t("button.cancel")},
                               onConfirm: () => deleteComment.mutate(c.id),
                               zIndex: 401,
                             })}
@@ -233,7 +245,7 @@ export default function EventDetailsPage() {
             variant="default"
             size="xl"
             onClick={() => openModal({
-              title: "Edit Event",
+              title: t("modal.event.edit"),
               zIndex: 401,
               closeOnClickOutside: false,
               children: <EventForm editedEventId={eventId}/>,
@@ -246,3 +258,7 @@ export default function EventDetailsPage() {
     </Stack>
   );
 }
+
+export const getServerSideProps = async ({locale}: { locale: string }) => ({
+  props: {...(await serverSideTranslations(locale, ["common"], i18nConfig))},
+});

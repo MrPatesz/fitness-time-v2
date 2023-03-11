@@ -1,0 +1,209 @@
+{
+  "application": {
+    "name": "Fitness Time",
+    "welcome": "Üdvözöl a Fitness Time!"
+  },
+  "navbar": {
+    "calendar": "Naptár",
+    "feed": "Hírfolyam",
+    "myEvents": "Eseményeim",
+    "users": "Felhasználók"
+  },
+  "button": {
+    "login": "Bejelentkezés",
+    "logout": "Kijelentkezés",
+    "confirm": "Megerősítés",
+    "cancel": "Mégse",
+    "reset": "Visszaállít",
+    "submit": "Beküld"
+  },
+  "resource": {
+    "calendar": "Naptár",
+    "comments": "Kommentek",
+    "eventDetails": "Esemény Részletek",
+    "feed": "Hírfolyam",
+    "myEvents": "Eseményeim",
+    "profile": "Profil",
+    "userDetails": "Felhasználó Részletek",
+    "users": "Felhasználók"
+  },
+  "notification": {
+    "event": {
+      "create": {
+        "title": "Esemény létrehozva!",
+        "message": "Új esemény jött létre."
+      },
+      "delete": {
+        "title": "Esemény törölve!",
+        "message": "Az esemény törlődött."
+      },
+      "update": {
+        "title": "Esemény módosítva!",
+        "message": "Az esemény módosult."
+      },
+      "failedToUpdate": {
+        "title": "Nem sikerült az esemény módosítása!",
+        "message": "Nem te hoztad létre ezt az eseményt!"
+      },
+      "participation": {
+        "title": "Részvétel módosítva!",
+        "message": "A részvételi státuszod múdosult."
+      }
+    },
+    "comment": {
+      "delete": {
+        "title": "Komment törölve!",
+        "message": "A komment törlődött."
+      },
+      "create": {
+        "title": "Komment létrehozva!",
+        "message": "Új komment jött létre."
+      },
+      "update": {
+        "title": "Komment módosítva!",
+        "message": "A komment módosult."
+      }
+    },
+    "profile": {
+      "update": {
+        "title": "Profil módosítva!",
+        "message": "A profilod módosult."
+      }
+    }
+  },
+  "modal": {
+    "event": {
+      "edit": "Esemény Szerkesztése",
+      "create": "Esemény Létrehozása",
+      "delete": {
+        "title": "Esemény Törlése",
+        "message": "Biztosan törölni szeretnéd ezt az eseményt?"
+      }
+    },
+    "comment": {
+      "edit": "Komment Szerkesztése",
+      "delete": {
+        "title": "Komment Törlése",
+        "message": "Biztosan törölni szeretnéd ezt a kommentet?"
+      }
+    }
+  },
+  "common": {
+    "name": "Név",
+    "location": "Hely",
+    "price": "Ár",
+    "date": "Dátum",
+    "orderBy": "Rendezés",
+    "free": "Ingyenes"
+  },
+  "myEvents": {
+    "dateTime": "Dátum és Idő",
+    "equipment": "Felszerelés",
+    "limit": "Limit",
+    "recurring": "Ismétlődő",
+    "actions": "Kezelés"
+  },
+  "filterEvents": {
+    "search": "Keresés név alapján",
+    "noEquipment": "Felszerelésmentes",
+    "limited": "Limitált",
+    "filter": "Filterezés"
+  },
+  "usersPage": {
+    "search": "Keresés név alapján"
+  },
+  "userDetails": {
+    "createdEvents": "Létrehozott Események"
+  },
+  "eventDetails": {
+    "participate": "Részvétel",
+    "removeParticipation": "Részvétel eltávolítása",
+    "requiredEquipment": "Szükséges felszerelés:",
+    "participants": "Ők is ott lesznek:",
+    "noParticipants": "Még nincs részvevő."
+  },
+  "queryComponent": {
+    "error": "{{resourceName}} betöltése közben hiba történt!"
+  },
+  "themeColorPicker": {
+    "label": "Téma Szín"
+  },
+  "color": {
+    "red": "Piros",
+    "pink": "Rózsaszín",
+    "grape": "Szőlő",
+    "violet": "Ibolya",
+    "indigo": "Indigó",
+    "blue": "Kék",
+    "cyan": "Cián",
+    "teal": "Zöldeskék",
+    "green": "Zöld",
+    "lime": "Lime",
+    "yellow": "Sárga",
+    "orange": "Narancssárga"
+  },
+  "profileForm": {
+    "introduction": "Bemutatkozás",
+    "displayName": {
+      "error": "Megjelenítendő Név kötelező!",
+      "label": "Megjelenítendő Név",
+      "placeholder": "A többi felhasználó ezt a nevet fogja látni."
+    },
+    "location": {
+      "placeholder": "Hol tartózkodsz?",
+      "description": "Így szűrhetsz ki távoli eseményeket. Csak te láthatod ezt az információt."
+    }
+  },
+  "mapComponent": {
+    "error": "Térkép betöltése közben hiba történt!"
+  },
+  "locationPicker": {
+    "error": "Helyek betöltése közben hiba történt!"
+  },
+  "intervalPicker": {
+    "on": "Dátum",
+    "start": {
+      "label": "Kezdés"
+    },
+    "end": {
+      "label": "Vége"
+    }
+  },
+  "eventForm": {
+    "name": {
+      "error": "Név kötelező!",
+      "placeholder": "Mi az esemény neve?"
+    },
+    "location": {
+      "error": "Hely kötelező!",
+      "placeholder": "Hol lesz megtartva?"
+    },
+    "start": {
+      "error": "Hibás kezdés"
+    },
+    "end": {
+      "error": "Hibás vége"
+    },
+    "description": {
+      "label": "Leírás",
+      "placeholder": "Mik a tervek?"
+    },
+    "equipment": {
+      "label": "Felszerelés",
+      "placeholder": "Szükséges bármilyen felszerelés?"
+    },
+    "price": {
+      "label": "Ár",
+      "placeholder": "A részvevőknek fizetniük kell érte?"
+    },
+    "limit": {
+      "label": "Limit",
+      "placeholder": "Maximum hányan vehetnek részt rajta?"
+    }
+  },
+  "commentFrom": {
+    "messageError": "Üzenet kötelező!",
+    "addComment": "Kommentelés...",
+    "update": "Frissít"
+  }
+}

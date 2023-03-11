@@ -1,13 +1,16 @@
 import {Box, Center, Text} from "@mantine/core";
 import Link from "next/link";
+import {useRouter} from "next/router";
 import {FunctionComponent} from "react";
 
 export const LinkButton: FunctionComponent<{
   href: string;
   label: string;
 }> = ({href, label}) => {
+  const {locale} = useRouter();
+
   return (
-    <Link href={href} passHref>
+    <Link href={href} locale={locale} passHref>
       <Box
         sx={theme => ({
           backgroundColor: theme.fn.primaryColor(),
@@ -19,7 +22,7 @@ export const LinkButton: FunctionComponent<{
         })}
       >
         <Center sx={{height: "100%"}}>
-          <Text weight={500} size={"sm"}>
+          <Text weight={500} size="sm">
             {label}
           </Text>
         </Center>

@@ -4,9 +4,12 @@ import {openModal} from "@mantine/modals";
 import {showNotification} from "@mantine/notifications";
 import dayjs from "dayjs";
 import {useSession} from "next-auth/react";
+import {useTranslation} from "next-i18next";
+import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import dynamic from "next/dynamic";
 import {useRouter} from "next/router";
 import {useState} from "react";
+import i18nConfig from "../../next-i18next.config.mjs";
 import {EventForm} from "../components/event/EventForm";
 import {QueryComponent} from "../components/QueryComponent";
 import {BasicEventType} from "../models/Event";
@@ -27,21 +30,22 @@ const DayPilotCalendar: any = dynamic(
 
 export default function CalendarPage() {
   const [startDate, setStartDate] = useState(new Date());
+  const theme = useMantineTheme();
+  const {push: pushRoute, locale} = useRouter();
+  const {data: session} = useSession();
+  const {t} = useTranslation("common");
+  const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
 
   const eventsQuery = api.event.getCalendar.useQuery();
   const updateEvent = api.event.update.useMutation({
     onSuccess: () => eventsQuery.refetch().then(() =>
       showNotification({
         color: "green",
-        title: "Updated event!",
-        message: "The event has been moved.",
+        title: t("notification.update.title"),
+        message: t("notification.update.message"),
       })
     ),
   });
-  const theme = useMantineTheme();
-  const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
-  const router = useRouter();
-  const {data: session} = useSession();
 
   const onIntervalChange = (event: {
     e: { data: { resource: BasicEventType } };
@@ -60,8 +64,8 @@ export default function CalendarPage() {
     } else {
       showNotification({
         color: "red",
-        title: "Could not update event!",
-        message: "You do not own this event!",
+        title: t("notification.failedToUpdate.title"),
+        message: t("notification.failedToUpdate.message"),
       });
     }
   };
@@ -78,7 +82,7 @@ export default function CalendarPage() {
     <>
       <Stack>
         {!xs && navigator}
-        <QueryComponent resourceName="Calendar" query={eventsQuery}>
+        <QueryComponent resourceName={t("resource.calendar")} query={eventsQuery}>
           <DayPilotCalendar
             theme={theme.colorScheme === "dark" ? "dark" : undefined}
             viewType="Week"
@@ -92,7 +96,7 @@ export default function CalendarPage() {
               end: { value: string };
             }) => {
               openModal({
-                title: "Create Event",
+                title: t("modal.event.create"),
                 zIndex: 402,
                 closeOnClickOutside: false,
                 children: (
@@ -111,16 +115,11 @@ export default function CalendarPage() {
             businessBeginsHour={8}
             businessEndsHour={17}
             startDate={startDate}
-            onEventClick={(e: any) => router.push(`events/${e.e.data.id}`)}
+            onEventClick={(e: { e: { data: BasicEventType } }) => pushRoute(`events/${e.e.data.id}`, undefined, {locale})}
             events={eventsQuery.data?.map((event) => {
-              const offsetInHours =
-                (new Date(event.start).getTimezoneOffset() / 60) * -1;
-              const start = dayjs(event.start)
-                .hour(dayjs(event.start).hour() + offsetInHours)
-                .toDate();
-              const end = dayjs(event.end)
-                .hour(dayjs(event.end).hour() + offsetInHours)
-                .toDate();
+              const offsetInHours = -1 * new Date(event.start).getTimezoneOffset();
+              const start = dayjs(event.start).add(offsetInHours, "minutes").toDate();
+              const end = dayjs(event.end).add(offsetInHours, "minutes").toDate();
               return {
                 id: event.id,
                 text: event.name,
@@ -144,3 +143,7 @@ export default function CalendarPage() {
     </>
   );
 }
+
+export const getServerSideProps = async ({locale}: { locale: string }) => ({
+  props: {...(await serverSideTranslations(locale, ["common"], i18nConfig))},
+});

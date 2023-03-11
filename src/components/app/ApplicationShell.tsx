@@ -13,31 +13,38 @@ import {
 } from "@mantine/core";
 import {useDisclosure, useMediaQuery} from "@mantine/hooks";
 import {signOut, useSession} from "next-auth/react";
+import {useTranslation} from "next-i18next";
 import Link from "next/link";
 import {useRouter} from "next/router";
 import {FunctionComponent} from "react";
 import {Adjustments, CalendarEvent, Logout, News, UserCircle, Users} from "tabler-icons-react";
+import {getBackgroundColor} from "../../utils/utilFunctions";
 
 export const ApplicationShell: FunctionComponent<{
   children: JSX.Element;
 }> = ({children}) => {
-  const calendarRoute = "/calendar";
-  const profileRoute = "/profile";
-  const welcomeRoute = "/welcome";
-
   const [showNavbar, {close: closeNavbar, toggle: toggleNavbar}] = useDisclosure(false);
 
   const theme = useMantineTheme();
   const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
-  const {route, replace: replaceRoute} = useRouter();
+  const {route, replace: replaceRoute, locale, defaultLocale} = useRouter();
+  const {t} = useTranslation("common");
   const {data: session} = useSession({
     required: true,
     onUnauthenticated() {
       if (route !== welcomeRoute) {
-        replaceRoute(welcomeRoute);
+        replaceRoute(welcomeRoute, undefined, {locale});
       }
     },
   });
+
+  const localePrefix = locale !== defaultLocale ? `/${locale}` : "";
+  const calendarRoute = `${localePrefix}/calendar`;
+  const profileRoute = `${localePrefix}/profile`;
+  const welcomeRoute = `${localePrefix}/welcome`;
+  const feedRoute = `${localePrefix}/feed`;
+  const myEventsRoute = `${localePrefix}/my-events`;
+  const usersRoute = `${localePrefix}/users`;
 
   return (
     <AppShell
@@ -54,8 +61,8 @@ export const ApplicationShell: FunctionComponent<{
                   color={theme.colors.gray[6]}
                 />
               </MediaQuery>
-              <Link href="/" as="/" passHref>
-                <Title order={2}>Fitness Time</Title>
+              <Link href="/" locale={locale} passHref>
+                <Title order={2}>{t("application.name")}</Title>
               </Link>
             </Group>
 
@@ -64,7 +71,7 @@ export const ApplicationShell: FunctionComponent<{
                 variant="light"
                 onClick={() => signOut({callbackUrl: welcomeRoute})}
               >
-                Logout
+                {t("button.logout")}
               </Button>
             ) : (
               <ActionIcon
@@ -83,13 +90,14 @@ export const ApplicationShell: FunctionComponent<{
         <Navbar width={{base: 211}} p="xs" hiddenBreakpoint="xs" hidden={!showNavbar} zIndex={401}>
           <Navbar.Section grow>
             {[
-              {label: "Calendar", route: calendarRoute, icon: CalendarEvent},
-              {label: "Feed", route: "/feed", icon: News},
-              {label: "My Events", route: "/my-events", icon: Adjustments},
-              {label: "Users", route: "/users", icon: Users},
+              {label: t("navbar.calendar"), route: calendarRoute, icon: CalendarEvent},
+              {label: t("navbar.feed"), route: feedRoute, icon: News},
+              {label: t("navbar.myEvents"), route: myEventsRoute, icon: Adjustments},
+              {label: t("navbar.users"), route: usersRoute, icon: Users},
             ].map((link) => (
               <Link
                 href={link.route}
+                locale={locale}
                 passHref
                 key={link.label}
                 onClick={closeNavbar}
@@ -105,6 +113,7 @@ export const ApplicationShell: FunctionComponent<{
           <Navbar.Section sx={(xs && route.includes(calendarRoute)) ? {marginBottom: 241} : undefined}>
             <Link
               href={profileRoute}
+              locale={locale}
               passHref
               onClick={closeNavbar}
             >
@@ -119,10 +128,7 @@ export const ApplicationShell: FunctionComponent<{
       }
       styles={{
         main: {
-          backgroundColor:
-            theme.colorScheme === "dark"
-              ? theme.colors.dark[8]
-              : theme.colors.gray[0],
+          backgroundColor: getBackgroundColor(theme),
         }
       }}
     >

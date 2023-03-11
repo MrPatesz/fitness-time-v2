@@ -1,5 +1,6 @@
 import {ActionIcon, Group, MultiSelect, Select, TextInput,} from "@mantine/core";
 import {useLocalStorage} from "@mantine/hooks";
+import {useTranslation} from "next-i18next";
 import {FunctionComponent, useEffect, useState} from "react";
 import {ArrowDown, ArrowUp, Search} from "tabler-icons-react";
 import {BasicEventType} from "../../models/Event";
@@ -11,37 +12,27 @@ enum OrderBy {
   PRICE = "price",
 }
 
-const orderByValues = [
-  {value: OrderBy.NAME, label: "Name"},
-  {value: OrderBy.DATE, label: "Date"},
-  {value: OrderBy.LOCATION, label: "Location"},
-  {value: OrderBy.PRICE, label: "Price"},
-];
-
 enum FilterBy {
   FREE = "free",
   NO_EQUIPMENT = "no_equipment",
   LIMITED = "limited",
 }
 
-const filterValues = [
-  {value: FilterBy.FREE, label: "Free"},
-  {value: FilterBy.NO_EQUIPMENT, label: "No Equipment"},
-  {value: FilterBy.LIMITED, label: "Limited"},
-];
-
+// TODO refactor: props: setFilters instead of setFilteredList and events (useMemo on FeedPage)
 export const FilterEventsComponent: FunctionComponent<{
   filterKey: string;
   events: BasicEventType[];
   setFilteredEvents: (filteredList: BasicEventType[]) => void;
 }> = ({filterKey, events, setFilteredEvents}) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [orderBy, setOrderBy] = useState<OrderBy>(OrderBy.DATE);
+  const [ascending, setAscending] = useState<boolean>(false);
   const [tags, setTags] = useLocalStorage<string[]>({
     key: filterKey,
     defaultValue: [],
   });
-  const [orderBy, setOrderBy] = useState<OrderBy>(OrderBy.DATE);
-  const [ascending, setAscending] = useState<boolean>(false);
+
+  const {t} = useTranslation("common");
 
   useEffect(() => {
     setFilteredEvents(
@@ -91,15 +82,19 @@ export const FilterEventsComponent: FunctionComponent<{
     <Group align="end" position="apart">
       <TextInput
         sx={{width: "300px"}}
-        label="Search by Name"
+        label={t("filterEvents.search")}
         value={searchTerm}
         onChange={(event) => setSearchTerm(event.currentTarget.value)}
         icon={<Search/>}
       />
       <MultiSelect
         sx={{minWidth: "300px", maxWidth: "320px"}}
-        data={filterValues}
-        label="Filter by Attributes"
+        data={[
+          {value: FilterBy.FREE, label: t("common.free") as string},
+          {value: FilterBy.NO_EQUIPMENT, label: t("filterEvents.noEquipment") as string},
+          {value: FilterBy.LIMITED, label: t("filterEvents.limited") as string},
+        ]}
+        label={t("filterEvents.filter")}
         value={tags}
         onChange={setTags}
       />
@@ -110,8 +105,13 @@ export const FilterEventsComponent: FunctionComponent<{
           </ActionIcon>
         }
         sx={{width: "300px"}}
-        data={orderByValues}
-        label="Order by"
+        data={[
+          {value: OrderBy.NAME, label: t("common.name") as string},
+          {value: OrderBy.DATE, label: t("common.date") as string},
+          {value: OrderBy.LOCATION, label: t("common.location") as string},
+          {value: OrderBy.PRICE, label: t("common.price") as string},
+        ]}
+        label={t("common.orderBy")}
         value={orderBy}
         onChange={(event) => {
           if (event) {

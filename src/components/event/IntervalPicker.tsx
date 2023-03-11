@@ -1,6 +1,7 @@
 import {Group} from "@mantine/core";
 import {DatePicker, TimeInput} from "@mantine/dates";
 import dayjs from "dayjs";
+import {useTranslation} from "next-i18next";
 import {FunctionComponent} from "react";
 
 const calculateDateTime = (date: Date, time: Date): Date => {
@@ -22,12 +23,14 @@ export const IntervalPicker: FunctionComponent<{
   startError: string | undefined;
   endError: string | undefined;
 }> = ({start, end, onChange, startError, endError}) => {
+  const {t} = useTranslation("common");
+
   return (
     <Group spacing="xs">
       <DatePicker
         withAsterisk
         sx={{width: "229px", marginBottom: "auto"}}
-        label="On"
+        label={t("intervalPicker.on")}
         value={start}
         onChange={(newDate) => {
           if (newDate) {
@@ -45,7 +48,7 @@ export const IntervalPicker: FunctionComponent<{
       <TimeInput
         withAsterisk
         sx={{marginBottom: "auto"}}
-        label="Start"
+        label={t("intervalPicker.start.label")}
         value={start}
         onChange={(event) => onChange(calculateDateTime(start, event), end)}
         error={startError}
@@ -53,7 +56,7 @@ export const IntervalPicker: FunctionComponent<{
       <TimeInput
         withAsterisk
         sx={{marginBottom: "auto"}}
-        label="End"
+        label={t("intervalPicker.end.label")}
         value={end}
         onChange={(event) => onChange(start, calculateDateTime(end, event))}
         error={endError}

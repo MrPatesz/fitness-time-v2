@@ -37,6 +37,7 @@
     "dayjs": "^1.11.7",
     "next": "13.2.3",
     "next-auth": "^4.19.2",
+    "next-i18next": "^13.2.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "superjson": "1.12.2",

@@ -3,6 +3,7 @@ import {useColorScheme} from "@mantine/hooks";
 import {ModalsProvider} from "@mantine/modals";
 import {NotificationsProvider} from "@mantine/notifications";
 import {useSession} from "next-auth/react";
+import {useRouter} from "next/router";
 import {FunctionComponent, useMemo} from "react";
 import {ThemeColor} from "../user/ThemeColorPicker";
 
@@ -10,6 +11,7 @@ export const ThemeProvider: FunctionComponent<{
   children: JSX.Element;
 }> = ({children}) => {
   const colorScheme = useColorScheme();
+  const {locale} = useRouter();
   const {data: session} = useSession();
 
   const myTheme = useMemo((): MantineThemeOverride => ({
@@ -19,6 +21,7 @@ export const ThemeProvider: FunctionComponent<{
     cursorType: "pointer",
     dateFormat: "MMMM DD, YYYY",
     defaultRadius: "md",
+    datesLocale: locale,
   }), [colorScheme, session?.user.themeColor]);
 
   return (

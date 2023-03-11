@@ -1,23 +1,27 @@
 import {Badge, Card, Group, Stack, Text} from "@mantine/core";
+import {useTranslation} from "next-i18next";
 import Link from "next/link";
+import {useRouter} from "next/router";
 import {FunctionComponent} from "react";
 import {BasicEventType} from "../../models/Event";
 import {shortDateFormatter} from "../../utils/formatters";
+import {getBackgroundColor} from "../../utils/utilFunctions";
 import {ThemeColor} from "../user/ThemeColorPicker";
 
 export const EventCard: FunctionComponent<{
   event: BasicEventType;
 }> = ({event}) => {
+  const {locale} = useRouter();
+  const {t} = useTranslation("common");
+
   return (
-    <Link href={`/events/${event.id}`}>
+    <Link href={`/events/${event.id}`} locale={locale} passHref>
       <Card
         withBorder
         sx={theme => ({
           height: "100%",
           ":hover": {
-            backgroundColor: theme.colorScheme === "dark"
-              ? theme.colors.dark[8]
-              : theme.colors.gray[0],
+            backgroundColor: getBackgroundColor(theme),
           },
         })}
       >
@@ -35,17 +39,17 @@ export const EventCard: FunctionComponent<{
             <Group>
               {!event.price && (
                 <Badge color="green" variant="light">
-                  Free
+                  {t("common.free")}
                 </Badge>
               )}
               {event.equipment && (
                 <Badge color="yellow" variant="light">
-                  Equipment
+                  {t("myEvents.equipment")}
                 </Badge>
               )}
               {event.limit && (
                 <Badge color="red" variant="light">
-                  Limited
+                  {t("filterEvents.limited")}
                 </Badge>
               )}
               {/* {event.recurring && (
@@ -57,7 +61,7 @@ export const EventCard: FunctionComponent<{
             <Text>{event.description}</Text>
           </Stack>
           <Group position="right">
-            <Link href={`/users/${event.creator.id}`} passHref>
+            <Link href={`/users/${event.creator.id}`} locale={locale} passHref>
               <Badge
                 color={event.creator.themeColor}
                 variant="outline"

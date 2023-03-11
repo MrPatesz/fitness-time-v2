@@ -1,9 +1,12 @@
 import {ActionIcon, Affix, Group, Stack, Table, Text, useMantineTheme} from "@mantine/core";
 import {openConfirmModal, openModal} from "@mantine/modals";
 import {showNotification} from "@mantine/notifications";
+import {useTranslation} from "next-i18next";
+import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import {useRouter} from "next/router";
 import {useState} from "react";
 import {Pencil, Plus, Trash} from "tabler-icons-react";
+import i18nConfig from "../../next-i18next.config.mjs";
 import {EventForm} from "../components/event/EventForm";
 import {FilterEventsComponent} from "../components/event/FilterEventsComponent";
 import {QueryComponent} from "../components/QueryComponent";
@@ -14,32 +17,33 @@ import {longDateFormatter, priceFormatter} from "../utils/formatters";
 export default function MyEventsPage() {
   const [filteredList, setFilteredList] = useState<BasicEventType[]>([]);
 
-  const router = useRouter();
   const theme = useMantineTheme();
+  const {push: pushRoute, locale} = useRouter();
+  const {t} = useTranslation("common");
 
   const eventsQuery = api.event.getAllCreated.useQuery();
   const deleteEvent = api.event.delete.useMutation({
     onSuccess: () => eventsQuery.refetch().then(() =>
       showNotification({
         color: "green",
-        title: "Deleted event!",
-        message: "The event has been deleted.",
+        title: t("notification.event.delete.title"),
+        message: t("notification.event.delete.message"),
       })),
   });
 
   const onDeleteClick = (event: BasicEventType) => openConfirmModal({
-    title: "Delete",
+    title: t("modal.event.delete.title"),
     children: (
       <Stack>
         <Text>
-          Are you sure you want to delete this event?
+          {t("modal.event.delete.message")}
         </Text>
         <Text weight="bold">
           "{event.name}"
         </Text>
       </Stack>
     ),
-    labels: {confirm: "Confirm", cancel: "Cancel"},
+    labels: {confirm: t("button.confirm"), cancel: t("button.cancel")},
     onConfirm: () => deleteEvent.mutate(event.id),
     zIndex: 401,
   });
@@ -52,25 +56,25 @@ export default function MyEventsPage() {
           setFilteredEvents={setFilteredList}
           filterKey="MyEventsPageFilter"
         />
-        <QueryComponent resourceName={"My Events"} query={eventsQuery}>
+        <QueryComponent resourceName={t("resource.myEvents")} query={eventsQuery}>
           <Table highlightOnHover withBorder withColumnBorders>
             <thead>
             <tr>
-              <th>Name</th>
-              <th>Date and Time</th>
-              <th>Location</th>
-              <th>Equipment</th>
-              <th>Price</th>
-              <th>Limit</th>
-              {/* <th>Recurring</th> */}
-              <th>Actions</th>
+              <th>{t("common.name")}</th>
+              <th>{t("myEvents.dateTime")}</th>
+              <th>{t("common.location")}</th>
+              <th>{t("myEvents.equipment")}</th>
+              <th>{t("common.price")}</th>
+              <th>{t("myEvents.limit")}</th>
+              {/* <th>{t("myEvents.recurring")}</th> */}
+              <th>{t("myEvents.actions")}</th>
             </tr>
             </thead>
             <tbody>
             {filteredList.map((event) => (
               <tr
                 key={event.id}
-                onClick={() => router.push(`events/${event.id}`)}
+                onClick={() => pushRoute(`events/${event.id}`, undefined, {locale})}
                 style={{cursor: "pointer"}}
               >
                 <td>{event.name}</td>
@@ -88,7 +92,7 @@ export default function MyEventsPage() {
                       onClick={(e) => {
                         e.stopPropagation();
                         openModal({
-                          title: "Edit Event",
+                          title: t("modal.event.edit"),
                           zIndex: 401,
                           closeOnClickOutside: false,
                           children: <EventForm editedEventId={event.id}/>,
@@ -120,7 +124,7 @@ export default function MyEventsPage() {
           variant="default"
           size="xl"
           onClick={() => openModal({
-            title: "Create Event",
+            title: t("modal.event.create"),
             zIndex: 401,
             closeOnClickOutside: false,
             children: <EventForm/>,
@@ -132,3 +136,7 @@ export default function MyEventsPage() {
     </>
   );
 }
+
+export const getServerSideProps = async ({locale}: { locale: string }) => ({
+  props: {...(await serverSideTranslations(locale, ["common"], i18nConfig))},
+});

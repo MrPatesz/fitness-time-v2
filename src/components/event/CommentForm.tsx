@@ -1,6 +1,7 @@
 import {ActionIcon, Button, Group, Stack, TextInput, useMantineTheme} from "@mantine/core";
 import {useForm} from "@mantine/form";
 import {showNotification} from "@mantine/notifications";
+import {useTranslation} from "next-i18next";
 import {FunctionComponent} from "react";
 import {Send} from "tabler-icons-react";
 import {BasicCommentType, CreateCommentType} from "../../models/Comment";
@@ -10,10 +11,12 @@ export const CommentForm: FunctionComponent<{
   editedComment?: BasicCommentType;
   eventId: number;
 }> = ({editedComment, eventId}) => {
+  const {t} = useTranslation("common");
+
   const form = useForm<CreateCommentType>({
     initialValues: editedComment ?? {message: ""},
     validateInputOnChange: true,
-    validate: {message: (value) => value ? null : "Message is required"},
+    validate: {message: (value) => value ? null : t("commentFrom.messageError")},
   });
 
   const theme = useMantineTheme();
@@ -22,8 +25,8 @@ export const CommentForm: FunctionComponent<{
     onSuccess: () => queryContext.comment.invalidate().then(() =>
       showNotification({
         color: "green",
-        title: "Created comment!",
-        message: "A new comment has been created."
+        title: t("notification.comment.create.title"),
+        message: t("notification.comment.create.message"),
       })
     )
   });
@@ -31,8 +34,8 @@ export const CommentForm: FunctionComponent<{
     onSuccess: () => queryContext.comment.invalidate().then(() =>
       showNotification({
         color: "green",
-        title: "Updated comment!",
-        message: "The comment has been modified.",
+        title: t("notification.comment.update.title"),
+        message: t("notification.comment.update.message"),
       })
     )
   });
@@ -40,13 +43,13 @@ export const CommentForm: FunctionComponent<{
   const content = (
     <>
       <TextInput
-        placeholder="Add comment..."
+        placeholder={t("commentFrom.addComment") as string}
         sx={{flexGrow: 1}}
         {...form.getInputProps("message")}
       />
       {editedComment ? (
         <Button type="submit" disabled={!form.isValid() || !form.isDirty()} sx={{marginLeft: "auto"}}>
-          Update
+          {t("commentFrom.update")}
         </Button>
       ) : (
         <ActionIcon
