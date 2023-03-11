@@ -113,7 +113,7 @@ export default function EventDetailsPage() {
               </Stack>
               <MapComponent location={eventQuery.data.location}/>
             </Group>
-            <Card withBorder shadow="md" p="lg">
+            <Card withBorder>
               <Stack>
                 <Group position="apart">
                   <Group spacing={"xs"}>
@@ -153,7 +153,13 @@ export default function EventDetailsPage() {
         )}
       </QueryComponent>
       <QueryComponent resourceName={"Comments"} query={commentsQuery}>
-        <Card withBorder sx={{backgroundColor: theme.colors.dark[9]}}>
+        <Card
+          withBorder sx={{
+          backgroundColor: theme.colorScheme === "dark"
+            ? theme.colors.dark[8]
+            : theme.colors.gray[0],
+        }}
+        >
           <Stack>
             <CommentForm eventId={eventId}/>
             {commentsQuery.data?.map(c => (
@@ -162,15 +168,12 @@ export default function EventDetailsPage() {
                   <Group>
                     <UserImage user={c.user} size={45}/>
                     <Stack spacing="xs">
-                      <Link
-                        href={`/users/${c.user.id}`}
-                        passHref
-                      >
+                      <Link href={`/users/${c.user.id}`} passHref>
                         <Text weight="bold">
                           {c.user.name}
                         </Text>
                       </Link>
-                      <Text>
+                      <Text /*TODO handle long message*/>
                         {c.message}
                       </Text>
                     </Stack>
