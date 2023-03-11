@@ -74,16 +74,6 @@ export default function EventDetailsPage() {
     );
   };
 
-  const limitBadge = () => {
-    if (eventQuery.data?.limit) {
-      return (
-        <Badge color={"red"}>
-          {eventQuery.data.participants.length}/{eventQuery.data.limit}
-        </Badge>
-      );
-    }
-  };
-
   return (
     <Stack>
       <QueryComponent resourceName={"Event Details"} query={eventQuery}>
@@ -124,15 +114,23 @@ export default function EventDetailsPage() {
               <MapComponent location={eventQuery.data.location}/>
             </Group>
             <Card withBorder shadow="md" p="lg">
-              {!!eventQuery.data.participants.length ? (
-                <Stack>
-                  <Group position="apart">
-                    <Group spacing={"xs"}>
-                      {limitBadge()}
-                      <Text>They will also be there:</Text>
-                    </Group>
-                    {participateButton(eventQuery.data)}
+              <Stack>
+                <Group position="apart">
+                  <Group spacing={"xs"}>
+                    {eventQuery.data.limit && (
+                      <Badge color={"red"}>
+                        {eventQuery.data.participants.length}/{eventQuery.data.limit}
+                      </Badge>
+                    )}
+                    <Text>
+                      {!!eventQuery.data.participants.length ?
+                        "They will also be there:" :
+                        "There are no participants yet"}
+                    </Text>
                   </Group>
+                  {participateButton(eventQuery.data)}
+                </Group>
+                {!!eventQuery.data.participants.length && (
                   <Group spacing="xs">
                     {eventQuery.data.participants.map((p, index: number) => (
                       <Link
@@ -148,16 +146,8 @@ export default function EventDetailsPage() {
                       </Link>
                     ))}
                   </Group>
-                </Stack>
-              ) : (
-                <Group position="apart">
-                  <Group spacing={"xs"}>
-                    {limitBadge()}
-                    <Text>There are no participants yet.</Text>
-                  </Group>
-                  {participateButton(eventQuery.data)}
-                </Group>
-              )}
+                )}
+              </Stack>
             </Card>
           </Stack>
         )}
