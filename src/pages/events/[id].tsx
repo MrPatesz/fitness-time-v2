@@ -1,8 +1,6 @@
 import {ActionIcon, Affix, Badge, Button, Card, Group, Stack, Text, useMantineTheme,} from "@mantine/core";
 import {openConfirmModal, openModal} from "@mantine/modals";
 import {showNotification} from "@mantine/notifications";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
 import {useSession} from "next-auth/react";
 import {useTranslation} from "next-i18next";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
@@ -17,16 +15,17 @@ import {QueryComponent} from "../../components/QueryComponent";
 import UserImage from "../../components/user/UserImage";
 import {DetailedEventType} from "../../models/Event";
 import {api} from "../../utils/api";
-import {longDateFormatter, priceFormatter} from "../../utils/formatters";
+import dayjs from "../../utils/dayjs";
+import {getLongDateFormatter, getPriceFormatter} from "../../utils/formatters";
 import {getBackgroundColor} from "../../utils/utilFunctions";
-
-dayjs.extend(relativeTime);
 
 export default function EventDetailsPage() {
   const theme = useMantineTheme();
   const {query: {id}, isReady, locale} = useRouter();
   const {data: session} = useSession();
   const {t} = useTranslation("common");
+  const longDateFormatter = getLongDateFormatter(locale as string);
+  const priceFormatter = getPriceFormatter(locale as string);
 
   const eventId = parseInt(id as string);
   const eventQuery = api.event.getById.useQuery(eventId, {

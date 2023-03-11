@@ -1,8 +1,8 @@
 import {Group} from "@mantine/core";
 import {DatePicker, TimeInput} from "@mantine/dates";
-import dayjs from "dayjs";
 import {useTranslation} from "next-i18next";
 import {FunctionComponent} from "react";
+import dayjs from "../../utils/dayjs";
 
 const calculateDateTime = (date: Date, time: Date): Date => {
   const hour = dayjs(time).hour();

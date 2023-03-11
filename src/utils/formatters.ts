@@ -1,10 +1,10 @@
-export const priceFormatter = new Intl.NumberFormat("en-US", {
+export const getPriceFormatter = (locale: string) => new Intl.NumberFormat(locale, {
   style: "currency",
   currency: "USD",
   maximumFractionDigits: 0,
 });
 
-export const longDateFormatter = new Intl.DateTimeFormat("en-US", {
+export const getLongDateFormatter = (locale: string) => new Intl.DateTimeFormat(locale, {
   year: "numeric",
   month: "long",
   day: "2-digit",
@@ -13,7 +13,7 @@ export const longDateFormatter = new Intl.DateTimeFormat("en-US", {
   hour12: false,
 });
 
-export const shortDateFormatter = new Intl.DateTimeFormat("en-US", {
+export const getShortDateFormatter = (locale: string) => new Intl.DateTimeFormat(locale, {
   year: "numeric",
   month: "2-digit",
   day: "2-digit",

@@ -1,6 +1,6 @@
-import dayjs from "dayjs";
 import {CreateEventType} from "../models/Event";
 import {CreateLocationType} from "../models/Location";
+import dayjs from "./dayjs";
 
 export const googleMapsLibraries: (
   | "places"

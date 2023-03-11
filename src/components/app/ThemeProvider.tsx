@@ -5,6 +5,7 @@ import {NotificationsProvider} from "@mantine/notifications";
 import {useSession} from "next-auth/react";
 import {useRouter} from "next/router";
 import {FunctionComponent, useMemo} from "react";
+import dayjs from "../../utils/dayjs";
 import {ThemeColor} from "../user/ThemeColorPicker";
 
 export const ThemeProvider: FunctionComponent<{
@@ -13,6 +14,8 @@ export const ThemeProvider: FunctionComponent<{
   const colorScheme = useColorScheme();
   const {locale} = useRouter();
   const {data: session} = useSession();
+
+  dayjs.locale(locale);
 
   const myTheme = useMemo((): MantineThemeOverride => ({
     colorScheme,

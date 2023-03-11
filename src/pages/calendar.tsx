@@ -2,7 +2,6 @@ import {Affix, Stack, useMantineTheme} from "@mantine/core";
 import {useMediaQuery} from "@mantine/hooks";
 import {openModal} from "@mantine/modals";
 import {showNotification} from "@mantine/notifications";
-import dayjs from "dayjs";
 import {useSession} from "next-auth/react";
 import {useTranslation} from "next-i18next";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
@@ -14,6 +13,7 @@ import {EventForm} from "../components/event/EventForm";
 import {QueryComponent} from "../components/QueryComponent";
 import {BasicEventType} from "../models/Event";
 import {api} from "../utils/api";
+import dayjs from "../utils/dayjs";
 
 const DayPilotNavigator: any = dynamic(
   () =>

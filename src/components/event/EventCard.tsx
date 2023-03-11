@@ -4,7 +4,7 @@ import Link from "next/link";
 import {useRouter} from "next/router";
 import {FunctionComponent} from "react";
 import {BasicEventType} from "../../models/Event";
-import {shortDateFormatter} from "../../utils/formatters";
+import {getShortDateFormatter} from "../../utils/formatters";
 import {getBackgroundColor} from "../../utils/utilFunctions";
 import {ThemeColor} from "../user/ThemeColorPicker";
 
@@ -13,6 +13,7 @@ export const EventCard: FunctionComponent<{
 }> = ({event}) => {
   const {locale} = useRouter();
   const {t} = useTranslation("common");
+  const shortDateFormatter = getShortDateFormatter(locale as string);
 
   return (
     <Link href={`/events/${event.id}`} locale={locale} passHref>

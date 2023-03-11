@@ -12,7 +12,7 @@ import {FilterEventsComponent} from "../components/event/FilterEventsComponent";
 import {QueryComponent} from "../components/QueryComponent";
 import {BasicEventType} from "../models/Event";
 import {api} from "../utils/api";
-import {longDateFormatter, priceFormatter} from "../utils/formatters";
+import {getLongDateFormatter, getPriceFormatter} from "../utils/formatters";
 
 export default function MyEventsPage() {
   const [filteredList, setFilteredList] = useState<BasicEventType[]>([]);
@@ -20,6 +20,8 @@ export default function MyEventsPage() {
   const theme = useMantineTheme();
   const {push: pushRoute, locale} = useRouter();
   const {t} = useTranslation("common");
+  const longDateFormatter = getLongDateFormatter(locale as string);
+  const priceFormatter = getPriceFormatter(locale as string);
 
   const eventsQuery = api.event.getAllCreated.useQuery();
   const deleteEvent = api.event.delete.useMutation({
