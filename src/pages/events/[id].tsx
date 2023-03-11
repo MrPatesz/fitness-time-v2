@@ -1,4 +1,4 @@
-import {ActionIcon, Affix, Badge, Button, Card, Group, Stack, Text, useMantineTheme,} from "@mantine/core";
+import {ActionIcon, Affix, Badge, Button, Card, Group, Stack, Text, Tooltip, useMantineTheme,} from "@mantine/core";
 import {openConfirmModal, openModal} from "@mantine/modals";
 import {showNotification} from "@mantine/notifications";
 import {useSession} from "next-auth/react";
@@ -228,9 +228,14 @@ export default function EventDetailsPage() {
                         </>
                       )}
                     </Group>
-                    <Text>
-                      {dayjs(c.postedAt).fromNow()}
-                    </Text>
+                    <Tooltip
+                      label={getLongDateFormatter(locale as string).format(c.postedAt)}
+                      color={theme.primaryColor}
+                    >
+                      <Text>
+                        {dayjs(c.postedAt).fromNow()}
+                      </Text>
+                    </Tooltip>
                   </Stack>
                 </Group>
               </Card>
