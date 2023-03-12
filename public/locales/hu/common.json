@@ -105,7 +105,6 @@
   },
   "filterEvents": {
     "search": "Keresés név alapján",
-    "noEquipment": "Felszerelésmentes",
     "limited": "Limitált",
     "filter": "Filterezés"
   },

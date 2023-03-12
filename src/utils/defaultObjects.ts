@@ -1,5 +1,7 @@
+import {OrderBy} from "../components/event/FilterEventsComponent";
 import {CreateEventType} from "../models/Event";
 import {CreateLocationType} from "../models/Location";
+import {EventFilters} from "../pages/feed";
 import dayjs from "./dayjs";
 
 export const googleMapsLibraries: (
@@ -28,3 +30,10 @@ export const getDefaultCreateEvent = (initialInterval?: {
   price: null,
   location: defaultCreateLocation
 });
+
+export const defaultEventFilters: EventFilters = {
+  searchTerm: "",
+  orderBy: OrderBy.DATE,
+  ascending: false,
+  tags: [],
+};

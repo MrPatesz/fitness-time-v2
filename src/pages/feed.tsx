@@ -4,23 +4,29 @@ import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import {useState} from "react";
 import i18nConfig from "../../next-i18next.config.mjs";
 import {EventGrid} from "../components/event/EventGrid";
-import {FilterEventsComponent} from "../components/event/FilterEventsComponent";
+import {FilterBy, FilterEventsComponent, OrderBy} from "../components/event/FilterEventsComponent";
 import {QueryComponent} from "../components/QueryComponent";
-import {BasicEventType} from "../models/Event";
+import useFilteredEvents from "../hooks/useFilteredEvents";
 import {api} from "../utils/api";
+import {defaultEventFilters} from "../utils/defaultObjects";
+
+export interface EventFilters {
+  searchTerm: string;
+  orderBy: OrderBy;
+  ascending: boolean;
+  tags: FilterBy[];
+}
 
 export default function FeedPage() {
-  const [filteredList, setFilteredList] = useState<BasicEventType[]>([]);
-  const eventsQuery = api.event.getFeed.useQuery();
   const {t} = useTranslation("common");
+
+  const eventsQuery = api.event.getFeed.useQuery();
+  const [filters, setFilters] = useState<EventFilters>(defaultEventFilters);
+  const filteredList = useFilteredEvents(eventsQuery.data, filters);
 
   return (
     <Stack>
-      <FilterEventsComponent
-        events={eventsQuery.data ?? []}
-        setFilteredEvents={setFilteredList}
-        filterKey="FeedPageFilter"
-      />
+      <FilterEventsComponent filters={filters} setFilters={setFilters}/>
       <QueryComponent resourceName={t("resource.feed")} query={eventsQuery}>
         <EventGrid events={filteredList}/>
       </QueryComponent>

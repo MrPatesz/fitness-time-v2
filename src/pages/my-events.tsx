@@ -10,13 +10,14 @@ import i18nConfig from "../../next-i18next.config.mjs";
 import {EventForm} from "../components/event/EventForm";
 import {FilterEventsComponent} from "../components/event/FilterEventsComponent";
 import {QueryComponent} from "../components/QueryComponent";
+import useFilteredEvents from "../hooks/useFilteredEvents";
 import {BasicEventType} from "../models/Event";
 import {api} from "../utils/api";
+import {defaultEventFilters} from "../utils/defaultObjects";
 import {getLongDateFormatter, getPriceFormatter} from "../utils/formatters";
+import {EventFilters} from "./feed";
 
 export default function MyEventsPage() {
-  const [filteredList, setFilteredList] = useState<BasicEventType[]>([]);
-
   const theme = useMantineTheme();
   const {push: pushRoute, locale} = useRouter();
   const {t} = useTranslation("common");
@@ -32,6 +33,9 @@ export default function MyEventsPage() {
         message: t("notification.event.delete.message"),
       })),
   });
+
+  const [filters, setFilters] = useState<EventFilters>(defaultEventFilters);
+  const filteredList = useFilteredEvents(eventsQuery.data, filters);
 
   const onDeleteClick = (event: BasicEventType) => openConfirmModal({
     title: t("modal.event.delete.title"),
@@ -53,11 +57,7 @@ export default function MyEventsPage() {
   return (
     <>
       <Stack>
-        <FilterEventsComponent
-          events={eventsQuery.data ?? []}
-          setFilteredEvents={setFilteredList}
-          filterKey="MyEventsPageFilter"
-        />
+        <FilterEventsComponent filters={filters} setFilters={setFilters}/>
         <QueryComponent resourceName={t("resource.myEvents")} query={eventsQuery}>
           <Table highlightOnHover withBorder withColumnBorders>
             <thead>

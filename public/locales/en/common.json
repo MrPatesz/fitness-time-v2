@@ -105,7 +105,6 @@
   },
   "filterEvents": {
     "search": "Search by Name",
-    "noEquipment": "No Equipment",
     "limited": "Limited",
     "filter": "Filter by Attributes"
   },
