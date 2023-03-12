@@ -106,7 +106,6 @@ export const ApplicationShell: FunctionComponent<{
                   label={link.label}
                   icon={<link.icon size={20}/>}
                   active={link.route.includes(route)}
-
                 />
               </Link>
             ))}

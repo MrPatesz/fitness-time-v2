@@ -22,7 +22,7 @@ export default function WelcomePage() {
         </h1>
         <Group position="center">
           <Button
-            onClick={() => signIn(undefined, {callbackUrl: `${locale !== defaultLocale ? `/${locale}` : ""}/`})}
+            onClick={() => signIn(undefined, {callbackUrl: locale !== defaultLocale ? `/${locale}/` : "/"})}
           >
             {t("button.login")}
           </Button>
