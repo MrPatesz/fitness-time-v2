@@ -46,6 +46,8 @@ export const ApplicationShell: FunctionComponent<{
   const myEventsRoute = `${localePrefix}/my-events`;
   const usersRoute = `${localePrefix}/users`;
 
+  const isRouteActive = (givenRoute: string) => givenRoute.includes(route) && route !== "/";
+
   return (
     <AppShell
       hidden={!session}
@@ -105,12 +107,12 @@ export const ApplicationShell: FunctionComponent<{
                 <NavLink
                   label={link.label}
                   icon={<link.icon size={20}/>}
-                  active={link.route.includes(route)}
+                  active={isRouteActive(link.route)}
                 />
               </Link>
             ))}
           </Navbar.Section>
-          <Navbar.Section sx={(xs && calendarRoute.includes(route)) ? {marginBottom: 241} : undefined}>
+          <Navbar.Section sx={(xs && isRouteActive(calendarRoute)) ? {marginBottom: 241} : undefined}>
             <Link
               href={profileRoute}
               locale={locale}
@@ -120,7 +122,7 @@ export const ApplicationShell: FunctionComponent<{
               <NavLink
                 label={session?.user?.name}
                 icon={<UserCircle size={20}/>}
-                active={profileRoute.includes(route)}
+                active={isRouteActive(profileRoute)}
               />
             </Link>
           </Navbar.Section>
