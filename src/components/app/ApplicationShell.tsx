@@ -105,12 +105,13 @@ export const ApplicationShell: FunctionComponent<{
                 <NavLink
                   label={link.label}
                   icon={<link.icon size={20}/>}
-                  active={route.includes(link.route)}
+                  active={link.route.includes(route)}
+
                 />
               </Link>
             ))}
           </Navbar.Section>
-          <Navbar.Section sx={(xs && route.includes(calendarRoute)) ? {marginBottom: 241} : undefined}>
+          <Navbar.Section sx={(xs && calendarRoute.includes(route)) ? {marginBottom: 241} : undefined}>
             <Link
               href={profileRoute}
               locale={locale}
@@ -120,7 +121,7 @@ export const ApplicationShell: FunctionComponent<{
               <NavLink
                 label={session?.user?.name}
                 icon={<UserCircle size={20}/>}
-                active={route.includes(profileRoute)}
+                active={profileRoute.includes(route)}
               />
             </Link>
           </Navbar.Section>
