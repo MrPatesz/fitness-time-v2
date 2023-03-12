@@ -27,16 +27,9 @@ export const ApplicationShell: FunctionComponent<{
 
   const theme = useMantineTheme();
   const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
-  const {route, replace: replaceRoute, locale, defaultLocale} = useRouter();
+  const {route, locale, defaultLocale} = useRouter();
+  const {data: session} = useSession();
   const {t} = useTranslation("common");
-  const {data: session} = useSession({
-    required: true,
-    onUnauthenticated() {
-      if (route !== welcomeRoute) {
-        replaceRoute(welcomeRoute, undefined, {locale});
-      }
-    },
-  });
 
   const localePrefix = locale !== defaultLocale ? `/${locale}` : "";
   const calendarRoute = `${localePrefix}/calendar`;
