@@ -1,87 +1,74 @@
-import {ActionIcon, Button, Group, Stack, TextInput, useMantineTheme} from "@mantine/core";
+import {Button, Group, Stack} from "@mantine/core";
 import {useForm} from "@mantine/form";
+import {closeAllModals} from "@mantine/modals";
 import {showNotification} from "@mantine/notifications";
 import {useTranslation} from "next-i18next";
+import dynamic from "next/dynamic";
 import {FunctionComponent} from "react";
-import {Send} from "tabler-icons-react";
 import {BasicCommentType, CreateCommentType} from "../../models/Comment";
 import {api} from "../../utils/api";
 
+const RichTextEditor = dynamic(
+  () => import("@mantine/rte").then((mod) => mod.RichTextEditor),
+  {ssr: false}
+);
+
 export const CommentForm: FunctionComponent<{
-  editedComment?: BasicCommentType;
+  editedComment?: BasicCommentType | CreateCommentType;
   eventId: number;
 }> = ({editedComment, eventId}) => {
   const {t} = useTranslation("common");
 
   const form = useForm<CreateCommentType>({
     initialValues: editedComment ?? {message: ""},
-    validateInputOnChange: true,
-    validate: {message: (value) => value ? null : t("commentFrom.messageError")},
   });
 
-  const theme = useMantineTheme();
   const queryContext = api.useContext();
   const createComment = api.comment.create.useMutation({
-    onSuccess: () => queryContext.comment.invalidate().then(() =>
+    onSuccess: () => queryContext.comment.invalidate().then(() => {
+      closeAllModals();
       showNotification({
         color: "green",
         title: t("notification.comment.create.title"),
         message: t("notification.comment.create.message"),
-      })
-    )
+      });
+    })
   });
   const updateComment = api.comment.update.useMutation({
-    onSuccess: () => queryContext.comment.invalidate().then(() =>
+    onSuccess: () => queryContext.comment.invalidate().then(() => {
+      closeAllModals();
       showNotification({
         color: "green",
         title: t("notification.comment.update.title"),
         message: t("notification.comment.update.message"),
-      })
-    )
+      });
+    })
   });
-
-  const content = (
-    <>
-      <TextInput
-        placeholder={t("commentFrom.addComment") as string}
-        sx={{flexGrow: 1}}
-        {...form.getInputProps("message")}
-      />
-      {editedComment ? (
-        <Button type="submit" disabled={!form.isValid() || !form.isDirty()} sx={{marginLeft: "auto"}}>
-          {t("commentFrom.update")}
-        </Button>
-      ) : (
-        <ActionIcon
-          type="submit"
-          disabled={!form.isValid() || !form.isDirty()}
-          size="lg"
-          color={theme.primaryColor}
-          variant="filled"
-        >
-          <Send/>
-        </ActionIcon>
-      )}
-    </>
-  );
 
   return (
     <form
       onSubmit={form.onSubmit((data) =>
-        editedComment ?
+        editedComment && "id" in editedComment ?
           updateComment.mutate({commentId: editedComment.id, comment: data, eventId}) :
           createComment.mutate({createComment: data, eventId})
       )}
     >
-      {editedComment ? (
-        <Stack>
-          {content}
-        </Stack>
-      ) : (
-        <Group>
-          {content}
+      <Stack>
+        <RichTextEditor
+          id="rte"
+          placeholder={t("commentFrom.addComment") as string}
+          value={form.getInputProps("message").value}
+          onChange={form.getInputProps("message").onChange}
+        />
+        <Group position="right">
+          <Button onClick={form.reset} color="gray" disabled={!form.isDirty()}>
+            {t("button.reset")}
+          </Button>
+          <Button type="submit" disabled={!form.isValid() || !form.isDirty()}>
+            {t("button.submit")}
+          </Button>
         </Group>
-      )}
+      </Stack>
     </form>
   );
 };

@@ -81,6 +81,7 @@
       }
     },
     "comment": {
+      "create": "Create Comment",
       "edit": "Edit Comment",
       "delete": {
         "title": "Delete Comment",

@@ -81,6 +81,7 @@
       }
     },
     "comment": {
+      "create": "Komment Létrehozása",
       "edit": "Komment Szerkesztése",
       "delete": {
         "title": "Komment Törlése",

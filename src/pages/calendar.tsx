@@ -16,15 +16,11 @@ import {api} from "../utils/api";
 import dayjs from "../utils/dayjs";
 
 const DayPilotNavigator: any = dynamic(
-  () =>
-    import("@daypilot/daypilot-lite-react").then(
-      (mod) => mod.DayPilotNavigator
-    ),
+  () => import("@daypilot/daypilot-lite-react").then((mod) => mod.DayPilotNavigator),
   {ssr: false}
 );
 const DayPilotCalendar: any = dynamic(
-  () =>
-    import("@daypilot/daypilot-lite-react").then((mod) => mod.DayPilotCalendar),
+  () => import("@daypilot/daypilot-lite-react").then((mod) => mod.DayPilotCalendar),
   {ssr: false}
 );
 
