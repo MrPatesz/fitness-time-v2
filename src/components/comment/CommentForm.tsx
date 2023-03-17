@@ -3,16 +3,11 @@ import {useForm} from "@mantine/form";
 import {closeAllModals} from "@mantine/modals";
 import {showNotification} from "@mantine/notifications";
 import {useTranslation} from "next-i18next";
-import dynamic from "next/dynamic";
 import {FunctionComponent} from "react";
 import {BasicCommentType, CreateCommentType} from "../../models/Comment";
 import {api} from "../../utils/api";
 import {defaultCreateComment} from "../../utils/defaultObjects";
-
-const RichTextEditor = dynamic(
-  () => import("@mantine/rte").then((mod) => mod.RichTextEditor),
-  {ssr: false}
-);
+import RichTextEditor from "../RichTextEditor";
 
 export const CommentForm: FunctionComponent<{
   editedComment?: BasicCommentType | CreateCommentType;
