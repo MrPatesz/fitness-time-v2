@@ -1,4 +1,5 @@
 import {OrderBy} from "../components/event/FilterEventsComponent";
+import {CreateCommentType} from "../models/Comment";
 import {CreateEventType} from "../models/Event";
 import {CreateLocationType} from "../models/Location";
 import {EventFilters} from "../pages/feed";
@@ -11,6 +12,10 @@ export const googleMapsLibraries: (
   | "localContext"
   | "visualization"
   )[] = ["places"];
+
+export const defaultCreateComment: CreateCommentType = {
+  message: "",
+};
 
 export const defaultCreateLocation: CreateLocationType = {
   address: "",

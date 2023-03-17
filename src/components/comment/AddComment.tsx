@@ -7,6 +7,7 @@ import {FunctionComponent} from "react";
 import {PencilPlus, Send} from "tabler-icons-react";
 import {CreateCommentType} from "../../models/Comment";
 import {api} from "../../utils/api";
+import {defaultCreateComment} from "../../utils/defaultObjects";
 import {CommentForm} from "./CommentForm";
 
 export const AddComment: FunctionComponent<{
@@ -15,7 +16,7 @@ export const AddComment: FunctionComponent<{
   const {t} = useTranslation("common");
 
   const form = useForm<CreateCommentType>({
-    initialValues: {message: ""},
+    initialValues: defaultCreateComment,
   });
 
   const theme = useMantineTheme();

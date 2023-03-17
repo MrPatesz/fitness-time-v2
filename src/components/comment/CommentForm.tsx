@@ -7,6 +7,7 @@ import dynamic from "next/dynamic";
 import {FunctionComponent} from "react";
 import {BasicCommentType, CreateCommentType} from "../../models/Comment";
 import {api} from "../../utils/api";
+import {defaultCreateComment} from "../../utils/defaultObjects";
 
 const RichTextEditor = dynamic(
   () => import("@mantine/rte").then((mod) => mod.RichTextEditor),
@@ -20,7 +21,7 @@ export const CommentForm: FunctionComponent<{
   const {t} = useTranslation("common");
 
   const form = useForm<CreateCommentType>({
-    initialValues: editedComment ?? {message: ""},
+    initialValues: editedComment ?? defaultCreateComment,
   });
 
   const queryContext = api.useContext();
