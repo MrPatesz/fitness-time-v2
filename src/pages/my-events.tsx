@@ -66,7 +66,6 @@ export default function MyEventsPage() {
               <th>{t("common.location")}</th>
               <th>{t("common.price")}</th>
               <th>{t("myEvents.limit")}</th>
-              {/* <th>{t("myEvents.recurring")}</th> */}
               <th>{t("myEvents.actions")}</th>
             </tr>
             </thead>
@@ -82,7 +81,6 @@ export default function MyEventsPage() {
                 <td>{event.location.address}</td>
                 <td>{event.price && priceFormatter.format(event.price)}</td>
                 <td>{event.limit}</td>
-                {/* <td>{event.recurring.toString()}</td> */}
                 <td>
                   <Group spacing="xs">
                     <ActionIcon

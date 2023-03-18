@@ -48,11 +48,6 @@ export const EventCard: FunctionComponent<{
                   {t("filterEvents.limited")}
                 </Badge>
               )}
-              {/* {event.recurring && (
-                <Badge color="violet" variant="light">
-                  Recurring
-                </Badge>
-              )} */}
             </Group>
             {/*<Text>{event.description}</Text> TODO show a little bit?*/}
           </Stack>

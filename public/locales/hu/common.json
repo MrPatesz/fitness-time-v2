@@ -101,7 +101,6 @@
   "myEvents": {
     "dateTime": "Időpont",
     "limit": "Limit",
-    "recurring": "Ismétlődő",
     "actions": "Kezelés"
   },
   "filterEvents": {

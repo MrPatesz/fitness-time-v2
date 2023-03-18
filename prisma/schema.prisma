@@ -79,7 +79,6 @@ model Event {
   name         String
   start        DateTime
   end          DateTime
-  // recurring    Boolean
   description  String
   limit        Int?
   price        Int?

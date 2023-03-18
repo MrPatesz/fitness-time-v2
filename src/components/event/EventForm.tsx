@@ -132,13 +132,6 @@ export const EventForm: FunctionComponent<{
           {...form.getInputProps("limit")}
           min={1}
         />
-        {/* <Checkbox
-        label="Is it recurring every week?"
-        checked={event.recurring}
-        onChange={(e) =>
-          setEvent({ ...event, recurring: e.currentTarget.checked })
-        }
-      /> */}
         <Group position="right">
           <Button
             variant="default"

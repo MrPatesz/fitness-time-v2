@@ -101,7 +101,6 @@
   "myEvents": {
     "dateTime": "Date and Time",
     "limit": "Limit",
-    "recurring": "Recurring",
     "actions": "Actions"
   },
   "filterEvents": {

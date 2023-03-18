@@ -10,7 +10,6 @@ export const CreateEventSchema = z.object({
   name: z.string().min(1),
   start: z.date(),
   end: z.date(),
-  // recurring: z.boolean(),
   description: z.string(),
   limit: z.number().min(1).nullable(),
   price: z.number().min(1).nullable(),
