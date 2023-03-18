@@ -64,7 +64,6 @@ export default function MyEventsPage() {
               <th>{t("common.name")}</th>
               <th>{t("myEvents.dateTime")}</th>
               <th>{t("common.location")}</th>
-              <th>{t("myEvents.equipment")}</th>
               <th>{t("common.price")}</th>
               <th>{t("myEvents.limit")}</th>
               {/* <th>{t("myEvents.recurring")}</th> */}
@@ -81,7 +80,6 @@ export default function MyEventsPage() {
                 <td>{event.name}</td>
                 <td>{longDateFormatter.formatRange(event.start, event.end)}</td>
                 <td>{event.location.address}</td>
-                <td>{event.equipment}</td>
                 <td>{event.price && priceFormatter.format(event.price)}</td>
                 <td>{event.limit}</td>
                 {/* <td>{event.recurring.toString()}</td> */}

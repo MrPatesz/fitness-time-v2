@@ -113,16 +113,6 @@ export default function EventDetailsPage() {
                     </TypographyStylesProvider>
                   </Card>
                 )}
-                {eventQuery.data.equipment && (
-                  <Group spacing="xs">
-                    <Text>
-                      {t("eventDetails.requiredEquipment")}
-                    </Text>
-                    <Text underline>
-                      {eventQuery.data.equipment}
-                    </Text>
-                  </Group>
-                )}
                 {eventQuery.data.price && (
                   <Group spacing="xs">
                     <Text>

@@ -81,7 +81,6 @@ model Event {
   end          DateTime
   // recurring    Boolean
   description  String
-  equipment    String
   limit        Int?
   price        Int?
   locationId   Int

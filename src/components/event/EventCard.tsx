@@ -43,11 +43,6 @@ export const EventCard: FunctionComponent<{
                   {t("common.free")}
                 </Badge>
               )}
-              {event.equipment && (
-                <Badge color="yellow" variant="light">
-                  {t("myEvents.equipment")}
-                </Badge>
-              )}
               {event.limit && (
                 <Badge color="red" variant="light">
                   {t("filterEvents.limited")}

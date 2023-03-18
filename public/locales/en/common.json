@@ -100,7 +100,6 @@
   },
   "myEvents": {
     "dateTime": "Date and Time",
-    "equipment": "Equipment",
     "limit": "Limit",
     "recurring": "Recurring",
     "actions": "Actions"
@@ -119,7 +118,6 @@
   "eventDetails": {
     "participate": "Participate",
     "removeParticipation": "Remove participation",
-    "requiredEquipment": "Required equipment:",
     "participants": "They will also be there:",
     "noParticipants": "There are no participants yet."
   },
@@ -188,10 +186,6 @@
     "description": {
       "label": "Description",
       "placeholder": "What are the plans?"
-    },
-    "equipment": {
-      "label": "Equipment",
-      "placeholder": "Is any equipment needed?"
     },
     "price": {
       "label": "Price",

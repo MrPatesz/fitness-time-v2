@@ -100,7 +100,6 @@
   },
   "myEvents": {
     "dateTime": "Időpont",
-    "equipment": "Felszerelés",
     "limit": "Limit",
     "recurring": "Ismétlődő",
     "actions": "Kezelés"
@@ -119,7 +118,6 @@
   "eventDetails": {
     "participate": "Részvétel",
     "removeParticipation": "Részvétel eltávolítása",
-    "requiredEquipment": "Szükséges felszerelés:",
     "participants": "Ők is ott lesznek:",
     "noParticipants": "Még nincs részvevő."
   },
@@ -188,10 +186,6 @@
     "description": {
       "label": "Leírás",
       "placeholder": "Mik a tervek?"
-    },
-    "equipment": {
-      "label": "Felszerelés",
-      "placeholder": "Szükséges bármilyen felszerelés?"
     },
     "price": {
       "label": "Ár",

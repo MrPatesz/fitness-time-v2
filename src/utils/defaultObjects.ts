@@ -30,7 +30,6 @@ export const getDefaultCreateEvent = (initialInterval?: {
   start: initialInterval?.start ?? dayjs(new Date()).add(1, "hours").toDate(),
   end: initialInterval?.end ?? dayjs(new Date()).add(2, "hours").toDate(),
   description: "",
-  equipment: "",
   limit: null,
   price: null,
   location: defaultCreateLocation

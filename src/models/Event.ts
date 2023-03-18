@@ -12,7 +12,6 @@ export const CreateEventSchema = z.object({
   end: z.date(),
   // recurring: z.boolean(),
   description: z.string(),
-  equipment: z.string(),
   limit: z.number().min(1).nullable(),
   price: z.number().min(1).nullable(),
   location: CreateLocationSchema,

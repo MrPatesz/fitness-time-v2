@@ -112,11 +112,6 @@ export const EventForm: FunctionComponent<{
           placeholder={t("eventForm.description.placeholder") as string}
           formInputProps={form.getInputProps("description")}
         />
-        {/*<TextInput TODO remove
-          label={t("eventForm.equipment.label")}
-          placeholder={t("eventForm.equipment.placeholder") as string}
-          {...form.getInputProps("equipment")}
-        />*/}
         <NumberInput
           label={t("eventForm.price.label")}
           placeholder={t("eventForm.price.placeholder") as string}
