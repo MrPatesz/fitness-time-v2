@@ -50,7 +50,7 @@ export default function UsersPage() {
           readOnly
           value={t("common.name") as string}
           rightSection={
-            <ActionIcon onClick={() => setAscending(!ascending)}>
+            <ActionIcon variant="transparent" onClick={() => setAscending(!ascending)}>
               {ascending ? <ArrowUp/> : <ArrowDown/>}
             </ActionIcon>
           }

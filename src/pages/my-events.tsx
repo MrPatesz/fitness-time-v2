@@ -51,7 +51,6 @@ export default function MyEventsPage() {
     ),
     labels: {confirm: t("button.confirm"), cancel: t("button.cancel")},
     onConfirm: () => deleteEvent.mutate(event.id),
-    zIndex: 401,
   });
 
   return (
@@ -90,13 +89,12 @@ export default function MyEventsPage() {
                   <Group spacing="xs">
                     <ActionIcon
                       // disabled={event.isArchive}
+                      variant="transparent"
                       size="md"
                       onClick={(e) => {
                         e.stopPropagation();
                         openModal({
                           title: t("modal.event.edit"),
-                          zIndex: 401,
-                          closeOnClickOutside: false,
                           children: <EventForm editedEventId={event.id}/>,
                         });
                       }}
@@ -105,6 +103,7 @@ export default function MyEventsPage() {
                     </ActionIcon>
                     <ActionIcon
                       // disabled={event.isArchive}
+                      variant="transparent"
                       size="md"
                       onClick={(e: any) => {
                         e.stopPropagation();
@@ -127,8 +126,6 @@ export default function MyEventsPage() {
           size="xl"
           onClick={() => openModal({
             title: t("modal.event.create"),
-            zIndex: 401,
-            closeOnClickOutside: false,
             children: <EventForm/>,
           })}
         >

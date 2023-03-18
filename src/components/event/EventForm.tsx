@@ -1,4 +1,4 @@
-import {Button, Group, NumberInput, Stack, Textarea, TextInput} from "@mantine/core";
+import {Button, Group, NumberInput, Stack, TextInput} from "@mantine/core";
 import {useForm} from "@mantine/form";
 import {closeAllModals} from "@mantine/modals";
 import {showNotification} from "@mantine/notifications";
@@ -8,6 +8,7 @@ import {CreateEventType} from "../../models/Event";
 import {api} from "../../utils/api";
 import {getDefaultCreateEvent} from "../../utils/defaultObjects";
 import {LocationPicker} from "../location/LocationPicker";
+import {RichTextField} from "../RichTextField";
 import {IntervalPicker} from "./IntervalPicker";
 
 export const EventForm: FunctionComponent<{
@@ -106,16 +107,16 @@ export const EventForm: FunctionComponent<{
           setLocation={form.getInputProps("location").onChange}
           error={form.getInputProps("location").error}
         />
-        <Textarea
-          label={t("eventForm.description.label")}
+        <RichTextField
+          label={t("eventForm.description.label") as string}
           placeholder={t("eventForm.description.placeholder") as string}
-          {...form.getInputProps("description")}
+          formInputProps={form.getInputProps("description")}
         />
-        <TextInput
+        {/*<TextInput TODO remove
           label={t("eventForm.equipment.label")}
           placeholder={t("eventForm.equipment.placeholder") as string}
           {...form.getInputProps("equipment")}
-        />
+        />*/}
         <NumberInput
           label={t("eventForm.price.label")}
           placeholder={t("eventForm.price.placeholder") as string}

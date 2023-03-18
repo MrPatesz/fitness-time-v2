@@ -1,4 +1,4 @@
-import {Affix, Stack, useMantineTheme} from "@mantine/core";
+import {Affix, Center, Loader, Stack, useMantineTheme} from "@mantine/core";
 import {useMediaQuery} from "@mantine/hooks";
 import {openModal} from "@mantine/modals";
 import {showNotification} from "@mantine/notifications";
@@ -21,7 +21,13 @@ const DayPilotNavigator: any = dynamic(
 );
 const DayPilotCalendar: any = dynamic(
   () => import("@daypilot/daypilot-lite-react").then((mod) => mod.DayPilotCalendar),
-  {ssr: false}
+  {
+    ssr: false, loading: () => (
+      <Center sx={{height: "100%", width: "100%"}}>
+        <Loader/>
+      </Center>
+    )
+  }
 );
 
 export default function CalendarPage() {
@@ -94,7 +100,6 @@ export default function CalendarPage() {
               openModal({
                 title: t("modal.event.create"),
                 zIndex: 402,
-                closeOnClickOutside: false,
                 children: (
                   <EventForm
                     initialInterval={{

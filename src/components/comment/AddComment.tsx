@@ -1,14 +1,13 @@
-import {ActionIcon, Group, TextInput, useMantineTheme} from "@mantine/core";
+import {ActionIcon, Group, useMantineTheme} from "@mantine/core";
 import {useForm} from "@mantine/form";
-import {openModal} from "@mantine/modals";
 import {showNotification} from "@mantine/notifications";
 import {useTranslation} from "next-i18next";
 import {FunctionComponent} from "react";
-import {PencilPlus, Send} from "tabler-icons-react";
+import {Send} from "tabler-icons-react";
 import {CreateCommentType} from "../../models/Comment";
 import {api} from "../../utils/api";
 import {defaultCreateComment} from "../../utils/defaultObjects";
-import {CommentForm} from "./CommentForm";
+import {RichTextField} from "../RichTextField";
 
 export const AddComment: FunctionComponent<{
   eventId: number;
@@ -34,23 +33,9 @@ export const AddComment: FunctionComponent<{
   return (
     <form onSubmit={form.onSubmit((data) => createComment.mutate({createComment: data, eventId}))}>
       <Group>
-        <TextInput
+        <RichTextField
           placeholder={t("commentFrom.addComment") as string}
-          sx={{flexGrow: 1}}
-          {...form.getInputProps("message")}
-          rightSection={(
-            <ActionIcon
-              onClick={() => openModal({
-                title: t("modal.comment.create"),
-                zIndex: 401,
-                closeOnClickOutside: false,
-                children: <CommentForm eventId={eventId} editedComment={form.values}/>,
-                size: "xl"
-              })}
-            >
-              <PencilPlus/>
-            </ActionIcon>
-          )}
+          formInputProps={form.getInputProps("message")}
         />
         <ActionIcon
           type="submit"

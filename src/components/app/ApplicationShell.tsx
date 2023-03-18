@@ -71,6 +71,7 @@ export const ApplicationShell: FunctionComponent<{
             ) : (
               <ActionIcon
                 size="lg"
+                variant="transparent"
                 color={theme.primaryColor}
                 onClick={() => signOut({callbackUrl: welcomeRoute})}
               >

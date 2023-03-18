@@ -61,10 +61,9 @@ export const CommentCard: FunctionComponent<{
             <Group position="right" spacing="xs">
               <ActionIcon
                 size="sm"
+                variant="transparent"
                 onClick={() => openModal({
                   title: t("modal.comment.edit"),
-                  zIndex: 401,
-                  closeOnClickOutside: false,
                   children: <CommentForm eventId={eventId} editedComment={comment}/>,
                   size: "xl"
                 })}
@@ -73,6 +72,7 @@ export const CommentCard: FunctionComponent<{
               </ActionIcon>
               <ActionIcon
                 size="sm"
+                variant="transparent"
                 onClick={() => openConfirmModal({
                   title: t("modal.comment.delete.title"),
                   children: (
@@ -80,15 +80,13 @@ export const CommentCard: FunctionComponent<{
                       <Text>
                         {t("modal.comment.delete.message")}
                       </Text>
-                      <TypographyStylesProvider /*TODO long message: hide (show more...)*/>
+                      <TypographyStylesProvider>
                         <div dangerouslySetInnerHTML={{__html: comment.message}} style={{overflowWrap: "break-word"}}/>
                       </TypographyStylesProvider>
                     </Stack>
                   ),
                   labels: {confirm: t("button.confirm"), cancel: t("button.cancel")},
                   onConfirm: () => deleteComment.mutate(comment.id),
-                  zIndex: 401,
-                  closeOnClickOutside: false,
                 })}
               >
                 <Trash/>
@@ -96,7 +94,7 @@ export const CommentCard: FunctionComponent<{
             </Group>
           )}
         </Group>
-        <TypographyStylesProvider /*TODO long message: hide (show more...)*/>
+        <TypographyStylesProvider /*TODO long message: hide (show more...): custom component*/>
           <div dangerouslySetInnerHTML={{__html: comment.message}} style={{overflowWrap: "break-word"}}/>
         </TypographyStylesProvider>
       </Stack>

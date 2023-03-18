@@ -7,6 +7,7 @@ import {ProfileType, UpdateProfileType} from "../../models/User";
 import {api} from "../../utils/api";
 import {refreshSession} from "../../utils/utilFunctions";
 import {LocationPicker} from "../location/LocationPicker";
+import {RichTextField} from "../RichTextField";
 import {ThemeColorPicker} from "./ThemeColorPicker";
 
 export const ProfileForm: FunctionComponent<{
@@ -45,10 +46,10 @@ export const ProfileForm: FunctionComponent<{
           placeholder={t("profileForm.displayName.placeholder") as string}
           {...form.getInputProps("name")}
         />
-        <TextInput
-          label={t("profileForm.introduction")}
+        <RichTextField
+          label={t("profileForm.introduction") as string}
           placeholder={t("profileForm.introduction") as string}
-          {...form.getInputProps("introduction")}
+          formInputProps={form.getInputProps("introduction")}
         />
         <LocationPicker
           location={form.getInputProps("location").value}

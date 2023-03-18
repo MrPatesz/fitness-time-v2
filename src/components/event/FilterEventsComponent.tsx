@@ -43,7 +43,7 @@ export const FilterEventsComponent: FunctionComponent<{
       />
       <Select
         rightSection={
-          <ActionIcon onClick={() => setFilters({...filters, ascending: !filters.ascending})}>
+          <ActionIcon variant="transparent" onClick={() => setFilters({...filters, ascending: !filters.ascending})}>
             {filters.ascending ? <ArrowUp/> : <ArrowDown/>}
           </ActionIcon>
         }

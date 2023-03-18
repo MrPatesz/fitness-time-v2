@@ -29,7 +29,13 @@ export const ThemeProvider: FunctionComponent<{
 
   return (
     <MantineProvider withGlobalStyles withNormalizeCSS theme={myTheme}>
-      <ModalsProvider modalProps={{centered: true}}>
+      <ModalsProvider
+        modalProps={{
+          centered: true,
+          closeOnClickOutside: false,
+          zIndex: 401,
+        }}
+      >
         <NotificationsProvider>
           {children}
         </NotificationsProvider>

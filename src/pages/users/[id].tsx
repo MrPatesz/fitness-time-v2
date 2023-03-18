@@ -1,4 +1,4 @@
-import {Group, Stack, Text} from "@mantine/core";
+import {Card, Group, Stack, Text, TypographyStylesProvider} from "@mantine/core";
 import {useTranslation} from "next-i18next";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import {useRouter} from "next/router";
@@ -7,8 +7,11 @@ import {EventGrid} from "../../components/event/EventGrid";
 import {QueryComponent} from "../../components/QueryComponent";
 import UserImage from "../../components/user/UserImage";
 import {api} from "../../utils/api";
+import {getBackgroundColor} from "../../utils/utilFunctions";
 
 export default function UserDetailsPage() {
+  const userImageSize = 100;
+
   const {query: {id}, isReady} = useRouter();
   const {t} = useTranslation("common");
 
@@ -21,13 +24,19 @@ export default function UserDetailsPage() {
       {userDetailsQuery.data && (
         <Stack>
           <Group position="apart" align="start">
-            <Stack>
+            <Stack sx={theme => ({width: `calc(100% - ${userImageSize + theme.spacing.md}px)`})}>
               <Text weight="bold" size="xl">
                 {userDetailsQuery.data.name}
               </Text>
-              <Text>{userDetailsQuery.data.introduction}</Text>
+              {userDetailsQuery.data.introduction && (
+                <Card withBorder sx={theme => ({backgroundColor: getBackgroundColor(theme)})}>
+                  <TypographyStylesProvider>
+                    <div dangerouslySetInnerHTML={{__html: userDetailsQuery.data.introduction}}/>
+                  </TypographyStylesProvider>
+                </Card>
+              )}
             </Stack>
-            <UserImage user={userDetailsQuery.data}/>
+            <UserImage size={userImageSize} user={userDetailsQuery.data}/>
           </Group>
           {!!userDetailsQuery.data.createdEvents.length && (
             <>

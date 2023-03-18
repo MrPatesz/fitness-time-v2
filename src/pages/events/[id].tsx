@@ -1,4 +1,15 @@
-import {ActionIcon, Affix, Badge, Button, Card, Group, Stack, Text, useMantineTheme,} from "@mantine/core";
+import {
+  ActionIcon,
+  Affix,
+  Badge,
+  Button,
+  Card,
+  Group,
+  Stack,
+  Text,
+  TypographyStylesProvider,
+  useMantineTheme,
+} from "@mantine/core";
 import {openModal} from "@mantine/modals";
 import {showNotification} from "@mantine/notifications";
 import {useSession} from "next-auth/react";
@@ -19,6 +30,8 @@ import {getLongDateFormatter, getPriceFormatter} from "../../utils/formatters";
 import {getBackgroundColor} from "../../utils/utilFunctions";
 
 export default function EventDetailsPage() {
+  const mapSize = 400; // TODO responsive map size
+
   const theme = useMantineTheme();
   const {query: {id}, isReady, locale} = useRouter();
   const {data: session} = useSession();
@@ -73,7 +86,7 @@ export default function EventDetailsPage() {
         {eventQuery.data && (
           <Stack>
             <Group align="start" position="apart">
-              <Stack>
+              <Stack sx={{width: `calc(100% - ${mapSize + theme.spacing.md}px)`, minWidth: mapSize}}>
                 <Group align="end">
                   <Text weight="bold" size="xl">
                     {eventQuery.data.name}
@@ -93,7 +106,13 @@ export default function EventDetailsPage() {
                     {longDateFormatter.formatRange(eventQuery.data.start, eventQuery.data.end)}
                   </Text>
                 </Group>
-                <Text color="dimmed">{eventQuery.data.description}</Text>
+                {eventQuery.data.description && (
+                  <Card withBorder sx={{backgroundColor: getBackgroundColor(theme)}}>
+                    <TypographyStylesProvider>
+                      <div dangerouslySetInnerHTML={{__html: eventQuery.data.description}}/>
+                    </TypographyStylesProvider>
+                  </Card>
+                )}
                 {eventQuery.data.equipment && (
                   <Group spacing="xs">
                     <Text>
@@ -113,7 +132,10 @@ export default function EventDetailsPage() {
                   </Group>
                 )}
               </Stack>
-              <MapComponent location={eventQuery.data.location}/>
+              <MapComponent
+                size={{width: mapSize, height: mapSize}}
+                location={eventQuery.data.location}
+              />
             </Group>
             <Card withBorder>
               <Stack>
@@ -171,8 +193,6 @@ export default function EventDetailsPage() {
             size="xl"
             onClick={() => openModal({
               title: t("modal.event.edit"),
-              zIndex: 401,
-              closeOnClickOutside: false,
               children: <EventForm editedEventId={eventId}/>,
             })}
           >

@@ -87,7 +87,8 @@
         "title": "Komment Törlése",
         "message": "Biztosan törölni szeretnéd ezt a kommentet?"
       }
-    }
+    },
+    "edit": "{{propertyName}} Szerkesztése"
   },
   "common": {
     "name": "Név",
@@ -98,7 +99,7 @@
     "free": "Ingyenes"
   },
   "myEvents": {
-    "dateTime": "Dátum és Idő",
+    "dateTime": "Időpont",
     "equipment": "Felszerelés",
     "limit": "Limit",
     "recurring": "Ismétlődő",
