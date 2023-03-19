@@ -1,10 +1,12 @@
-import {useMemo} from "react";
+import {useMemo, useState} from "react";
 import {FilterBy, OrderBy} from "../components/event/FilterEventsComponent";
 import {BasicEventType} from "../models/Event";
 import {EventFilters} from "../pages/feed";
+import {defaultEventFilters} from "../utils/defaultObjects";
 
-const useFilteredEvents = (events: BasicEventType[] | undefined, filters: EventFilters) => {
-  return useMemo(() => {
+const useFilteredEvents = (events: BasicEventType[] | undefined) => {
+  const [filters, setFilters] = useState<EventFilters>(defaultEventFilters);
+  const filteredList = useMemo(() => {
     if (!events) {
       return [];
     }
@@ -45,6 +47,8 @@ const useFilteredEvents = (events: BasicEventType[] | undefined, filters: EventF
         return result;
       });
   }, [events, filters]);
+
+  return {filters, setFilters, filteredList};
 };
 
 export default useFilteredEvents;

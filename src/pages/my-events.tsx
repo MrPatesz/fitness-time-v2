@@ -4,7 +4,6 @@ import {showNotification} from "@mantine/notifications";
 import {useTranslation} from "next-i18next";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import {useRouter} from "next/router";
-import {useState} from "react";
 import {Pencil, Plus, Trash} from "tabler-icons-react";
 import i18nConfig from "../../next-i18next.config.mjs";
 import {EventForm} from "../components/event/EventForm";
@@ -13,9 +12,7 @@ import {QueryComponent} from "../components/QueryComponent";
 import useFilteredEvents from "../hooks/useFilteredEvents";
 import {BasicEventType} from "../models/Event";
 import {api} from "../utils/api";
-import {defaultEventFilters} from "../utils/defaultObjects";
 import {getLongDateFormatter, getPriceFormatter} from "../utils/formatters";
-import {EventFilters} from "./feed";
 
 export default function MyEventsPage() {
   const theme = useMantineTheme();
@@ -34,8 +31,7 @@ export default function MyEventsPage() {
       })),
   });
 
-  const [filters, setFilters] = useState<EventFilters>(defaultEventFilters);
-  const filteredList = useFilteredEvents(eventsQuery.data, filters);
+  const {filteredList, filters, setFilters} = useFilteredEvents(eventsQuery.data);
 
   const onDeleteClick = (event: BasicEventType) => openConfirmModal({
     title: t("modal.event.delete.title"),
