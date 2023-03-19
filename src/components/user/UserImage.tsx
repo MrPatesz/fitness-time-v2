@@ -1,44 +1,46 @@
-import {initials} from "@dicebear/collection";
-import {createAvatar} from "@dicebear/core";
-import {Box, useMantineTheme} from "@mantine/core";
-import Image from "next/image";
-import {FunctionComponent, useMemo} from "react";
+import {Avatar, Text} from "@mantine/core";
+import {FunctionComponent} from "react";
 import {BasicUserType} from "../../models/User";
+
+const getInitials = (username: string) => {
+  const names: string[] = username.split(" ");
+  let initials: string[] | string = "";
+
+  switch (names.length) {
+    case 0:
+      break;
+    case 1:
+      initials = (names.at(0) as string).slice(0, 2).toUpperCase();
+      break;
+    case 2:
+      initials = names.map(s => (s.at(0) as string).toUpperCase());
+      break;
+    default:
+      initials = [
+        ((names.at(0) as string).at(0) as string).toUpperCase(),
+        ((names.at(-1) as string).at(0) as string).toUpperCase()
+      ];
+      break;
+  }
+
+  return initials;
+};
 
 const UserImage: FunctionComponent<{
   user: BasicUserType;
   size?: number;
 }> = ({user, size = 100}) => {
-  const theme = useMantineTheme();
-  const radius = theme.fn.radius(theme.defaultRadius);
-  const themeColor = theme.fn.themeColor(user.themeColor);
-
-  const avatar = useMemo(() => {
-      return createAvatar(initials, {
-        seed: user.name,
-        backgroundColor: [themeColor.slice(1)],
-      }).toDataUriSync();
-    }, [user],
-  );
-
-  if (!user.name) {
-    return (
-      <Box sx={{
-        width: size,
-        height: size,
-        borderRadius: radius,
-        backgroundColor: themeColor,
-      }}/>
-    );
-  }
-
   return (
-    <Image
-      src={avatar}
-      alt="Avatar"
-      width={size} height={size}
-      style={{borderRadius: radius}}
-    />
+    <Avatar
+      variant="filled"
+      size={size}
+      src={user.image}
+      color={user.themeColor}
+    >
+      <Text weight="normal" size={size / 1.75}>
+        {getInitials(user.name)}
+      </Text>
+    </Avatar>
   );
 };
 

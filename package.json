@@ -15,8 +15,6 @@
   },
   "dependencies": {
     "@daypilot/daypilot-lite-react": "^3.12.1",
-    "@dicebear/collection": "^5.3.4",
-    "@dicebear/core": "^5.3.4",
     "@emotion/react": "^11.10.6",
     "@emotion/server": "^11.10.0",
     "@mantine/core": "^5.10.5",

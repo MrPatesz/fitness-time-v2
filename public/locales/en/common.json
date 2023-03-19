@@ -150,6 +150,11 @@
     "location": {
       "placeholder": "Where do you stay?",
       "description": "This is used to filter events by distance. Only you can see this information."
+    },
+    "image": {
+      "label": "Profile Image URL",
+      "placeholder": "You can set your profile image here.",
+      "error": "Invalid image URL!"
     }
   },
   "mapComponent": {
@@ -177,10 +182,10 @@
       "placeholder": "Where will it take place?"
     },
     "start": {
-      "error": "Invalid start"
+      "error": "Invalid start!"
     },
     "end": {
-      "error": "Invalid end"
+      "error": "Invalid end!"
     },
     "description": {
       "label": "Description",

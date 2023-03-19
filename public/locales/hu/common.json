@@ -150,6 +150,11 @@
     "location": {
       "placeholder": "Hol tartózkodsz?",
       "description": "Így szűrhetsz ki távoli eseményeket. Csak te láthatod ezt az információt."
+    },
+    "image": {
+      "label": "Profilkép URL",
+      "placeholder": "Itt állíthatod be a profilképedet.",
+      "error": "Hibás kép URL!"
     }
   },
   "mapComponent": {
@@ -177,10 +182,10 @@
       "placeholder": "Hol lesz megtartva?"
     },
     "start": {
-      "error": "Hibás kezdés"
+      "error": "Hibás kezdés!"
     },
     "end": {
-      "error": "Hibás vége"
+      "error": "Hibás vége!"
     },
     "description": {
       "label": "Leírás",

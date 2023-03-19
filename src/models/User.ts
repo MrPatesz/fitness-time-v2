@@ -8,6 +8,7 @@ export const BasicUserSchema = z.object({
   name: z.string().min(1),
   introduction: z.string(),
   themeColor: z.nativeEnum(ThemeColor),
+  image: z.string().nullable(),
 });
 
 export const DetailedUserSchema = BasicUserSchema.extend({
