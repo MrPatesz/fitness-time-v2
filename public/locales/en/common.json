@@ -204,5 +204,9 @@
     "messageError": "Message is required",
     "addComment": "Add comment...",
     "update": "Update"
+  },
+  "richTextDisplay": {
+    "showLabel": "Show more",
+    "hideLabel": "Show less"
   }
 }

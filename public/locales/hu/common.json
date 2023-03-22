@@ -204,5 +204,9 @@
     "messageError": "Üzenet kötelező!",
     "addComment": "Kommentelés...",
     "update": "Frissít"
+  },
+  "richTextDisplay": {
+    "showLabel": "Mutass többet",
+    "hideLabel": "Mutass kevesebbet"
   }
 }

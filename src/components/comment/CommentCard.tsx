@@ -1,4 +1,4 @@
-import {ActionIcon, Card, Group, Stack, Text, Tooltip, TypographyStylesProvider, useMantineTheme} from "@mantine/core";
+import {ActionIcon, Card, Group, Stack, Text, Tooltip, useMantineTheme} from "@mantine/core";
 import {openConfirmModal, openModal} from "@mantine/modals";
 import {showNotification} from "@mantine/notifications";
 import {useSession} from "next-auth/react";
@@ -11,6 +11,7 @@ import {BasicCommentType} from "../../models/Comment";
 import {api} from "../../utils/api";
 import dayjs from "../../utils/dayjs";
 import {getLongDateFormatter} from "../../utils/formatters";
+import {RichTextDisplay} from "../rich-text/RichTextDisplay";
 import UserImage from "../user/UserImage";
 import {CommentForm} from "./CommentForm";
 
@@ -80,9 +81,9 @@ export const CommentCard: FunctionComponent<{
                       <Text>
                         {t("modal.comment.delete.message")}
                       </Text>
-                      <TypographyStylesProvider>
-                        <div dangerouslySetInnerHTML={{__html: comment.message}} style={{overflowWrap: "break-word"}}/>
-                      </TypographyStylesProvider>
+                      <Card withBorder>
+                        <RichTextDisplay richText={comment.message} maxHeight={100}/>
+                      </Card>
                     </Stack>
                   ),
                   labels: {confirm: t("button.confirm"), cancel: t("button.cancel")},
@@ -94,9 +95,7 @@ export const CommentCard: FunctionComponent<{
             </Group>
           )}
         </Group>
-        <TypographyStylesProvider /*TODO long message: hide (show more...): custom component*/>
-          <div dangerouslySetInnerHTML={{__html: comment.message}} style={{overflowWrap: "break-word"}}/>
-        </TypographyStylesProvider>
+        <RichTextDisplay richText={comment.message} maxHeight={100}/>
       </Stack>
     </Card>
   );

@@ -7,7 +7,7 @@ import {FunctionComponent} from "react";
 import {BasicCommentType, CreateCommentType} from "../../models/Comment";
 import {api} from "../../utils/api";
 import {defaultCreateComment} from "../../utils/defaultObjects";
-import RichTextEditor from "../RichTextEditor";
+import RichTextEditor from "../rich-text/RichTextEditor";
 
 export const CommentForm: FunctionComponent<{
   editedComment?: BasicCommentType | CreateCommentType;

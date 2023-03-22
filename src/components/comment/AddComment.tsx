@@ -7,7 +7,7 @@ import {Send} from "tabler-icons-react";
 import {CreateCommentType} from "../../models/Comment";
 import {api} from "../../utils/api";
 import {defaultCreateComment} from "../../utils/defaultObjects";
-import {RichTextField} from "../RichTextField";
+import {RichTextField} from "../rich-text/RichTextField";
 
 export const AddComment: FunctionComponent<{
   eventId: number;

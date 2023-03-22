@@ -7,7 +7,7 @@ import {ProfileType, UpdateProfileType} from "../../models/User";
 import {api} from "../../utils/api";
 import {isValidUrl, refreshSession} from "../../utils/utilFunctions";
 import {LocationPicker} from "../location/LocationPicker";
-import {RichTextField} from "../RichTextField";
+import {RichTextField} from "../rich-text/RichTextField";
 import {ThemeColorPicker} from "./ThemeColorPicker";
 import UserImage from "./UserImage";
 

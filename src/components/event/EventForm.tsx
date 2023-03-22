@@ -8,7 +8,7 @@ import {CreateEventType} from "../../models/Event";
 import {api} from "../../utils/api";
 import {getDefaultCreateEvent} from "../../utils/defaultObjects";
 import {LocationPicker} from "../location/LocationPicker";
-import {RichTextField} from "../RichTextField";
+import {RichTextField} from "../rich-text/RichTextField";
 import {IntervalPicker} from "./IntervalPicker";
 
 export const EventForm: FunctionComponent<{

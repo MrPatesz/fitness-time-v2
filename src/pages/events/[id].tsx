@@ -1,15 +1,4 @@
-import {
-  ActionIcon,
-  Affix,
-  Badge,
-  Button,
-  Card,
-  Group,
-  Stack,
-  Text,
-  TypographyStylesProvider,
-  useMantineTheme,
-} from "@mantine/core";
+import {ActionIcon, Affix, Badge, Button, Card, Group, Stack, Text, useMantineTheme} from "@mantine/core";
 import {openModal} from "@mantine/modals";
 import {showNotification} from "@mantine/notifications";
 import {useSession} from "next-auth/react";
@@ -24,14 +13,13 @@ import {CommentCard} from "../../components/comment/CommentCard";
 import {EventForm} from "../../components/event/EventForm";
 import MapComponent from "../../components/location/MapComponent";
 import {QueryComponent} from "../../components/QueryComponent";
+import {RichTextDisplay} from "../../components/rich-text/RichTextDisplay";
 import {DetailedEventType} from "../../models/Event";
 import {api} from "../../utils/api";
 import {getLongDateFormatter, getPriceFormatter} from "../../utils/formatters";
 import {getBackgroundColor} from "../../utils/utilFunctions";
 
 export default function EventDetailsPage() {
-  const mapSize = 400; // TODO responsive map size
-
   const theme = useMantineTheme();
   const {query: {id}, isReady, locale} = useRouter();
   const {data: session} = useSession();
@@ -46,6 +34,12 @@ export default function EventDetailsPage() {
   const commentsQuery = api.comment.getAllByEventId.useQuery(eventId, {
     enabled: isReady,
   });
+
+  const defaultSpacing = "md";
+  const defaultSpacingSize: number = theme.spacing[defaultSpacing];
+  const mapSize = 400; // TODO responsive map size
+  const descriptionMaxHeight = mapSize - (31 + 24.8 + (2 + 2) * defaultSpacingSize + 2 * 0.8 + 24.8);
+  // eventName + eventDate + Stack spacing + card padding + card borders + show/hide label
 
   const participate = api.event.participate.useMutation({
     onSuccess: () => eventQuery.refetch().then(() =>
@@ -85,8 +79,11 @@ export default function EventDetailsPage() {
       <QueryComponent resourceName={t("resource.eventDetails")} query={eventQuery}>
         {eventQuery.data && (
           <Stack>
-            <Group align="start" position="apart">
-              <Stack sx={{width: `calc(100% - ${mapSize + theme.spacing.md}px)`, minWidth: mapSize}}>
+            <Group spacing={defaultSpacing} align="start" position="apart">
+              <Stack
+                spacing={defaultSpacing}
+                sx={{width: `calc(100% - ${mapSize + defaultSpacingSize}px)`, minWidth: mapSize}}
+              >
                 <Group align="end">
                   <Text weight="bold" size="xl">
                     {eventQuery.data.name}
@@ -101,25 +98,23 @@ export default function EventDetailsPage() {
                     </Text>
                   </Link>
                 </Group>
-                <Group spacing="xs">
+                <Group position="apart">
                   <Text>
                     {longDateFormatter.formatRange(eventQuery.data.start, eventQuery.data.end)}
                   </Text>
+                  {eventQuery.data.price && (
+                    <Group spacing="xs">
+                      <Text>
+                        {t("common.price")}:
+                      </Text>
+                      <Text weight="bold">{priceFormatter.format(eventQuery.data.price)}</Text>
+                    </Group>
+                  )}
                 </Group>
                 {eventQuery.data.description && (
-                  <Card withBorder sx={{backgroundColor: getBackgroundColor(theme)}}>
-                    <TypographyStylesProvider>
-                      <div dangerouslySetInnerHTML={{__html: eventQuery.data.description}}/>
-                    </TypographyStylesProvider>
+                  <Card p={defaultSpacing} withBorder sx={{backgroundColor: getBackgroundColor(theme)}}>
+                    <RichTextDisplay richText={eventQuery.data.description} maxHeight={descriptionMaxHeight}/>
                   </Card>
-                )}
-                {eventQuery.data.price && (
-                  <Group spacing="xs">
-                    <Text>
-                      {t("common.price")}:
-                    </Text>
-                    <Text weight="bold">{priceFormatter.format(eventQuery.data.price)}</Text>
-                  </Group>
                 )}
               </Stack>
               <MapComponent
