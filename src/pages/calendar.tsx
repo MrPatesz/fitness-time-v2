@@ -1,4 +1,5 @@
 import {Affix, Center, Loader, Stack, useMantineTheme} from "@mantine/core";
+import {DatePicker} from "@mantine/dates";
 import {useMediaQuery} from "@mantine/hooks";
 import {openModal} from "@mantine/modals";
 import {showNotification} from "@mantine/notifications";
@@ -14,11 +15,8 @@ import {QueryComponent} from "../components/QueryComponent";
 import {BasicEventType} from "../models/Event";
 import {api} from "../utils/api";
 import dayjs from "../utils/dayjs";
+import {getFirstDayOfWeek} from "../utils/utilFunctions";
 
-const DayPilotNavigator: any = dynamic(
-  () => import("@daypilot/daypilot-lite-react").then((mod) => mod.DayPilotNavigator),
-  {ssr: false}
-);
 const DayPilotCalendar: any = dynamic(
   () => import("@daypilot/daypilot-lite-react").then((mod) => mod.DayPilotCalendar),
   {
@@ -31,7 +29,7 @@ const DayPilotCalendar: any = dynamic(
 );
 
 export default function CalendarPage() {
-  const [startDate, setStartDate] = useState(new Date());
+  const [startDate, setStartDate] = useState<Date>(new Date());
   const theme = useMantineTheme();
   const {push: pushRoute, locale} = useRouter();
   const {data: session} = useSession();
@@ -72,18 +70,9 @@ export default function CalendarPage() {
     }
   };
 
-  const navigator = (
-    <DayPilotNavigator
-      theme={theme.colorScheme === "dark" ? "dark_navigator" : undefined}
-      selectMode="week"
-      onTimeRangeSelected={(args: { day: Date }) => setStartDate(args.day)}
-    />
-  );
-
   return (
     <>
       <Stack>
-        {!xs && navigator}
         <QueryComponent resourceName={t("resource.calendar")} query={eventsQuery}>
           <DayPilotCalendar
             theme={theme.colorScheme === "dark" ? "dark" : undefined}
@@ -93,6 +82,7 @@ export default function CalendarPage() {
             heightSpec="Full"
             eventMoveHandling="JavaScript"
             eventResizeHandling="JavaScript"
+            locale={locale}
             onTimeRangeSelected={(event: {
               start: { value: string };
               end: { value: string };
@@ -136,11 +126,14 @@ export default function CalendarPage() {
           />
         </QueryComponent>
       </Stack>
-      {xs && (
-        <Affix position={{bottom: 0, left: -1}} zIndex={401}>
-          {navigator}
-        </Affix>
-      )}
+      <Affix position={{top: 10, left: 211}} zIndex={401}>
+        <DatePicker
+          value={startDate}
+          onChange={(value) => value && setStartDate(value)}
+          clearable={false}
+          firstDayOfWeek={getFirstDayOfWeek(locale as string)}
+        />
+      </Affix>
     </>
   );
 }

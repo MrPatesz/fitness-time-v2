@@ -18,3 +18,11 @@ export const isValidUrl = (url: string) => {
     return false;
   }
 };
+
+export const getFirstDayOfWeek = (locale: string) => {
+  if (locale === "hu") {
+    return "monday";
+  } else {
+    return "sunday";
+  }
+};

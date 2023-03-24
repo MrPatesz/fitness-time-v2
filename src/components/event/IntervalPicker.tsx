@@ -1,8 +1,10 @@
 import {Group} from "@mantine/core";
 import {DatePicker, TimeInput} from "@mantine/dates";
 import {useTranslation} from "next-i18next";
+import {useRouter} from "next/router";
 import {FunctionComponent} from "react";
 import dayjs from "../../utils/dayjs";
+import {getFirstDayOfWeek} from "../../utils/utilFunctions";
 
 const calculateDateTime = (date: Date, time: Date): Date => {
   const hour = dayjs(time).hour();
@@ -24,6 +26,7 @@ export const IntervalPicker: FunctionComponent<{
   endError: string | undefined;
 }> = ({start, end, onChange, startError, endError}) => {
   const {t} = useTranslation("common");
+  const {locale} = useRouter();
 
   return (
     <Group spacing="xs">
@@ -42,7 +45,7 @@ export const IntervalPicker: FunctionComponent<{
         }}
         clearable={false}
         minDate={new Date()}
-        firstDayOfWeek="sunday"
+        firstDayOfWeek={getFirstDayOfWeek(locale as string)}
         error={(startError || endError) ? " " : undefined}
       />
       <TimeInput

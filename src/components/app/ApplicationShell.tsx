@@ -106,7 +106,7 @@ export const ApplicationShell: FunctionComponent<{
               </Link>
             ))}
           </Navbar.Section>
-          <Navbar.Section sx={(xs && isRouteActive(calendarRoute)) ? {marginBottom: 241} : undefined}>
+          <Navbar.Section>
             <Link
               href={profileRoute}
               locale={locale}

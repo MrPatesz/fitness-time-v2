@@ -8,7 +8,6 @@ import {ApplicationShell} from "../components/app/ApplicationShell";
 import {ThemeProvider} from "../components/app/ThemeProvider";
 import "../styles/calendar.css";
 import "../styles/globals.css";
-import "../styles/navigator.css";
 import {api} from "../utils/api";
 
 const App: AppType<{ session: Session | null }> = ({
