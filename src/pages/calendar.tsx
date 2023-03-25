@@ -126,7 +126,7 @@ export default function CalendarPage() {
           />
         </QueryComponent>
       </Stack>
-      <Affix position={{top: 10, left: 211}} zIndex={401}>
+      <Affix position={{top: 10, left: 211 + theme.spacing.md}} zIndex={401}>
         <DatePicker
           value={startDate}
           onChange={(value) => value && setStartDate(value)}
