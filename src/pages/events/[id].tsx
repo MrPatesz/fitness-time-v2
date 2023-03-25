@@ -82,7 +82,7 @@ export default function EventDetailsPage() {
             <Group spacing={defaultSpacing} align="start" position="apart">
               <Stack
                 spacing={defaultSpacing}
-                sx={{width: `calc(100% - ${mapSize + defaultSpacingSize}px)`, minWidth: mapSize}}
+                sx={{flexGrow: 1, minWidth: mapSize}}
               >
                 <Group align="end">
                   <Text weight="bold" size="xl">

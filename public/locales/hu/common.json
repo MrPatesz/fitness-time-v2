@@ -101,7 +101,10 @@
   "myEvents": {
     "dateTime": "Időpont",
     "limit": "Limit",
-    "actions": "Kezelés"
+    "actions": "Kezelés",
+    "noRecords": "Nem található esemény",
+    "recordsPerPage": "Oldalankénti eseményszám",
+    "archive": "Archívum"
   },
   "filterEvents": {
     "search": "Keresés név alapján",

@@ -26,7 +26,7 @@ export default function UserDetailsPage() {
       {userDetailsQuery.data && (
         <Stack>
           <Group position="apart" align="start">
-            <Stack sx={theme => ({width: `calc(100% - ${userImageSize + theme.spacing.md}px)`})}>
+            <Stack sx={{flexGrow: 1}}>
               <Text weight="bold" size="xl">
                 {userDetailsQuery.data.name}
               </Text>

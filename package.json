@@ -34,6 +34,7 @@
     "@trpc/react-query": "^10.13.2",
     "@trpc/server": "^10.13.2",
     "dayjs": "^1.11.7",
+    "mantine-datatable": "^1.8.8",
     "next": "13.2.3",
     "next-auth": "^4.19.2",
     "next-i18next": "^13.2.2",

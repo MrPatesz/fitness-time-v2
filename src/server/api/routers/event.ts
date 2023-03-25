@@ -1,9 +1,10 @@
+import {TRPCError} from "@trpc/server";
 import {z} from "zod";
 import {BasicEventSchema, CreateEventSchema, DetailedEventSchema} from "../../../models/Event";
 import {IdSchema} from "../../../models/Id";
+import {PaginateEventsSchema} from "../../../models/PaginateEvents";
 import {createTRPCRouter, protectedProcedure} from "../trpc";
 import {Prisma} from ".prisma/client";
-import {TRPCError} from "@trpc/server";
 
 export const eventRouter = createTRPCRouter({
   getAll: protectedProcedure
@@ -17,18 +18,50 @@ export const eventRouter = createTRPCRouter({
       return BasicEventSchema.array().parse(events);
     }),
   getAllCreated: protectedProcedure
-    .output(BasicEventSchema.array())
-    .query(async ({ctx: {session: {user: {id: callerId}}, prisma}}) => {
-      const caller = await prisma.user.findUnique({
-        where: {id: callerId},
-        include: {createdEvents: {include: {location: true, creator: true}}},
-      });
+    .input(PaginateEventsSchema)
+    .output(z.object({events: BasicEventSchema.array(), size: z.number()}))
+    .query(async ({
+                    input: {page, pageSize, sortBy, archive, searchQuery},
+                    ctx: {session: {user: {id: callerId}}, prisma}
+                  }) => {
+      const orderBy: {
+        name?: Prisma.SortOrder;
+        start?: Prisma.SortOrder;
+        price?: Prisma.SortOrder;
+        limit?: Prisma.SortOrder;
+      } = {};
+      orderBy[sortBy.property] = Prisma.SortOrder[sortBy.direction];
 
-      if (!caller) {
-        throw new TRPCError({code: "UNAUTHORIZED", message: "User doesn't exist!"});
-      }
+      const where = {
+        creatorId: callerId,
+        start: archive ? {
+          lt: new Date(),
+        } : {
+          gt: new Date(),
+        },
+        name: {
+          mode: "insensitive",
+          contains: searchQuery,
+        } as Prisma.StringFilter,
+      };
 
-      return BasicEventSchema.array().parse(caller.createdEvents);
+      const [createdEvents, numberOfEvents] = await prisma.$transaction([
+        prisma.event.findMany({
+          where,
+          include: {location: true, creator: true},
+          skip: (page - 1) * pageSize,
+          take: pageSize,
+          orderBy,
+        }),
+        prisma.event.count({
+          where,
+        }),
+      ]);
+
+      return {
+        events: BasicEventSchema.array().parse(createdEvents),
+        size: numberOfEvents,
+      };
     }),
   getFeed: protectedProcedure
     .output(BasicEventSchema.array())

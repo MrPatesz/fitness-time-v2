@@ -101,7 +101,10 @@
   "myEvents": {
     "dateTime": "Date and Time",
     "limit": "Limit",
-    "actions": "Actions"
+    "actions": "Actions",
+    "noRecords": "No events found",
+    "recordsPerPage": "Events per page",
+    "archive": "Archive"
   },
   "filterEvents": {
     "search": "Search by Name",
