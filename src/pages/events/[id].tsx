@@ -1,4 +1,4 @@
-import {ActionIcon, Affix, Badge, Button, Card, Group, Stack, Text, useMantineTheme} from "@mantine/core";
+import {ActionIcon, Badge, Button, Card, Group, Stack, Text, useMantineTheme} from "@mantine/core";
 import {openModal} from "@mantine/modals";
 import {showNotification} from "@mantine/notifications";
 import {useSession} from "next-auth/react";
@@ -38,7 +38,7 @@ export default function EventDetailsPage() {
   const defaultSpacing = "md";
   const defaultSpacingSize: number = theme.spacing[defaultSpacing];
   const mapSize = 400; // TODO responsive map size
-  const descriptionMaxHeight = mapSize - (31 + 24.8 + (2 + 2) * defaultSpacingSize + 2 * 0.8 + 24.8);
+  const descriptionMaxHeight = mapSize - (34 + 24.8 + (2 + 2) * defaultSpacingSize + 2 * 0.8 + 24.8);
   // eventName + eventDate + Stack spacing + card padding + card borders + show/hide label
 
   const participate = api.event.participate.useMutation({
@@ -84,19 +84,34 @@ export default function EventDetailsPage() {
                 spacing={defaultSpacing}
                 sx={{flexGrow: 1, minWidth: mapSize}}
               >
-                <Group align="end">
-                  <Text weight="bold" size="xl">
-                    {eventQuery.data.name}
-                  </Text>
-                  <Link
-                    href={`/users/${eventQuery.data.creator.id}`}
-                    locale={locale}
-                    passHref
-                  >
-                    <Text color="dimmed">
-                      {eventQuery.data.creator.name}
+                <Group position="apart">
+                  <Group align="end">
+                    <Text weight="bold" size="xl">
+                      {eventQuery.data.name}
                     </Text>
-                  </Link>
+                    <Link
+                      href={`/users/${eventQuery.data.creator.id}`}
+                      locale={locale}
+                      passHref
+                    >
+                      <Text color="dimmed">
+                        {eventQuery.data.creator.name}
+                      </Text>
+                    </Link>
+                  </Group>
+                  {eventQuery.data?.creatorId === session?.user.id && (
+                    <ActionIcon
+                      size="lg"
+                      variant="filled"
+                      color={theme.fn.themeColor(theme.primaryColor)}
+                      onClick={() => openModal({
+                        title: t("modal.event.edit"),
+                        children: <EventForm editedEventId={eventId}/>,
+                      })}
+                    >
+                      <Pencil/>
+                    </ActionIcon>
+                  )}
                 </Group>
                 <Group position="apart">
                   <Text>
@@ -171,20 +186,6 @@ export default function EventDetailsPage() {
           </Stack>
         </Card>
       </QueryComponent>
-      {eventQuery.data?.creatorId === session?.user.id && (
-        <Affix position={{bottom: theme.spacing.md, right: theme.spacing.md}}>
-          <ActionIcon
-            variant="default"
-            size="xl"
-            onClick={() => openModal({
-              title: t("modal.event.edit"),
-              children: <EventForm editedEventId={eventId}/>,
-            })}
-          >
-            <Pencil/>
-          </ActionIcon>
-        </Affix>
-      )}
     </Stack>
   );
 }

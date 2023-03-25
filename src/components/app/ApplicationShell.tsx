@@ -39,7 +39,13 @@ export const ApplicationShell: FunctionComponent<{
   const myEventsRoute = `${localePrefix}/my-events`;
   const usersRoute = `${localePrefix}/users`;
 
-  const isRouteActive = (givenRoute: string) => givenRoute.includes(route) && route !== "/";
+  const isRouteActive = (givenRoute: string) => {
+    if (route === "/") {
+      return false;
+    }
+    const actualRoute = givenRoute.split("/").at(2) as string;
+    return route.includes(actualRoute);
+  };
 
   return (
     <AppShell
