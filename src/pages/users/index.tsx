@@ -7,6 +7,7 @@ import {useMemo, useState} from "react";
 import {ArrowDown, ArrowUp, Search} from "tabler-icons-react";
 import i18nConfig from "../../../next-i18next.config.mjs";
 import {QueryComponent} from "../../components/QueryComponent";
+import UserImage from "../../components/user/UserImage";
 import {api} from "../../utils/api";
 
 export default function UsersPage() {
@@ -66,7 +67,10 @@ export default function UsersPage() {
               key={user.id}
             >
               <Card withBorder>
-                <Text sx={{cursor: "pointer"}}>{user.name}</Text>
+                <Group>
+                  <UserImage user={user} size={50}/>
+                  <Text sx={{cursor: "pointer"}}>{user.name}</Text>
+                </Group>
               </Card>
             </Link>
           ))}
