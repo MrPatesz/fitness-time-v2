@@ -140,6 +140,11 @@
     "archive": "Archive",
     "creator": "Creator"
   },
+  "groupTable": {
+    "noRecords": "No groups found",
+    "recordsPerPage": "Groups per page",
+    "createdAt": "Creation Date"
+  },
   "filterEvents": {
     "search": "Search by Name",
     "limited": "Limited",

@@ -1,19 +1,50 @@
 import {z} from "zod";
 import {BasicGroupSchema, CreateGroupSchema, DetailedGroupSchema} from "../../../models/group/Group";
+import {PaginateGroupsSchema} from "../../../models/group/PaginateGroups";
 import {IdSchema} from "../../../models/Id";
 import {createTRPCRouter, protectedProcedure} from "../trpc";
 import {Prisma} from ".prisma/client";
 
 export const groupRouter = createTRPCRouter({
-  getAll: protectedProcedure
-    .output(BasicGroupSchema.array())
-    .query(async ({ctx}) => {
-      const groups = await ctx.prisma.group.findMany({
-        orderBy: {name: Prisma.SortOrder.asc},
-        include: {creator: true},
-      });
+  getPaginatedGroups: protectedProcedure
+    .input(PaginateGroupsSchema)
+    .output(z.object({groups: BasicGroupSchema.array(), size: z.number()}))
+    .query(async ({
+                    input: {page, pageSize, sortBy, createdOnly, searchQuery},
+                    ctx: {session: {user: {id: callerId}}, prisma}
+                  }) => {
+      const orderBy: {
+        name?: Prisma.SortOrder;
+        createdAt?: Prisma.SortOrder;
+        // memberCount?: Prisma.SortOrder;
+      } = {};
+      orderBy[sortBy.property] = Prisma.SortOrder[sortBy.direction];
 
-      return BasicGroupSchema.array().parse(groups);
+      const where = {
+        creatorId: createdOnly ? callerId : undefined,
+        name: {
+          mode: "insensitive",
+          contains: searchQuery,
+        } as Prisma.StringFilter,
+      };
+
+      const [groups, numberOfGroups] = await prisma.$transaction([
+        prisma.group.findMany({
+          where,
+          include: {creator: true},
+          skip: (page - 1) * pageSize,
+          take: pageSize,
+          orderBy,
+        }),
+        prisma.group.count({
+          where,
+        }),
+      ]);
+
+      return {
+        groups: BasicGroupSchema.array().parse(groups),
+        size: numberOfGroups,
+      };
     }),
   getById: protectedProcedure
     .input(IdSchema)

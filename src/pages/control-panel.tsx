@@ -5,6 +5,7 @@ import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import {Share, Ticket} from "tabler-icons-react";
 import i18nConfig from "../../next-i18next.config.mjs";
 import EventTable, {EventTableDisplayPlace} from "../components/event/EventTable";
+import GroupTable, {GroupTableDisplayPlace} from "../components/group/GroupTable";
 
 export default function ControlPanelPage() {
   const {t} = useTranslation("common");
@@ -23,7 +24,7 @@ export default function ControlPanelPage() {
       </Tabs.Panel>
 
       <Tabs.Panel value="groups" pt="md">
-        Groups Table
+        <GroupTable groupTableDisplayPlace={GroupTableDisplayPlace.CONTROL_PANEL}/>
       </Tabs.Panel>
 
       {/*<Tabs.Panel value="posts" pt="md">

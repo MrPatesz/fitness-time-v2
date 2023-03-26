@@ -1,14 +1,4 @@
-import {
-  ActionIcon,
-  Box,
-  Checkbox,
-  Group,
-  MantineNumberSize,
-  Stack,
-  Text,
-  TextInput,
-  useMantineTheme
-} from "@mantine/core";
+import {ActionIcon, Box, Group, MantineNumberSize, Stack, Text, TextInput, useMantineTheme} from "@mantine/core";
 import {useDebouncedValue} from "@mantine/hooks";
 import {openConfirmModal, openModal} from "@mantine/modals";
 import {showNotification} from "@mantine/notifications";
@@ -18,28 +8,26 @@ import {useTranslation} from "next-i18next";
 import {useRouter} from "next/router";
 import {FunctionComponent, useEffect, useState} from "react";
 import {Pencil, Plus, Trash} from "tabler-icons-react";
-import {BasicEventType} from "../../models/event/Event";
-import {SortDirection, SortEventByProperty} from "../../models/event/PaginateEvents";
+import {SortDirection} from "../../models/event/PaginateEvents";
+import {BasicGroupType} from "../../models/group/Group";
+import {SortGroupByProperty} from "../../models/group/PaginateGroups";
 import {api} from "../../utils/api";
-import {getLongDateFormatter, getPriceFormatter} from "../../utils/formatters";
+import {getLongDateFormatter} from "../../utils/formatters";
+import {PAGE_SIZES} from "../event/EventTable";
 import {QueryComponent} from "../QueryComponent";
-import {EventForm} from "./EventForm";
+import {GroupForm} from "./GroupForm";
 
-export enum EventTableDisplayPlace {
+export enum GroupTableDisplayPlace {
   CONTROL_PANEL = "CONTROL_PANEL",
-  EVENTS_PAGE = "EVENTS_PAGE",
+  GROUPS_PAGE = "GROUPS_PAGE",
 }
 
-const DATE_TIME: string = "dateTime";
-export const PAGE_SIZES: number[] = [10, 25, 50];
-
-const EventTable: FunctionComponent<{
-  eventTableDisplayPlace: EventTableDisplayPlace;
-}> = ({eventTableDisplayPlace}) => {
-  const [archive, setArchive] = useState<boolean>(false);
+const GroupTable: FunctionComponent<{
+  groupTableDisplayPlace: GroupTableDisplayPlace;
+}> = ({groupTableDisplayPlace}) => {
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(PAGE_SIZES.at(0) as number);
-  const [sortBy, setSortBy] = useState<DataTableSortStatus>({columnAccessor: DATE_TIME, direction: "desc"});
+  const [sortBy, setSortBy] = useState<DataTableSortStatus>({columnAccessor: "createdAt", direction: "desc"});
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [debouncedSearchQuery] = useDebouncedValue(searchQuery, 500);
 
@@ -47,48 +35,46 @@ const EventTable: FunctionComponent<{
   const {push: pushRoute, locale} = useRouter();
   const {t} = useTranslation("common");
   const longDateFormatter = getLongDateFormatter(locale as string);
-  const priceFormatter = getPriceFormatter(locale as string);
 
-  const eventsQuery = api.event.getPaginatedEvents.useQuery({
-    archive: archive,
+  const groupsQuery = api.group.getPaginatedGroups.useQuery({
     page: page,
     pageSize: pageSize,
     sortBy: {
-      property: (sortBy.columnAccessor === DATE_TIME ? "start" : sortBy.columnAccessor) as SortEventByProperty,
+      property: sortBy.columnAccessor as SortGroupByProperty,
       direction: sortBy.direction as SortDirection,
     },
     searchQuery: debouncedSearchQuery,
-    createdOnly: eventTableDisplayPlace === EventTableDisplayPlace.CONTROL_PANEL,
+    createdOnly: groupTableDisplayPlace === GroupTableDisplayPlace.CONTROL_PANEL,
   });
-  const deleteEvent = api.event.delete.useMutation({
-    onSuccess: () => eventsQuery.refetch().then(() =>
+  const deleteGroup = api.group.delete.useMutation({
+    onSuccess: () => groupsQuery.refetch().then(() =>
       showNotification({
         color: "green",
-        title: t("notification.event.delete.title"),
-        message: t("notification.event.delete.message"),
+        title: t("notification.group.delete.title"),
+        message: t("notification.group.delete.message"),
       })),
   });
 
   useEffect(() => {
-    if (eventsQuery.data?.events.length === 0 && page !== 1) {
+    if (groupsQuery.data?.groups.length === 0 && page !== 1) {
       setPage(page - 1);
     }
-  }, [eventsQuery.data, page]);
+  }, [groupsQuery.data, page]);
 
-  const onDeleteClick = (event: BasicEventType) => openConfirmModal({
-    title: t("modal.event.delete.title"),
+  const onDeleteClick = (group: BasicGroupType) => openConfirmModal({
+    title: t("modal.group.delete.title"),
     children: (
       <Stack>
         <Text>
-          {t("modal.event.delete.message")}
+          {t("modal.group.delete.message")}
         </Text>
         <Text weight="bold">
-          "{event.name}"
+          "{group.name}"
         </Text>
       </Stack>
     ),
     labels: {confirm: t("button.confirm"), cancel: t("button.cancel")},
-    onConfirm: () => deleteEvent.mutate(event.id),
+    onConfirm: () => deleteGroup.mutate(group.id),
   });
 
   return (
@@ -101,24 +87,19 @@ const EventTable: FunctionComponent<{
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.currentTarget.value)}
         />
-        <Checkbox
-          label={t("myEvents.archive")}
-          checked={archive}
-          onChange={(e) => setArchive(e.currentTarget.checked)}
-        />
         <ActionIcon
           size="lg"
           variant="filled"
           color={theme.fn.themeColor(theme.primaryColor)}
           onClick={() => openModal({
-            title: t("modal.event.create"),
-            children: <EventForm/>,
+            title: t("modal.group.create"),
+            children: <GroupForm/>,
           })}
         >
           <Plus/>
         </ActionIcon>
       </Group>
-      <QueryComponent resourceName={t("resource.events")} query={eventsQuery}>
+      <QueryComponent resourceName={t("resource.groups")} query={groupsQuery}>
         <Box sx={{maxHeight: "calc(100vh - (72px + 36px + 16px + 16px))" /*TODO*/}}>
           <DataTable
             highlightOnHover
@@ -126,22 +107,22 @@ const EventTable: FunctionComponent<{
             withColumnBorders
             textSelectionDisabled
             borderRadius={theme.defaultRadius as MantineNumberSize}
-            minHeight={!eventsQuery.data?.events.length ? 175 : undefined}
-            noRecordsText={t("myEvents.noRecords") as string}
+            minHeight={!groupsQuery.data?.groups.length ? 175 : undefined}
+            noRecordsText={t("groupTable.noRecords") as string}
             sortStatus={sortBy}
             onSortStatusChange={setSortBy}
             page={page}
             onPageChange={setPage}
             recordsPerPageOptions={PAGE_SIZES}
-            recordsPerPageLabel={t("myEvents.recordsPerPage") as string}
+            recordsPerPageLabel={t("groupTable.recordsPerPage") as string}
             recordsPerPage={pageSize}
             onRecordsPerPageChange={(newPageSize) => {
               setPageSize(newPageSize);
               setPage(1);
             }}
-            records={eventsQuery.data?.events}
-            totalRecords={eventsQuery.data?.size}
-            onRowClick={(event) => pushRoute(`events/${event.id}`, undefined, {locale})}
+            records={groupsQuery.data?.groups}
+            totalRecords={groupsQuery.data?.size}
+            onRowClick={(group) => pushRoute(`groups/${group.id}`, undefined, {locale})}
             columns={[
               {
                 accessor: "name",
@@ -149,39 +130,23 @@ const EventTable: FunctionComponent<{
                 sortable: true,
               },
               {
-                accessor: DATE_TIME,
-                title: t("myEvents.dateTime"),
+                accessor: "createdAt",
+                title: t("groupTable.createdAt"),
                 sortable: true,
-                render: ({start, end}) => longDateFormatter.formatRange(start, end),
-              },
-              {
-                accessor: "location",
-                title: t("common.location"),
-                render: ({location}) => location.address,
-              },
-              {
-                accessor: "price",
-                title: t("common.price"),
-                sortable: true,
-                render: ({price}) => price && priceFormatter.format(price),
-              },
-              {
-                accessor: "limit",
-                title: t("myEvents.limit"),
-                sortable: true,
+                render: ({createdAt}) => longDateFormatter.format(createdAt),
               },
               {
                 accessor: "creatorName",
                 title: t("myEvents.creator"),
-                hidden: eventTableDisplayPlace === EventTableDisplayPlace.CONTROL_PANEL,
+                hidden: groupTableDisplayPlace === GroupTableDisplayPlace.CONTROL_PANEL,
                 render: ({creator}) => creator.name,
               },
               {
                 accessor: "actions",
                 title: t("myEvents.actions"),
-                hidden: eventTableDisplayPlace === EventTableDisplayPlace.EVENTS_PAGE || archive,
+                hidden: groupTableDisplayPlace === GroupTableDisplayPlace.GROUPS_PAGE,
                 width: 85,
-                render: (event) => (
+                render: (group) => (
                   <Group spacing="xs" noWrap>
                     <ActionIcon
                       variant="transparent"
@@ -189,8 +154,8 @@ const EventTable: FunctionComponent<{
                       onClick={(e) => {
                         e.stopPropagation();
                         openModal({
-                          title: t("modal.event.edit"),
-                          children: <EventForm editedEventId={event.id}/>,
+                          title: t("modal.group.edit"),
+                          children: <GroupForm editedGroupId={group.id}/>,
                         });
                       }}
                       sx={theme => ({
@@ -206,7 +171,7 @@ const EventTable: FunctionComponent<{
                       size="md"
                       onClick={(e: any) => {
                         e.stopPropagation();
-                        onDeleteClick(event);
+                        onDeleteClick(group);
                       }}
                       sx={theme => ({
                         "&:hover": {
@@ -227,4 +192,4 @@ const EventTable: FunctionComponent<{
   );
 };
 
-export default EventTable;
+export default GroupTable;

@@ -38,12 +38,12 @@ export const getInitials = (username: string) => {
       initials = (names.at(0) as string).slice(0, 2).toUpperCase();
       break;
     case 2:
-      initials = names.map(s => (s.at(0) as string).toUpperCase());
+      initials = names.map(s => s.charAt(0).toUpperCase());
       break;
     default:
       initials = [
-        ((names.at(0) as string).at(0) as string).toUpperCase(),
-        ((names.at(-1) as string).at(0) as string).toUpperCase()
+        (names.at(0) as string).charAt(0).toUpperCase(),
+        (names.at(-1) as string).charAt(0).toUpperCase(),
       ];
       break;
   }

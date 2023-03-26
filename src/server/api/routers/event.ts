@@ -35,7 +35,7 @@ export const eventRouter = createTRPCRouter({
         } as Prisma.StringFilter,
       };
 
-      const [createdEvents, numberOfEvents] = await prisma.$transaction([
+      const [events, numberOfEvents] = await prisma.$transaction([
         prisma.event.findMany({
           where,
           include: {location: true, creator: true},
@@ -49,7 +49,7 @@ export const eventRouter = createTRPCRouter({
       ]);
 
       return {
-        events: BasicEventSchema.array().parse(createdEvents),
+        events: BasicEventSchema.array().parse(events),
         size: numberOfEvents,
       };
     }),

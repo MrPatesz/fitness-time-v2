@@ -21,12 +21,12 @@
   "resource": {
     "calendar": "Naptár",
     "comments": "Kommentek",
-    "eventDetails": "Esemény Részletek",
+    "eventDetails": "Esemény részletek",
     "feed": "Hírfolyam",
     "events": "Események",
     "myEvents": "Eseményeim",
     "profile": "Profil",
-    "userDetails": "Felhasználó Részletek",
+    "userDetails": "Felhasználó részletek",
     "users": "Felhasználók",
     "groups": "Csoportok"
   },
@@ -98,30 +98,30 @@
   },
   "modal": {
     "group": {
-      "edit": "Csoport Szerkesztése",
-      "create": "Csoport Létrehozása",
+      "edit": "Csoport szerkesztése",
+      "create": "Csoport létrehozása",
       "delete": {
-        "title": "Csoport Törlése",
+        "title": "Csoport rörlése",
         "message": "Biztosan törölni szeretnéd ezt a csoportot?"
       }
     },
     "event": {
-      "edit": "Esemény Szerkesztése",
-      "create": "Esemény Létrehozása",
+      "edit": "Esemény szerkesztése",
+      "create": "Esemény létrehozása",
       "delete": {
-        "title": "Esemény Törlése",
+        "title": "Esemény törlése",
         "message": "Biztosan törölni szeretnéd ezt az eseményt?"
       }
     },
     "comment": {
-      "create": "Komment Létrehozása",
+      "create": "Komment létrehozása",
       "edit": "Komment Szerkesztése",
       "delete": {
-        "title": "Komment Törlése",
+        "title": "Komment törlése",
         "message": "Biztosan törölni szeretnéd ezt a kommentet?"
       }
     },
-    "edit": "{{propertyName}} Szerkesztése"
+    "edit": "{{propertyName}} szerkesztése"
   },
   "common": {
     "name": "Név",
@@ -136,9 +136,14 @@
     "limit": "Limit",
     "actions": "Kezelés",
     "noRecords": "Nem található esemény",
-    "recordsPerPage": "Oldalankénti eseményszám",
+    "recordsPerPage": "Oldalankénti események száma",
     "archive": "Archívum",
     "creator": "Létrehozó"
+  },
+  "groupTable": {
+    "noRecords": "Nem található csoport",
+    "recordsPerPage": "Oldalankénti csoportok száma",
+    "createdAt": "Létrehozás dátuma"
   },
   "filterEvents": {
     "search": "Keresés név alapján",
@@ -149,7 +154,7 @@
     "search": "Keresés név alapján"
   },
   "userDetails": {
-    "createdEvents": "Létrehozott Események"
+    "createdEvents": "Létrehozott események"
   },
   "eventDetails": {
     "participate": "Részvétel",
@@ -180,8 +185,8 @@
   "profileForm": {
     "introduction": "Bemutatkozás",
     "displayName": {
-      "error": "Megjelenítendő Név kötelező!",
-      "label": "Megjelenítendő Név",
+      "error": "Megjelenítendő név kötelező!",
+      "label": "Megjelenítendő név",
       "placeholder": "A többi felhasználó ezt a nevet fogja látni."
     },
     "location": {
