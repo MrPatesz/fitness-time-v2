@@ -3,7 +3,7 @@ import {CreateCommentType} from "../models/Comment";
 import {CreateEventType} from "../models/Event";
 import {CreateGroupType} from "../models/Group";
 import {CreateLocationType} from "../models/Location";
-import {EventFilters} from "../pages/feed";
+import {EventFilters} from "../pages";
 import dayjs from "./dayjs";
 
 export const googleMapsLibraries: (

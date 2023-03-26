@@ -36,8 +36,8 @@ export const ApplicationShell: FunctionComponent<{
   const groupsRoute = `${localePrefix}/groups`;
   const profileRoute = `${localePrefix}/profile`;
   const welcomeRoute = `${localePrefix}/welcome`;
-  const feedRoute = `${localePrefix}/feed`;
-  const myEventsRoute = `${localePrefix}/my-events`;
+  const eventsRoute = `${localePrefix}/events`;
+  const controlPanelRoute = `${localePrefix}/control-panel`;
   const usersRoute = `${localePrefix}/users`;
 
   const isRouteActive = (givenRoute: string) => {
@@ -95,8 +95,8 @@ export const ApplicationShell: FunctionComponent<{
             {[
               {label: t("navbar.calendar"), route: calendarRoute, icon: CalendarEvent},
               {label: t("navbar.groups"), route: groupsRoute, icon: Share},
-              {label: t("navbar.feed"), route: feedRoute, icon: Ticket},
-              {label: t("navbar.myEvents"), route: myEventsRoute, icon: Adjustments},
+              {label: t("navbar.events"), route: eventsRoute, icon: Ticket},
+              {label: t("navbar.controlPanel"), route: controlPanelRoute, icon: Adjustments},
               {label: t("navbar.users"), route: usersRoute, icon: Users},
             ].map((link) => (
               <Link

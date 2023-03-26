@@ -1,7 +1,7 @@
 import {useMemo, useState} from "react";
 import {FilterBy, OrderBy} from "../components/event/FilterEventsComponent";
 import {BasicEventType} from "../models/Event";
-import {EventFilters} from "../pages/feed";
+import {EventFilters} from "../pages";
 import {defaultEventFilters} from "../utils/defaultObjects";
 
 const useFilteredEvents = (events: BasicEventType[] | undefined) => {

@@ -30,7 +30,7 @@ import {getLongDateFormatter, getPriceFormatter} from "../utils/formatters";
 const DATE_TIME: string = "dateTime";
 const PAGE_SIZES: number[] = [10, 25, 50];
 
-export default function MyEventsPage() {
+export default function ControlPanelPage() {
   const [archive, setArchive] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(PAGE_SIZES.at(0) as number);

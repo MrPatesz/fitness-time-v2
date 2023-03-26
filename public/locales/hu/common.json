@@ -5,8 +5,8 @@
   },
   "navbar": {
     "calendar": "Naptár",
-    "feed": "Hírfolyam",
-    "myEvents": "Eseményeim",
+    "events": "Események",
+    "controlPanel": "Vezérlőpult",
     "users": "Felhasználók",
     "groups": "Csoportok"
   },
@@ -23,6 +23,7 @@
     "comments": "Kommentek",
     "eventDetails": "Esemény Részletek",
     "feed": "Hírfolyam",
+    "events": "Események",
     "myEvents": "Eseményeim",
     "profile": "Profil",
     "userDetails": "Felhasználó Részletek",

@@ -5,8 +5,8 @@
   },
   "navbar": {
     "calendar": "Calendar",
-    "feed": "Feed",
-    "myEvents": "My Events",
+    "events": "Events",
+    "controlPanel": "Control Panel",
     "users": "Users",
     "groups": "Groups"
   },
@@ -23,6 +23,7 @@
     "comments": "Comments",
     "eventDetails": "Event Details",
     "feed": "Feed",
+    "events": "Events",
     "myEvents": "My Events",
     "profile": "Profile",
     "userDetails": "User Details",
