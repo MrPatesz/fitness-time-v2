@@ -1,8 +1,8 @@
 import {z} from "zod";
-import {BasicCommentSchema} from "./Comment";
-import {IdSchema} from "./Id";
-import {CreateLocationSchema, LocationSchema} from "./Location";
-import {BasicUserSchema} from "./User";
+import {BasicCommentSchema} from "../Comment";
+import {IdSchema} from "../Id";
+import {CreateLocationSchema, LocationSchema} from "../Location";
+import {BasicUserSchema} from "../User";
 
 // TODO status: planned, archive
 

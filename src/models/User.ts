@@ -1,6 +1,6 @@
 import {z} from "zod";
 import {ThemeColor} from "../components/user/ThemeColorPicker";
-import {BasicEventSchema} from "./Event";
+import {BasicEventSchema} from "./event/Event";
 import {CreateLocationSchema, LocationSchema} from "./Location";
 
 export const BasicUserSchema = z.object({

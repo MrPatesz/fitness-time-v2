@@ -14,7 +14,7 @@ import {EventForm} from "../../components/event/EventForm";
 import MapComponent from "../../components/location/MapComponent";
 import {QueryComponent} from "../../components/QueryComponent";
 import {RichTextDisplay} from "../../components/rich-text/RichTextDisplay";
-import {DetailedEventType} from "../../models/Event";
+import {DetailedEventType} from "../../models/event/Event";
 import {api} from "../../utils/api";
 import {getLongDateFormatter, getPriceFormatter} from "../../utils/formatters";
 import {getBackgroundColor} from "../../utils/utilFunctions";

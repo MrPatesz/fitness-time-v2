@@ -4,7 +4,7 @@ import {closeAllModals} from "@mantine/modals";
 import {showNotification} from "@mantine/notifications";
 import {useTranslation} from "next-i18next";
 import {FunctionComponent} from "react";
-import {CreateEventType} from "../../models/Event";
+import {CreateEventType} from "../../models/event/Event";
 import {api} from "../../utils/api";
 import {getDefaultCreateEvent} from "../../utils/defaultObjects";
 import {LocationPicker} from "../location/LocationPicker";

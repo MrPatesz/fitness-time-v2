@@ -12,7 +12,7 @@ import {useState} from "react";
 import i18nConfig from "../../next-i18next.config.mjs";
 import {EventForm} from "../components/event/EventForm";
 import {QueryComponent} from "../components/QueryComponent";
-import {BasicEventType} from "../models/Event";
+import {BasicEventType} from "../models/event/Event";
 import {api} from "../utils/api";
 import dayjs from "../utils/dayjs";
 import {getFirstDayOfWeek} from "../utils/utilFunctions";

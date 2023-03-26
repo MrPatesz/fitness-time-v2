@@ -1,7 +1,7 @@
 import {SimpleGrid, useMantineTheme} from "@mantine/core";
 import {useMediaQuery} from "@mantine/hooks";
 import {FunctionComponent} from "react";
-import {BasicEventType} from "../../models/Event";
+import {BasicEventType} from "../../models/event/Event";
 import {EventCard} from "./EventCard";
 
 export const EventGrid: FunctionComponent<{

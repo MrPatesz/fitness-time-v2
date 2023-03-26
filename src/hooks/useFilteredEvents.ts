@@ -1,6 +1,6 @@
 import {useMemo, useState} from "react";
 import {FilterBy, OrderBy} from "../components/event/FilterEventsComponent";
-import {BasicEventType} from "../models/Event";
+import {BasicEventType} from "../models/event/Event";
 import {EventFilters} from "../pages";
 import {defaultEventFilters} from "../utils/defaultObjects";
 

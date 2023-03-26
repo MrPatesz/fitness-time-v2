@@ -1,5 +1,5 @@
 import {z} from "zod";
-import {BasicGroupSchema, CreateGroupSchema, DetailedGroupSchema} from "../../../models/Group";
+import {BasicGroupSchema, CreateGroupSchema, DetailedGroupSchema} from "../../../models/group/Group";
 import {IdSchema} from "../../../models/Id";
 import {createTRPCRouter, protectedProcedure} from "../trpc";
 import {Prisma} from ".prisma/client";

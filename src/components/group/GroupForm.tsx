@@ -4,7 +4,7 @@ import {closeAllModals} from "@mantine/modals";
 import {showNotification} from "@mantine/notifications";
 import {useTranslation} from "next-i18next";
 import {FunctionComponent} from "react";
-import {CreateGroupType} from "../../models/Group";
+import {CreateGroupType} from "../../models/group/Group";
 import {api} from "../../utils/api";
 import {defaultCreateGroup} from "../../utils/defaultObjects";
 import {RichTextField} from "../rich-text/RichTextField";

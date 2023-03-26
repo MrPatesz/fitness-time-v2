@@ -18,8 +18,8 @@ import {useTranslation} from "next-i18next";
 import {useRouter} from "next/router";
 import {FunctionComponent, useEffect, useState} from "react";
 import {Pencil, Plus, Trash} from "tabler-icons-react";
-import {BasicEventType} from "../../models/Event";
-import {SortEventByProperty} from "../../models/PaginateEvents";
+import {BasicEventType} from "../../models/event/Event";
+import {SortDirection, SortEventByProperty} from "../../models/event/PaginateEvents";
 import {api} from "../../utils/api";
 import {getLongDateFormatter, getPriceFormatter} from "../../utils/formatters";
 import {QueryComponent} from "../QueryComponent";
@@ -55,7 +55,7 @@ const EventTable: FunctionComponent<{
     pageSize: pageSize,
     sortBy: {
       property: (sortBy.columnAccessor === DATE_TIME ? "start" : sortBy.columnAccessor) as SortEventByProperty,
-      direction: sortBy.direction,
+      direction: sortBy.direction as SortDirection,
     },
     searchQuery: debouncedSearchQuery,
     createdOnly: eventTableDisplayPlace === EventTableDisplayPlace.CONTROL_PANEL,

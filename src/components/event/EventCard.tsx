@@ -3,7 +3,7 @@ import {useTranslation} from "next-i18next";
 import Link from "next/link";
 import {useRouter} from "next/router";
 import {FunctionComponent} from "react";
-import {BasicEventType} from "../../models/Event";
+import {BasicEventType} from "../../models/event/Event";
 import {getShortDateFormatter} from "../../utils/formatters";
 import {getBackgroundColor} from "../../utils/utilFunctions";
 import {ThemeColor} from "../user/ThemeColorPicker";
