@@ -27,7 +27,8 @@
     "myEvents": "My Events",
     "profile": "Profile",
     "userDetails": "User Details",
-    "users": "Users"
+    "users": "Users",
+    "groups": "Groups"
   },
   "notification": {
     "group": {
@@ -136,7 +137,8 @@
     "actions": "Actions",
     "noRecords": "No events found",
     "recordsPerPage": "Events per page",
-    "archive": "Archive"
+    "archive": "Archive",
+    "creator": "Creator"
   },
   "filterEvents": {
     "search": "Search by Name",

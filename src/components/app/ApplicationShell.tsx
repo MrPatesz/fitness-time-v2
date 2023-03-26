@@ -17,8 +17,32 @@ import {useTranslation} from "next-i18next";
 import Link from "next/link";
 import {useRouter} from "next/router";
 import {FunctionComponent} from "react";
-import {Adjustments, CalendarEvent, Logout, Share, Ticket, UserCircle, Users} from "tabler-icons-react";
+import {Adjustments, CalendarEvent, IconProps, Logout, Share, Ticket, UserCircle, Users} from "tabler-icons-react";
 import {getBackgroundColor} from "../../utils/utilFunctions";
+
+const NavBarLink: FunctionComponent<{
+  link: {
+    icon: FunctionComponent<IconProps>;
+    label: string;
+    route: string;
+    onClick: () => void;
+    active: boolean;
+  };
+  locale: string;
+}> = ({link, locale}) => (
+  <Link
+    href={link.route}
+    locale={locale}
+    passHref
+    onClick={link.onClick}
+  >
+    <NavLink
+      label={link.label}
+      icon={<link.icon size={20}/>}
+      active={link.active}
+    />
+  </Link>
+);
 
 export const ApplicationShell: FunctionComponent<{
   children: JSX.Element;
@@ -94,39 +118,42 @@ export const ApplicationShell: FunctionComponent<{
           <Navbar.Section grow>
             {[
               {label: t("navbar.calendar"), route: calendarRoute, icon: CalendarEvent},
-              {label: t("navbar.groups"), route: groupsRoute, icon: Share},
               {label: t("navbar.events"), route: eventsRoute, icon: Ticket},
-              {label: t("navbar.controlPanel"), route: controlPanelRoute, icon: Adjustments},
+              {label: t("navbar.groups"), route: groupsRoute, icon: Share},
               {label: t("navbar.users"), route: usersRoute, icon: Users},
             ].map((link) => (
-              <Link
-                href={link.route}
-                locale={locale}
-                passHref
+              <NavBarLink
                 key={link.label}
-                onClick={closeNavbar}
-              >
-                <NavLink
-                  label={link.label}
-                  icon={<link.icon size={20}/>}
-                  active={isRouteActive(link.route)}
-                />
-              </Link>
+                locale={locale as string}
+                link={{
+                  ...link,
+                  active: isRouteActive(link.route),
+                  onClick: closeNavbar,
+                }}
+              />
             ))}
           </Navbar.Section>
           <Navbar.Section>
-            <Link
-              href={profileRoute}
-              locale={locale}
-              passHref
-              onClick={closeNavbar}
-            >
-              <NavLink
-                label={session?.user?.name}
-                icon={<UserCircle size={20}/>}
-                active={isRouteActive(profileRoute)}
-              />
-            </Link>
+            <NavBarLink
+              locale={locale as string}
+              link={{
+                label: t("navbar.controlPanel"),
+                route: controlPanelRoute,
+                icon: Adjustments,
+                active: isRouteActive(controlPanelRoute),
+                onClick: closeNavbar,
+              }}
+            />
+            <NavBarLink
+              locale={locale as string}
+              link={{
+                label: session?.user?.name as string,
+                route: profileRoute,
+                icon: UserCircle,
+                active: isRouteActive(profileRoute),
+                onClick: closeNavbar,
+              }}
+            />
           </Navbar.Section>
         </Navbar>
       }
