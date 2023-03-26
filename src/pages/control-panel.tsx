@@ -44,7 +44,7 @@ export default function ControlPanelPage() {
   const longDateFormatter = getLongDateFormatter(locale as string);
   const priceFormatter = getPriceFormatter(locale as string);
 
-  const eventsQuery = api.event.getAllCreated.useQuery({
+  const eventsQuery = api.event.getPaginatedEvents.useQuery({
     archive: archive,
     page: page,
     pageSize: pageSize,
@@ -53,6 +53,7 @@ export default function ControlPanelPage() {
       direction: sortBy.direction,
     },
     searchQuery: debouncedSearchQuery,
+    createdOnly: true,
   });
   const deleteEvent = api.event.delete.useMutation({
     onSuccess: () => eventsQuery.refetch().then(() =>

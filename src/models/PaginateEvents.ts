@@ -15,6 +15,7 @@ export const PaginateEventsSchema = z.object({
     direction: z.enum(["asc", "desc"]),
   }),
   archive: z.boolean(),
+  createdOnly: z.boolean(),
   searchQuery: z.string(),
 });
 

@@ -7,21 +7,11 @@ import {createTRPCRouter, protectedProcedure} from "../trpc";
 import {Prisma} from ".prisma/client";
 
 export const eventRouter = createTRPCRouter({
-  getAll: protectedProcedure
-    .output(BasicEventSchema.array())
-    .query(async ({ctx}) => {
-      const events = await ctx.prisma.event.findMany({
-        orderBy: {name: Prisma.SortOrder.asc},
-        include: {location: true, creator: true},
-      });
-
-      return BasicEventSchema.array().parse(events);
-    }),
-  getAllCreated: protectedProcedure
+  getPaginatedEvents: protectedProcedure
     .input(PaginateEventsSchema)
     .output(z.object({events: BasicEventSchema.array(), size: z.number()}))
     .query(async ({
-                    input: {page, pageSize, sortBy, archive, searchQuery},
+                    input: {page, pageSize, sortBy, archive, createdOnly, searchQuery},
                     ctx: {session: {user: {id: callerId}}, prisma}
                   }) => {
       const orderBy: {
@@ -33,7 +23,7 @@ export const eventRouter = createTRPCRouter({
       orderBy[sortBy.property] = Prisma.SortOrder[sortBy.direction];
 
       const where = {
-        creatorId: callerId,
+        creatorId: createdOnly ? callerId : undefined,
         start: archive ? {
           lt: new Date(),
         } : {
