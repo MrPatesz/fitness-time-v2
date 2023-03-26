@@ -17,7 +17,7 @@ import {useTranslation} from "next-i18next";
 import Link from "next/link";
 import {useRouter} from "next/router";
 import {FunctionComponent} from "react";
-import {Adjustments, CalendarEvent, Logout, News, UserCircle, Users} from "tabler-icons-react";
+import {Adjustments, CalendarEvent, Logout, Share, Ticket, UserCircle, Users} from "tabler-icons-react";
 import {getBackgroundColor} from "../../utils/utilFunctions";
 
 export const ApplicationShell: FunctionComponent<{
@@ -33,6 +33,7 @@ export const ApplicationShell: FunctionComponent<{
 
   const localePrefix = locale !== defaultLocale ? `/${locale}` : "";
   const calendarRoute = `${localePrefix}/calendar`;
+  const groupsRoute = `${localePrefix}/groups`;
   const profileRoute = `${localePrefix}/profile`;
   const welcomeRoute = `${localePrefix}/welcome`;
   const feedRoute = `${localePrefix}/feed`;
@@ -93,7 +94,8 @@ export const ApplicationShell: FunctionComponent<{
           <Navbar.Section grow>
             {[
               {label: t("navbar.calendar"), route: calendarRoute, icon: CalendarEvent},
-              {label: t("navbar.feed"), route: feedRoute, icon: News},
+              {label: t("navbar.groups"), route: groupsRoute, icon: Share},
+              {label: t("navbar.feed"), route: feedRoute, icon: Ticket},
               {label: t("navbar.myEvents"), route: myEventsRoute, icon: Adjustments},
               {label: t("navbar.users"), route: usersRoute, icon: Users},
             ].map((link) => (

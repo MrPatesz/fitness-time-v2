@@ -49,7 +49,6 @@ export const EventCard: FunctionComponent<{
                 </Badge>
               )}
             </Group>
-            {/*<Text>{event.description}</Text> TODO show a little bit?*/}
           </Stack>
           <Group position="right">
             <Link href={`/users/${event.creator.id}`} locale={locale} passHref>

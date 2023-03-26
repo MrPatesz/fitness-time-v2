@@ -14,6 +14,8 @@ export const BasicUserSchema = z.object({
 export const DetailedUserSchema = BasicUserSchema.extend({
   createdEvents: z.lazy(() => BasicEventSchema.array()),
   participatedEvents: z.lazy(() => BasicEventSchema.array()),
+  // createdGroups: z.lazy(() => BasicGroupSchema.array()),
+  // joinedGroups: z.lazy(() => BasicGroupSchema.array()),
 });
 
 export const UpdateProfileSchema = BasicUserSchema.extend({

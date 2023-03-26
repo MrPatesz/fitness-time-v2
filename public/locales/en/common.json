@@ -7,7 +7,8 @@
     "calendar": "Calendar",
     "feed": "Feed",
     "myEvents": "My Events",
-    "users": "Users"
+    "users": "Users",
+    "groups": "Groups"
   },
   "button": {
     "login": "Login",
@@ -28,6 +29,28 @@
     "users": "Users"
   },
   "notification": {
+    "group": {
+      "create": {
+        "title": "Created group!",
+        "message": "A new group has been created."
+      },
+      "delete": {
+        "title": "Deleted group!",
+        "message": "The group has been deleted."
+      },
+      "update": {
+        "title": "Updated group!",
+        "message": "The group has been modified."
+      },
+      "join": {
+        "title": "Joined successfully!",
+        "message": "You joined this group."
+      },
+      "leave": {
+        "title": "Left successfully!",
+        "message": "You left this group."
+      }
+    },
     "event": {
       "create": {
         "title": "Created event!",
@@ -72,6 +95,14 @@
     }
   },
   "modal": {
+    "group": {
+      "edit": "Edit Group",
+      "create": "Create Group",
+      "delete": {
+        "title": "Delete Group",
+        "message": "Are you sure you want to delete this group?"
+      }
+    },
     "event": {
       "edit": "Edit Event",
       "create": "Create Event",
@@ -175,13 +206,23 @@
       "label": "End"
     }
   },
+  "groupForm": {
+    "name": {
+      "error": "Name is required!",
+      "placeholder": "What is the group called?"
+    },
+    "description": {
+      "label": "Description",
+      "placeholder": "Tell us about this group."
+    }
+  },
   "eventForm": {
     "name": {
-      "error": "Name is required",
+      "error": "Name is required!",
       "placeholder": "What is the event called?"
     },
     "location": {
-      "error": "Location is required",
+      "error": "Location is required!",
       "placeholder": "Where will it take place?"
     },
     "start": {

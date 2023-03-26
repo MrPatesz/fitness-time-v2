@@ -1,6 +1,7 @@
 import {OrderBy} from "../components/event/FilterEventsComponent";
 import {CreateCommentType} from "../models/Comment";
 import {CreateEventType} from "../models/Event";
+import {CreateGroupType} from "../models/Group";
 import {CreateLocationType} from "../models/Location";
 import {EventFilters} from "../pages/feed";
 import dayjs from "./dayjs";
@@ -15,6 +16,11 @@ export const googleMapsLibraries: (
 
 export const defaultCreateComment: CreateCommentType = {
   message: "",
+};
+
+export const defaultCreateGroup: CreateGroupType = {
+  name: "",
+  description: "",
 };
 
 export const defaultCreateLocation: CreateLocationType = {

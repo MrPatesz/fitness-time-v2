@@ -70,8 +70,8 @@ model User {
   createdEvents      Event[]   @relation(name: "createdEvents")
   participatedEvents Event[]   @relation(name: "participatedEvents")
   comments           Comment[]
-  // createdGroups      Group[]   @relation(name: "createdGroups")
-  // joinedGroups       Group[]   @relation(name: "joinedGroups")
+  createdGroups      Group[]   @relation(name: "createdGroups")
+  joinedGroups       Group[]   @relation(name: "joinedGroups")
 }
 
 model Event {
@@ -109,12 +109,16 @@ model Comment {
   event    Event    @relation(fields: [eventId], references: [id])
 }
 
-// model Group {
-//   id        Int    @id @default(autoincrement())
-//   name      String @unique
-//   creatorId String
-//   creator   User   @relation(name: "createdGroups", fields: [creatorId], references: [id], onDelete: Restrict)
-//   members   User[] @relation(name: "joinedGroups")
-//   // events Event[]
-//   // posts Post[]
-// }
+model Group {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String
+  createdAt   DateTime @default(now())
+  creatorId   String
+  creator     User     @relation(name: "createdGroups", fields: [creatorId], references: [id], onDelete: Restrict)
+  members     User[]   @relation(name: "joinedGroups")
+  // events Event[]
+  // posts Post[]
+}
+
+// model Post {}

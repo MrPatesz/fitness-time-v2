@@ -2,19 +2,26 @@ import {z} from "zod";
 import {IdSchema} from "./Id";
 import {BasicUserSchema} from "./User";
 
-const CreateGroupSchema = z.object({
+export const CreateGroupSchema = z.object({
   name: z.string().min(1),
+  description: z.string(),
 });
 
-const GroupSchema = CreateGroupSchema.merge(z.object({
+export const BasicGroupSchema = CreateGroupSchema.extend({
   id: IdSchema,
-  creatorId: z.number(),
+  createdAt: z.date(),
+  creatorId: z.string(),
   creator: BasicUserSchema,
+});
+
+export const DetailedGroupSchema = BasicGroupSchema.extend({
   members: BasicUserSchema.array(),
   // events
   // posts
-}));
+});
 
 export type CreateGroupType = z.infer<typeof CreateGroupSchema>;
 
-export type GroupType = z.infer<typeof GroupSchema>;
+export type BasicGroupType = z.infer<typeof BasicGroupSchema>;
+
+export type DetailedGroupType = z.infer<typeof DetailedGroupSchema>;

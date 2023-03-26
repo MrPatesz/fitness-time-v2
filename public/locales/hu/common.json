@@ -7,7 +7,8 @@
     "calendar": "Naptár",
     "feed": "Hírfolyam",
     "myEvents": "Eseményeim",
-    "users": "Felhasználók"
+    "users": "Felhasználók",
+    "groups": "Csoportok"
   },
   "button": {
     "login": "Bejelentkezés",
@@ -28,6 +29,28 @@
     "users": "Felhasználók"
   },
   "notification": {
+    "group": {
+      "create": {
+        "title": "Csoport létrehozva!",
+        "message": "Új csoport jött létre."
+      },
+      "delete": {
+        "title": "Csoport törölve!",
+        "message": "A csoport törlődött."
+      },
+      "update": {
+        "title": "Csoport módosítva!",
+        "message": "A csoport módosult."
+      },
+      "join": {
+        "title": "Sikeres belépés!",
+        "message": "Beléptél ebbe a csoportba."
+      },
+      "leave": {
+        "title": "Sikeres kilépés!",
+        "message": "Kiléptél ebből a csoportból."
+      }
+    },
     "event": {
       "create": {
         "title": "Esemény létrehozva!",
@@ -72,6 +95,14 @@
     }
   },
   "modal": {
+    "group": {
+      "edit": "Csoport Szerkesztése",
+      "create": "Csoport Létrehozása",
+      "delete": {
+        "title": "Csoport Törlése",
+        "message": "Biztosan törölni szeretnéd ezt a csoportot?"
+      }
+    },
     "event": {
       "edit": "Esemény Szerkesztése",
       "create": "Esemény Létrehozása",
@@ -173,6 +204,16 @@
     },
     "end": {
       "label": "Vége"
+    }
+  },
+  "groupForm": {
+    "name": {
+      "error": "Név kötelező!",
+      "placeholder": "Mi a csoport neve?"
+    },
+    "description": {
+      "label": "Leírás",
+      "placeholder": "Mutasd be a csoportot."
     }
   },
   "eventForm": {
