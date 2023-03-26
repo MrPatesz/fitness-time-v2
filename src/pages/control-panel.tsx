@@ -11,7 +11,7 @@ export default function ControlPanelPage() {
 
   return (
     <Tabs defaultValue="events">
-      <Tabs.List>
+      <Tabs.List grow>
         <Tabs.Tab value="events" icon={<Ticket size={20}/>}>{t("resource.events")}</Tabs.Tab>
         <Tabs.Tab value="groups" icon={<Share size={20}/>}>{t("resource.groups")}</Tabs.Tab>
         {/*<Tabs.Tab value="posts" icon={<IconSettings size={20} />}>{t("resource.posts")}</Tabs.Tab>*/}
