@@ -1,105 +1,85 @@
 import {ActionIcon, Box, Group, MantineNumberSize, Stack, Text, TextInput, useMantineTheme} from "@mantine/core";
-import {useDebouncedValue} from "@mantine/hooks";
 import {openConfirmModal, openModal} from "@mantine/modals";
 import {showNotification} from "@mantine/notifications";
-import {IconSearch} from "@tabler/icons";
 import {DataTable, DataTableSortStatus} from "mantine-datatable";
 import {useTranslation} from "next-i18next";
 import {useRouter} from "next/router";
 import {FunctionComponent, useEffect, useState} from "react";
-import {Pencil, Plus, Trash} from "tabler-icons-react";
-import {SortDirection} from "../../models/event/PaginateEvents";
-import {BasicGroupType} from "../../models/group/Group";
-import {SortGroupByProperty} from "../../models/group/PaginateGroups";
+import {Pencil, Trash} from "tabler-icons-react";
 import {api} from "../../utils/api";
 import {getLongDateFormatter} from "../../utils/formatters";
 import {PAGE_SIZES} from "../event/EventTable";
 import {QueryComponent} from "../QueryComponent";
-import {GroupForm} from "./GroupForm";
+import {DetailedCommentType} from "../../models/Comment";
+import {CommentForm} from "./CommentForm";
+import Link from "next/link";
+import {RichTextDisplay} from "../rich-text/RichTextDisplay";
+import {IconSearch} from "@tabler/icons";
+import {useDebouncedValue} from "@mantine/hooks";
+import {SortDirection} from "../../models/event/PaginateEvents";
+import {SortCommentByProperty} from "../../server/api/routers/comment";
 
-export enum GroupTableDisplayPlace {
-  CONTROL_PANEL = "CONTROL_PANEL",
-  GROUPS_PAGE = "GROUPS_PAGE",
-}
-
-const GroupTable: FunctionComponent<{
-  groupTableDisplayPlace: GroupTableDisplayPlace;
-}> = ({groupTableDisplayPlace}) => {
+const CommentTable: FunctionComponent = () => {
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(PAGE_SIZES.at(0) as number);
-  const [sortBy, setSortBy] = useState<DataTableSortStatus>({columnAccessor: "createdAt", direction: "desc"});
+  const [sortBy, setSortBy] = useState<DataTableSortStatus>({columnAccessor: "postedAt", direction: "desc"});
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [debouncedSearchQuery] = useDebouncedValue(searchQuery, 500);
 
   const theme = useMantineTheme();
-  const {push: pushRoute, locale} = useRouter();
+  const {locale} = useRouter();
   const {t} = useTranslation("common");
   const longDateFormatter = getLongDateFormatter(locale as string);
 
-  const groupsQuery = api.group.getPaginatedGroups.useQuery({
+  const commentsQuery = api.comment.getAllCreated.useQuery({
     page,
     pageSize,
+    searchQuery: debouncedSearchQuery,
     sortBy: {
-      property: sortBy.columnAccessor as SortGroupByProperty,
+      property: sortBy.columnAccessor as SortCommentByProperty,
       direction: sortBy.direction as SortDirection,
     },
-    searchQuery: debouncedSearchQuery,
-    createdOnly: groupTableDisplayPlace === GroupTableDisplayPlace.CONTROL_PANEL,
   });
-  const deleteGroup = api.group.delete.useMutation({
-    onSuccess: () => groupsQuery.refetch().then(() =>
+  const deleteComment = api.comment.delete.useMutation({
+    onSuccess: () => commentsQuery.refetch().then(() =>
       showNotification({
         color: "green",
-        title: t("notification.group.delete.title"),
-        message: t("notification.group.delete.message"),
+        title: t("notification.comment.delete.title"),
+        message: t("notification.comment.delete.message"),
       })),
   });
 
   useEffect(() => {
-    if (groupsQuery.data?.groups.length === 0 && page !== 1) {
+    if (commentsQuery.data?.comments.length === 0 && page !== 1) {
       setPage(page - 1);
     }
-  }, [groupsQuery.data, page]);
+  }, [commentsQuery.data, page]);
 
-  const onDeleteClick = (group: BasicGroupType) => openConfirmModal({
-    title: t("modal.group.delete.title"),
+  const onDeleteClick = (comment: DetailedCommentType) => openConfirmModal({
+    title: t("modal.comment.delete.title"),
     children: (
       <Stack>
         <Text>
-          {t("modal.group.delete.message")}
+          {t("modal.comment.delete.message")}
         </Text>
         <Text weight="bold">
-          "{group.name}"
+          "{comment.message}"
         </Text>
       </Stack>
     ),
     labels: {confirm: t("button.confirm"), cancel: t("button.cancel")},
-    onConfirm: () => deleteGroup.mutate(group.id),
+    onConfirm: () => deleteComment.mutate(comment.id),
   });
 
   return (
     <Stack sx={{height: "100%"}}>
-      <Group>
-        <TextInput
-          sx={{flexGrow: 1}}
-          icon={<IconSearch/>}
-          placeholder={t("filterEvents.search") as string}
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.currentTarget.value)}
-        />
-        <ActionIcon
-          size="lg"
-          variant="filled"
-          color={theme.fn.themeColor(theme.primaryColor)}
-          onClick={() => openModal({
-            title: t("modal.group.create"),
-            children: <GroupForm/>,
-          })}
-        >
-          <Plus/>
-        </ActionIcon>
-      </Group>
-      <QueryComponent resourceName={t("resource.groups")} query={groupsQuery}>
+      <TextInput
+        icon={<IconSearch/>}
+        placeholder={t("filterEvents.search") as string}
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.currentTarget.value)}
+      />
+      <QueryComponent resourceName={t("resource.comments")} query={commentsQuery}>
         <Box sx={{maxHeight: "calc(100vh - (72px + 36px + 16px + 16px))" /*TODO*/}}>
           <DataTable
             highlightOnHover
@@ -107,46 +87,54 @@ const GroupTable: FunctionComponent<{
             withColumnBorders
             textSelectionDisabled
             borderRadius={theme.defaultRadius as MantineNumberSize}
-            minHeight={!groupsQuery.data?.groups.length ? 175 : undefined}
-            noRecordsText={t("groupTable.noRecords") as string}
+            minHeight={!commentsQuery.data?.comments.length ? 175 : undefined}
+            noRecordsText={t("commentTable.noRecords") as string}
             sortStatus={sortBy}
             onSortStatusChange={setSortBy}
             page={page}
             onPageChange={setPage}
             recordsPerPageOptions={PAGE_SIZES}
-            recordsPerPageLabel={t("groupTable.recordsPerPage") as string}
+            recordsPerPageLabel={t("commentTable.recordsPerPage") as string}
             recordsPerPage={pageSize}
             onRecordsPerPageChange={(newPageSize) => {
               setPageSize(newPageSize);
               setPage(1);
             }}
-            records={groupsQuery.data?.groups}
-            totalRecords={groupsQuery.data?.size}
-            onRowClick={(group) => pushRoute(`/groups/${group.id}`, undefined, {locale})}
+            records={commentsQuery.data?.comments}
+            totalRecords={commentsQuery.data?.size}
             columns={[
               {
-                accessor: "name",
-                title: t("common.name"),
+                accessor: "message",
+                title: t("commentTable.message"),
                 sortable: true,
+                width: 300,
+                render: ({message}) => (<RichTextDisplay richText={message} maxHeight={25}/>),
               },
               {
-                accessor: "createdAt",
-                title: t("groupTable.createdAt"),
+                accessor: "postedAt",
+                title: t("commentTable.postedAt"),
                 sortable: true,
-                render: ({createdAt}) => longDateFormatter.format(createdAt),
+                render: ({postedAt}) => longDateFormatter.format(postedAt),
               },
               {
-                accessor: "creatorName",
-                title: t("myEvents.creator"),
-                hidden: groupTableDisplayPlace === GroupTableDisplayPlace.CONTROL_PANEL,
-                render: ({creator}) => creator.name,
+                accessor: "event",
+                title: t("commentTable.event"),
+                sortable: true,
+                render: ({event}) => (
+                  <Link
+                    href={`/events/${event.id}`}
+                    locale={locale}
+                    passHref
+                  >
+                    {event.name}
+                  </Link>
+                ),
               },
               {
                 accessor: "actions",
                 title: t("myEvents.actions"),
-                hidden: groupTableDisplayPlace === GroupTableDisplayPlace.GROUPS_PAGE,
                 width: 85,
-                render: (group) => (
+                render: (comment) => (
                   <Group spacing="xs" noWrap>
                     <ActionIcon
                       variant="transparent"
@@ -154,8 +142,8 @@ const GroupTable: FunctionComponent<{
                       onClick={(e) => {
                         e.stopPropagation();
                         openModal({
-                          title: t("modal.group.edit"),
-                          children: <GroupForm editedGroupId={group.id}/>,
+                          title: t("modal.comment.edit"),
+                          children: <CommentForm eventId={comment.event.id} editedComment={comment}/>,
                         });
                       }}
                       sx={theme => ({
@@ -171,7 +159,7 @@ const GroupTable: FunctionComponent<{
                       size="md"
                       onClick={(e: any) => {
                         e.stopPropagation();
-                        onDeleteClick(group);
+                        onDeleteClick(comment);
                       }}
                       sx={theme => ({
                         "&:hover": {
@@ -192,4 +180,4 @@ const GroupTable: FunctionComponent<{
   );
 };
 
-export default GroupTable;
+export default CommentTable;

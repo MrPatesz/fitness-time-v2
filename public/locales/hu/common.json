@@ -145,6 +145,13 @@
     "recordsPerPage": "Oldalankénti csoportok száma",
     "createdAt": "Létrehozás dátuma"
   },
+  "commentTable": {
+    "noRecords": "Nem található komment",
+    "recordsPerPage": "Oldalankénti koomentek száma",
+    "postedAt": "Közzététel",
+    "message": "Üzenet",
+    "event": "Esemény"
+  },
   "filterEvents": {
     "search": "Keresés név alapján",
     "limited": "Limitált",

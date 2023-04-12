@@ -20,7 +20,7 @@ export const eventRouter = createTRPCRouter({
         price?: Prisma.SortOrder;
         limit?: Prisma.SortOrder;
       } = {};
-      orderBy[sortBy.property] = Prisma.SortOrder[sortBy.direction];
+      orderBy[sortBy.property] = sortBy.direction;
 
       const where = {
         creatorId: createdOnly ? callerId : undefined,

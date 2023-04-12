@@ -6,6 +6,7 @@ import {Share, Ticket} from "tabler-icons-react";
 import i18nConfig from "../../next-i18next.config.mjs";
 import EventTable, {EventTableDisplayPlace} from "../components/event/EventTable";
 import GroupTable, {GroupTableDisplayPlace} from "../components/group/GroupTable";
+import CommentTable from "../components/comment/CommentTable";
 
 export default function ControlPanelPage() {
   const {t} = useTranslation("common");
@@ -15,7 +16,6 @@ export default function ControlPanelPage() {
       <Tabs.List grow>
         <Tabs.Tab value="events" icon={<Ticket size={20}/>}>{t("resource.events")}</Tabs.Tab>
         <Tabs.Tab value="groups" icon={<Share size={20}/>}>{t("resource.groups")}</Tabs.Tab>
-        {/*<Tabs.Tab value="posts" icon={<IconSettings size={20} />}>{t("resource.posts")}</Tabs.Tab>*/}
         <Tabs.Tab value="comments" icon={<IconMessageCircle size={20}/>}>{t("resource.comments")}</Tabs.Tab>
       </Tabs.List>
 
@@ -27,12 +27,8 @@ export default function ControlPanelPage() {
         <GroupTable groupTableDisplayPlace={GroupTableDisplayPlace.CONTROL_PANEL}/>
       </Tabs.Panel>
 
-      {/*<Tabs.Panel value="posts" pt="md">
-        Posts Table
-      </Tabs.Panel>*/}
-
       <Tabs.Panel value="comments" pt="md">
-        Comments Table
+        <CommentTable/>
       </Tabs.Panel>
     </Tabs>
   );

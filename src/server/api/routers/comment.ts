@@ -1,8 +1,15 @@
 import {z} from "zod";
-import {BasicCommentSchema, CreateCommentSchema} from "../../../models/Comment";
+import {BasicCommentSchema, CreateCommentSchema, DetailedCommentSchema} from "../../../models/Comment";
 import {IdSchema} from "../../../models/Id";
 import {createTRPCRouter, protectedProcedure} from "../trpc";
 import {Prisma} from ".prisma/client";
+import {SortDirection} from "../../../models/event/PaginateEvents";
+
+export enum SortCommentByProperty {
+  MESSAGE = "message",
+  POSTED_AT = "postedAt",
+  EVENT = "event",
+}
 
 export const commentRouter = createTRPCRouter({
   getAllByEventId: protectedProcedure
@@ -17,16 +24,54 @@ export const commentRouter = createTRPCRouter({
 
       return BasicCommentSchema.array().parse(comments);
     }),
-  getAllByUserId: protectedProcedure
-    .input(z.string())
-    .output(BasicCommentSchema.array())
-    .query(async ({input: userId, ctx}) => {
-      const comments = await ctx.prisma.comment.findMany({
-        where: {userId},
-        include: {user: true},
-      });
+  getAllCreated: protectedProcedure
+    .input(z.object({
+      page: z.number().min(1),
+      pageSize: z.number().min(5).max(50),
+      searchQuery: z.string(),
+      sortBy: z.object({
+        property: z.nativeEnum(SortCommentByProperty),
+        direction: z.nativeEnum(SortDirection),
+      }),
+    }))
+    .output(z.object({comments: DetailedCommentSchema.array(), size: z.number()}))
+    .query(async ({input: {page, pageSize, sortBy, searchQuery}, ctx: {prisma, session: {user: {id: callerId}}}}) => {
+      const orderBy: {
+        message?: Prisma.SortOrder;
+        postedAt?: Prisma.SortOrder;
+        event?: { name: Prisma.SortOrder };
+      } = {};
+      if (sortBy.property === SortCommentByProperty.EVENT) {
+        orderBy[sortBy.property] = {name: sortBy.direction};
+      } else {
+        orderBy[sortBy.property] = sortBy.direction;
+      }
 
-      return BasicCommentSchema.array().parse(comments);
+      const where = {
+        userId: callerId,
+        message: {
+          mode: "insensitive",
+          contains: searchQuery,
+        } as Prisma.StringFilter,
+      };
+
+      const [comments, numberOfComments] = await prisma.$transaction([
+        prisma.comment.findMany({
+          where,
+          include: {user: true, event: {include: {location: true, creator: true}}},
+          skip: (page - 1) * pageSize,
+          take: pageSize,
+          orderBy,
+        }),
+        prisma.comment.count({
+          where,
+        }),
+      ]);
+
+      return {
+        comments: DetailedCommentSchema.array().parse(comments),
+        size: numberOfComments,
+      };
     }),
   create: protectedProcedure
     .input(z.object({createComment: CreateCommentSchema, eventId: IdSchema}))

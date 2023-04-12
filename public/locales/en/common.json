@@ -145,6 +145,13 @@
     "recordsPerPage": "Groups per page",
     "createdAt": "Creation Date"
   },
+  "commentTable": {
+    "noRecords": "No comments found",
+    "recordsPerPage": "Comments per page",
+    "postedAt": "Post Date",
+    "message": "Message",
+    "event": "Event"
+  },
   "filterEvents": {
     "search": "Search by Name",
     "limited": "Limited",
