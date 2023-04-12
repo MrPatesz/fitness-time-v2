@@ -11,7 +11,7 @@ import {ThemeColor} from "../user/ThemeColorPicker";
 export const EventCard: FunctionComponent<{
   event: BasicEventType;
 }> = ({event}) => {
-  const {locale} = useRouter();
+  const {locale, push: pushRoute} = useRouter();
   const {t} = useTranslation("common");
   const shortDateFormatter = getShortDateFormatter(locale as string);
 
@@ -51,20 +51,22 @@ export const EventCard: FunctionComponent<{
             </Group>
           </Stack>
           <Group position="right">
-            <Link href={`/users/${event.creator.id}`} locale={locale} passHref>
-              <Badge
-                color={event.creator.themeColor}
-                variant="outline"
-                sx={theme => ({
-                  ":hover": {
-                    backgroundColor: theme.fn.themeColor(event.creator.themeColor),
-                    color: theme.white,
-                  },
-                })}
-              >
-                {event.creator.name}
-              </Badge>
-            </Link>
+            <Badge
+              color={event.creator.themeColor}
+              variant="outline"
+              onClick={(e) => {
+                e.preventDefault();
+                pushRoute(`/users/${event.creator.id}`, undefined, {locale}).then();
+              }}
+              sx={theme => ({
+                ":hover": {
+                  backgroundColor: theme.fn.themeColor(event.creator.themeColor),
+                  color: theme.white,
+                },
+              })}
+            >
+              {event.creator.name}
+            </Badge>
           </Group>
         </Stack>
       </Card>

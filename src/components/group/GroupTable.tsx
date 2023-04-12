@@ -122,7 +122,7 @@ const GroupTable: FunctionComponent<{
             }}
             records={groupsQuery.data?.groups}
             totalRecords={groupsQuery.data?.size}
-            onRowClick={(group) => pushRoute(`groups/${group.id}`, undefined, {locale})}
+            onRowClick={(group) => pushRoute(`/groups/${group.id}`, undefined, {locale})}
             columns={[
               {
                 accessor: "name",

@@ -106,7 +106,9 @@ export default function CalendarPage() {
             businessBeginsHour={8}
             businessEndsHour={17}
             startDate={startDate}
-            onEventClick={(e: { e: { data: BasicEventType } }) => pushRoute(`events/${e.e.data.id}`, undefined, {locale})}
+            onEventClick={(e: {
+              e: { data: BasicEventType }
+            }) => pushRoute(`/events/${e.e.data.id}`, undefined, {locale})}
             events={eventsQuery.data?.map((event) => {
               const offsetInHours = -1 * new Date(event.start).getTimezoneOffset();
               const start = dayjs(event.start).add(offsetInHours, "minutes").toDate();

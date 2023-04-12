@@ -141,7 +141,7 @@ const EventTable: FunctionComponent<{
             }}
             records={eventsQuery.data?.events}
             totalRecords={eventsQuery.data?.size}
-            onRowClick={(event) => pushRoute(`events/${event.id}`, undefined, {locale})}
+            onRowClick={(event) => pushRoute(`/events/${event.id}`, undefined, {locale})}
             columns={[
               {
                 accessor: "name",
