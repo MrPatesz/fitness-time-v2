@@ -2,7 +2,7 @@ import {ActionIcon, Group, MultiSelect, Select, TextInput,} from "@mantine/core"
 import {useTranslation} from "next-i18next";
 import {Dispatch, FunctionComponent, SetStateAction} from "react";
 import {ArrowDown, ArrowUp, Search} from "tabler-icons-react";
-import {EventFilters} from "../../pages";
+import {EventFilters} from "../../hooks/useFilteredEvents";
 
 export enum OrderBy {
   NAME = "name",

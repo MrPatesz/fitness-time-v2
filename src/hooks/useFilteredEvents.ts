@@ -1,8 +1,14 @@
 import {useMemo, useState} from "react";
 import {FilterBy, OrderBy} from "../components/event/FilterEventsComponent";
 import {BasicEventType} from "../models/event/Event";
-import {EventFilters} from "../pages";
 import {defaultEventFilters} from "../utils/defaultObjects";
+
+export interface EventFilters {
+  searchTerm: string;
+  orderBy: OrderBy;
+  ascending: boolean;
+  tags: FilterBy[];
+}
 
 const useFilteredEvents = (events: BasicEventType[] | undefined) => {
   const [filters, setFilters] = useState<EventFilters>(defaultEventFilters);

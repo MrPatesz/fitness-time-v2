@@ -3,8 +3,8 @@ import {CreateCommentType} from "../models/Comment";
 import {CreateEventType} from "../models/event/Event";
 import {CreateGroupType} from "../models/group/Group";
 import {CreateLocationType} from "../models/Location";
-import {EventFilters} from "../pages";
 import dayjs from "./dayjs";
+import {EventFilters} from "../hooks/useFilteredEvents";
 
 export const googleMapsLibraries: (
   | "places"
