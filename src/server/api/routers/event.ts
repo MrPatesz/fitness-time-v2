@@ -54,15 +54,34 @@ export const eventRouter = createTRPCRouter({
       };
     }),
   getFeed: protectedProcedure
-    .output(BasicEventSchema.array())
-    .query(async ({ctx: {session: {user: {id: callerId}}, prisma}}) => {
+    .input(z.object({
+      cursor: z.date().nullish(),
+    }))
+    .output(z.object({
+      events: BasicEventSchema.array(),
+      nextCursor: z.date().nullish(),
+    }))
+    .query(async ({input: {cursor}, ctx: {session: {user: {id: callerId}}, prisma}}) => {
+      const limit = 10;
+
       const events = await prisma.event.findMany({
         where: {creatorId: {not: callerId}},
-        orderBy: {start: Prisma.SortOrder.desc},
+        take: limit + 1,
+        cursor: cursor ? {createdAt: cursor} : undefined,
+        orderBy: {createdAt: Prisma.SortOrder.desc},
         include: {location: true, creator: true},
       });
 
-      return BasicEventSchema.array().parse(events);
+      let nextCursor: Date | undefined = undefined;
+      if (events.length > limit) {
+        const nextItem = events.pop();
+        nextCursor = nextItem?.createdAt;
+      }
+
+      return {
+        events: BasicEventSchema.array().parse(events),
+        nextCursor,
+      };
     }),
   getCalendar: protectedProcedure
     .output(BasicEventSchema.array())

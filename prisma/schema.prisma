@@ -6,11 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql" // "sqlite"
-  // NOTE: When using postgresql, mysql or sqlserver, uncomment the @db.Text annotations in model Account below
-  // Further reading:
-  // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
-  // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -64,7 +60,7 @@ model User {
   accounts           Account[]
   sessions           Session[]
   introduction       String    @default("")
-  themeColor         String    @default("violet") // TODO enum (migrate to PostgreSQL first)
+  themeColor         String    @default("violet") // TODO enum
   locationId         Int?
   location           Location? @relation(fields: [locationId], references: [id], onDelete: Restrict)
   createdEvents      Event[]   @relation(name: "createdEvents")
@@ -76,6 +72,8 @@ model User {
 
 model Event {
   id           Int       @id @default(autoincrement())
+  createdAt    DateTime  @unique @default(now())
+  updatedAt    DateTime  @updatedAt
   name         String
   start        DateTime
   end          DateTime
@@ -118,7 +116,4 @@ model Group {
   creator     User     @relation(name: "createdGroups", fields: [creatorId], references: [id], onDelete: Restrict)
   members     User[]   @relation(name: "joinedGroups")
   // events Event[]
-  // posts Post[]
 }
-
-// model Post {}

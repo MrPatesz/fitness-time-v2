@@ -1,32 +1,49 @@
-import {Stack} from "@mantine/core";
+import {Card, Center, Loader, Stack} from "@mantine/core";
 import {useTranslation} from "next-i18next";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import i18nConfig from "../../next-i18next.config.mjs";
 import {EventGrid} from "../components/event/EventGrid";
-import {FilterBy, FilterEventsComponent, OrderBy} from "../components/event/FilterEventsComponent";
-import {QueryComponent} from "../components/QueryComponent";
-import useFilteredEvents from "../hooks/useFilteredEvents";
 import {api} from "../utils/api";
-
-export interface EventFilters {
-  searchTerm: string;
-  orderBy: OrderBy;
-  ascending: boolean;
-  tags: FilterBy[];
-}
+import {useEffect} from "react";
+import {useInView} from "react-intersection-observer";
 
 export default function FeedPage() {
   const {t} = useTranslation("common");
+  const {ref, inView} = useInView();
 
-  const eventsQuery = api.event.getFeed.useQuery();
-  const {filteredList, filters, setFilters} = useFilteredEvents(eventsQuery.data);
+  const {
+    data,
+    fetchNextPage,
+    isFetching,
+    hasNextPage,
+    isLoading,
+    error,
+  } = api.event.getFeed.useInfiniteQuery({}, {
+    getNextPageParam: (lastPage) => lastPage.nextCursor,
+  });
+
+  useEffect(() => {
+    if (inView && hasNextPage) {
+      fetchNextPage().then();
+    }
+  }, [inView, data?.pages.length])
 
   return (
     <Stack>
-      <FilterEventsComponent filters={filters} setFilters={setFilters}/>
-      <QueryComponent resourceName={t("resource.feed")} query={eventsQuery}>
-        <EventGrid events={filteredList}/>
-      </QueryComponent>
+      {error ? (
+        <Card withBorder>{t("queryComponent.error", {resourceName: t("resource.feed")})}</Card>
+      ) : isLoading ? (
+        <Center sx={{height: "100%", width: "100%"}}>
+          <Loader/>
+        </Center>
+      ) : (
+        <EventGrid events={data?.pages.flatMap(page => page.events) ?? []}/>
+      )}
+      <Center ref={ref} sx={{height: "100%", width: "100%"}}>
+        {isFetching && (
+          <Loader/>
+        )}
+      </Center>
     </Stack>
   );
 }
