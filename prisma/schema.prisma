@@ -66,6 +66,7 @@ model User {
   createdEvents      Event[]   @relation(name: "createdEvents")
   participatedEvents Event[]   @relation(name: "participatedEvents")
   comments           Comment[]
+  messages           Message[]
   createdGroups      Group[]   @relation(name: "createdGroups")
   joinedGroups       Group[]   @relation(name: "joinedGroups")
 }
@@ -108,12 +109,23 @@ model Comment {
 }
 
 model Group {
-  id          Int      @id @default(autoincrement())
-  name        String   @unique
+  id          Int       @id @default(autoincrement())
+  name        String    @unique
   description String
-  createdAt   DateTime @default(now())
+  createdAt   DateTime  @default(now())
   creatorId   String
-  creator     User     @relation(name: "createdGroups", fields: [creatorId], references: [id], onDelete: Restrict)
-  members     User[]   @relation(name: "joinedGroups")
+  creator     User      @relation(name: "createdGroups", fields: [creatorId], references: [id], onDelete: Restrict)
+  members     User[]    @relation(name: "joinedGroups")
+  messages    Message[]
   // events Event[]
+}
+
+model Message {
+  id       Int      @id @default(autoincrement())
+  message  String
+  postedAt DateTime @unique @default(now())
+  userId   String
+  user     User     @relation(fields: [userId], references: [id])
+  groupId  Int
+  group    Group    @relation(fields: [groupId], references: [id])
 }

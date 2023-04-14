@@ -1,4 +1,17 @@
-import {ActionIcon, Avatar, Card, Group, Stack, Text, useMantineTheme} from "@mantine/core";
+import {
+  ActionIcon,
+  Avatar,
+  Button,
+  Card,
+  Center,
+  Group,
+  Loader,
+  ScrollArea, SimpleGrid,
+  Stack,
+  Text,
+  TextInput,
+  useMantineTheme
+} from "@mantine/core";
 import {showNotification} from "@mantine/notifications";
 import {useSession} from "next-auth/react";
 import {useTranslation} from "next-i18next";
@@ -11,7 +24,9 @@ import {QueryComponent} from "../../components/QueryComponent";
 import {RichTextDisplay} from "../../components/rich-text/RichTextDisplay";
 import {api} from "../../utils/api";
 import {getLongDateFormatter} from "../../utils/formatters";
-import {getInitials} from "../../utils/utilFunctions";
+import {getBackgroundColor, getInitials} from "../../utils/utilFunctions";
+import {useInView} from "react-intersection-observer";
+import {useEffect, useMemo, useRef} from "react";
 
 export default function GroupDetailsPage() {
   const theme = useMantineTheme();
@@ -19,6 +34,13 @@ export default function GroupDetailsPage() {
   const {data: session} = useSession();
   const {t} = useTranslation("common");
   const longDateFormatter = getLongDateFormatter(locale as string);
+  const {ref, inView} = useInView();
+  const viewport = useRef<HTMLDivElement>(null);
+  const scrollToBottom = () => viewport.current?.scrollTo({top: viewport.current?.scrollHeight});
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [viewport.current])
 
   const groupId = parseInt(id as string);
   const groupQuery = api.group.getById.useQuery(groupId, {
@@ -33,11 +55,49 @@ export default function GroupDetailsPage() {
       })
     ),
   });
+  const {
+    data,
+    fetchNextPage,
+    isFetching,
+    hasNextPage,
+    isLoading,
+    error,
+    refetch: refetchMessages,
+  } = api.groupChat.getMessages.useInfiniteQuery({groupId}, {
+    getNextPageParam: (lastPage) => lastPage.nextCursor,
+  });
+  const useCreateMessage = api.groupChat.create.useMutation({
+    onSuccess: () => refetchMessages().then(() =>
+      showNotification({
+        color: "green",
+        title: t("notification.message.sent.title"),
+        message: t("notification.message.sent.message"),
+      })
+    ),
+  });
+
+  useEffect(() => {
+    if (inView && hasNextPage) {
+      fetchNextPage().then(() => {
+        setTimeout(() => {
+          const numberOfPages = data?.pages.length ?? 1;
+          const scrollRatio = 1 - numberOfPages / (numberOfPages + 1);
+          viewport.current?.scrollTo({top: viewport.current?.scrollHeight * scrollRatio});
+        }, 100);
+      });
+    }
+  }, [inView])
+
+  const messages = useMemo(() => {
+    if (!data) return [];
+
+    return [...data.pages].reverse().flatMap(page => page.messages);
+  }, [data?.pages])
 
   return (
-    <QueryComponent resourceName={t("resource.eventDetails")} query={groupQuery}>
+    <QueryComponent resourceName={t("resource.groupDetails")} query={groupQuery}>
       {groupQuery.data && (
-        <Stack>
+        <Stack sx={{height: "100%"}}>
           <Group position="apart" align="start">
             <Stack>
               <Group align="end">
@@ -116,11 +176,64 @@ export default function GroupDetailsPage() {
             </Avatar.Group>
           </Group>
           {groupQuery.data.description && (
-            <Card withBorder>
+            <Card withBorder sx={theme => ({backgroundColor: getBackgroundColor(theme)})}>
               <RichTextDisplay richText={groupQuery.data.description} maxHeight={400}/>
             </Card>
           )}
-          {/*TODO events/posts*/}
+          {groupQuery.data.members.find(m => m.id === session?.user.id) && (
+            <SimpleGrid cols={2} sx={{flexGrow: 1}}>
+              <Card
+                withBorder
+                sx={theme => ({
+                  backgroundColor: getBackgroundColor(theme),
+                  height: "100%"
+                })}
+              >
+                Events
+              </Card>
+              <Card
+                withBorder
+                sx={theme => ({
+                  backgroundColor: getBackgroundColor(theme),
+                  height: "100%",
+                })}
+              >
+                <ScrollArea
+                  viewportRef={viewport}
+                  h={200}
+                  // sx={{height: "100%",}}
+                >
+                  <Stack>
+                    <Center ref={ref} sx={{width: "100%"}}>
+                      {isFetching && (
+                        <Loader/>
+                      )}
+                    </Center>
+                    {error ? (
+                      <Card withBorder>{t("queryComponent.error", {resourceName: t("resource.chat")})}</Card>
+                    ) : isLoading ? (
+                      <Center sx={{height: "100%", width: "100%"}}>
+                        <Loader/>
+                      </Center>
+                    ) : (
+                      messages.map(m => (
+                        <Card
+                          key={m.id}>{m.user.name}: {m.message} - {getLongDateFormatter(locale as string).format(m.postedAt)}</Card>
+                      ))
+                    )}
+                  </Stack>
+                </ScrollArea>
+                <Group>
+                  <TextInput defaultValue={"heloka"}/>
+                  <Button
+                    onClick={() => useCreateMessage.mutate({groupId, createMessage: {message: "heloka"}})}
+                  >
+                    Post
+                  </Button>
+                </Group>
+              </Card>
+            </SimpleGrid>
+          )}
         </Stack>
       )}
     </QueryComponent>

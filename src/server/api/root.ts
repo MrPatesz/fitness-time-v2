@@ -4,6 +4,7 @@ import {groupRouter} from "./routers/group";
 import {userRouter} from "./routers/user";
 import {createTRPCRouter} from "./trpc";
 import {commentRouter} from "./routers/comment";
+import {groupChatRouter} from "./routers/groupChat";
 
 /**
  * This is the primary router for your server.
@@ -16,6 +17,7 @@ export const appRouter = createTRPCRouter({
   example: exampleRouter,
   group: groupRouter,
   user: userRouter,
+  groupChat: groupChatRouter,
 });
 
 // export type definition of API

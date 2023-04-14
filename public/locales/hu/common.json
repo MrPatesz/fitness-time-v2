@@ -28,9 +28,16 @@
     "profile": "Profil",
     "userDetails": "Felhasználó részletek",
     "users": "Felhasználók",
-    "groups": "Csoportok"
+    "groups": "Csoportok",
+    "groupDetails": "Csoport részletek"
   },
   "notification": {
+    "message": {
+      "sent": {
+        "title": "Üzenet elküldve!",
+        "message": "Új üzenetet küldtél a csoportba."
+      }
+    },
     "group": {
       "create": {
         "title": "Csoport létrehozva!",

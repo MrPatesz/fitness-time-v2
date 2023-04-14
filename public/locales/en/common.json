@@ -28,9 +28,16 @@
     "profile": "Profile",
     "userDetails": "User Details",
     "users": "Users",
-    "groups": "Groups"
+    "groups": "Groups",
+    "groupDetails": "Group Details"
   },
   "notification": {
+    "message": {
+      "sent": {
+        "title": "Message Sent!",
+        "message": "You sent a new message to the group."
+      }
+    },
     "group": {
       "create": {
         "title": "Created group!",
