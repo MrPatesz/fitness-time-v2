@@ -29,7 +29,8 @@
     "userDetails": "User Details",
     "users": "Users",
     "groups": "Groups",
-    "groupDetails": "Group Details"
+    "groupDetails": "Group Details",
+    "chat": "Group Chat"
   },
   "notification": {
     "message": {

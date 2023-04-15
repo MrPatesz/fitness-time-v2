@@ -29,7 +29,8 @@
     "userDetails": "Felhasználó részletek",
     "users": "Felhasználók",
     "groups": "Csoportok",
-    "groupDetails": "Csoport részletek"
+    "groupDetails": "Csoport részletek",
+    "chat": "Csoport csevegés"
   },
   "notification": {
     "message": {
