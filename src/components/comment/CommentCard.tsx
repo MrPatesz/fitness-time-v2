@@ -14,11 +14,11 @@ import {getLongDateFormatter} from "../../utils/formatters";
 import {RichTextDisplay} from "../rich-text/RichTextDisplay";
 import UserImage from "../user/UserImage";
 import {CommentForm} from "./CommentForm";
+import {BasicMessageType} from "../../models/Message";
 
 export const CommentCard: FunctionComponent<{
-  comment: BasicCommentType;
-  eventId: number;
-}> = ({comment, eventId}) => {
+  comment: BasicCommentType | BasicMessageType;
+}> = ({comment}) => {
   const queryContext = api.useContext();
   const theme = useMantineTheme();
   const {locale} = useRouter();
@@ -58,14 +58,14 @@ export const CommentCard: FunctionComponent<{
               </Tooltip>
             </Stack>
           </Group>
-          {comment.userId === session?.user.id && (
+          {"eventId" in comment && comment.userId === session?.user.id && (
             <Group position="right" spacing="xs">
               <ActionIcon
                 size="sm"
                 variant="transparent"
                 onClick={() => openModal({
                   title: t("modal.comment.edit"),
-                  children: <CommentForm eventId={eventId} editedComment={comment}/>,
+                  children: <CommentForm eventId={comment.eventId} editedComment={comment}/>,
                   size: "xl"
                 })}
               >

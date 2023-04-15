@@ -181,7 +181,7 @@ export default function EventDetailsPage() {
           <Stack>
             <AddComment eventId={eventId}/>
             {commentsQuery.data?.map(c => (
-              <CommentCard key={c.id} comment={c} eventId={eventId}/>
+              <CommentCard key={c.id} comment={c}/>
             ))}
           </Stack>
         </Card>
