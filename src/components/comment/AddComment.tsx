@@ -34,7 +34,7 @@ export const AddComment: FunctionComponent<{
     <form onSubmit={form.onSubmit((data) => createComment.mutate({createComment: data, eventId}))}>
       <Group>
         <RichTextField
-          placeholder={t("commentFrom.addComment") as string}
+          placeholder={t("commentForm.addComment") as string}
           formInputProps={form.getInputProps("message")}
         />
         <ActionIcon

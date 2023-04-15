@@ -266,10 +266,11 @@
       "placeholder": "Maximum hányan vehetnek részt rajta?"
     }
   },
-  "commentFrom": {
-    "messageError": "Üzenet kötelező!",
-    "addComment": "Kommentelés...",
-    "update": "Frissít"
+  "commentForm": {
+    "addComment": "Kommentelés..."
+  },
+  "messageForm": {
+    "addMessage": "Üzenetküldés..."
   },
   "richTextDisplay": {
     "showLabel": "Mutass többet",

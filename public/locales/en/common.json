@@ -266,10 +266,11 @@
       "placeholder": "Is there a maximum number of participants?"
     }
   },
-  "commentFrom": {
-    "messageError": "Message is required",
-    "addComment": "Add comment...",
-    "update": "Update"
+  "commentForm": {
+    "addComment": "Add comment..."
+  },
+  "messageForm": {
+    "addMessage": "Send message..."
   },
   "richTextDisplay": {
     "showLabel": "Show more",

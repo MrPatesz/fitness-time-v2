@@ -52,7 +52,7 @@ export const CommentForm: FunctionComponent<{
       <Stack>
         <RichTextEditor
           id="rte"
-          placeholder={t("commentFrom.addComment") as string}
+          placeholder={t("commentForm.addComment") as string}
           value={form.getInputProps("message").value}
           onChange={form.getInputProps("message").onChange}
         />
