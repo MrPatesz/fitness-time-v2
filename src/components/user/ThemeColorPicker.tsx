@@ -1,21 +1,7 @@
 import {ColorSwatch, DefaultMantineColor, Group, Select, Text, useMantineTheme} from "@mantine/core";
 import {useTranslation} from "next-i18next";
 import {ComponentPropsWithoutRef, forwardRef, FunctionComponent} from "react";
-
-export enum ThemeColor {
-  RED = "red",
-  PINK = "pink",
-  GRAPE = "grape",
-  VIOLET = "violet",
-  INDIGO = "indigo",
-  BLUE = "blue",
-  CYAN = "cyan",
-  TEAL = "teal",
-  GREEN = "green",
-  LIME = "lime",
-  YELLOW = "yellow",
-  ORANGE = "orange",
-}
+import {ThemeColor} from "../../utils/enums";
 
 interface ItemProps extends ComponentPropsWithoutRef<"div"> {
   value: ThemeColor;

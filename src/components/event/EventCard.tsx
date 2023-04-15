@@ -6,7 +6,7 @@ import {FunctionComponent} from "react";
 import {BasicEventType} from "../../models/event/Event";
 import {getShortDateFormatter} from "../../utils/formatters";
 import {getBackgroundColor} from "../../utils/utilFunctions";
-import {ThemeColor} from "../user/ThemeColorPicker";
+import {ThemeColor} from "../../utils/enums";
 
 export const EventCard: FunctionComponent<{
   event: BasicEventType;

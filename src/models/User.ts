@@ -1,5 +1,5 @@
 import {z} from "zod";
-import {ThemeColor} from "../components/user/ThemeColorPicker";
+import {ThemeColor} from "../utils/enums";
 import {BasicEventSchema} from "./event/Event";
 import {CreateLocationSchema, LocationSchema} from "./Location";
 

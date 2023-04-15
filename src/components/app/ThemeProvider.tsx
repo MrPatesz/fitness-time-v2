@@ -6,7 +6,7 @@ import {useSession} from "next-auth/react";
 import {useRouter} from "next/router";
 import {FunctionComponent, useMemo} from "react";
 import dayjs from "../../utils/dayjs";
-import {ThemeColor} from "../user/ThemeColorPicker";
+import {ThemeColor} from "../../utils/enums";
 
 export const ThemeProvider: FunctionComponent<{
   children: JSX.Element;
