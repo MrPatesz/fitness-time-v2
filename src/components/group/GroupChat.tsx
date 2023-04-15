@@ -1,16 +1,15 @@
-import {Box, Button, Card, Center, Group, Loader, ScrollArea, Stack, TextInput} from "@mantine/core";
+import {Box, Card, Center, Loader, ScrollArea, Stack} from "@mantine/core";
 import {useTranslation} from "next-i18next";
-import {FunctionComponent, useEffect, useMemo, useRef, useState} from "react";
+import {FunctionComponent, useEffect, useMemo, useRef} from "react";
 import {useInView} from "react-intersection-observer";
 import {api} from "../../utils/api";
 import {getBackgroundColor} from "../../utils/utilFunctions";
 import {CommentCard} from "../comment/CommentCard";
+import {AddMessage} from "./AddMessage";
 
 export const GroupChat: FunctionComponent<{
   groupId: number;
 }> = ({groupId}) => {
-  const [messageText, setMessageText] = useState("");
-
   const {ref, inView} = useInView();
   const viewport = useRef<HTMLDivElement>(null);
   const {t} = useTranslation("common");
@@ -30,11 +29,6 @@ export const GroupChat: FunctionComponent<{
     refetch: refetchMessages,
   } = api.groupChat.getMessages.useInfiniteQuery({groupId}, {
     getNextPageParam: (lastPage) => lastPage.nextCursor,
-  });
-  const useCreateMessage = api.groupChat.create.useMutation({
-    onSuccess: () => refetchMessages().then(() => {
-      setTimeout(() => scrollToBottom(true), 100);
-    }),
   });
 
   const messages = useMemo(() => {
@@ -103,21 +97,7 @@ export const GroupChat: FunctionComponent<{
             )}
           </Stack>
         </ScrollArea>
-        <Group>
-          <TextInput
-            sx={{flexGrow: 1}}
-            value={messageText}
-            onChange={event => setMessageText(event.currentTarget.value)}
-          />
-          <Button
-            onClick={() => useCreateMessage.mutateAsync({
-              groupId,
-              createMessage: {message: messageText}
-            }).then(() => setMessageText(""))}
-          >
-            Post
-          </Button>
-        </Group>
+        <AddMessage groupId={groupId}/>
       </Stack>
     </Card>
   );
