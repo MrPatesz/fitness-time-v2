@@ -48,7 +48,7 @@ export const GroupChat: FunctionComponent<{
 
   useEffect(() => {
     scrollToBottom();
-  }, [viewport.current]);
+  }, [viewport.current, isLoading]);
 
   useEffect(() => {
     if (inView && hasNextPage) {
