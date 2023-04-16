@@ -15,12 +15,12 @@ export const groupChatRouter = createTRPCRouter({
       messages: BasicMessageSchema.array(),
       nextCursor: z.date().nullish(),
     }))
-    .query(async ({input: {cursor, groupId}, ctx: {session: {user: {id: callerId}}, prisma}}) => {
+    .query(async ({input: {cursor, groupId}, ctx}) => {
       const limit = 10;
 
       // TODO get these in reverse, so FE doesn't have to reverse them
       // TODO only group members should be able to get this data
-      const messages = await prisma.message.findMany({
+      const messages = await ctx.prisma.message.findMany({
         where: {groupId},
         take: -(limit + 1),
         cursor: cursor ? {postedAt: cursor} : undefined,
@@ -63,7 +63,7 @@ export const groupChatRouter = createTRPCRouter({
     }),
   onCreate: protectedProcedure
     .input(IdSchema)
-    .subscription(({ctx: {emitter}, input: groupId, ctx}) => {
+    .subscription(({ctx: {emitter}, input: groupId}) => {
       return observable<BasicMessageType>((emit) => {
         const onCreate = (data: BasicMessageType) => {
           if (data.groupId === groupId) {
