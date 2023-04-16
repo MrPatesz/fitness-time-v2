@@ -68,17 +68,17 @@ const merged = server.merge(client);
  *  @ts-ignore - can't type this properly in jsdoc */
 let env = process.env;
 
-if (!!process.env.SKIP_ENV_VALIDATION == false) {
+if (!!process.env.SKIP_ENV_VALIDATION === false) {
   const isServer = typeof window === "undefined";
 
   const parsed = isServer
-    ? merged.safeParse(processEnv) // on server we can validate all env vars
-    : client.safeParse(processEnv); // on client we can only validate the ones that are exposed
+      ? merged.safeParse(processEnv) // on server we can validate all env vars
+      : client.safeParse(processEnv); // on client we can only validate the ones that are exposed
 
   if (parsed.success === false) {
     console.error(
-      "❌ Invalid environment variables:",
-      parsed.error.flatten().fieldErrors,
+        "❌ Invalid environment variables:",
+        parsed.error.flatten().fieldErrors,
     );
     throw new Error("Invalid environment variables");
   }
