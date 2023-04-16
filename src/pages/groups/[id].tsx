@@ -1,4 +1,4 @@
-import {ActionIcon, Avatar, Card, Group, SimpleGrid, Stack, Text, useMantineTheme} from "@mantine/core";
+import {ActionIcon, Avatar, Box, Card, Group, SimpleGrid, Stack, Text, useMantineTheme} from "@mantine/core";
 import {showNotification} from "@mantine/notifications";
 import {useSession} from "next-auth/react";
 import {useTranslation} from "next-i18next";
@@ -14,6 +14,7 @@ import {api} from "../../utils/api";
 import {getLongDateFormatter} from "../../utils/formatters";
 import {getBackgroundColor, getInitials} from "../../utils/utilFunctions";
 import {useMediaQuery} from "@mantine/hooks";
+import {useMemo} from "react";
 
 export default function GroupDetailsPage() {
   const theme = useMantineTheme();
@@ -36,6 +37,10 @@ export default function GroupDetailsPage() {
       })
     ),
   });
+
+  const isMember = useMemo(() => {
+    return Boolean(groupQuery.data?.members.find(m => m.id === session?.user.id));
+  }, [groupQuery.data?.members, session?.user.id])
 
   return (
     <QueryComponent resourceName={t("resource.groupDetails")} query={groupQuery}>
@@ -118,27 +123,36 @@ export default function GroupDetailsPage() {
                 ))}
             </Avatar.Group>
           </Group>
-          {groupQuery.data.description && (
-            <Card withBorder sx={theme => ({backgroundColor: getBackgroundColor(theme)})}>
-              <RichTextDisplay richText={groupQuery.data.description} maxHeight={300} scroll/>
-            </Card>
-          )}
-          {groupQuery.data.members.find(m => m.id === session?.user.id) && (
+          {isMember ? (
             <SimpleGrid
               cols={md ? 2 : 1}
-              sx={{flexGrow: 1, minHeight: 300}}
+              sx={{flexGrow: 1}}
             >
               <Card
                 withBorder
                 sx={theme => ({
                   backgroundColor: getBackgroundColor(theme),
-                  height: "100%"
+                  height: "100%",
+                  minHeight: 300,
                 })}
               >
                 Events
               </Card>
-              <GroupChat groupId={groupId}/>
+              <Stack>
+                {groupQuery.data.description && (
+                  <Card withBorder sx={theme => ({backgroundColor: getBackgroundColor(theme)})}>
+                    <RichTextDisplay richText={groupQuery.data.description} maxHeight={300} scroll/>
+                  </Card>
+                )}
+                <Box sx={{flexGrow: 1}}>
+                  <GroupChat groupId={groupId}/>
+                </Box>
+              </Stack>
             </SimpleGrid>
+          ) : (
+            <Card withBorder sx={theme => ({backgroundColor: getBackgroundColor(theme)})}>
+              <RichTextDisplay richText={groupQuery.data.description}/>
+            </Card>
           )}
         </Stack>
       )}

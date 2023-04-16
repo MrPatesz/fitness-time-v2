@@ -1,11 +1,9 @@
 import {createTRPCRouter, protectedProcedure} from "../trpc";
-import {EventEmitter} from "events";
 import {z} from "zod";
 import {Prisma} from ".prisma/client";
-import {BasicMessageSchema, CreateMessageSchema} from "../../../models/Message";
+import {BasicMessageSchema, BasicMessageType, CreateMessageSchema} from "../../../models/Message";
 import {IdSchema} from "../../../models/Id";
-
-const ee = new EventEmitter();
+import {observable} from "@trpc/server/observable";
 
 export const groupChatRouter = createTRPCRouter({
   getMessages: protectedProcedure
@@ -20,7 +18,8 @@ export const groupChatRouter = createTRPCRouter({
     .query(async ({input: {cursor, groupId}, ctx: {session: {user: {id: callerId}}, prisma}}) => {
       const limit = 10;
 
-      // TODO get these in reverse
+      // TODO get these in reverse, so FE doesn't have to reverse them
+      // TODO only group members should be able to get this data
       const messages = await prisma.message.findMany({
         where: {groupId},
         take: -(limit + 1),
@@ -43,7 +42,12 @@ export const groupChatRouter = createTRPCRouter({
   create: protectedProcedure
     .input(z.object({createMessage: CreateMessageSchema, groupId: IdSchema}))
     .output(BasicMessageSchema)
-    .mutation(async ({input: {createMessage, groupId}, ctx: {session: {user: {id: callerId}}, prisma}}) => {
+    .mutation(async (
+      {
+        input: {createMessage, groupId},
+        ctx: {session: {user: {id: callerId}}, emitter, prisma}
+      }
+    ) => {
       const message = await prisma.message.create({
         data: {
           ...createMessage,
@@ -53,6 +57,21 @@ export const groupChatRouter = createTRPCRouter({
         include: {user: true},
       });
 
-      return BasicMessageSchema.parse(message);
+      const result = BasicMessageSchema.parse(message);
+      emitter.emit("create", result);
+      return result;
+    }),
+  onCreate: protectedProcedure
+    .input(IdSchema)
+    .subscription(({ctx: {emitter}, input: groupId, ctx}) => {
+      return observable<BasicMessageType>((emit) => {
+        const onCreate = (data: BasicMessageType) => {
+          if (data.groupId === groupId) {
+            emit.next(data);
+          }
+        };
+        emitter.on('create', onCreate);
+        return () => emitter.off('create', onCreate);
+      });
     }),
 });

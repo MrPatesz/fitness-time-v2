@@ -14,11 +14,6 @@ export const GroupChat: FunctionComponent<{
   const viewport = useRef<HTMLDivElement>(null);
   const {t} = useTranslation("common");
 
-  const scrollToBottom = (smooth: boolean = false) => viewport.current?.scrollTo({
-    top: viewport.current?.scrollHeight,
-    behavior: smooth ? "smooth" : undefined,
-  });
-
   const {
     data: groupChatData,
     fetchNextPage,
@@ -29,6 +24,23 @@ export const GroupChat: FunctionComponent<{
     refetch: refetchMessages,
   } = api.groupChat.getMessages.useInfiniteQuery({groupId}, {
     getNextPageParam: (lastPage) => lastPage.nextCursor,
+  });
+
+  const scrollToBottom = (smooth: boolean = false) => viewport.current?.scrollTo({
+    top: viewport.current?.scrollHeight,
+    behavior: smooth ? "smooth" : undefined,
+  });
+
+  const refetchAndScrollToBottom = () => refetchMessages().then(() => setTimeout(() => scrollToBottom(true), 100));
+
+  api.groupChat.onCreate.useSubscription(groupId, {
+    onData: (_message) => {
+      refetchAndScrollToBottom();
+    },
+    onError: (err) => {
+      console.error('Subscription error:', err);
+      refetchAndScrollToBottom();
+    },
   });
 
   const messages = useMemo(() => {
@@ -49,8 +61,8 @@ export const GroupChat: FunctionComponent<{
       fetchNextPage().then(() => {
         setTimeout(() => {
           const numberOfPages = groupChatData?.pages.length ?? 1;
-          const scrollRatio = 1 - numberOfPages / (numberOfPages + 1);
-          viewport.current?.scrollTo({top: viewport.current?.scrollHeight * scrollRatio});
+          const scrollRatio = 1 - (numberOfPages / (numberOfPages + 1));
+          viewport.current?.scrollTo({top: viewport.current?.scrollHeight * scrollRatio, behavior: "smooth"});
         }, 100);
       });
     }
@@ -62,11 +74,12 @@ export const GroupChat: FunctionComponent<{
       sx={theme => ({
         backgroundColor: getBackgroundColor(theme),
         height: "100%",
-        position: "relative",
         minHeight: 300,
+        position: "relative",
       })}
     >
       <Stack
+        justify="end"
         sx={{
           position: "absolute",
           top: 16,
