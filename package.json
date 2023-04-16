@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "build": "next build",
-    "dev": "next dev",
+    "dev:wss": "tsx watch src/server/wsServer.ts --tsconfig tsconfig.server.json",
+    "dev:next": "next dev",
+    "dev": "run-p dev:*",
     "postinstall": "prisma generate",
     "lint": "next lint",
     "start": "next start",
@@ -34,6 +36,7 @@
     "@trpc/react-query": "^10.13.2",
     "@trpc/server": "^10.13.2",
     "dayjs": "^1.11.7",
+    "dotenv": "^16.0.3",
     "mantine-datatable": "^1.8.8",
     "next": "13.2.3",
     "next-auth": "^4.19.2",
@@ -43,16 +46,19 @@
     "react-intersection-observer": "^9.4.3",
     "superjson": "1.12.2",
     "tabler-icons-react": "^1.56.0",
+    "ws": "^8.13.0",
     "zod": "^3.20.6"
   },
   "devDependencies": {
     "@types/node": "^18.14.2",
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
+    "@types/ws": "^8.5.4",
     "@typescript-eslint/eslint-plugin": "^5.54.0",
     "@typescript-eslint/parser": "^5.54.0",
     "eslint": "^8.35.0",
     "eslint-config-next": "13.2.3",
+    "npm-run-all": "^4.1.5",
     "prisma": "^4.12.0",
     "tsx": "^3.12.3",
     "typescript": "^5.0.2"

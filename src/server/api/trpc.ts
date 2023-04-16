@@ -12,6 +12,11 @@ import {getServerAuthSession} from "../auth";
 import {prisma} from "../db";
 import {initTRPC, TRPCError} from "@trpc/server";
 import superjson from "superjson";
+import {NodeHTTPCreateContextFnOptions} from "@trpc/server/dist/adapters/node-http";
+import {IncomingMessage} from "http";
+import ws from "ws";
+import {getSession} from "next-auth/react";
+import {emitter} from "../emitter";
 
 /**
  * 1. CONTEXT
@@ -40,6 +45,7 @@ const createInnerTRPCContext = (opts: CreateContextOptions) => {
   return {
     session: opts.session,
     prisma,
+    emitter,
   };
 };
 
@@ -49,11 +55,14 @@ const createInnerTRPCContext = (opts: CreateContextOptions) => {
  *
  * @see https://trpc.io/docs/context
  */
-export const createTRPCContext = async (opts: CreateNextContextOptions) => {
+export const createTRPCContext = async (opts: CreateNextContextOptions | NodeHTTPCreateContextFnOptions<IncomingMessage, ws>) => {
   const {req, res} = opts;
 
   // Get the session from the server using the getServerSession wrapper function
-  const session = await getServerAuthSession({req, res});
+  const session = ("cookies" in req && "statusCode" in res) ? await getServerAuthSession({
+    req,
+    res
+  }) : await getSession(opts);
 
   return createInnerTRPCContext({
     session,
