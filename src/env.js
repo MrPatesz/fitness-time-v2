@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-const {z} = require("zod")
+const z = require("zod");
 
 if (typeof window === 'undefined') {
   require('dotenv').config();
