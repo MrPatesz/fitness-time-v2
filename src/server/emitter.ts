@@ -1,5 +1,5 @@
 import {EventEmitter} from "events";
-import {env} from "../env.mjs";
+import {env} from "../env.js";
 
 // In a real app, you'd probably use Redis or something TODO
 

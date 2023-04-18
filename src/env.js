@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import {z} from "zod";
+const {z} = require("zod")
 
 if (typeof window === 'undefined') {
   require('dotenv').config();
@@ -102,4 +102,4 @@ if (!!process.env.SKIP_ENV_VALIDATION === false) {
   });
 }
 
-export { env };
+module.exports = {env};

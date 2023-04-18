@@ -2,7 +2,7 @@ import {Card, Center, Loader, TextInput} from "@mantine/core";
 import {Autocomplete, useJsApiLoader} from "@react-google-maps/api";
 import {useTranslation} from "next-i18next";
 import {FunctionComponent, useEffect, useState} from "react";
-import {env} from "../../env.mjs";
+import {env} from "../../env.js";
 import {CreateLocationType} from "../../models/Location";
 import {googleMapsLibraries} from "../../utils/defaultObjects";
 
