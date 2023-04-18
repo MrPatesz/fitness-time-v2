@@ -54,23 +54,24 @@ export const eventRouter = createTRPCRouter({
       };
     }),
   getFeed: protectedProcedure
-    .input(z.object({
-      cursor: z.date().nullish(),
-    }))
-    .output(z.object({
-      events: BasicEventSchema.array(),
-      nextCursor: z.date().nullish(),
-    }))
-    .query(async ({input: {cursor}, ctx: {session: {user: {id: callerId}}, prisma}}) => {
-      const limit = 10;
+      .input(z.object({
+          cursor: z.date().nullish(),
+          groupId: z.number().nullish(),
+      }))
+      .output(z.object({
+          events: BasicEventSchema.array(),
+          nextCursor: z.date().nullish(),
+      }))
+      .query(async ({input: {cursor, groupId}, ctx: {session: {user: {id: callerId}}, prisma}}) => {
+          const limit = 10;
 
-      const events = await prisma.event.findMany({
-        where: {creatorId: {not: callerId}},
-        take: limit + 1,
-        cursor: cursor ? {createdAt: cursor} : undefined,
-        orderBy: {createdAt: Prisma.SortOrder.desc},
-        include: {location: true, creator: true},
-      });
+          const events = await prisma.event.findMany({
+              where: groupId ? {groupId} : {creatorId: {not: callerId}},
+              take: limit + 1,
+              cursor: cursor ? {createdAt: cursor} : undefined,
+              orderBy: {createdAt: Prisma.SortOrder.desc},
+              include: {location: true, creator: true},
+          });
 
       let nextCursor: Date | undefined = undefined;
       if (events.length > limit) {
@@ -122,16 +123,18 @@ export const eventRouter = createTRPCRouter({
     .mutation(async ({input: createEvent, ctx: {session: {user: {id: callerId}}, prisma}}) => {
       const event = await prisma.event.create({
         data: {
-          ...createEvent,
-          creator: {connect: {id: callerId}},
-          location: {
-            connectOrCreate: {
-              where: {
-                address: createEvent.location.address,
-              },
-              create: createEvent.location,
+            ...createEvent,
+            groupId: undefined,
+            group: createEvent.groupId ? {connect: {id: createEvent.groupId}} : undefined,
+            creator: {connect: {id: callerId}},
+            location: {
+                connectOrCreate: {
+                    where: {
+                        address: createEvent.location.address,
+                    },
+                    create: createEvent.location,
+                },
             },
-          },
         },
         include: {location: true, creator: true},
       });
@@ -172,16 +175,18 @@ export const eventRouter = createTRPCRouter({
       const updatedEvent = await prisma.event.update({
         where: {id: input.id},
         data: {
-          ...input.event,
-          creator: {connect: {id: callerId}},
-          location: {
-            connectOrCreate: {
-              where: {
-                address: input.event.location.address,
-              },
-              create: input.event.location,
+            ...input.event,
+            groupId: undefined,
+            group: input.event.groupId ? {connect: {id: input.event.groupId}} : undefined,
+            creator: {connect: {id: callerId}},
+            location: {
+                connectOrCreate: {
+                    where: {
+                        address: input.event.location.address,
+                    },
+                    create: input.event.location,
+                },
             },
-          },
         },
         include: {location: true, creator: true},
       });

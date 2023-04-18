@@ -17,7 +17,8 @@ export const EventForm: FunctionComponent<{
     start: Date;
     end: Date;
   };
-}> = ({editedEventId, initialInterval}) => {
+  groupId?: number;
+}> = ({editedEventId, initialInterval, groupId}) => {
   const {t} = useTranslation("common");
 
   const getErrors = (data: CreateEventType, isCreation: boolean) => ({
@@ -35,8 +36,9 @@ export const EventForm: FunctionComponent<{
   const queryContext = api.useContext();
   const editedEventQuery = api.event.getById.useQuery(editedEventId ?? 0, {
     enabled: !!editedEventId,
-    initialData: getDefaultCreateEvent(initialInterval),
+    initialData: {...getDefaultCreateEvent(initialInterval), groupId},
     onSuccess: resetForm,
+    refetchOnMount: (query) => !query.isActive(),
   });
 
   const form = useForm<CreateEventType>({

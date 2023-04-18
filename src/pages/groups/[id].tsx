@@ -5,7 +5,7 @@ import {useTranslation} from "next-i18next";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import Link from "next/link";
 import {useRouter} from "next/router";
-import {Minus, Plus} from "tabler-icons-react";
+import {Minus, Pencil, Plus} from "tabler-icons-react";
 import i18nConfig from "../../../next-i18next.config.mjs";
 import {GroupChat} from "../../components/group/GroupChat";
 import {QueryComponent} from "../../components/QueryComponent";
@@ -15,6 +15,9 @@ import {getLongDateFormatter} from "../../utils/formatters";
 import {getBackgroundColor, getInitials} from "../../utils/utilFunctions";
 import {useMediaQuery} from "@mantine/hooks";
 import {useMemo} from "react";
+import {GroupFeed} from "../../components/group/GroupFeed";
+import {openModal} from "@mantine/modals";
+import {GroupForm} from "../../components/group/GroupForm";
 
 export default function GroupDetailsPage() {
   const theme = useMantineTheme();
@@ -53,28 +56,43 @@ export default function GroupDetailsPage() {
                   {groupQuery.data.name}
                 </Text>
                 <Link
-                  href={`/users/${groupQuery.data.creator.id}`}
-                  locale={locale}
-                  passHref
+                    href={`/users/${groupQuery.data.creator.id}`}
+                    locale={locale}
+                    passHref
                 >
                   <Text color="dimmed">
                     {groupQuery.data.creator.name}
                   </Text>
                 </Link>
               </Group>
-              <Text>
-                {longDateFormatter.format(groupQuery.data.createdAt)}
-              </Text>
+              <Group>
+                <Text>
+                  {longDateFormatter.format(groupQuery.data.createdAt)}
+                </Text>
+                {groupQuery.data?.creatorId === session?.user.id && (
+                    <ActionIcon
+                        size="lg"
+                        variant="filled"
+                        color={theme.fn.themeColor(theme.primaryColor)}
+                        onClick={() => openModal({
+                          title: t("modal.group.create"),
+                          children: <GroupForm editedGroupId={groupId}/>,
+                        })}
+                    >
+                      <Pencil/>
+                    </ActionIcon>
+                )}
+              </Group>
             </Stack>
             <Avatar.Group>
               {groupQuery.data.members.slice(0, 5).map(user => (
-                <Avatar
-                  key={user.id}
-                  variant="filled"
-                  radius="xl"
-                  size="lg"
-                  src={user.image}
-                  color={theme.fn.themeColor(theme.primaryColor)}
+                  <Avatar
+                      key={user.id}
+                      variant="filled"
+                      radius="xl"
+                      size="lg"
+                      src={user.image}
+                      color={theme.fn.themeColor(theme.primaryColor)}
                 >
                   <Text weight="normal" size={10}>
                     {getInitials(user.name)}
@@ -128,31 +146,22 @@ export default function GroupDetailsPage() {
               cols={md ? 2 : 1}
               sx={{flexGrow: 1}}
             >
-              <Card
-                withBorder
-                sx={theme => ({
-                  backgroundColor: getBackgroundColor(theme),
-                  height: "100%",
-                  minHeight: 300,
-                })}
-              >
-                Events
-              </Card>
+              <GroupFeed groupId={groupId}/>
               <Stack>
                 {groupQuery.data.description && (
-                  <Card withBorder sx={theme => ({backgroundColor: getBackgroundColor(theme)})}>
-                    <RichTextDisplay richText={groupQuery.data.description} maxHeight={300} scroll/>
-                  </Card>
+                    <Card withBorder sx={theme => ({backgroundColor: getBackgroundColor(theme)})}>
+                      <RichTextDisplay richText={groupQuery.data.description} maxHeight={300} scroll/>
+                    </Card>
                 )}
                 <Box sx={{flexGrow: 1}}>
                   <GroupChat groupId={groupId}/>
                 </Box>
               </Stack>
             </SimpleGrid>
-          ) : (
-            <Card withBorder sx={theme => ({backgroundColor: getBackgroundColor(theme)})}>
-              <RichTextDisplay richText={groupQuery.data.description}/>
-            </Card>
+          ) : groupQuery.data.description && (
+              <Card withBorder sx={theme => ({backgroundColor: getBackgroundColor(theme)})}>
+                <RichTextDisplay richText={groupQuery.data.description}/>
+              </Card>
           )}
         </Stack>
       )}

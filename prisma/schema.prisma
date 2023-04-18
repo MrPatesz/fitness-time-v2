@@ -87,6 +87,8 @@ model Event {
   creator      User      @relation(name: "createdEvents", fields: [creatorId], references: [id], onDelete: Restrict)
   participants User[]    @relation(name: "participatedEvents")
   comments     Comment[]
+  groupId      Int?
+  group        Group?    @relation(fields: [groupId], references: [id])
 }
 
 model Location {
@@ -117,7 +119,7 @@ model Group {
   creator     User      @relation(name: "createdGroups", fields: [creatorId], references: [id], onDelete: Restrict)
   members     User[]    @relation(name: "joinedGroups")
   messages    Message[]
-  // events Event[]
+  events      Event[]
 }
 
 model Message {

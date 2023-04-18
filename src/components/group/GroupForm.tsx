@@ -28,6 +28,7 @@ export const GroupForm: FunctionComponent<{
     enabled: !!editedGroupId,
     initialData: defaultCreateGroup,
     onSuccess: resetForm,
+    refetchOnMount: (query) => !query.isActive(),
   });
 
   const form = useForm<CreateGroupType>({
