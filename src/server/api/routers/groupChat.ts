@@ -8,7 +8,7 @@ import {observable} from "@trpc/server/observable";
 export const groupChatRouter = createTRPCRouter({
   getMessages: protectedProcedure
     .input(z.object({
-      groupId: z.number(),
+      groupId: IdSchema,
       cursor: z.date().nullish(),
     }))
     .output(z.object({

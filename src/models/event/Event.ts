@@ -14,7 +14,7 @@ export const CreateEventSchema = z.object({
   limit: z.number().min(1).nullable(),
   price: z.number().min(1).nullable(),
   location: CreateLocationSchema,
-  groupId: z.number().nullish(),
+  groupId: IdSchema.nullish(),
 });
 
 export const BasicEventSchema = CreateEventSchema.extend({

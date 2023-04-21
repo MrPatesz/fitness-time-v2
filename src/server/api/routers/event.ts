@@ -55,8 +55,8 @@ export const eventRouter = createTRPCRouter({
     }),
   getFeed: protectedProcedure
       .input(z.object({
-          cursor: z.date().nullish(),
-          groupId: z.number().nullish(),
+        cursor: z.date().nullish(),
+        groupId: IdSchema.nullish(),
       }))
       .output(z.object({
           events: BasicEventSchema.array(),
@@ -204,6 +204,6 @@ export const eventRouter = createTRPCRouter({
         },
       });
 
-      return !!count;
+      return Boolean(count);
     }),
 });

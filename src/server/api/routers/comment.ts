@@ -115,6 +115,6 @@ export const commentRouter = createTRPCRouter({
         },
       });
 
-      return !!count;
+      return Boolean(count);
     }),
 });

@@ -56,7 +56,7 @@ export default function EventDetailsPage() {
       return;
     }
 
-    const isParticipated = !!event.participants.find(p => p.id === session?.user.id);
+    const isParticipated = Boolean(event.participants.find(p => p.id === session?.user.id));
 
     if (!isParticipated && event.limit && (event.participants.length >= event.limit)) {
       return;
@@ -147,14 +147,14 @@ export default function EventDetailsPage() {
                       </Badge>
                     )}
                     <Text>
-                      {!!eventQuery.data.participants.length ?
+                      {Boolean(eventQuery.data.participants.length) ?
                         t("eventDetails.participants") :
                         t("eventDetails.noParticipants")}
                     </Text>
                   </Group>
                   {participateButton(eventQuery.data)}
                 </Group>
-                {!!eventQuery.data.participants.length && (
+                {Boolean(eventQuery.data.participants.length) && (
                   <Group spacing="xs">
                     {eventQuery.data.participants.map((p, index: number) => (
                       <Link

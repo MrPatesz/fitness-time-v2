@@ -23,7 +23,7 @@ export const EventForm: FunctionComponent<{
 
   const getErrors = (data: CreateEventType, isCreation: boolean) => ({
     name: (isCreation || data.name) ? null : t("eventForm.name.error"),
-    location: (isCreation || !!data.location?.address) ? null : t("eventForm.location.error"),
+    location: (isCreation || Boolean(data.location?.address)) ? null : t("eventForm.location.error"),
     start: data.start > new Date() ? null : t("eventForm.start.error"),
     end: (data.end > new Date() && data.end > data.start) ? null : t("eventForm.end.error"),
   });
@@ -35,7 +35,7 @@ export const EventForm: FunctionComponent<{
 
   const queryContext = api.useContext();
   const editedEventQuery = api.event.getById.useQuery(editedEventId ?? 0, {
-    enabled: !!editedEventId,
+    enabled: Boolean(editedEventId),
     initialData: {...getDefaultCreateEvent(initialInterval), groupId},
     onSuccess: resetForm,
     refetchOnMount: (query) => !query.isActive(),
@@ -47,7 +47,7 @@ export const EventForm: FunctionComponent<{
     validateInputOnChange: true,
     validate: {
       name: (value) => value ? null : t("eventForm.name.error"),
-      location: (value) => !!value?.address ? null : t("eventForm.location.error"),
+      location: (value) => Boolean(value?.address) ? null : t("eventForm.location.error"),
       start: (value) => value > new Date() ? null : t("eventForm.start.error"),
       end: (value, formData) => (value > new Date() && value > formData.start) ? null : t("eventForm.end.error"),
     },

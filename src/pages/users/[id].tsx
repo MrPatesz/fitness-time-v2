@@ -38,7 +38,7 @@ export default function UserDetailsPage() {
             </Stack>
             <UserImage size={userImageSize} user={userDetailsQuery.data}/>
           </Group>
-          {!!userDetailsQuery.data.createdEvents.length && (
+          {Boolean(userDetailsQuery.data.createdEvents.length) && (
             <>
               <Text size="lg">
                 {t("userDetails.createdEvents")}

@@ -25,7 +25,7 @@ export const GroupForm: FunctionComponent<{
 
   const queryContext = api.useContext();
   const editedGroupQuery = api.group.getById.useQuery(editedGroupId ?? 0, {
-    enabled: !!editedGroupId,
+    enabled: Boolean(editedGroupId),
     initialData: defaultCreateGroup,
     onSuccess: resetForm,
     refetchOnMount: (query) => !query.isActive(),

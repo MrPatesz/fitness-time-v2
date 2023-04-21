@@ -98,7 +98,7 @@ export const groupRouter = createTRPCRouter({
         },
       });
 
-      return !!count;
+      return Boolean(count);
     }),
   join: protectedProcedure
     .input(z.object({id: IdSchema, join: z.boolean()}))

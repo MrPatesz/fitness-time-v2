@@ -19,7 +19,7 @@ const useFilteredEvents = (events: BasicEventType[] | undefined) => {
 
     return events.filter((a) => {
       const free = !a.price;
-      const limited = !!a.limit;
+      const limited = Boolean(a.limit);
 
       return (
         (free || !filters.tags.includes(FilterBy.FREE)) &&
