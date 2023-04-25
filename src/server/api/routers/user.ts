@@ -29,8 +29,11 @@ export const userRouter = createTRPCRouter({
       const user = await ctx.prisma.user.findFirst({
         where: {id},
         include: {
-          createdEvents: {include: {location: true, creator: true}, orderBy: {start: Prisma.SortOrder.desc}},
-          participatedEvents: {include: {location: true, creator: true}},
+          createdEvents: {
+            include: {location: true, creator: true, group: {include: {creator: true}}},
+            orderBy: {start: Prisma.SortOrder.desc}
+          },
+          participatedEvents: {include: {location: true, creator: true, group: {include: {creator: true}}}},
         },
       });
 

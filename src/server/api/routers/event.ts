@@ -1,6 +1,6 @@
 import {TRPCError} from "@trpc/server";
 import {z} from "zod";
-import {BasicEventSchema, CreateEventSchema, DetailedEventSchema} from "../../../models/event/Event";
+import {BasicEventSchema, CreateEventSchema, DetailedEventSchema,} from "../../../models/event/Event";
 import {IdSchema} from "../../../models/Id";
 import {PaginateEventsSchema} from "../../../models/event/PaginateEvents";
 import {createTRPCRouter, protectedProcedure} from "../trpc";
@@ -38,7 +38,7 @@ export const eventRouter = createTRPCRouter({
       const [events, numberOfEvents] = await prisma.$transaction([
         prisma.event.findMany({
           where,
-          include: {location: true, creator: true},
+          include: {location: true, creator: true, group: {include: {creator: true}}},
           skip: (page - 1) * pageSize,
           take: pageSize,
           orderBy,
@@ -54,24 +54,24 @@ export const eventRouter = createTRPCRouter({
       };
     }),
   getFeed: protectedProcedure
-      .input(z.object({
-        cursor: z.date().nullish(),
-        groupId: IdSchema.nullish(),
-      }))
-      .output(z.object({
-          events: BasicEventSchema.array(),
-          nextCursor: z.date().nullish(),
-      }))
-      .query(async ({input: {cursor, groupId}, ctx: {session: {user: {id: callerId}}, prisma}}) => {
-          const limit = 10;
+    .input(z.object({
+      cursor: z.date().nullish(),
+      groupId: IdSchema.nullish(),
+    }))
+    .output(z.object({
+      events: BasicEventSchema.array(),
+      nextCursor: z.date().nullish(),
+    }))
+    .query(async ({input: {cursor, groupId}, ctx: {session: {user: {id: callerId}}, prisma}}) => {
+      const limit = 10;
 
-          const events = await prisma.event.findMany({
-              where: groupId ? {groupId} : {creatorId: {not: callerId}},
-              take: limit + 1,
-              cursor: cursor ? {createdAt: cursor} : undefined,
-              orderBy: {createdAt: Prisma.SortOrder.desc},
-              include: {location: true, creator: true},
-          });
+      const events = await prisma.event.findMany({
+        where: groupId ? {groupId} : {creatorId: {not: callerId}},
+        take: limit + 1,
+        cursor: cursor ? {createdAt: cursor} : undefined,
+        orderBy: {createdAt: Prisma.SortOrder.desc},
+        include: {location: true, creator: true, group: {include: {creator: true}}},
+      });
 
       let nextCursor: Date | undefined = undefined;
       if (events.length > limit) {
@@ -90,8 +90,8 @@ export const eventRouter = createTRPCRouter({
       const caller = await prisma.user.findUnique({
         where: {id: callerId},
         include: {
-          createdEvents: {include: {location: true, creator: true}},
-          participatedEvents: {include: {location: true, creator: true}},
+          createdEvents: {include: {location: true, creator: true, group: {include: {creator: true}}}},
+          participatedEvents: {include: {location: true, creator: true, group: {include: {creator: true}}}},
         },
       });
 
@@ -111,6 +111,7 @@ export const eventRouter = createTRPCRouter({
           creator: true,
           participants: true,
           location: true,
+          group: {include: {creator: true}},
           comments: {include: {user: true}, orderBy: {postedAt: "desc"}}
         },
       });
@@ -123,20 +124,20 @@ export const eventRouter = createTRPCRouter({
     .mutation(async ({input: createEvent, ctx: {session: {user: {id: callerId}}, prisma}}) => {
       const event = await prisma.event.create({
         data: {
-            ...createEvent,
-            groupId: undefined,
-            group: createEvent.groupId ? {connect: {id: createEvent.groupId}} : undefined,
-            creator: {connect: {id: callerId}},
-            location: {
-                connectOrCreate: {
-                    where: {
-                        address: createEvent.location.address,
-                    },
-                    create: createEvent.location,
-                },
+          ...createEvent,
+          groupId: undefined,
+          group: createEvent.groupId ? {connect: {id: createEvent.groupId}} : undefined,
+          creator: {connect: {id: callerId}},
+          location: {
+            connectOrCreate: {
+              where: {
+                address: createEvent.location.address,
+              },
+              create: createEvent.location,
             },
+          },
         },
-        include: {location: true, creator: true},
+        include: {location: true, creator: true, group: {include: {creator: true}}},
       });
 
       return BasicEventSchema.parse(event);
@@ -163,7 +164,7 @@ export const eventRouter = createTRPCRouter({
             disconnect: {id: callerId},
           },
         },
-        include: {creator: true, location: true},
+        include: {creator: true, location: true, group: {include: {creator: true}}},
       });
 
       return BasicEventSchema.parse(result);
@@ -175,20 +176,20 @@ export const eventRouter = createTRPCRouter({
       const updatedEvent = await prisma.event.update({
         where: {id: input.id},
         data: {
-            ...input.event,
-            groupId: undefined,
-            group: input.event.groupId ? {connect: {id: input.event.groupId}} : undefined,
-            creator: {connect: {id: callerId}},
-            location: {
-                connectOrCreate: {
-                    where: {
-                        address: input.event.location.address,
-                    },
-                    create: input.event.location,
-                },
+          ...input.event,
+          groupId: undefined,
+          group: input.event.groupId ? {connect: {id: input.event.groupId}} : undefined,
+          creator: {connect: {id: callerId}},
+          location: {
+            connectOrCreate: {
+              where: {
+                address: input.event.location.address,
+              },
+              create: input.event.location,
             },
+          },
         },
-        include: {location: true, creator: true},
+        include: {location: true, creator: true, group: {include: {creator: true}}},
       });
 
       return BasicEventSchema.parse(updatedEvent);

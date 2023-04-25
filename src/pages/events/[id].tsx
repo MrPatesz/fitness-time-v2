@@ -1,4 +1,4 @@
-import {ActionIcon, Badge, Button, Card, Group, Stack, Text, useMantineTheme} from "@mantine/core";
+import {ActionIcon, Badge, Button, Card, Group, Rating, Stack, Text, useMantineTheme} from "@mantine/core";
 import {openModal} from "@mantine/modals";
 import {showNotification} from "@mantine/notifications";
 import {useSession} from "next-auth/react";
@@ -18,6 +18,7 @@ import {DetailedEventType} from "../../models/event/Event";
 import {api} from "../../utils/api";
 import {getLongDateFormatter, getPriceFormatter} from "../../utils/formatters";
 import {getBackgroundColor} from "../../utils/utilFunctions";
+import {EventStatus} from "../../utils/enums";
 
 export default function EventDetailsPage() {
   const theme = useMantineTheme();
@@ -34,12 +35,24 @@ export default function EventDetailsPage() {
   const commentsQuery = api.comment.getAllByEventId.useQuery(eventId, {
     enabled: isReady,
   });
+  const userRatingQuery = api.rating.getCallerRating.useQuery(eventId, {
+    enabled: isReady,
+  });
+  const averageRatingQuery = api.rating.getAverageRatingForEvent.useQuery(eventId, {
+    enabled: isReady,
+  });
+  const rateEvent = api.rating.rate.useMutation({
+    onSuccess: () => {
+      averageRatingQuery.refetch().then();
+      userRatingQuery.refetch().then();
+    },
+  });
 
   const defaultSpacing = "md";
   const defaultSpacingSize: number = theme.spacing[defaultSpacing];
   const mapSize = 400; // TODO responsive map size
-  const descriptionMaxHeight = mapSize - (34 + 24.8 + (2 + 2) * defaultSpacingSize + 2 * 0.8 + 24.8);
-  // eventName + eventDate + Stack spacing + card padding + card borders + show/hide label
+  const descriptionMaxHeight = mapSize - (34 + 24.8 + 24.8 + (3 + 2) * defaultSpacingSize + 2 * 0.8 + 24.8);
+  // eventName + eventDate + rating + Stack spacing + card padding + card borders + show/hide label
 
   const participate = api.event.participate.useMutation({
     onSuccess: () => eventQuery.refetch().then(() =>
@@ -52,7 +65,7 @@ export default function EventDetailsPage() {
   });
 
   const participateButton = (event: DetailedEventType) => {
-    if (event.creatorId === session?.user.id) {
+    if (event.creatorId === session?.user.id || event.status === EventStatus.ARCHIVE) {
       return;
     }
 
@@ -99,7 +112,7 @@ export default function EventDetailsPage() {
                       </Text>
                     </Link>
                   </Group>
-                  {eventQuery.data?.creatorId === session?.user.id && (
+                  {eventQuery.data.status === EventStatus.PLANNED && eventQuery.data.creatorId === session?.user.id && (
                     <ActionIcon
                       size="lg"
                       variant="filled"
@@ -126,6 +139,36 @@ export default function EventDetailsPage() {
                     </Group>
                   )}
                 </Group>
+                {eventQuery.data.status === EventStatus.ARCHIVE && (
+                  <Group align="center" spacing="xs">
+                    {(!eventQuery.data.participants.find(p => p.id === session?.user.id) || eventQuery.data.creatorId === session?.user.id) ? (
+                      <Rating
+                        readOnly
+                        fractions={5}
+                        color={theme.primaryColor}
+                        value={averageRatingQuery.data?.averageStars ?? 0}
+                      />
+                    ) : (
+                      <Rating
+                        fractions={2}
+                        color={theme.primaryColor}
+                        value={userRatingQuery.data?.stars ?? 0}
+                        onChange={(value) => rateEvent.mutate({
+                          createRating: {stars: value},
+                          eventId,
+                        })}
+                      />
+                    )}
+                    <Group spacing={4}>
+                      <Text>
+                        {averageRatingQuery.data?.averageStars?.toFixed(2) ?? 0}
+                      </Text>
+                      <Text color="dimmed">
+                        ({averageRatingQuery.data?.count})
+                      </Text>
+                    </Group>
+                  </Group>
+                )}
                 {eventQuery.data.description && (
                   <Card p={defaultSpacing} withBorder sx={{backgroundColor: getBackgroundColor(theme)}}>
                     <RichTextDisplay richText={eventQuery.data.description} maxHeight={descriptionMaxHeight}/>

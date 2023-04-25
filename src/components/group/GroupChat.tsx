@@ -90,7 +90,7 @@ export const GroupChat: FunctionComponent<{
       >
         <ScrollArea viewportRef={viewport}>
           <Center ref={ref} sx={{width: "100%"}}>
-            {isFetching && (
+            {isFetching && !isLoading && (
               <Box h={25}>
                 <Loader/>
               </Box>

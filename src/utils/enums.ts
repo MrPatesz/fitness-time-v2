@@ -12,3 +12,8 @@ export enum ThemeColor {
   YELLOW = "yellow",
   ORANGE = "orange",
 }
+
+export enum EventStatus {
+  PLANNED = "PLANNED",
+  ARCHIVE = "ARCHIVE",
+}

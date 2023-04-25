@@ -3,8 +3,8 @@ import {BasicCommentSchema} from "../Comment";
 import {IdSchema} from "../Id";
 import {CreateLocationSchema, LocationSchema} from "../Location";
 import {BasicUserSchema} from "../User";
-
-// TODO status: planned, archive
+import {EventStatus} from "../../utils/enums";
+import {BasicGroupSchema} from "../group/Group";
 
 export const CreateEventSchema = z.object({
   name: z.string().min(1),
@@ -23,9 +23,15 @@ export const BasicEventSchema = CreateEventSchema.extend({
   creator: BasicUserSchema,
   locationId: IdSchema,
   location: LocationSchema,
-});
+  groupId: IdSchema.nullable(),
+  group: BasicGroupSchema.nullable(),
+  status: z.nativeEnum(EventStatus).optional(),
+}).transform((event) => ({
+  ...event,
+  status: event.start > new Date() ? EventStatus.PLANNED : EventStatus.ARCHIVE,
+}));
 
-export const DetailedEventSchema = BasicEventSchema.extend({
+export const DetailedEventSchema = BasicEventSchema.innerType().extend({
   participants: BasicUserSchema.array(),
   comments: BasicCommentSchema.array(),
 });

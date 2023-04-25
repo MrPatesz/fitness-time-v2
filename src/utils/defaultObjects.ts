@@ -38,7 +38,8 @@ export const getDefaultCreateEvent = (initialInterval?: {
   description: "",
   limit: null,
   price: null,
-  location: defaultCreateLocation
+  location: defaultCreateLocation,
+  groupId: null,
 });
 
 export const defaultEventFilters: EventFilters = {

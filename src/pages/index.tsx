@@ -40,7 +40,7 @@ export default function FeedPage() {
         <EventGrid events={data?.pages.flatMap(page => page.events) ?? []}/>
       )}
       <Center ref={ref} sx={{height: "100%", width: "100%"}}>
-        {isFetching && (
+        {isFetching && !isLoading && (
           <Loader/>
         )}
       </Center>
