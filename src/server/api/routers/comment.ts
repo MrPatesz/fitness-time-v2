@@ -58,7 +58,7 @@ export const commentRouter = createTRPCRouter({
       const [comments, numberOfComments] = await prisma.$transaction([
         prisma.comment.findMany({
           where,
-          include: {user: true, event: {include: {location: true, creator: true}}},
+          include: {user: true, event: {include: {location: true, creator: true, group: {include: {creator: true}}}}},
           skip: (page - 1) * pageSize,
           take: pageSize,
           orderBy,
