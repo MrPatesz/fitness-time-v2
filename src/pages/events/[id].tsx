@@ -51,8 +51,27 @@ export default function EventDetailsPage() {
   const defaultSpacing = "md";
   const defaultSpacingSize: number = theme.spacing[defaultSpacing];
   const mapSize = 400; // TODO responsive map size
-  const descriptionMaxHeight = mapSize - (34 + 24.8 + 24.8 + (3 + 2) * defaultSpacingSize + 2 * 0.8 + 24.8);
-  // eventName + eventDate + rating + Stack spacing + card padding + card borders + show/hide label
+  const itemHeights = {
+    eventName: 34,
+    eventDate: 24.8,
+    cardPaddingCount: 2,
+    ...(eventQuery.data?.status === EventStatus.ARCHIVE ? {
+      rating: 24.8,
+      stackSpacingCount: 3,
+      cardBorders: 0,
+    } : {
+      rating: 0,
+      stackSpacingCount: 2,
+      cardBorders: 2 * 0.8,
+    }),
+  };
+  const descriptionMaxHeight = mapSize - (
+    itemHeights.eventName +
+    itemHeights.eventDate +
+    itemHeights.rating +
+    (itemHeights.stackSpacingCount + itemHeights.cardPaddingCount) * defaultSpacingSize +
+    itemHeights.cardBorders
+  );
 
   const participate = api.event.participate.useMutation({
     onSuccess: () => eventQuery.refetch().then(() =>
@@ -171,7 +190,7 @@ export default function EventDetailsPage() {
                 )}
                 {eventQuery.data.description && (
                   <Card p={defaultSpacing} withBorder sx={{backgroundColor: getBackgroundColor(theme)}}>
-                    <RichTextDisplay richText={eventQuery.data.description} maxHeight={descriptionMaxHeight}/>
+                    <RichTextDisplay scroll richText={eventQuery.data.description} maxHeight={descriptionMaxHeight}/>
                   </Card>
                 )}
               </Stack>
