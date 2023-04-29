@@ -7,10 +7,10 @@ export const userRouter = createTRPCRouter({
   getAll: protectedProcedure
     .output(BasicUserSchema.array())
     .query(async ({ctx}) => {
-      const events = await ctx.prisma.user.findMany({
+      const users = await ctx.prisma.user.findMany({
         orderBy: {name: Prisma.SortOrder.asc},
       });
-      return BasicUserSchema.array().parse(events);
+      return BasicUserSchema.array().parse(users);
     }),
   profile: protectedProcedure
     .output(ProfileSchema)
@@ -31,7 +31,7 @@ export const userRouter = createTRPCRouter({
         include: {
           createdEvents: {
             include: {location: true, creator: true, group: {include: {creator: true}}},
-            orderBy: {start: Prisma.SortOrder.desc}
+            orderBy: {start: Prisma.SortOrder.desc},
           },
           participatedEvents: {include: {location: true, creator: true, group: {include: {creator: true}}}},
         },
@@ -42,22 +42,22 @@ export const userRouter = createTRPCRouter({
   update: protectedProcedure
     .input(UpdateProfileSchema)
     .output(UpdateProfileSchema)
-    .mutation(async ({input, ctx}) => {
-      const updatedEvent = await ctx.prisma.user.update({
+    .mutation(async ({input, ctx: {prisma}}) => {
+      const updatedUser = await prisma.user.update({
         where: {id: input.id},
         data: {
           ...input,
           location: input.location ? {
             connectOrCreate: {
               where: {
-                address: input.location.address
+                address: input.location.address,
               },
-              create: input.location
+              create: input.location,
             }
-          } : {disconnect: true}
+          } : {disconnect: true},
         },
-        include: {location: true}
+        include: {location: true},
       });
-      return ProfileSchema.parse(updatedEvent);
+      return ProfileSchema.parse(updatedUser);
     }),
 });
