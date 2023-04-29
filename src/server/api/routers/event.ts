@@ -138,6 +138,7 @@ export const eventRouter = createTRPCRouter({
           groupId: undefined,
           group: createEvent.groupId ? {connect: {id: createEvent.groupId}} : undefined,
           creator: {connect: {id: callerId}},
+          participants: {connect: {id: callerId}},
           location: {
             connectOrCreate: {
               where: {

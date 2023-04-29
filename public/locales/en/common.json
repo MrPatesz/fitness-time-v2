@@ -175,8 +175,7 @@
   "eventDetails": {
     "participate": "Participate",
     "removeParticipation": "Remove participation",
-    "participants": "They will also be there:",
-    "noParticipants": "There are no participants yet."
+    "participants": "They will also be there:"
   },
   "queryComponent": {
     "error": "An error occurred while fetching {{resourceName}}!"

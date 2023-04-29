@@ -175,8 +175,7 @@
   "eventDetails": {
     "participate": "Részvétel",
     "removeParticipation": "Részvétel eltávolítása",
-    "participants": "Ők is ott lesznek:",
-    "noParticipants": "Még nincs részvevő."
+    "participants": "Ők is ott lesznek:"
   },
   "queryComponent": {
     "error": "{{resourceName}} betöltése közben hiba történt!"

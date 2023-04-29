@@ -209,30 +209,26 @@ export default function EventDetailsPage() {
                       </Badge>
                     )}
                     <Text>
-                      {Boolean(eventQuery.data.participants.length) ?
-                        t("eventDetails.participants") :
-                        t("eventDetails.noParticipants")}
+                      {t("eventDetails.participants")}
                     </Text>
                   </Group>
                   {participateButton(eventQuery.data)}
                 </Group>
-                {Boolean(eventQuery.data.participants.length) && (
-                  <Group spacing="xs">
-                    {eventQuery.data.participants.map((p, index: number) => (
-                      <Link
-                        href={`/users/${p.id}`}
-                        locale={locale}
-                        passHref
-                        key={p.id}
-                      >
-                        <Text sx={{cursor: "pointer"}}>
-                          {p.name}
-                          {index !== eventQuery.data.participants.length - 1 && ","}
-                        </Text>
-                      </Link>
-                    ))}
-                  </Group>
-                )}
+                <Group spacing="xs">
+                  {eventQuery.data.participants.map((p, index: number) => (
+                    <Link
+                      href={`/users/${p.id}`}
+                      locale={locale}
+                      passHref
+                      key={p.id}
+                    >
+                      <Text sx={{cursor: "pointer"}}>
+                        {p.name}
+                        {index !== eventQuery.data.participants.length - 1 && ","}
+                      </Text>
+                    </Link>
+                  ))}
+                </Group>
               </Stack>
             </Card>
           </Stack>
