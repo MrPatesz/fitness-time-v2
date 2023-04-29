@@ -100,14 +100,26 @@ const GroupTable: FunctionComponent<{
         </ActionIcon>
       </Group>
       <QueryComponent resourceName={t("resource.groups")} query={groupsQuery}>
-        <Box sx={{maxHeight: "calc(100vh - (72px + 36px + 16px + 16px))" /*TODO*/}}>
+        <Box
+          sx={{
+            height: "100%",
+            minHeight: 300,
+            position: "relative",
+          }}
+        >
           <DataTable
+            sx={{
+              position: "absolute",
+              top: 0,
+              bottom: 0,
+              left: 0,
+              right: 0,
+            }}
             highlightOnHover
             withBorder
             withColumnBorders
             textSelectionDisabled
             borderRadius={theme.defaultRadius as MantineNumberSize}
-            minHeight={!groupsQuery.data?.groups.length ? 175 : undefined}
             noRecordsText={t("groupTable.noRecords") as string}
             sortStatus={sortBy}
             onSortStatusChange={setSortBy}

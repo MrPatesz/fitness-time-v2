@@ -12,22 +12,22 @@ export default function ControlPanelPage() {
   const {t} = useTranslation("common");
 
   return (
-    <Tabs defaultValue="events">
+    <Tabs defaultValue="events" sx={{height: "100%"}}>
       <Tabs.List grow>
         <Tabs.Tab value="events" icon={<Ticket size={20}/>}>{t("resource.events")}</Tabs.Tab>
         <Tabs.Tab value="groups" icon={<Share size={20}/>}>{t("resource.groups")}</Tabs.Tab>
         <Tabs.Tab value="comments" icon={<IconMessageCircle size={20}/>}>{t("resource.comments")}</Tabs.Tab>
       </Tabs.List>
 
-      <Tabs.Panel value="events" pt="md">
+      <Tabs.Panel value="events" pt="md" sx={{height: "calc(100% - 42px)"}}>
         <EventTable eventTableDisplayPlace={EventTableDisplayPlace.CONTROL_PANEL}/>
       </Tabs.Panel>
 
-      <Tabs.Panel value="groups" pt="md">
+      <Tabs.Panel value="groups" pt="md" sx={{height: "calc(100% - 42px)"}}>
         <GroupTable groupTableDisplayPlace={GroupTableDisplayPlace.CONTROL_PANEL}/>
       </Tabs.Panel>
 
-      <Tabs.Panel value="comments" pt="md">
+      <Tabs.Panel value="comments" pt="md" sx={{height: "calc(100% - 42px)"}}>
         <CommentTable/>
       </Tabs.Panel>
     </Tabs>

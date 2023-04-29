@@ -56,9 +56,9 @@ export default function GroupDetailsPage() {
                   {groupQuery.data.name}
                 </Text>
                 <Link
-                    href={`/users/${groupQuery.data.creator.id}`}
-                    locale={locale}
-                    passHref
+                  href={`/users/${groupQuery.data.creator.id}`}
+                  locale={locale}
+                  passHref
                 >
                   <Text color="dimmed">
                     {groupQuery.data.creator.name}
@@ -70,29 +70,29 @@ export default function GroupDetailsPage() {
                   {longDateFormatter.format(groupQuery.data.createdAt)}
                 </Text>
                 {groupQuery.data?.creatorId === session?.user.id && (
-                    <ActionIcon
-                        size="lg"
-                        variant="filled"
-                        color={theme.fn.themeColor(theme.primaryColor)}
-                        onClick={() => openModal({
-                          title: t("modal.group.create"),
-                          children: <GroupForm editedGroupId={groupId}/>,
-                        })}
-                    >
-                      <Pencil/>
-                    </ActionIcon>
+                  <ActionIcon
+                    size="lg"
+                    variant="filled"
+                    color={theme.fn.themeColor(theme.primaryColor)}
+                    onClick={() => openModal({
+                      title: t("modal.group.create"),
+                      children: <GroupForm editedGroupId={groupId}/>,
+                    })}
+                  >
+                    <Pencil/>
+                  </ActionIcon>
                 )}
               </Group>
             </Stack>
             <Avatar.Group>
               {groupQuery.data.members.slice(0, 5).map(user => (
-                  <Avatar
-                      key={user.id}
-                      variant="filled"
-                      radius="xl"
-                      size="lg"
-                      src={user.image}
-                      color={theme.fn.themeColor(theme.primaryColor)}
+                <Avatar
+                  key={user.id}
+                  variant="filled"
+                  radius="xl"
+                  size="lg"
+                  src={user.image}
+                  color={theme.fn.themeColor(theme.primaryColor)}
                 >
                   <Text weight="normal" size={10}>
                     {getInitials(user.name)}
@@ -149,9 +149,9 @@ export default function GroupDetailsPage() {
               <GroupFeed groupId={groupId}/>
               <Stack>
                 {groupQuery.data.description && (
-                    <Card withBorder sx={theme => ({backgroundColor: getBackgroundColor(theme)})}>
-                      <RichTextDisplay richText={groupQuery.data.description} maxHeight={300} scroll/>
-                    </Card>
+                  <Card withBorder sx={theme => ({backgroundColor: getBackgroundColor(theme)})}>
+                    <RichTextDisplay richText={groupQuery.data.description} maxHeight={300} scroll/>
+                  </Card>
                 )}
                 <Box sx={{flexGrow: 1}}>
                   <GroupChat groupId={groupId}/>
@@ -159,9 +159,9 @@ export default function GroupDetailsPage() {
               </Stack>
             </SimpleGrid>
           ) : groupQuery.data.description && (
-              <Card withBorder sx={theme => ({backgroundColor: getBackgroundColor(theme)})}>
-                <RichTextDisplay richText={groupQuery.data.description}/>
-              </Card>
+            <Card withBorder sx={theme => ({backgroundColor: getBackgroundColor(theme)})}>
+              <RichTextDisplay richText={groupQuery.data.description}/>
+            </Card>
           )}
         </Stack>
       )}

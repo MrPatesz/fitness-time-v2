@@ -27,7 +27,7 @@ export const QueryComponent: FunctionComponent<{
           <Loader/>
         </Center>
       ) : query.isFetching ? (
-        <Box sx={{position: "relative"}}>
+        <Box sx={{position: "relative", height: "100%"}}>
           <LoadingOverlay visible={true} sx={theme => ({borderRadius: theme.fn.radius(theme.defaultRadius)})}/>
           {children}
         </Box>
