@@ -34,7 +34,10 @@ export const BasicEventSchema = CreateEventSchema.extend({
 export const DetailedEventSchema = BasicEventSchema.innerType().extend({
   participants: BasicUserSchema.array(),
   comments: BasicCommentSchema.array(),
-});
+}).transform((event) => ({
+  ...event,
+  status: event.start > new Date() ? EventStatus.PLANNED : EventStatus.ARCHIVE,
+}));
 
 export type CreateEventType = z.infer<typeof CreateEventSchema>;
 
