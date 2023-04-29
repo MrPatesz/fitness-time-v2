@@ -146,7 +146,8 @@
     "noRecords": "No events found",
     "recordsPerPage": "Events per page",
     "archive": "Archive",
-    "creator": "Creator"
+    "creator": "Creator",
+    "group": "Group"
   },
   "groupTable": {
     "noRecords": "No groups found",

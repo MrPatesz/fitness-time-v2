@@ -183,6 +183,11 @@ const EventTable: FunctionComponent<{
                 sortable: true,
               },
               {
+                accessor: "groupName",
+                title: t("myEvents.group"),
+                render: ({group}) => group?.name,
+              },
+              {
                 accessor: "creatorName",
                 title: t("myEvents.creator"),
                 hidden: eventTableDisplayPlace === EventTableDisplayPlace.CONTROL_PANEL,

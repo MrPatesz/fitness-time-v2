@@ -24,6 +24,10 @@ export const eventRouter = createTRPCRouter({
 
       const where = {
         creatorId: createdOnly ? callerId : undefined,
+        OR: createdOnly ? undefined : [
+          {groupId: null},
+          {group: {members: {some: {id: callerId}}}},
+        ],
         start: archive ? {
           lt: new Date(),
         } : {
@@ -66,7 +70,13 @@ export const eventRouter = createTRPCRouter({
       const limit = 10;
 
       const events = await prisma.event.findMany({
-        where: groupId ? {groupId} : {creatorId: {not: callerId}},
+        where: groupId ? {groupId} : {
+          creatorId: {not: callerId},
+          OR: [
+            {groupId: null},
+            {group: {members: {some: {id: callerId}}}},
+          ]
+        },
         take: limit + 1,
         cursor: cursor ? {createdAt: cursor} : undefined,
         orderBy: {createdAt: Prisma.SortOrder.desc},

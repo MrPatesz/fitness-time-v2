@@ -146,7 +146,8 @@
     "noRecords": "Nem található esemény",
     "recordsPerPage": "Oldalankénti események száma",
     "archive": "Archívum",
-    "creator": "Létrehozó"
+    "creator": "Létrehozó",
+    "group": "Csoport"
   },
   "groupTable": {
     "noRecords": "Nem található csoport",
