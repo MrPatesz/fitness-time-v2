@@ -17,6 +17,7 @@ import {IncomingMessage} from "http";
 import ws from "ws";
 import {getSession} from "next-auth/react";
 import {emitter} from "../emitter";
+import {kysely} from "../kysely/kysely";
 
 /**
  * 1. CONTEXT
@@ -46,6 +47,7 @@ const createInnerTRPCContext = (opts: CreateContextOptions) => {
     session: opts.session,
     prisma,
     emitter,
+    kysely,
   };
 };
 
