@@ -1,20 +1,23 @@
-import {Card, Center, LoadingOverlay} from "@mantine/core";
+import {Card, Center, Loader, Stack, Text} from "@mantine/core";
 import {GoogleMap, MarkerF, useJsApiLoader} from "@react-google-maps/api";
 import {useTranslation} from "next-i18next";
 import {FunctionComponent, useMemo} from "react";
 import {env} from "../../env.js";
 import {LocationType} from "../../models/Location";
 import {googleMapsLibraries} from "../../utils/defaultObjects";
+import {formatDistance} from "../../utils/utilFunctions";
 
 const MapComponent: FunctionComponent<{
   location: LocationType;
   size?: { width: number, height: number }
-}> = ({location, size = {width: 400, height: 400}}) => {
+  distance: number | undefined;
+}> = ({distance, location, size = {width: 400, height: 400}}) => {
   const {t} = useTranslation("common");
-  const {isLoaded, loadError} = useJsApiLoader({
+  const {isLoaded, loadError: mockLoadError} = useJsApiLoader({
     googleMapsApiKey: `${env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`,
     libraries: googleMapsLibraries,
   });
+  const loadError = mockLoadError || true; // TODO remove true to show map
 
   const map = useMemo(() => {
     const coordinates = {
@@ -33,22 +36,27 @@ const MapComponent: FunctionComponent<{
   }, [location, isLoaded, loadError]);
 
   return (
-    <>
-      {(loadError || true) ? ( // TODO remove true to show map
-        <Card withBorder sx={size}>
-          <Center sx={{height: "100%", width: "100%"}}>
-            {t("mapComponent.error")}
-          </Center>
-        </Card>
-      ) : !isLoaded ? (
-        <Card withBorder sx={{
-          ...size,
-          position: "relative",
-        }}>
-          <LoadingOverlay visible={true} sx={theme => ({borderRadius: theme.fn.radius(theme.defaultRadius)})}/>
-        </Card>
-      ) : map}
-    </>
+    <Card withBorder p={0} sx={{...size, position: 'relative'}}>
+      <Card
+        withBorder
+        p={8}
+        sx={{
+          position: "absolute",
+          bottom: 9,
+          left: 9,
+          right: loadError ? 9 : 59,
+          zIndex: 1,
+        }}
+      >
+        <Stack spacing={0}>
+          <Text>{location.address}</Text>
+          {distance !== undefined && (<Text>{formatDistance(distance)}</Text>)}
+        </Stack>
+      </Card>
+      <Center sx={{height: "100%", width: "100%"}}>
+        {loadError ? t("mapComponent.error") : !isLoaded ? <Loader/> : map}
+      </Center>
+    </Card>
   );
 };
 

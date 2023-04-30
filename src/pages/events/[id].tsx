@@ -197,6 +197,7 @@ export default function EventDetailsPage() {
               <MapComponent
                 size={{width: mapSize, height: mapSize}}
                 location={eventQuery.data.location}
+                distance={eventQuery.data.distance}
               />
             </Group>
             <Card withBorder>

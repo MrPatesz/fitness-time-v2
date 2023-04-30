@@ -26,6 +26,7 @@ export const BasicEventSchema = CreateEventSchema.extend({
   groupId: IdSchema.nullable(),
   group: BasicGroupSchema.nullable(),
   status: z.nativeEnum(EventStatus).optional(),
+  distance: z.number().min(0).optional(),
 }).transform((event) => ({
   ...event,
   status: event.start > new Date() ? EventStatus.PLANNED : EventStatus.ARCHIVE,

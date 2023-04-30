@@ -1,16 +1,25 @@
-import {Card, Center, Loader, Stack} from "@mantine/core";
+import {Card, Center, Checkbox, Group, Loader, Slider, Stack, Text, useMantineTheme} from "@mantine/core";
 import {useTranslation} from "next-i18next";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import i18nConfig from "../../next-i18next.config.mjs";
 import {EventGrid} from "../components/event/EventGrid";
 import {api} from "../utils/api";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {useInView} from "react-intersection-observer";
+import {formatDistance, getBackgroundColor} from "../utils/utilFunctions";
+import {CenteredLoader} from "../components/CenteredLoader";
 
 export default function FeedPage() {
-  const {t} = useTranslation("common");
-  const {ref, inView} = useInView();
+  const [fluidMaxDistance, setFluidMaxDistance] = useState<number>(100);
+  const [maxDistance, setMaxDistance] = useState<number>(100);
+  const [enableMaxDistance, setEnableMaxDistance] = useState<boolean>(true);
 
+  const {ref, inView} = useInView();
+  const theme = useMantineTheme();
+  const {t} = useTranslation("common");
+
+  const userDetailsQuery = api.user.profile.useQuery();
+  const userHasLocation = Boolean(userDetailsQuery.data?.location);
   const {
     data,
     fetchNextPage,
@@ -18,7 +27,7 @@ export default function FeedPage() {
     hasNextPage,
     isLoading,
     error,
-  } = api.event.getFeed.useInfiniteQuery({}, {
+  } = api.event.getFeed.useInfiniteQuery({maxDistance: userHasLocation && enableMaxDistance ? maxDistance : undefined}, {
     getNextPageParam: (lastPage) => lastPage.nextCursor,
   });
 
@@ -30,12 +39,42 @@ export default function FeedPage() {
 
   return (
     <Stack>
+      {userHasLocation && (
+        <Card withBorder sx={{backgroundColor: getBackgroundColor(theme)}}>
+          <Stack spacing="xs">
+            <Group position="apart">
+              <Group spacing={4}>
+                <Text>{t("feedPage.maxDistance")}</Text>
+                <Text
+                  weight="bold"
+                  color={enableMaxDistance ? theme.primaryColor : "dimmed"}
+                >
+                  {formatDistance(fluidMaxDistance)}
+                </Text>
+              </Group>
+              <Checkbox
+                label={t("feedPage.useMaxDistance")}
+                checked={enableMaxDistance}
+                onChange={(e) => setEnableMaxDistance(e.currentTarget.checked)}
+              />
+            </Group>
+            <Slider
+              step={10}
+              min={10}
+              max={200}
+              label={null}
+              disabled={!enableMaxDistance}
+              value={fluidMaxDistance}
+              onChange={setFluidMaxDistance}
+              onChangeEnd={setMaxDistance}
+            />
+          </Stack>
+        </Card>
+      )}
       {error ? (
         <Card withBorder>{t("queryComponent.error", {resourceName: t("resource.feed")})}</Card>
       ) : isLoading ? (
-        <Center sx={{height: "100%", width: "100%"}}>
-          <Loader/>
-        </Center>
+        <CenteredLoader/>
       ) : (
         <EventGrid events={data?.pages.flatMap(page => page.events) ?? []}/>
       )}

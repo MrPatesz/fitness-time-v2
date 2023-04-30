@@ -61,12 +61,13 @@ export const eventRouter = createTRPCRouter({
     .input(z.object({
       cursor: z.date().nullish(),
       groupId: IdSchema.nullish(),
+      maxDistance: z.number().min(0).optional(),
     }))
     .output(z.object({
       events: BasicEventSchema.array(),
       nextCursor: z.date().nullish(),
     }))
-    .query(async ({input: {cursor, groupId}, ctx: {session: {user: {id: callerId}}, prisma}}) => {
+    .query(async ({input: {cursor, groupId, maxDistance}, ctx: {session: {user: {id: callerId}}, prisma}}) => {
       const limit = 10;
 
       const events = await prisma.event.findMany({
@@ -89,8 +90,44 @@ export const eventRouter = createTRPCRouter({
         nextCursor = nextItem?.createdAt;
       }
 
+      const user = await prisma.user.findUnique({where: {id: callerId}});
+
+      if (!user?.locationId) {
+        return {
+          events: BasicEventSchema.array().parse(events),
+          nextCursor,
+        };
+      }
+
+      // TODO write this whole thing in kysely
+      const eventsWithDistance = await Promise.all(events.map(async (e) => {
+        const distance: { distanceInKilometers: number }[] = await prisma.$queryRaw`
+        SELECT ST_Distance(eventLocation.location, userLocation.location, false)/1000 as "distanceInKilometers"
+        FROM (
+          (
+            SELECT ST_MakePoint(longitude, latitude) as location
+            FROM "Event" as e
+            JOIN "Location" as l ON e."locationId" = l.id
+            WHERE e.id = ${e.id}
+          ) as eventLocation
+          CROSS JOIN 
+          (
+            SELECT ST_MakePoint(longitude, latitude) as location
+            FROM "User" as u
+            JOIN "Location" as l ON u."locationId" = l.id
+            WHERE u.id = ${callerId}
+          ) as userLocation
+        )`;
+        return {
+          ...e,
+          distance: distance.at(0)?.distanceInKilometers,
+        };
+      }));
+
+      const eventsResult = maxDistance ? eventsWithDistance.filter(e => e.distance === undefined || e.distance < maxDistance) : eventsWithDistance;
+
       return {
-        events: BasicEventSchema.array().parse(events),
+        events: BasicEventSchema.array().parse(eventsResult),
         nextCursor,
       };
     }),
@@ -114,8 +151,8 @@ export const eventRouter = createTRPCRouter({
   getById: protectedProcedure
     .input(IdSchema)
     .output(DetailedEventSchema)
-    .query(async ({input: id, ctx}) => {
-      const event = await ctx.prisma.event.findUnique({
+    .query(async ({input: id, ctx: {session: {user: {id: callerId}}, prisma}}) => {
+      const event = await prisma.event.findUnique({
         where: {id},
         include: {
           creator: true,
@@ -126,7 +163,29 @@ export const eventRouter = createTRPCRouter({
         },
       });
 
-      return DetailedEventSchema.parse(event);
+      // TODO write this in kysely
+      const distance: { distanceInKilometers: number }[] = await prisma.$queryRaw`
+        SELECT ST_Distance(eventLocation.location, userLocation.location, false)/1000 as "distanceInKilometers"
+        FROM (
+          (
+            SELECT ST_MakePoint(longitude, latitude) as location
+            FROM "Event" as e
+            JOIN "Location" as l ON e."locationId" = l.id
+            WHERE e.id = ${id}
+          ) as eventLocation
+          CROSS JOIN 
+          (
+            SELECT ST_MakePoint(longitude, latitude) as location
+            FROM "User" as u
+            JOIN "Location" as l ON u."locationId" = l.id
+            WHERE u.id = ${callerId}
+          ) as userLocation
+        )`;
+
+      return DetailedEventSchema.parse({
+        ...event,
+        distance: distance.at(0)?.distanceInKilometers,
+      });
     }),
   create: protectedProcedure
     .input(CreateEventSchema)

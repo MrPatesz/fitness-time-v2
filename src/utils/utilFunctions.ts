@@ -50,3 +50,10 @@ export const getInitials = (username: string) => {
 
   return initials;
 };
+
+export const formatDistance = (distance: number | undefined) => {
+  if (distance === undefined) {
+    return;
+  }
+  return `${distance.toFixed(0)} km`
+};

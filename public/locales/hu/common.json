@@ -123,7 +123,7 @@
     },
     "comment": {
       "create": "Komment létrehozása",
-      "edit": "Komment Szerkesztése",
+      "edit": "Komment szerkesztése",
       "delete": {
         "title": "Komment törlése",
         "message": "Biztosan törölni szeretnéd ezt a kommentet?"
@@ -181,7 +181,7 @@
     "error": "{{resourceName}} betöltése közben hiba történt!"
   },
   "themeColorPicker": {
-    "label": "Téma Szín"
+    "label": "Téma szín"
   },
   "color": {
     "red": "Piros",
@@ -276,5 +276,9 @@
   "richTextDisplay": {
     "showLabel": "Mutass többet",
     "hideLabel": "Mutass kevesebbet"
+  },
+  "feedPage": {
+    "maxDistance": "Maximum távolság:",
+    "useMaxDistance": "Maximum távolság használata"
   }
 }

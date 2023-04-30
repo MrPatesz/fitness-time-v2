@@ -5,7 +5,7 @@ import {useRouter} from "next/router";
 import {FunctionComponent} from "react";
 import {BasicEventType} from "../../models/event/Event";
 import {getShortDateFormatter} from "../../utils/formatters";
-import {getBackgroundColor} from "../../utils/utilFunctions";
+import {formatDistance, getBackgroundColor} from "../../utils/utilFunctions";
 import {EventStatus, ThemeColor} from "../../utils/enums";
 import {api} from "../../utils/api";
 import {IconStar} from "@tabler/icons";
@@ -41,15 +41,22 @@ export const EventCard: FunctionComponent<{
                 {shortDateFormatter.format(event.start)}
               </Badge>
             </Group>
-            <Group>
-              {!event.price && (
-                <Badge color="green" variant="light">
-                  {t("common.free")}
-                </Badge>
-              )}
-              {event.limit && (
-                <Badge color="red" variant="light">
-                  {t("filterEvents.limited")}
+            <Group position="apart">
+              <Group spacing="xs">
+                {!event.price && (
+                  <Badge color="green" variant="light">
+                    {t("common.free")}
+                  </Badge>
+                )}
+                {event.limit && (
+                  <Badge color="red" variant="light">
+                    {t("filterEvents.limited")}
+                  </Badge>
+                )}
+              </Group>
+              {event.distance !== undefined && (
+                <Badge variant="outline" color="gray">
+                  {formatDistance(event.distance)}
                 </Badge>
               )}
             </Group>

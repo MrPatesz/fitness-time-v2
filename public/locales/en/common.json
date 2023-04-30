@@ -276,5 +276,9 @@
   "richTextDisplay": {
     "showLabel": "Show more",
     "hideLabel": "Show less"
+  },
+  "feedPage": {
+    "maxDistance": "Maximum Distance:",
+    "useMaxDistance": "Use Maximum Distance"
   }
 }
