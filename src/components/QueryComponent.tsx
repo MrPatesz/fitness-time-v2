@@ -1,7 +1,8 @@
-import {Box, Card, Center, Loader, LoadingOverlay} from "@mantine/core";
+import {Box, Card, LoadingOverlay} from "@mantine/core";
 import {UseTRPCQueryResult} from "@trpc/react-query/shared";
 import {useTranslation} from "next-i18next";
 import {FunctionComponent, useEffect} from "react";
+import {CenteredLoader} from "./CenteredLoader";
 
 export const QueryComponent: FunctionComponent<{
   resourceName: string;
@@ -23,9 +24,7 @@ export const QueryComponent: FunctionComponent<{
       {query.error ? (
         <Card withBorder>{t("queryComponent.error", {resourceName})}</Card>
       ) : query.isLoading ? (
-        <Center sx={{height: "100%", width: "100%"}}>
-          <Loader/>
-        </Center>
+        <CenteredLoader/>
       ) : query.isFetching ? (
         <Box sx={{position: "relative", height: "100%"}}>
           <LoadingOverlay visible={true} sx={theme => ({borderRadius: theme.fn.radius(theme.defaultRadius)})}/>

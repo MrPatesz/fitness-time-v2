@@ -3,6 +3,7 @@ import {useMediaQuery} from "@mantine/hooks";
 import {FunctionComponent} from "react";
 import {BasicEventType} from "../../models/event/Event";
 import {EventCard} from "./EventCard";
+import {CenteredLoader} from "../CenteredLoader";
 
 export const EventGrid: FunctionComponent<{
   events: BasicEventType[];
@@ -14,6 +15,10 @@ export const EventGrid: FunctionComponent<{
   const xxl = useMediaQuery(`(min-width: ${theme.breakpoints.xs + theme.breakpoints.lg}px)`);
   const txl = useMediaQuery(`(min-width: ${theme.breakpoints.md + theme.breakpoints.lg}px)`);
   const qxl = useMediaQuery(`(min-width: ${theme.breakpoints.md + theme.breakpoints.xl}px)`);
+
+  if (xs === undefined) {
+    return <CenteredLoader/>;
+  }
 
   return (
     <SimpleGrid cols={qxl ? 7 : txl ? 6 : xxl ? 5 : xl ? 4 : md ? 3 : xs ? 2 : 1}>

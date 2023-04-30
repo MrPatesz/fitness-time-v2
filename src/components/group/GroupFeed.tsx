@@ -1,4 +1,4 @@
-import {ActionIcon, Box, Card, Center, Group, Loader, ScrollArea, Stack, useMantineTheme} from "@mantine/core";
+import {ActionIcon, Box, Card, Group, ScrollArea, Stack, useMantineTheme} from "@mantine/core";
 import {useTranslation} from "next-i18next";
 import {FunctionComponent, useEffect, useMemo, useRef} from "react";
 import {useInView} from "react-intersection-observer";
@@ -9,6 +9,7 @@ import {EventForm} from "../event/EventForm";
 import {Plus} from "tabler-icons-react";
 import {EventCard} from "../event/EventCard";
 import {BasicEventType} from "../../models/event/Event";
+import {CenteredLoader} from "../CenteredLoader";
 
 export const GroupFeed: FunctionComponent<{
   groupId: number;
@@ -75,9 +76,7 @@ export const GroupFeed: FunctionComponent<{
             {error ? (
               <Card withBorder>{t("queryComponent.error", {resourceName: t("resource.feed")})}</Card>
             ) : isLoading ? (
-              <Center sx={{height: "100%", width: "100%"}}>
-                <Loader/>
-              </Center>
+              <CenteredLoader/>
             ) : (
               events.map((event, index) => (
                 <Box ref={(index === events.length - 1) ? ref : undefined} key={event.id}>

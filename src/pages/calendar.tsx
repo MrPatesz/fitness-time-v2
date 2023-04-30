@@ -1,4 +1,4 @@
-import {Affix, Center, Loader, Stack, useMantineTheme} from "@mantine/core";
+import {Affix, Stack, useMantineTheme} from "@mantine/core";
 import {DatePicker} from "@mantine/dates";
 import {useMediaQuery} from "@mantine/hooks";
 import {openModal} from "@mantine/modals";
@@ -16,15 +16,13 @@ import {BasicEventType} from "../models/event/Event";
 import {api} from "../utils/api";
 import dayjs from "../utils/dayjs";
 import {getFirstDayOfWeek} from "../utils/utilFunctions";
+import {CenteredLoader} from "../components/CenteredLoader";
 
 const DayPilotCalendar: any = dynamic(
   () => import("@daypilot/daypilot-lite-react").then((mod) => mod.DayPilotCalendar),
   {
-    ssr: false, loading: () => (
-      <Center sx={{height: "100%", width: "100%"}}>
-        <Loader/>
-      </Center>
-    )
+    ssr: false,
+    loading: () => <CenteredLoader/>,
   }
 );
 

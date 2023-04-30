@@ -6,6 +6,7 @@ import {api} from "../../utils/api";
 import {getBackgroundColor} from "../../utils/utilFunctions";
 import {CommentCard} from "../comment/CommentCard";
 import {AddMessage} from "./AddMessage";
+import {CenteredLoader} from "../CenteredLoader";
 
 export const GroupChat: FunctionComponent<{
   groupId: number;
@@ -102,9 +103,7 @@ export const GroupChat: FunctionComponent<{
                 {t("queryComponent.error", {resourceName: t("resource.chat")})}
               </Card>
             ) : isLoading ? (
-              <Center sx={{height: "100%", width: "100%"}}>
-                <Loader/>
-              </Center>
+              <CenteredLoader/>
             ) : (
               messages
             )}
