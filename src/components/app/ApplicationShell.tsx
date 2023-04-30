@@ -55,7 +55,8 @@ export const ApplicationShell: FunctionComponent<{
   const {data: session} = useSession();
   const {t} = useTranslation("common");
 
-  const localePrefix = locale !== defaultLocale ? `/${locale}` : "";
+  const isDefaultLocale = locale === defaultLocale;
+  const localePrefix = isDefaultLocale ? "" : `/${locale}`;
   const calendarRoute = `${localePrefix}/calendar`;
   const groupsRoute = `${localePrefix}/groups`;
   const profileRoute = `${localePrefix}/profile`;
@@ -68,7 +69,7 @@ export const ApplicationShell: FunctionComponent<{
     if (route === "/") {
       return false;
     }
-    const actualRoute = givenRoute.split("/").at(2) as string;
+    const actualRoute = givenRoute.split("/").at(isDefaultLocale ? 1 : 2) as string;
     return route.includes(actualRoute);
   };
 
