@@ -39,8 +39,8 @@ export default function CalendarPage() {
     onSuccess: () => eventsQuery.refetch().then(() =>
       showNotification({
         color: "green",
-        title: t("notification.update.title"),
-        message: t("notification.update.message"),
+        title: t("notification.event.update.title"),
+        message: t("notification.event.update.message"),
       })
     ),
   });
@@ -62,8 +62,8 @@ export default function CalendarPage() {
     } else {
       showNotification({
         color: "red",
-        title: t("notification.failedToUpdate.title"),
-        message: t("notification.failedToUpdate.message"),
+        title: t("notification.event.failedToUpdate.title"),
+        message: t("notification.event.failedToUpdate.message"),
       });
     }
   };
