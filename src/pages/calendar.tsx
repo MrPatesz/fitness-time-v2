@@ -29,7 +29,7 @@ const DayPilotCalendar: any = dynamic(
 export default function CalendarPage() {
   const [startDate, setStartDate] = useState<Date>(new Date());
   const theme = useMantineTheme();
-  const {push: pushRoute, locale} = useRouter();
+  const {push: pushRoute, locale = "en"} = useRouter();
   const {data: session} = useSession();
   const {t} = useTranslation("common");
   const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
@@ -131,7 +131,7 @@ export default function CalendarPage() {
           value={startDate}
           onChange={(value) => value && setStartDate(value)}
           clearable={false}
-          firstDayOfWeek={getFirstDayOfWeek(locale as string)}
+          firstDayOfWeek={getFirstDayOfWeek(locale)}
         />
       </Affix>
     </>

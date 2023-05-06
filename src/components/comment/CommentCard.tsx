@@ -21,7 +21,7 @@ export const CommentCard: FunctionComponent<{
 }> = ({comment}) => {
   const queryContext = api.useContext();
   const theme = useMantineTheme();
-  const {locale} = useRouter();
+  const {locale = "en"} = useRouter();
   const {data: session} = useSession();
   const {t} = useTranslation("common");
 
@@ -48,7 +48,7 @@ export const CommentCard: FunctionComponent<{
                 </Text>
               </Link>
               <Tooltip
-                label={getLongDateFormatter(locale as string).format(comment.postedAt)}
+                label={getLongDateFormatter(locale).format(comment.postedAt)}
                 color={theme.primaryColor}
                 position="right"
               >

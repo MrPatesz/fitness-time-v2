@@ -27,9 +27,9 @@ const CommentTable: FunctionComponent = () => {
   const [debouncedSearchQuery] = useDebouncedValue(searchQuery, 500);
 
   const theme = useMantineTheme();
-  const {locale} = useRouter();
+  const {locale = "en"} = useRouter();
   const {t} = useTranslation("common");
-  const longDateFormatter = getLongDateFormatter(locale as string);
+  const longDateFormatter = getLongDateFormatter(locale);
 
   const commentsQuery = api.comment.getAllCreated.useQuery({
     page,

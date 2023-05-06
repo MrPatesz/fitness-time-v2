@@ -26,7 +26,7 @@ export const IntervalPicker: FunctionComponent<{
   endError: string | undefined;
 }> = ({start, end, onChange, startError, endError}) => {
   const {t} = useTranslation("common");
-  const {locale} = useRouter();
+  const {locale = "en"} = useRouter();
 
   return (
     <Group spacing="xs">
@@ -45,8 +45,8 @@ export const IntervalPicker: FunctionComponent<{
         }}
         clearable={false}
         minDate={new Date()}
-        firstDayOfWeek={getFirstDayOfWeek(locale as string)}
-        error={(startError || endError) ? " " : undefined}
+        firstDayOfWeek={getFirstDayOfWeek(locale)}
+        error={Boolean(startError || endError)}
       />
       <TimeInput
         withAsterisk

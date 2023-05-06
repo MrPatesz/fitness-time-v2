@@ -13,9 +13,9 @@ import {IconStar} from "@tabler/icons";
 export const EventCard: FunctionComponent<{
   event: BasicEventType;
 }> = ({event}) => {
-  const {locale, push: pushRoute} = useRouter();
+  const {locale = "en", push: pushRoute} = useRouter();
   const {t} = useTranslation("common");
-  const shortDateFormatter = getShortDateFormatter(locale as string);
+  const shortDateFormatter = getShortDateFormatter(locale);
 
   const userRatingQuery = api.rating.getAverageRatingForUser.useQuery(event.creatorId);
 

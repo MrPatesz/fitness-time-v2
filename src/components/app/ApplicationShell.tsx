@@ -19,6 +19,7 @@ import {useRouter} from "next/router";
 import {FunctionComponent} from "react";
 import {Adjustments, CalendarEvent, IconProps, Logout, Share, Ticket, UserCircle, Users} from "tabler-icons-react";
 import {getBackgroundColor} from "../../utils/utilFunctions";
+import LanguagePicker from "../LanguagePicker";
 
 const NavBarLink: FunctionComponent<{
   link: {
@@ -135,6 +136,7 @@ export const ApplicationShell: FunctionComponent<{
             ))}
           </Navbar.Section>
           <Navbar.Section>
+            <LanguagePicker/>
             <NavBarLink
               locale={locale as string}
               link={{

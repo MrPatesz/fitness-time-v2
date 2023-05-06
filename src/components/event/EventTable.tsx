@@ -44,10 +44,10 @@ const EventTable: FunctionComponent<{
   const [debouncedSearchQuery] = useDebouncedValue(searchQuery, 500);
 
   const theme = useMantineTheme();
-  const {push: pushRoute, locale} = useRouter();
+  const {push: pushRoute, locale = "en"} = useRouter();
   const {t} = useTranslation("common");
-  const longDateFormatter = getLongDateFormatter(locale as string);
-  const priceFormatter = getPriceFormatter(locale as string);
+  const longDateFormatter = getLongDateFormatter(locale);
+  const priceFormatter = getPriceFormatter(locale);
 
   const eventsQuery = api.event.getPaginatedEvents.useQuery({
     archive: archive,

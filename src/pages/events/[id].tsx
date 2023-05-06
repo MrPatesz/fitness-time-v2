@@ -22,11 +22,11 @@ import {EventStatus} from "../../utils/enums";
 
 export default function EventDetailsPage() {
   const theme = useMantineTheme();
-  const {query: {id}, isReady, locale} = useRouter();
+  const {query: {id}, isReady, locale = "en"} = useRouter();
   const {data: session} = useSession();
   const {t} = useTranslation("common");
-  const longDateFormatter = getLongDateFormatter(locale as string);
-  const priceFormatter = getPriceFormatter(locale as string);
+  const longDateFormatter = getLongDateFormatter(locale);
+  const priceFormatter = getPriceFormatter(locale);
 
   const eventId = parseInt(id as string);
   const eventQuery = api.event.getById.useQuery(eventId, {

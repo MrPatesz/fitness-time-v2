@@ -32,9 +32,9 @@ const GroupTable: FunctionComponent<{
   const [debouncedSearchQuery] = useDebouncedValue(searchQuery, 500);
 
   const theme = useMantineTheme();
-  const {push: pushRoute, locale} = useRouter();
+  const {push: pushRoute, locale = "en"} = useRouter();
   const {t} = useTranslation("common");
-  const longDateFormatter = getLongDateFormatter(locale as string);
+  const longDateFormatter = getLongDateFormatter(locale);
 
   const groupsQuery = api.group.getPaginatedGroups.useQuery({
     page,

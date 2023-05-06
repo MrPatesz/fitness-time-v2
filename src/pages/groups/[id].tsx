@@ -22,10 +22,10 @@ import {GroupForm} from "../../components/group/GroupForm";
 export default function GroupDetailsPage() {
   const theme = useMantineTheme();
   const md = useMediaQuery(`(min-width: ${theme.breakpoints.md}px)`);
-  const {query: {id}, isReady, locale} = useRouter();
+  const {query: {id}, isReady, locale = "en"} = useRouter();
   const {data: session} = useSession();
   const {t} = useTranslation("common");
-  const longDateFormatter = getLongDateFormatter(locale as string);
+  const longDateFormatter = getLongDateFormatter(locale);
 
   const groupId = parseInt(id as string);
   const groupQuery = api.group.getById.useQuery(groupId, {
