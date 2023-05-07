@@ -18,6 +18,7 @@ import {useMemo} from "react";
 import {GroupFeed} from "../../components/group/GroupFeed";
 import {openModal} from "@mantine/modals";
 import {GroupForm} from "../../components/group/GroupForm";
+import {RatingComponent} from "../../components/RatingComponent";
 
 export default function GroupDetailsPage() {
   const theme = useMantineTheme();
@@ -31,6 +32,10 @@ export default function GroupDetailsPage() {
   const groupQuery = api.group.getById.useQuery(groupId, {
     enabled: isReady,
   });
+  const groupRatingQuery = api.rating.getAverageRatingForGroup.useQuery(groupId, {
+    enabled: isReady,
+  });
+
   const useJoinGroup = api.group.join.useMutation({
     onSuccess: (_data, {join}) => groupQuery.refetch().then(() =>
       showNotification({
@@ -83,6 +88,7 @@ export default function GroupDetailsPage() {
                   </ActionIcon>
                 )}
               </Group>
+              <RatingComponent averageRating={groupRatingQuery.data}/>
             </Stack>
             <Avatar.Group>
               {groupQuery.data.members.slice(0, 5).map(user => (

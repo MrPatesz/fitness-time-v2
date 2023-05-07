@@ -1,4 +1,4 @@
-import {ActionIcon, Badge, Button, Card, Group, Rating, Stack, Text, useMantineTheme} from "@mantine/core";
+import {ActionIcon, Badge, Button, Card, Group, Stack, Text, useMantineTheme} from "@mantine/core";
 import {openModal} from "@mantine/modals";
 import {showNotification} from "@mantine/notifications";
 import {useSession} from "next-auth/react";
@@ -19,6 +19,7 @@ import {api} from "../../utils/api";
 import {getLongDateFormatter, getPriceFormatter} from "../../utils/formatters";
 import {getBackgroundColor} from "../../utils/utilFunctions";
 import {EventStatus} from "../../utils/enums";
+import {RatingComponent} from "../../components/RatingComponent";
 
 export default function EventDetailsPage() {
   const theme = useMantineTheme();
@@ -106,6 +107,8 @@ export default function EventDetailsPage() {
     );
   };
 
+  // TODO group badge
+
   return (
     <Stack>
       <QueryComponent resourceName={t("resource.eventDetails")} query={eventQuery}>
@@ -159,34 +162,15 @@ export default function EventDetailsPage() {
                   )}
                 </Group>
                 {eventQuery.data.status === EventStatus.ARCHIVE && (
-                  <Group align="center" spacing="xs">
-                    {(!eventQuery.data.participants.find(p => p.id === session?.user.id) || eventQuery.data.creatorId === session?.user.id) ? (
-                      <Rating
-                        readOnly
-                        fractions={5}
-                        color={theme.primaryColor}
-                        value={averageRatingQuery.data?.averageStars ?? 0}
-                      />
-                    ) : (
-                      <Rating
-                        fractions={2}
-                        color={theme.primaryColor}
-                        value={userRatingQuery.data?.stars ?? 0}
-                        onChange={(value) => rateEvent.mutate({
-                          createRating: {stars: value},
-                          eventId,
-                        })}
-                      />
-                    )}
-                    <Group spacing={4}>
-                      <Text>
-                        {averageRatingQuery.data?.averageStars?.toFixed(2) ?? 0}
-                      </Text>
-                      <Text color="dimmed">
-                        ({averageRatingQuery.data?.count})
-                      </Text>
-                    </Group>
-                  </Group>
+                  <RatingComponent
+                    averageRating={averageRatingQuery.data}
+                    previousRating={userRatingQuery.data}
+                    canRate={!(eventQuery.data.creatorId === session?.user.id || !eventQuery.data.participants.find(p => p.id === session?.user.id))}
+                    onChange={(value) => rateEvent.mutate({
+                      createRating: {stars: value},
+                      eventId,
+                    })}
+                  />
                 )}
                 {eventQuery.data.description && (
                   <Card p={defaultSpacing} withBorder sx={{backgroundColor: getBackgroundColor(theme)}}>

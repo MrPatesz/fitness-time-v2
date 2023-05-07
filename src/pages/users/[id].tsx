@@ -9,15 +9,17 @@ import {RichTextDisplay} from "../../components/rich-text/RichTextDisplay";
 import UserImage from "../../components/user/UserImage";
 import {api} from "../../utils/api";
 import {getBackgroundColor} from "../../utils/utilFunctions";
+import {RatingComponent} from "../../components/RatingComponent";
 
 export default function UserDetailsPage() {
-  const userImageSize = 100;
-  const introductionMaxHeight = 294.6;
-
   const {query: {id}, isReady} = useRouter();
   const {t} = useTranslation("common");
 
-  const userDetailsQuery = api.user.getById.useQuery(id as string, {
+  const userId = id as string;
+  const userDetailsQuery = api.user.getById.useQuery(userId, {
+    enabled: isReady,
+  });
+  const userRatingQuery = api.rating.getAverageRatingForUser.useQuery(userId, {
     enabled: isReady,
   });
 
@@ -27,16 +29,19 @@ export default function UserDetailsPage() {
         <Stack>
           <Group position="apart" align="start">
             <Stack sx={{flexGrow: 1}}>
-              <Text weight="bold" size="xl">
-                {userDetailsQuery.data.name}
-              </Text>
+              <Group align="end" position="apart">
+                <Text weight="bold" size="xl">
+                  {userDetailsQuery.data.name}
+                </Text>
+                <RatingComponent averageRating={userRatingQuery.data}/>
+              </Group>
               {userDetailsQuery.data.introduction && (
                 <Card withBorder sx={theme => ({backgroundColor: getBackgroundColor(theme)})}>
-                  <RichTextDisplay richText={userDetailsQuery.data.introduction} maxHeight={introductionMaxHeight}/>
+                  <RichTextDisplay richText={userDetailsQuery.data.introduction} maxHeight={300}/>
                 </Card>
               )}
             </Stack>
-            <UserImage size={userImageSize} user={userDetailsQuery.data}/>
+            <UserImage user={userDetailsQuery.data}/>
           </Group>
           {Boolean(userDetailsQuery.data.createdEvents.length) && (
             <>

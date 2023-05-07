@@ -16,10 +16,8 @@ export const LanguageToggle: FunctionComponent = () => {
       onClick={() => pushRoute(asPath, undefined, {locale: hu ? "en" : "hu"})}
     >
       <Text>
-        {hu ? "🇬🇧" : "🇭🇺"}
+        {hu ? "🇺🇸" : "🇭🇺"}
       </Text>
     </ActionIcon>
   );
 };
-
-export default LanguageToggle;

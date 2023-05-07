@@ -18,6 +18,9 @@ export const EventCard: FunctionComponent<{
   const shortDateFormatter = getShortDateFormatter(locale);
 
   const userRatingQuery = api.rating.getAverageRatingForUser.useQuery(event.creatorId);
+  const groupRatingQuery = api.rating.getAverageRatingForGroup.useQuery(parseInt(`${event.groupId}`), {
+    enabled: Boolean(event.groupId)
+  });
 
   return (
     <Link href={`/events/${event.id}`} locale={locale} passHref>
@@ -72,13 +75,23 @@ export const EventCard: FunctionComponent<{
                 }}
                 sx={theme => ({
                   ":hover": {
-                    backgroundColor: theme.fn.themeColor(event.group?.creator.themeColor ?? theme.primaryColor),
+                    backgroundColor: theme.fn.themeColor(event.group!.creator.themeColor),
                     color: theme.white,
                   },
                 })}
               >
-                <Text>{event.group.name}</Text>
-                {/* TODO groupRating */}
+                <Group spacing={8}>
+                  <Text>{event.group.name}</Text>
+                  {groupRatingQuery.data?.count && (
+                    <>
+                      <Divider orientation="vertical" color={event.group.creator.themeColor}/>
+                      <Group spacing={4}>
+                        <Text>{groupRatingQuery.data.averageStars?.toFixed(1)}</Text>
+                        <IconStar size={10}/>
+                      </Group>
+                    </>
+                  )}
+                </Group>
               </Badge>
             )}
             <Badge

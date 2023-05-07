@@ -18,8 +18,8 @@ import {useRouter} from "next/router";
 import {FunctionComponent} from "react";
 import {Adjustments, CalendarEvent, IconProps, Logout, Share, Ticket, UserCircle, Users} from "tabler-icons-react";
 import {getBackgroundColor} from "../../utils/utilFunctions";
-import {ColorSchemeToggle} from "../ColorSchemeToggle";
-import LanguageToggle from "../LanguageToggle";
+import {ColorSchemeToggle} from "./ColorSchemeToggle";
+import {LanguageToggle} from "./LanguageToggle";
 
 const NavBarLink: FunctionComponent<{
   link: {
