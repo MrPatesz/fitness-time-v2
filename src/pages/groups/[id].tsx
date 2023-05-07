@@ -1,24 +1,25 @@
-import {ActionIcon, Avatar, Box, Card, Group, SimpleGrid, Stack, Text, useMantineTheme} from "@mantine/core";
+import {ActionIcon, Box, Card, Group, SimpleGrid, Stack, Text, useMantineTheme} from "@mantine/core";
 import {showNotification} from "@mantine/notifications";
 import {useSession} from "next-auth/react";
 import {useTranslation} from "next-i18next";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import Link from "next/link";
 import {useRouter} from "next/router";
-import {Minus, Pencil, Plus} from "tabler-icons-react";
+import {Pencil} from "tabler-icons-react";
 import i18nConfig from "../../../next-i18next.config.mjs";
 import {GroupChat} from "../../components/group/GroupChat";
 import {QueryComponent} from "../../components/QueryComponent";
 import {RichTextDisplay} from "../../components/rich-text/RichTextDisplay";
 import {api} from "../../utils/api";
 import {getLongDateFormatter} from "../../utils/formatters";
-import {getBackgroundColor, getInitials} from "../../utils/utilFunctions";
+import {getBackgroundColor} from "../../utils/utilFunctions";
 import {useMediaQuery} from "@mantine/hooks";
 import {useMemo} from "react";
 import {GroupFeed} from "../../components/group/GroupFeed";
 import {openModal} from "@mantine/modals";
 import {GroupForm} from "../../components/group/GroupForm";
 import {RatingComponent} from "../../components/RatingComponent";
+import {MembersComponent} from "../../components/group/MembersComponent";
 
 export default function GroupDetailsPage() {
   const theme = useMantineTheme();
@@ -90,62 +91,11 @@ export default function GroupDetailsPage() {
               </Group>
               <RatingComponent averageRating={groupRatingQuery.data}/>
             </Stack>
-            <Avatar.Group>
-              {groupQuery.data.members.slice(0, 5).map(user => (
-                <Avatar
-                  key={user.id}
-                  variant="filled"
-                  radius="xl"
-                  size="lg"
-                  src={user.image}
-                  color={theme.fn.themeColor(theme.primaryColor)}
-                >
-                  <Text weight="normal" size={10}>
-                    {getInitials(user.name)}
-                  </Text>
-                </Avatar>
-              ))}
-              {groupQuery.data.members.length > 5 && (
-                <Avatar
-                  variant="light"
-                  radius="xl"
-                  size="lg"
-                  color={theme.fn.themeColor(theme.primaryColor)}
-                >
-                  +{groupQuery.data.members.length - 5}
-                </Avatar>
-              )}
-              {groupQuery.data.creatorId !== session?.user.id &&
-                (!groupQuery.data.members.find(m => m.id === session?.user.id) ? (
-                  <Avatar
-                    variant="filled"
-                    radius="xl"
-                    color={theme.fn.themeColor(theme.primaryColor)}
-                  >
-                    <ActionIcon
-                      variant="filled"
-                      color={theme.fn.themeColor(theme.primaryColor)}
-                      onClick={() => useJoinGroup.mutate({id: groupId, join: true})}
-                    >
-                      <Plus/>
-                    </ActionIcon>
-                  </Avatar>
-                ) : (
-                  <Avatar
-                    variant="filled"
-                    radius="xl"
-                    color={theme.fn.themeColor(theme.primaryColor)}
-                  >
-                    <ActionIcon
-                      variant="filled"
-                      color={theme.fn.themeColor(theme.primaryColor)}
-                      onClick={() => useJoinGroup.mutate({id: groupId, join: false})}
-                    >
-                      <Minus/>
-                    </ActionIcon>
-                  </Avatar>
-                ))}
-            </Avatar.Group>
+            <MembersComponent
+              members={groupQuery.data.members}
+              isCreator={groupQuery.data.creatorId === session?.user.id}
+              onJoin={(join) => useJoinGroup.mutate({id: groupId, join})}
+            />
           </Group>
           {isMember ? (
             <SimpleGrid
