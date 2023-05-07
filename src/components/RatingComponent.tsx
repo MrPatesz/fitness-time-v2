@@ -1,10 +1,11 @@
 import {FunctionComponent} from 'react';
 import {Group, Rating, Text, useMantineTheme} from "@mantine/core";
+import {AverageRatingType, BasicRatingType} from "../models/Rating";
 
 export const RatingComponent: FunctionComponent<{
   canRate?: boolean;
-  previousRating?: { id: number, user: {}, userId: string, eventId: number, stars: number } | null | undefined;
-  averageRating: { count: number, averageStars: number | null } | undefined;
+  previousRating?: BasicRatingType | null;
+  averageRating: AverageRatingType | undefined;
   onChange?: (newRating: number) => void;
 }> = ({canRate = false, averageRating, previousRating, onChange}) => {
   const theme = useMantineTheme();

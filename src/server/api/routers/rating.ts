@@ -1,15 +1,12 @@
 import {z} from "zod";
 import {IdSchema} from "../../../models/Id";
 import {createTRPCRouter, protectedProcedure} from "../trpc";
-import {BasicRatingSchema, CreateRatingSchema, StarsSchema} from "../../../models/Rating";
+import {AverageRatingSchema, BasicRatingSchema, CreateRatingSchema} from "../../../models/Rating";
 
 export const ratingRouter = createTRPCRouter({
   getAverageRatingForEvent: protectedProcedure
     .input(IdSchema)
-    .output(z.object({
-      count: z.number(),
-      averageStars: StarsSchema.nullable(),
-    }))
+    .output(AverageRatingSchema)
     .query(async ({input: id, ctx: {prisma}}) => {
       const rating = await prisma.rating.aggregate({
         where: {eventId: id},
@@ -24,10 +21,7 @@ export const ratingRouter = createTRPCRouter({
     }),
   getAverageRatingForUser: protectedProcedure
     .input(z.string())
-    .output(z.object({
-      count: z.number(),
-      averageStars: StarsSchema.nullable(),
-    }))
+    .output(AverageRatingSchema)
     .query(async ({input: userId, ctx: {prisma}}) => {
       const usersEvents = await prisma.event.findMany({
         where: {creatorId: userId},
@@ -48,10 +42,7 @@ export const ratingRouter = createTRPCRouter({
     }),
   getAverageRatingForGroup: protectedProcedure
     .input(z.number())
-    .output(z.object({
-      count: z.number(),
-      averageStars: StarsSchema.nullable(),
-    }))
+    .output(AverageRatingSchema)
     .query(async ({input: groupId, ctx: {prisma}}) => {
       const groupsEvents = await prisma.event.findMany({
         where: {groupId},

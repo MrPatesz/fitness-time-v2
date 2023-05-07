@@ -15,6 +15,13 @@ export const BasicRatingSchema = CreateRatingSchema.extend({
   user: BasicUserSchema,
 });
 
+export const AverageRatingSchema = z.object({
+  count: z.number().min(0),
+  averageStars: StarsSchema.nullable(),
+});
+
 export type CreateRatingType = z.infer<typeof CreateRatingSchema>;
 
 export type BasicRatingType = z.infer<typeof BasicRatingSchema>;
+
+export type AverageRatingType = z.infer<typeof AverageRatingSchema>;
