@@ -1,5 +1,5 @@
-import {MantineProvider, MantineThemeOverride} from "@mantine/core";
-import {useColorScheme} from "@mantine/hooks";
+import {ColorScheme, ColorSchemeProvider, MantineProvider, MantineThemeOverride} from "@mantine/core";
+import {useColorScheme, useLocalStorage} from "@mantine/hooks";
 import {ModalsProvider} from "@mantine/modals";
 import {NotificationsProvider} from "@mantine/notifications";
 import {useSession} from "next-auth/react";
@@ -11,9 +11,16 @@ import {ThemeColor} from "../../utils/enums";
 export const ThemeProvider: FunctionComponent<{
   children: JSX.Element;
 }> = ({children}) => {
-  const colorScheme = useColorScheme();
+  const systemColorScheme = useColorScheme();
   const {locale} = useRouter();
   const {data: session} = useSession();
+
+  const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
+    key: 'mantine-color-scheme',
+    defaultValue: systemColorScheme,
+    getInitialValueInEffect: true,
+  });
+  const toggleColorScheme = (value?: ColorScheme) => setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'));
 
   dayjs.locale(locale);
 
@@ -28,18 +35,20 @@ export const ThemeProvider: FunctionComponent<{
   }), [colorScheme, session?.user.themeColor]);
 
   return (
-    <MantineProvider withGlobalStyles withNormalizeCSS theme={myTheme}>
-      <ModalsProvider
-        modalProps={{
-          centered: true,
-          closeOnClickOutside: false,
-          zIndex: 401,
-        }}
-      >
-        <NotificationsProvider>
-          {children}
-        </NotificationsProvider>
-      </ModalsProvider>
-    </MantineProvider>
+    <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
+      <MantineProvider withGlobalStyles withNormalizeCSS theme={myTheme}>
+        <ModalsProvider
+          modalProps={{
+            centered: true,
+            closeOnClickOutside: false,
+            zIndex: 401,
+          }}
+        >
+          <NotificationsProvider>
+            {children}
+          </NotificationsProvider>
+        </ModalsProvider>
+      </MantineProvider>
+    </ColorSchemeProvider>
   );
 };

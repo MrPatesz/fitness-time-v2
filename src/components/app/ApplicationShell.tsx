@@ -2,7 +2,6 @@ import {
   ActionIcon,
   AppShell,
   Burger,
-  Button,
   Group,
   Header,
   MediaQuery,
@@ -19,7 +18,8 @@ import {useRouter} from "next/router";
 import {FunctionComponent} from "react";
 import {Adjustments, CalendarEvent, IconProps, Logout, Share, Ticket, UserCircle, Users} from "tabler-icons-react";
 import {getBackgroundColor} from "../../utils/utilFunctions";
-import LanguagePicker from "../LanguagePicker";
+import {ColorSchemeToggle} from "../ColorSchemeToggle";
+import LanguageToggle from "../LanguageToggle";
 
 const NavBarLink: FunctionComponent<{
   link: {
@@ -52,7 +52,7 @@ export const ApplicationShell: FunctionComponent<{
 
   const theme = useMantineTheme();
   const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
-  const {route, locale, defaultLocale} = useRouter();
+  const {route, locale = "en", defaultLocale} = useRouter();
   const {data: session} = useSession();
   const {t} = useTranslation("common");
 
@@ -78,7 +78,7 @@ export const ApplicationShell: FunctionComponent<{
     <AppShell
       hidden={!session}
       header={
-        <Header height={56} p="xs">
+        <Header height={56} p="xs" pr="md">
           <Group align="center" position="apart" pl={xs ? "xs" : 1}>
             <Group>
               <MediaQuery largerThan="xs" styles={{display: "none"}}>
@@ -90,27 +90,21 @@ export const ApplicationShell: FunctionComponent<{
                 />
               </MediaQuery>
               <Link href="/" locale={locale} passHref>
-                <Title order={2}>{t("application.name")}</Title>
+                <Title order={2}>{t(xs ? "application.name" : "application.shortName")}</Title>
               </Link>
             </Group>
 
-            {xs ? (
-              <Button
-                variant="light"
-                onClick={() => signOut({callbackUrl: welcomeRoute})}
-              >
-                {t("button.logout")}
-              </Button>
-            ) : (
+            <Group spacing="xs">
+              <LanguageToggle/>
+              <ColorSchemeToggle/>
               <ActionIcon
                 size="lg"
-                variant="transparent"
-                color={theme.primaryColor}
+                variant={theme.colorScheme === 'dark' ? "outline" : "default"}
                 onClick={() => signOut({callbackUrl: welcomeRoute})}
               >
                 <Logout/>
               </ActionIcon>
-            )}
+            </Group>
           </Group>
         </Header>
       }
@@ -126,7 +120,7 @@ export const ApplicationShell: FunctionComponent<{
             ].map((link) => (
               <NavBarLink
                 key={link.label}
-                locale={locale as string}
+                locale={locale}
                 link={{
                   ...link,
                   active: isRouteActive(link.route),
@@ -136,9 +130,8 @@ export const ApplicationShell: FunctionComponent<{
             ))}
           </Navbar.Section>
           <Navbar.Section>
-            <LanguagePicker/>
             <NavBarLink
-              locale={locale as string}
+              locale={locale}
               link={{
                 label: t("navbar.controlPanel"),
                 route: controlPanelRoute,
@@ -148,7 +141,7 @@ export const ApplicationShell: FunctionComponent<{
               }}
             />
             <NavBarLink
-              locale={locale as string}
+              locale={locale}
               link={{
                 label: session?.user?.name as string,
                 route: profileRoute,

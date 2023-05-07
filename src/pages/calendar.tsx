@@ -126,11 +126,13 @@ export default function CalendarPage() {
           />
         </QueryComponent>
       </Stack>
-      <Affix position={{top: 10, left: 211 + theme.spacing.md}} zIndex={401}>
+      <Affix position={{top: 10, left: xs ? (211 + theme.spacing.md) : 104}} zIndex={401}>
         <DatePicker
+          w={155}
+          clearable={false}
+          locale={locale}
           value={startDate}
           onChange={(value) => value && setStartDate(value)}
-          clearable={false}
           firstDayOfWeek={getFirstDayOfWeek(locale)}
         />
       </Affix>

@@ -1,6 +1,7 @@
 {
   "application": {
     "name": "Fitness Time",
+    "shortName": "FT",
     "welcome": "Welcome to Fitness Time!"
   },
   "navbar": {
