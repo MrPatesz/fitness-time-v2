@@ -2,7 +2,7 @@ import {FunctionComponent} from 'react';
 import {ActionIcon, Avatar, Text, useMantineTheme} from "@mantine/core";
 import {getInitials} from "../../utils/utilFunctions";
 import {Minus, Plus} from "tabler-icons-react";
-import {BasicUserType} from "../../models/User";
+import {BasicUserType} from "../../models/user/User";
 import {useSession} from "next-auth/react";
 
 export const MembersComponent: FunctionComponent<{

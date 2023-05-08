@@ -3,7 +3,7 @@ import {useForm} from "@mantine/form";
 import {showNotification} from "@mantine/notifications";
 import {useTranslation} from "next-i18next";
 import {FunctionComponent} from "react";
-import {ProfileType, UpdateProfileType} from "../../models/User";
+import {ProfileType, UpdateProfileType} from "../../models/user/User";
 import {api} from "../../utils/api";
 import {isValidUrl, refreshSession} from "../../utils/utilFunctions";
 import {LocationPicker} from "../location/LocationPicker";

@@ -1,6 +1,6 @@
 import {z} from "zod";
 import {IdSchema} from "./Id";
-import {BasicUserSchema} from "./User";
+import {BasicUserSchema} from "./user/User";
 import {BasicEventSchema} from "./event/Event";
 
 export const CreateCommentSchema = z.object({

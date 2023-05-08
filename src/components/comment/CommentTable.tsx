@@ -16,8 +16,8 @@ import Link from "next/link";
 import {RichTextDisplay} from "../rich-text/RichTextDisplay";
 import {IconSearch} from "@tabler/icons";
 import {useDebouncedValue} from "@mantine/hooks";
-import {SortDirection} from "../../models/event/PaginateEvents";
 import {SortCommentByProperty} from "../../server/api/routers/comment";
+import {SortDirection} from "../../models/PaginateBase";
 
 const CommentTable: FunctionComponent = () => {
   const [page, setPage] = useState<number>(1);

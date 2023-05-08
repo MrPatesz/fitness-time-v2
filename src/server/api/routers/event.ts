@@ -33,10 +33,10 @@ export const eventRouter = createTRPCRouter({
         } : {
           gt: new Date(),
         },
-        name: {
+        name: searchQuery ? ({
           mode: "insensitive",
           contains: searchQuery,
-        } as Prisma.StringFilter,
+        } as Prisma.StringFilter) : undefined,
       };
 
       const [events, numberOfEvents] = await prisma.$transaction([

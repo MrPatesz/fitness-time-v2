@@ -8,7 +8,6 @@ import {useTranslation} from "next-i18next";
 import {useRouter} from "next/router";
 import {FunctionComponent, useEffect, useState} from "react";
 import {Pencil, Plus, Trash} from "tabler-icons-react";
-import {SortDirection} from "../../models/event/PaginateEvents";
 import {BasicGroupType} from "../../models/group/Group";
 import {SortGroupByProperty} from "../../models/group/PaginateGroups";
 import {api} from "../../utils/api";
@@ -16,6 +15,7 @@ import {getLongDateFormatter} from "../../utils/formatters";
 import {PAGE_SIZES} from "../event/EventTable";
 import {QueryComponent} from "../QueryComponent";
 import {GroupForm} from "./GroupForm";
+import {SortDirection} from "../../models/PaginateBase";
 
 export enum GroupTableDisplayPlace {
   CONTROL_PANEL = "CONTROL_PANEL",

@@ -2,7 +2,7 @@ import {z} from "zod";
 import {BasicCommentSchema} from "../Comment";
 import {IdSchema} from "../Id";
 import {CreateLocationSchema, LocationSchema} from "../Location";
-import {BasicUserSchema} from "../User";
+import {BasicUserSchema} from "../user/User";
 import {EventStatus} from "../../utils/enums";
 import {BasicGroupSchema} from "../group/Group";
 

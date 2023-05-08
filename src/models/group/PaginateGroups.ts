@@ -1,5 +1,5 @@
 import {z} from "zod";
-import {SortDirection} from "../event/PaginateEvents";
+import {PaginateBaseSchema, SortDirection} from "../PaginateBase";
 
 export enum SortGroupByProperty {
   NAME = "name",
@@ -7,15 +7,12 @@ export enum SortGroupByProperty {
   // MEMBER_COUNT = "memberCount",
 }
 
-export const PaginateGroupsSchema = z.object({
-  page: z.number().min(1),
-  pageSize: z.number().min(5).max(50),
+export const PaginateGroupsSchema = PaginateBaseSchema.extend({
   sortBy: z.object({
     property: z.nativeEnum(SortGroupByProperty),
     direction: z.nativeEnum(SortDirection),
   }),
   createdOnly: z.boolean(),
-  searchQuery: z.string(),
 });
 
 export type PaginateGroupsType = z.infer<typeof PaginateGroupsSchema>;

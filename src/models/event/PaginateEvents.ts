@@ -1,4 +1,5 @@
 import {z} from "zod";
+import {PaginateBaseSchema, SortDirection} from "../PaginateBase";
 
 export enum SortEventByProperty {
   NAME = "name",
@@ -7,21 +8,13 @@ export enum SortEventByProperty {
   LIMIT = "limit",
 }
 
-export enum SortDirection {
-  ASC = "asc",
-  DESC = "desc",
-}
-
-export const PaginateEventsSchema = z.object({
-  page: z.number().min(1),
-  pageSize: z.number().min(5).max(50),
+export const PaginateEventsSchema = PaginateBaseSchema.extend({
   sortBy: z.object({
     property: z.nativeEnum(SortEventByProperty),
     direction: z.nativeEnum(SortDirection),
   }),
-  archive: z.boolean(),
   createdOnly: z.boolean(),
-  searchQuery: z.string(),
+  archive: z.boolean(),
 });
 
 export type PaginateEventsType = z.infer<typeof PaginateEventsSchema>;

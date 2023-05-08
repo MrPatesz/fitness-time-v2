@@ -22,10 +22,10 @@ export const groupRouter = createTRPCRouter({
 
       const where = {
         creatorId: createdOnly ? callerId : undefined,
-        name: {
+        name: searchQuery ? ({
           mode: "insensitive",
           contains: searchQuery,
-        } as Prisma.StringFilter,
+        } as Prisma.StringFilter) : undefined,
       };
 
       const [groups, numberOfGroups] = await prisma.$transaction([

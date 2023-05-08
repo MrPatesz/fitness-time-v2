@@ -1,9 +1,41 @@
 import {z} from "zod";
-import {BasicUserSchema, DetailedUserSchema, ProfileSchema, UpdateProfileSchema} from "../../../models/User";
+import {BasicUserSchema, DetailedUserSchema, ProfileSchema, UpdateProfileSchema} from "../../../models/user/User";
 import {createTRPCRouter, protectedProcedure} from "../trpc";
 import {Prisma} from ".prisma/client";
+import {PaginateUsersSchema} from "../../../models/user/PaginateUsers";
 
 export const userRouter = createTRPCRouter({
+  getPaginatedUsers: protectedProcedure
+    .input(PaginateUsersSchema)
+    .output(z.object({users: BasicUserSchema.array(), size: z.number()}))
+    .query(async ({
+                    input: {page, pageSize, sortBy, searchQuery},
+                    ctx: {prisma},
+                  }) => {
+      const where = searchQuery ? {
+        name: {
+          mode: "insensitive",
+          contains: searchQuery,
+        } as Prisma.StringFilter,
+      } : undefined;
+
+      const [users, numberOfUsers] = await prisma.$transaction([
+        prisma.user.findMany({
+          where,
+          skip: (page - 1) * pageSize,
+          take: pageSize,
+          orderBy: {name: sortBy.direction},
+        }),
+        prisma.user.count({
+          where,
+        }),
+      ]);
+
+      return {
+        users: BasicUserSchema.array().parse(users),
+        size: numberOfUsers,
+      };
+    }),
   getAll: protectedProcedure
     .output(BasicUserSchema.array())
     .query(async ({ctx}) => {

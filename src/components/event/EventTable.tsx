@@ -19,11 +19,12 @@ import {useRouter} from "next/router";
 import {FunctionComponent, useEffect, useState} from "react";
 import {Pencil, Plus, Trash} from "tabler-icons-react";
 import {BasicEventType} from "../../models/event/Event";
-import {SortDirection, SortEventByProperty} from "../../models/event/PaginateEvents";
+import {SortEventByProperty} from "../../models/event/PaginateEvents";
 import {api} from "../../utils/api";
 import {getLongDateFormatter, getPriceFormatter} from "../../utils/formatters";
 import {QueryComponent} from "../QueryComponent";
 import {EventForm} from "./EventForm";
+import {SortDirection} from "../../models/PaginateBase";
 
 export enum EventTableDisplayPlace {
   CONTROL_PANEL = "CONTROL_PANEL",

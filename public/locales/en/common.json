@@ -162,6 +162,11 @@
     "message": "Message",
     "event": "Event"
   },
+  "userTable": {
+    "noRecords": "No users found",
+    "recordsPerPage": "Users per page",
+    "image": "Profile Image"
+  },
   "filterEvents": {
     "search": "Search by Name",
     "limited": "Limited",

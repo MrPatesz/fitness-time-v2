@@ -157,10 +157,15 @@
   },
   "commentTable": {
     "noRecords": "Nem található komment",
-    "recordsPerPage": "Oldalankénti koomentek száma",
+    "recordsPerPage": "Oldalankénti kommentek száma",
     "postedAt": "Közzététel",
     "message": "Üzenet",
     "event": "Esemény"
+  },
+  "userTable": {
+    "noRecords": "Nem található felhasználó",
+    "recordsPerPage": "Oldalankénti felhasználók száma",
+    "image": "Profilkép"
   },
   "filterEvents": {
     "search": "Keresés név alapján",

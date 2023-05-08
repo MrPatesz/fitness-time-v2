@@ -1,6 +1,6 @@
 import {Avatar, Text} from "@mantine/core";
 import {FunctionComponent} from "react";
-import {BasicUserType} from "../../models/User";
+import {BasicUserType} from "../../models/user/User";
 import {getInitials} from "../../utils/utilFunctions";
 
 const UserImage: FunctionComponent<{
