@@ -47,17 +47,17 @@ export const ProfileForm: FunctionComponent<{
           withAsterisk
           data-autofocus
           label={t("profileForm.displayName.label")}
-          placeholder={t("profileForm.displayName.placeholder") as string}
+          placeholder={t("profileForm.displayName.placeholder")}
           {...form.getInputProps("name")}
         />
         <RichTextField
-          label={t("profileForm.introduction") as string}
-          placeholder={t("profileForm.introduction") as string}
+          label={t("profileForm.introduction")}
+          placeholder={t("profileForm.introduction")}
           formInputProps={form.getInputProps("introduction")}
         />
         <TextInput
           label={t("profileForm.image.label")}
-          placeholder={t("profileForm.image.placeholder") as string}
+          placeholder={t("profileForm.image.placeholder")}
           rightSection={<UserImage user={form.values} size={30}/>}
           {...form.getInputProps("image")}
           value={form.getInputProps("image").value ?? ""}
@@ -69,8 +69,8 @@ export const ProfileForm: FunctionComponent<{
         <LocationPicker
           location={form.getInputProps("location").value}
           required={false}
-          placeholder={t("profileForm.location.placeholder") as string}
-          description={t("profileForm.location.description") as string}
+          placeholder={t("profileForm.location.placeholder")}
+          description={t("profileForm.location.description")}
           initialAddress={form.getInputProps("location").value?.address ?? ""}
           setLocation={form.getInputProps("location").onChange}
         />

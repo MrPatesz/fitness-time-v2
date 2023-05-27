@@ -33,18 +33,18 @@ export const ThemeColorPicker: FunctionComponent<{
       label={t("themeColorPicker.label")}
       itemComponent={SelectItem}
       data={[
-        {value: ThemeColor.RED, label: t("color.red") as string},
-        {value: ThemeColor.PINK, label: t("color.pink") as string},
-        {value: ThemeColor.GRAPE, label: t("color.grape") as string},
-        {value: ThemeColor.VIOLET, label: t("color.violet") as string},
-        {value: ThemeColor.INDIGO, label: t("color.indigo") as string},
-        {value: ThemeColor.BLUE, label: t("color.blue") as string},
-        {value: ThemeColor.CYAN, label: t("color.cyan") as string},
-        {value: ThemeColor.TEAL, label: t("color.teal") as string},
-        {value: ThemeColor.GREEN, label: t("color.green") as string},
-        {value: ThemeColor.LIME, label: t("color.lime") as string},
-        {value: ThemeColor.YELLOW, label: t("color.yellow") as string},
-        {value: ThemeColor.ORANGE, label: t("color.orange") as string},
+        {value: ThemeColor.RED, label: t("color.red")},
+        {value: ThemeColor.PINK, label: t("color.pink")},
+        {value: ThemeColor.GRAPE, label: t("color.grape")},
+        {value: ThemeColor.VIOLET, label: t("color.violet")},
+        {value: ThemeColor.INDIGO, label: t("color.indigo")},
+        {value: ThemeColor.BLUE, label: t("color.blue")},
+        {value: ThemeColor.CYAN, label: t("color.cyan")},
+        {value: ThemeColor.TEAL, label: t("color.teal")},
+        {value: ThemeColor.GREEN, label: t("color.green")},
+        {value: ThemeColor.LIME, label: t("color.lime")},
+        {value: ThemeColor.YELLOW, label: t("color.yellow")},
+        {value: ThemeColor.ORANGE, label: t("color.orange")},
       ]}
       value={value}
       onChange={onChange}

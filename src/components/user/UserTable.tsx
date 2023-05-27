@@ -41,7 +41,7 @@ const UserTable: FunctionComponent = () => {
       <TextInput
         sx={{flexGrow: 1}}
         icon={<IconSearch/>}
-        placeholder={t("filterEvents.search") as string}
+        placeholder={t("filterEvents.search")}
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.currentTarget.value)}
       />
@@ -66,13 +66,13 @@ const UserTable: FunctionComponent = () => {
             withColumnBorders
             textSelectionDisabled
             borderRadius={theme.defaultRadius as MantineNumberSize}
-            noRecordsText={t("userTable.noRecords") as string}
+            noRecordsText={t("userTable.noRecords")}
             sortStatus={sortBy}
             onSortStatusChange={setSortBy}
             page={page}
             onPageChange={setPage}
             recordsPerPageOptions={PAGE_SIZES}
-            recordsPerPageLabel={t("userTable.recordsPerPage") as string}
+            recordsPerPageLabel={t("userTable.recordsPerPage")}
             recordsPerPage={pageSize}
             onRecordsPerPageChange={(newPageSize) => {
               setPageSize(newPageSize);

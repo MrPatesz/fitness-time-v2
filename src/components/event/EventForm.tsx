@@ -88,7 +88,7 @@ export const EventForm: FunctionComponent<{
           withAsterisk
           data-autofocus
           label={t("common.name")}
-          placeholder={t("eventForm.name.placeholder") as string}
+          placeholder={t("eventForm.name.placeholder")}
           {...form.getInputProps("name")}
         />
         <IntervalPicker
@@ -110,13 +110,13 @@ export const EventForm: FunctionComponent<{
           error={form.getInputProps("location").error}
         />
         <RichTextField
-          label={t("eventForm.description.label") as string}
-          placeholder={t("eventForm.description.placeholder") as string}
+          label={t("eventForm.description.label")}
+          placeholder={t("eventForm.description.placeholder")}
           formInputProps={form.getInputProps("description")}
         />
         <NumberInput
           label={t("eventForm.price.label")}
-          placeholder={t("eventForm.price.placeholder") as string}
+          placeholder={t("eventForm.price.placeholder")}
           {...form.getInputProps("price")}
           min={1}
           parser={(value: string | undefined) =>
@@ -130,7 +130,7 @@ export const EventForm: FunctionComponent<{
         />
         <NumberInput
           label={t("eventForm.limit.label")}
-          placeholder={t("eventForm.limit.placeholder") as string}
+          placeholder={t("eventForm.limit.placeholder")}
           {...form.getInputProps("limit")}
           min={1}
         />

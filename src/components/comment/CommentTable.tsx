@@ -74,7 +74,7 @@ const CommentTable: FunctionComponent = () => {
     <Stack sx={{height: "100%"}}>
       <TextInput
         icon={<IconSearch/>}
-        placeholder={t("filterEvents.search") as string}
+        placeholder={t("filterEvents.search")}
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.currentTarget.value)}
       />
@@ -99,13 +99,13 @@ const CommentTable: FunctionComponent = () => {
             withColumnBorders
             textSelectionDisabled
             borderRadius={theme.defaultRadius as MantineNumberSize}
-            noRecordsText={t("commentTable.noRecords") as string}
+            noRecordsText={t("commentTable.noRecords")}
             sortStatus={sortBy}
             onSortStatusChange={setSortBy}
             page={page}
             onPageChange={setPage}
             recordsPerPageOptions={PAGE_SIZES}
-            recordsPerPageLabel={t("commentTable.recordsPerPage") as string}
+            recordsPerPageLabel={t("commentTable.recordsPerPage")}
             recordsPerPage={pageSize}
             onRecordsPerPageChange={(newPageSize) => {
               setPageSize(newPageSize);

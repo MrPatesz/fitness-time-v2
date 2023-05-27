@@ -74,12 +74,12 @@ export const GroupForm: FunctionComponent<{
           withAsterisk
           data-autofocus
           label={t("common.name")}
-          placeholder={t("groupForm.name.placeholder") as string}
+          placeholder={t("groupForm.name.placeholder")}
           {...form.getInputProps("name")}
         />
         <RichTextField
-          label={t("groupForm.description.label") as string}
-          placeholder={t("groupForm.description.placeholder") as string}
+          label={t("groupForm.description.label")}
+          placeholder={t("groupForm.description.placeholder")}
           formInputProps={form.getInputProps("description")}
         />
         <Group position="right">

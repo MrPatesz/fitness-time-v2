@@ -26,7 +26,7 @@ export const AddMessage: FunctionComponent<{
       <Group>
         <TextInput
           sx={{flexGrow: 1}}
-          placeholder={t("messageForm.addMessage") as string}
+          placeholder={t("messageForm.addMessage")}
           {...form.getInputProps("message")}
         />
         <ActionIcon

@@ -92,7 +92,7 @@ const EventTable: FunctionComponent<{
         <TextInput
           sx={{flexGrow: 1}}
           icon={<IconSearch/>}
-          placeholder={t("filterEvents.search") as string}
+          placeholder={t("filterEvents.search")}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.currentTarget.value)}
         />
@@ -134,13 +134,13 @@ const EventTable: FunctionComponent<{
             withColumnBorders
             textSelectionDisabled
             borderRadius={theme.defaultRadius as MantineNumberSize}
-            noRecordsText={t("myEvents.noRecords") as string}
+            noRecordsText={t("myEvents.noRecords")}
             sortStatus={sortBy}
             onSortStatusChange={setSortBy}
             page={page}
             onPageChange={setPage}
             recordsPerPageOptions={PAGE_SIZES}
-            recordsPerPageLabel={t("myEvents.recordsPerPage") as string}
+            recordsPerPageLabel={t("myEvents.recordsPerPage")}
             recordsPerPage={pageSize}
             onRecordsPerPageChange={(newPageSize) => {
               setPageSize(newPageSize);
