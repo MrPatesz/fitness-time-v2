@@ -1,4 +1,4 @@
-import {ActionIcon, Box, Card, Group, SimpleGrid, Stack, Text, useMantineTheme} from "@mantine/core";
+import {ActionIcon, Box, Group, SimpleGrid, Stack, Text, useMantineTheme} from "@mantine/core";
 import {showNotification} from "@mantine/notifications";
 import {useSession} from "next-auth/react";
 import {useTranslation} from "next-i18next";
@@ -12,7 +12,6 @@ import {QueryComponent} from "../../components/QueryComponent";
 import {RichTextDisplay} from "../../components/rich-text/RichTextDisplay";
 import {api} from "../../utils/api";
 import {getLongDateFormatter} from "../../utils/formatters";
-import {getBackgroundColor} from "../../utils/utilFunctions";
 import {useMediaQuery} from "@mantine/hooks";
 import {useMemo} from "react";
 import {GroupFeed} from "../../components/group/GroupFeed";
@@ -104,20 +103,14 @@ export default function GroupDetailsPage() {
             >
               <GroupFeed groupId={groupId}/>
               <Stack>
-                {groupQuery.data.description && (
-                  <Card withBorder sx={theme => ({backgroundColor: getBackgroundColor(theme)})}>
-                    <RichTextDisplay richText={groupQuery.data.description} maxHeight={300} scroll/>
-                  </Card>
-                )}
+                <RichTextDisplay bordered richText={groupQuery.data.description} maxHeight={300} scroll/>
                 <Box sx={{flexGrow: 1}}>
                   <GroupChat groupId={groupId}/>
                 </Box>
               </Stack>
             </SimpleGrid>
-          ) : groupQuery.data.description && (
-            <Card withBorder sx={theme => ({backgroundColor: getBackgroundColor(theme)})}>
-              <RichTextDisplay richText={groupQuery.data.description}/>
-            </Card>
+          ) : (
+            <RichTextDisplay bordered richText={groupQuery.data.description}/>
           )}
         </Stack>
       )}

@@ -172,11 +172,12 @@ export default function EventDetailsPage() {
                     })}
                   />
                 )}
-                {eventQuery.data.description && (
-                  <Card p={defaultSpacing} withBorder sx={{backgroundColor: getBackgroundColor(theme)}}>
-                    <RichTextDisplay scroll richText={eventQuery.data.description} maxHeight={descriptionMaxHeight}/>
-                  </Card>
-                )}
+                <RichTextDisplay
+                  bordered
+                  scroll
+                  richText={eventQuery.data.description}
+                  maxHeight={descriptionMaxHeight}
+                />
               </Stack>
               <MapComponent
                 size={{width: mapSize, height: mapSize}}

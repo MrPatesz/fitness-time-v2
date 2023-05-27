@@ -119,7 +119,7 @@ const CommentTable: FunctionComponent = () => {
                 title: t("commentTable.message"),
                 sortable: true,
                 width: 300,
-                render: ({message}) => (<RichTextDisplay richText={message} maxHeight={25}/>),
+                render: ({message}) => <RichTextDisplay scroll richText={message} maxHeight={50}/>,
               },
               {
                 accessor: "postedAt",

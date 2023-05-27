@@ -1,4 +1,4 @@
-import {Card, Group, Stack, Text} from "@mantine/core";
+import {Group, Stack, Text} from "@mantine/core";
 import {useTranslation} from "next-i18next";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import {useRouter} from "next/router";
@@ -8,7 +8,6 @@ import {QueryComponent} from "../../components/QueryComponent";
 import {RichTextDisplay} from "../../components/rich-text/RichTextDisplay";
 import UserImage from "../../components/user/UserImage";
 import {api} from "../../utils/api";
-import {getBackgroundColor} from "../../utils/utilFunctions";
 import {RatingComponent} from "../../components/RatingComponent";
 
 export default function UserDetailsPage() {
@@ -35,11 +34,7 @@ export default function UserDetailsPage() {
                 </Text>
                 <RatingComponent averageRating={userRatingQuery.data}/>
               </Group>
-              {userDetailsQuery.data.introduction && (
-                <Card withBorder sx={theme => ({backgroundColor: getBackgroundColor(theme)})}>
-                  <RichTextDisplay richText={userDetailsQuery.data.introduction} maxHeight={300}/>
-                </Card>
-              )}
+              <RichTextDisplay bordered richText={userDetailsQuery.data.introduction} maxHeight={300}/>
             </Stack>
             <UserImage user={userDetailsQuery.data}/>
           </Group>

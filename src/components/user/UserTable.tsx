@@ -90,7 +90,7 @@ const UserTable: FunctionComponent = () => {
               {
                 accessor: "introduction",
                 title: t("profileForm.introduction"),
-                render: ({introduction}) => <RichTextDisplay richText={introduction} maxHeight={25}/>,
+                render: ({introduction}) => <RichTextDisplay scroll richText={introduction} maxHeight={50}/>,
               },
               {
                 accessor: "image",
