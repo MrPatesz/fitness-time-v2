@@ -43,7 +43,7 @@ const client = z.object({
 
 /**
  * You can't destruct `process.env` as a regular object in the Next.js
- * edge runtimes (e.g. middlewares) or client-side so we need to destruct manually.
+ * edge runtimes (e.g. middlewares) or client-side, so we need to destruct manually.
  * @type {Record<keyof z.infer<typeof server> | keyof z.infer<typeof client>, string | undefined>}
  */
 const processEnv = {

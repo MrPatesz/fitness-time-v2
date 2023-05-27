@@ -1,11 +1,6 @@
 import {z} from "zod";
-import {PaginateBaseSchema, SortDirection} from "../PaginateBase";
-
-export enum SortGroupByProperty {
-  NAME = "name",
-  CREATED_AT = "createdAt",
-  // MEMBER_COUNT = "memberCount",
-}
+import {PaginateBaseSchema} from "../PaginateBase";
+import {SortDirection, SortGroupByProperty} from "../../utils/enums";
 
 export const PaginateGroupsSchema = PaginateBaseSchema.extend({
   sortBy: z.object({

@@ -1,12 +1,6 @@
 import {z} from "zod";
-import {PaginateBaseSchema, SortDirection} from "../PaginateBase";
-
-export enum SortEventByProperty {
-  NAME = "name",
-  START = "start",
-  PRICE = "price",
-  LIMIT = "limit",
-}
+import {PaginateBaseSchema} from "../PaginateBase";
+import {SortDirection, SortEventByProperty} from "../../utils/enums";
 
 export const PaginateEventsSchema = PaginateBaseSchema.extend({
   sortBy: z.object({

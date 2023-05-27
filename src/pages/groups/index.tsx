@@ -1,6 +1,7 @@
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import i18nConfig from "../../../next-i18next.config.mjs";
-import GroupTable, {GroupTableDisplayPlace} from "../../components/group/GroupTable";
+import GroupTable from "../../components/group/GroupTable";
+import {GroupTableDisplayPlace} from "../../utils/enums";
 
 export default function GroupsPage() {
   return (

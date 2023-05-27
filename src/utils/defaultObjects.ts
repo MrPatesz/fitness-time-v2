@@ -1,10 +1,8 @@
-import {OrderBy} from "../components/event/FilterEventsComponent";
 import {CreateCommentType} from "../models/Comment";
 import {CreateEventType} from "../models/event/Event";
 import {CreateGroupType} from "../models/group/Group";
 import {CreateLocationType} from "../models/Location";
 import dayjs from "./dayjs";
-import {EventFilters} from "../hooks/useFilteredEvents";
 
 export const googleMapsLibraries: (
   | "places"
@@ -41,10 +39,3 @@ export const getDefaultCreateEvent = (initialInterval?: {
   location: defaultCreateLocation,
   groupId: null,
 });
-
-export const defaultEventFilters: EventFilters = {
-  searchTerm: "",
-  orderBy: OrderBy.DATE,
-  ascending: false,
-  tags: [],
-};

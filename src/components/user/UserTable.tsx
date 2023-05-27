@@ -8,9 +8,9 @@ import {FunctionComponent, useEffect, useState} from "react";
 import {api} from "../../utils/api";
 import {PAGE_SIZES} from "../event/EventTable";
 import {QueryComponent} from "../QueryComponent";
-import {SortDirection} from "../../models/PaginateBase";
 import {RichTextDisplay} from "../rich-text/RichTextDisplay";
 import UserImage from "./UserImage";
+import {SortDirection} from "../../utils/enums";
 
 const UserTable: FunctionComponent = () => {
   const [page, setPage] = useState<number>(1);

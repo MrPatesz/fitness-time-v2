@@ -1,6 +1,7 @@
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import i18nConfig from "../../../next-i18next.config.mjs";
-import EventTable, {EventTableDisplayPlace} from "../../components/event/EventTable";
+import EventTable from "../../components/event/EventTable";
+import {EventTableDisplayPlace} from "../../utils/enums";
 
 export default function EventsPage() {
   return (

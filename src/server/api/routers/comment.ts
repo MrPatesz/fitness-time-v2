@@ -3,13 +3,8 @@ import {BasicCommentSchema, CreateCommentSchema, DetailedCommentSchema} from "..
 import {IdSchema} from "../../../models/Id";
 import {createTRPCRouter, protectedProcedure} from "../trpc";
 import {Prisma} from ".prisma/client";
-import {SortDirection} from "../../../models/PaginateBase";
 
-export enum SortCommentByProperty {
-  MESSAGE = "message",
-  POSTED_AT = "postedAt",
-  EVENT = "event",
-}
+import {SortCommentByProperty, SortDirection} from "../../../utils/enums";
 
 export const commentRouter = createTRPCRouter({
   getAllByEventId: protectedProcedure
