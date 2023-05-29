@@ -18,7 +18,7 @@ export const LocationPicker: FunctionComponent<{
 }> = ({location, initialAddress, setLocation, error, required, placeholder, description}) => {
   const {t} = useTranslation("common");
   const {isLoaded, loadError} = useJsApiLoader({
-    googleMapsApiKey: `${env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`,
+    googleMapsApiKey: env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
     libraries: googleMapsLibraries,
   });
 
