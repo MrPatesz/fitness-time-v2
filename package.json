@@ -47,7 +47,6 @@
     "prisma-kysely": "^1.2.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-intersection-observer": "^9.4.3",
     "react-query": "^3.39.3",
     "superjson": "1.12.3",
     "tabler-icons-react": "^1.56.0",

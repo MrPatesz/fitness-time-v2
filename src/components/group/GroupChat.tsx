@@ -1,26 +1,29 @@
 import {Box, Card, Center, Loader, ScrollArea, Stack} from "@mantine/core";
 import {useTranslation} from "next-i18next";
 import {FunctionComponent, useEffect, useMemo, useRef} from "react";
-import {useInView} from "react-intersection-observer";
 import {api} from "../../utils/api";
 import {getBackgroundColor} from "../../utils/utilFunctions";
 import {CommentCard} from "../comment/CommentCard";
 import {AddMessage} from "./AddMessage";
-import {CenteredLoader} from "../CenteredLoader";
+import {useIntersection} from "@mantine/hooks";
 
 export const GroupChat: FunctionComponent<{
   groupId: number;
 }> = ({groupId}) => {
-  const {ref, inView} = useInView();
   const viewport = useRef<HTMLDivElement>(null);
   const {t} = useTranslation("common");
+  const lastMessageRef = useRef<HTMLElement>(null);
+  const {ref, entry} = useIntersection({
+    root: lastMessageRef.current,
+    threshold: 1,
+  });
 
   const {
-    data: groupChatData,
-    fetchNextPage,
-    isFetching,
-    hasNextPage,
+    data,
     isLoading,
+    isFetching,
+    fetchNextPage,
+    hasNextPage,
     error,
     refetch: refetchMessages,
   } = api.groupChat.getMessages.useInfiniteQuery({groupId}, {
@@ -45,29 +48,28 @@ export const GroupChat: FunctionComponent<{
   });
 
   const messages = useMemo(() => {
-    if (!groupChatData) return [];
+    if (!data) return [];
 
-    return [...groupChatData.pages]
+    return [...data.pages]
       .reverse()
-      .flatMap(page => page.messages)
-      .map(m => (<CommentCard key={m.id} comment={m}/>));
-  }, [groupChatData?.pages]);
+      .flatMap(page => page.messages);
+  }, [data?.pages]);
 
   useEffect(() => {
     scrollToBottom();
   }, [viewport.current, isLoading]);
 
   useEffect(() => {
-    if (inView && hasNextPage) {
+    if (entry?.isIntersecting && hasNextPage) {
       fetchNextPage().then(() => {
         setTimeout(() => {
-          const numberOfPages = groupChatData?.pages.length ?? 1;
+          const numberOfPages = data?.pages.length ?? 1;
           const scrollRatio = 1 - (numberOfPages / (numberOfPages + 1));
-          viewport.current?.scrollTo({top: viewport.current?.scrollHeight * scrollRatio, behavior: "smooth"});
+          viewport.current?.scrollTo({top: viewport.current?.scrollHeight * scrollRatio});
         }, 100);
       });
     }
-  }, [inView]);
+  }, [entry]);
 
   return (
     <Card
@@ -91,7 +93,7 @@ export const GroupChat: FunctionComponent<{
       >
         <ScrollArea viewportRef={viewport}>
           <Center ref={ref} sx={{width: "100%"}}>
-            {isFetching && !isLoading && (
+            {isFetching && (
               <Box h={25}>
                 <Loader/>
               </Box>
@@ -102,11 +104,9 @@ export const GroupChat: FunctionComponent<{
               <Card withBorder>
                 {t("queryComponent.error", {resourceName: t("resource.chat")})}
               </Card>
-            ) : isLoading ? (
-              <CenteredLoader/>
-            ) : (
-              messages
-            )}
+            ) : messages.map((message) => (
+              <CommentCard key={message.id} comment={message}/>
+            ))}
           </Stack>
         </ScrollArea>
         <AddMessage groupId={groupId}/>
