@@ -1,7 +1,6 @@
 import {ActionIcon, Box, Card, Group, ScrollArea, Stack, useMantineTheme} from "@mantine/core";
 import {useTranslation} from "next-i18next";
 import {FunctionComponent, useEffect, useMemo, useRef} from "react";
-import {useInView} from "react-intersection-observer";
 import {api} from "../../utils/api";
 import {getBackgroundColor} from "../../utils/utilFunctions";
 import {openModal} from "@mantine/modals";
@@ -10,30 +9,34 @@ import {Plus} from "tabler-icons-react";
 import {EventCard} from "../event/EventCard";
 import {BasicEventType} from "../../models/event/Event";
 import {CenteredLoader} from "../CenteredLoader";
+import {useIntersection} from "@mantine/hooks";
 
 export const GroupFeed: FunctionComponent<{
   groupId: number;
 }> = ({groupId}) => {
-  const {ref, inView} = useInView();
   const theme = useMantineTheme();
-  const viewport = useRef<HTMLDivElement>(null);
   const {t} = useTranslation("common");
+  const lastEventRef = useRef<HTMLElement>(null);
+  const {ref, entry} = useIntersection({
+    root: lastEventRef.current,
+    threshold: 1,
+  });
 
   const {
     data,
+    isFetching,
     fetchNextPage,
     hasNextPage,
-    isLoading,
     error,
   } = api.event.getFeed.useInfiniteQuery({groupId}, {
     getNextPageParam: (lastPage) => lastPage.nextCursor,
   });
 
   useEffect(() => {
-    if (inView && hasNextPage) {
-      fetchNextPage().then();
+    if (entry?.isIntersecting && hasNextPage) {
+      fetchNextPage();
     }
-  }, [inView])
+  }, [entry]);
 
   const events: BasicEventType[] = useMemo(() => {
     return data?.pages.flatMap(page => page.events) ?? [];
@@ -71,19 +74,16 @@ export const GroupFeed: FunctionComponent<{
             <Plus/>
           </ActionIcon>
         </Group>
-        <ScrollArea viewportRef={viewport}>
+        <ScrollArea>
           <Stack>
             {error ? (
               <Card withBorder>{t("queryComponent.error", {resourceName: t("resource.feed")})}</Card>
-            ) : isLoading ? (
-              <CenteredLoader/>
-            ) : (
-              events.map((event, index) => (
-                <Box ref={(index === events.length - 1) ? ref : undefined} key={event.id}>
-                  <EventCard event={event}/>
-                </Box>
-              ))
-            )}
+            ) : events.map((event, index) => (
+              <Box ref={(index === events.length - 1) ? ref : undefined} key={event.id}>
+                <EventCard event={event}/>
+              </Box>
+            ))}
+            {isFetching && <CenteredLoader/>}
           </Stack>
         </ScrollArea>
       </Stack>

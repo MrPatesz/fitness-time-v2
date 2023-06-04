@@ -1,13 +1,13 @@
-import {SimpleGrid, useMantineTheme} from "@mantine/core";
+import {Box, SimpleGrid, useMantineTheme} from "@mantine/core";
 import {useMediaQuery} from "@mantine/hooks";
-import {FunctionComponent} from "react";
+import {ForwardedRef, forwardRef} from "react";
 import {BasicEventType} from "../../models/event/Event";
 import {EventCard} from "./EventCard";
 import {CenteredLoader} from "../CenteredLoader";
 
-export const EventGrid: FunctionComponent<{
+export const EventGrid = forwardRef(({events}: {
   events: BasicEventType[];
-}> = ({events}) => {
+}, ref: ForwardedRef<HTMLDivElement | null>) => {
   const theme = useMantineTheme();
   const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
   const md = useMediaQuery(`(min-width: ${theme.breakpoints.md}px)`);
@@ -22,9 +22,13 @@ export const EventGrid: FunctionComponent<{
 
   return (
     <SimpleGrid cols={qxl ? 7 : txl ? 6 : xxl ? 5 : xl ? 4 : md ? 3 : xs ? 2 : 1}>
-      {events.map((event) => (
+      {events.map((event, index) => (index === events.length - 1) ? (
+        <Box key={event.id} ref={ref}>
+          <EventCard event={event}/>
+        </Box>
+      ) : (
         <EventCard event={event} key={event.id}/>
       ))}
     </SimpleGrid>
   );
-};
+});

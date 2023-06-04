@@ -1,41 +1,49 @@
-import {Card, Center, Checkbox, Group, Loader, Slider, Stack, Text, useMantineTheme} from "@mantine/core";
+import {Card, Checkbox, Group, Slider, Stack, Text, useMantineTheme} from "@mantine/core";
 import {useTranslation} from "next-i18next";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import i18nConfig from "../../next-i18next.config.mjs";
-import {EventGrid} from "../components/event/EventGrid";
 import {api} from "../utils/api";
-import {useEffect, useState} from "react";
-import {useInView} from "react-intersection-observer";
+import {useEffect, useMemo, useRef, useState} from "react";
 import {formatDistance, getBackgroundColor} from "../utils/utilFunctions";
+import {useIntersection} from "@mantine/hooks";
+import {EventGrid} from "../components/event/EventGrid";
 import {CenteredLoader} from "../components/CenteredLoader";
+import {BasicEventType} from "../models/event/Event";
 
 export default function FeedPage() {
   const [fluidMaxDistance, setFluidMaxDistance] = useState<number>(100);
   const [maxDistance, setMaxDistance] = useState<number>(100);
   const [enableMaxDistance, setEnableMaxDistance] = useState<boolean>(true);
 
-  const {ref, inView} = useInView();
   const theme = useMantineTheme();
   const {t} = useTranslation("common");
+  const lastEventRef = useRef<HTMLElement>(null);
+  const {ref, entry} = useIntersection({
+    root: lastEventRef.current,
+    threshold: 1,
+  });
 
   const userDetailsQuery = api.user.profile.useQuery();
   const userHasLocation = Boolean(userDetailsQuery.data?.location);
   const {
     data,
-    fetchNextPage,
     isFetching,
+    fetchNextPage,
     hasNextPage,
-    isLoading,
     error,
   } = api.event.getFeed.useInfiniteQuery({maxDistance: userHasLocation && enableMaxDistance ? maxDistance : undefined}, {
     getNextPageParam: (lastPage) => lastPage.nextCursor,
   });
 
   useEffect(() => {
-    if (inView && hasNextPage) {
-      fetchNextPage().then();
+    if (entry?.isIntersecting && hasNextPage) {
+      fetchNextPage();
     }
-  }, [inView, data?.pages.length])
+  }, [entry]);
+
+  const events: BasicEventType[] = useMemo(() => {
+    return data?.pages.flatMap(page => page.events) ?? [];
+  }, [data?.pages])
 
   return (
     <Stack>
@@ -73,16 +81,10 @@ export default function FeedPage() {
       )}
       {error ? (
         <Card withBorder>{t("queryComponent.error", {resourceName: t("resource.feed")})}</Card>
-      ) : isLoading ? (
-        <CenteredLoader/>
       ) : (
-        <EventGrid events={data?.pages.flatMap(page => page.events) ?? []}/>
+        <EventGrid ref={ref} events={events}/>
       )}
-      <Center ref={ref} sx={{height: "100%", width: "100%"}}>
-        {isFetching && !isLoading && (
-          <Loader/>
-        )}
-      </Center>
+      {isFetching && <CenteredLoader/>}
     </Stack>
   );
 }
