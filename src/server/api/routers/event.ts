@@ -137,7 +137,6 @@ export const eventRouter = createTRPCRouter({
       const caller = await prisma.user.findUnique({
         where: {id: callerId},
         include: {
-          createdEvents: {include: {location: true, creator: true, group: {include: {creator: true}}}},
           participatedEvents: {include: {location: true, creator: true, group: {include: {creator: true}}}},
         },
       });
@@ -146,7 +145,7 @@ export const eventRouter = createTRPCRouter({
         throw new TRPCError({code: "UNAUTHORIZED", message: "User doesn't exist!"});
       }
 
-      return BasicEventSchema.array().parse([...caller.createdEvents, ...caller.participatedEvents]);
+      return BasicEventSchema.array().parse(caller.participatedEvents);
     }),
   getById: protectedProcedure
     .input(IdSchema)
