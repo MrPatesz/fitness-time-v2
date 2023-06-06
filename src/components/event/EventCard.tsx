@@ -80,12 +80,12 @@ export const EventCard: FunctionComponent<{
                   },
                 })}
               >
-                <Group spacing={8}>
+                <Group spacing={4}>
                   <Text>{event.group.name}</Text>
                   {groupRatingQuery.data?.count && (
                     <>
                       <Divider orientation="vertical" color={event.group.creator.themeColor}/>
-                      <Group spacing={4}>
+                      <Group spacing={2}>
                         <Text>{groupRatingQuery.data.averageStars?.toFixed(1)}</Text>
                         <IconStar size={10}/>
                       </Group>
@@ -108,12 +108,12 @@ export const EventCard: FunctionComponent<{
                 },
               })}
             >
-              <Group spacing={8}>
+              <Group spacing={4}>
                 <Text>{event.creator.name}</Text>
                 {userRatingQuery.data?.count && (
                   <>
                     <Divider orientation="vertical" color={event.creator.themeColor}/>
-                    <Group spacing={4}>
+                    <Group spacing={2}>
                       <Text>{userRatingQuery.data.averageStars?.toFixed(1)}</Text>
                       <IconStar size={10}/>
                     </Group>
