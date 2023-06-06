@@ -24,9 +24,9 @@ export const MembersComponent: FunctionComponent<{
           radius="xl"
           size="lg"
           src={user.image}
-          color={theme.fn.themeColor(theme.primaryColor)}
+          color={user.themeColor}
         >
-          <Text weight="normal" size={10}>
+          <Text weight="normal" size={25}>
             {getInitials(user.name)}
           </Text>
         </Avatar>
@@ -36,7 +36,7 @@ export const MembersComponent: FunctionComponent<{
           variant="light"
           radius="xl"
           size="lg"
-          color={theme.fn.themeColor(theme.primaryColor)}
+          color={theme.fn.themeColor(theme.primaryColor)} // TODO group owner's color
         >
           +{members.length - limit}
         </Avatar>
