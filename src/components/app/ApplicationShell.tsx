@@ -15,7 +15,7 @@ import {signOut, useSession} from "next-auth/react";
 import {useTranslation} from "next-i18next";
 import Link from "next/link";
 import {useRouter} from "next/router";
-import {FunctionComponent} from "react";
+import {FunctionComponent, useEffect} from "react";
 import {Adjustments, CalendarEvent, IconProps, Logout, Share, Ticket, UserCircle, Users} from "tabler-icons-react";
 import {getBackgroundColor} from "../../utils/utilFunctions";
 import {ColorSchemeToggle} from "./ColorSchemeToggle";
@@ -52,9 +52,15 @@ export const ApplicationShell: FunctionComponent<{
 
   const theme = useMantineTheme();
   const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
-  const {route, locale = "en", defaultLocale} = useRouter();
+  const {route, locale = "en", defaultLocale, push: pushRoute} = useRouter();
   const {data: session} = useSession();
   const {t} = useTranslation("common");
+
+  useEffect(() => {
+    if (!session) {
+      pushRoute("/welcome", undefined, {locale})
+    }
+  }, [session]);
 
   const isDefaultLocale = locale === defaultLocale;
   const localePrefix = isDefaultLocale ? "" : `/${locale}`;

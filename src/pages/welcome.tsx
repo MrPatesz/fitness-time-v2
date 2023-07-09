@@ -4,15 +4,18 @@ import {useTranslation} from "next-i18next";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import {useRouter} from "next/router";
 import i18nConfig from "../../next-i18next.config.mjs";
+import {useEffect} from "react";
 
 export default function WelcomePage() {
   const {replace: replaceRoute, locale, defaultLocale} = useRouter();
   const {data: session} = useSession();
   const {t} = useTranslation("common");
 
-  if (session) {
-    replaceRoute("/", undefined, {locale});
-  }
+  useEffect(() => {
+    if (session) {
+      replaceRoute("/", undefined, {locale});
+    }
+  }, [session]);
 
   return (
     <Stack align="center" justify="center" sx={{height: "100vh"}}>
