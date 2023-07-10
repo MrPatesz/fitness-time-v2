@@ -20,7 +20,7 @@ import {FunctionComponent, useEffect, useState} from "react";
 import {Pencil, Plus, Trash} from "tabler-icons-react";
 import {BasicEventType} from "../../models/event/Event";
 import {api} from "../../utils/api";
-import {getLongDateFormatter, getPriceFormatter} from "../../utils/formatters";
+import {useLongDateFormatter, usePriceFormatter} from "../../utils/formatters";
 import {QueryComponent} from "../QueryComponent";
 import {EventForm} from "./EventForm";
 import {EventTableDisplayPlace, SortDirection, SortEventByProperty} from "../../utils/enums";
@@ -41,8 +41,8 @@ const EventTable: FunctionComponent<{
   const theme = useMantineTheme();
   const {push: pushRoute, locale = "en"} = useRouter();
   const {t} = useTranslation("common");
-  const longDateFormatter = getLongDateFormatter(locale);
-  const priceFormatter = getPriceFormatter(locale);
+  const longDateFormatter = useLongDateFormatter();
+  const priceFormatter = usePriceFormatter();
 
   const eventsQuery = api.event.getPaginatedEvents.useQuery({
     archive: archive,

@@ -10,7 +10,7 @@ import {Pencil, Trash} from "tabler-icons-react";
 import {BasicCommentType} from "../../models/Comment";
 import {api} from "../../utils/api";
 import dayjs from "../../utils/dayjs";
-import {getLongDateFormatter} from "../../utils/formatters";
+import {useLongDateFormatter} from "../../utils/formatters";
 import {RichTextDisplay} from "../rich-text/RichTextDisplay";
 import UserImage from "../user/UserImage";
 import {CommentForm} from "./CommentForm";
@@ -20,6 +20,7 @@ export const CommentCard: FunctionComponent<{
   comment: BasicCommentType | BasicMessageType;
 }> = ({comment}) => {
   const queryContext = api.useContext();
+  const longDateFormatter = useLongDateFormatter();
   const theme = useMantineTheme();
   const {locale = "en"} = useRouter();
   const {data: session} = useSession();
@@ -48,7 +49,7 @@ export const CommentCard: FunctionComponent<{
                 </Text>
               </Link>
               <Tooltip
-                label={getLongDateFormatter(locale).format(comment.postedAt)}
+                label={longDateFormatter.format(comment.postedAt)}
                 color={theme.primaryColor}
                 position="right"
               >

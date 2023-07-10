@@ -7,7 +7,7 @@ import {useRouter} from "next/router";
 import {FunctionComponent, useEffect, useState} from "react";
 import {Pencil, Trash} from "tabler-icons-react";
 import {api} from "../../utils/api";
-import {getLongDateFormatter} from "../../utils/formatters";
+import {useLongDateFormatter} from "../../utils/formatters";
 import {PAGE_SIZES} from "../event/EventTable";
 import {QueryComponent} from "../QueryComponent";
 import {DetailedCommentType} from "../../models/Comment";
@@ -28,7 +28,7 @@ const CommentTable: FunctionComponent = () => {
   const theme = useMantineTheme();
   const {locale = "en"} = useRouter();
   const {t} = useTranslation("common");
-  const longDateFormatter = getLongDateFormatter(locale);
+  const longDateFormatter = useLongDateFormatter();
 
   const commentsQuery = api.comment.getAllCreated.useQuery({
     page,

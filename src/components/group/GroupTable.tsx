@@ -10,7 +10,7 @@ import {FunctionComponent, useEffect, useState} from "react";
 import {Pencil, Plus, Trash} from "tabler-icons-react";
 import {BasicGroupType} from "../../models/group/Group";
 import {api} from "../../utils/api";
-import {getLongDateFormatter} from "../../utils/formatters";
+import {useLongDateFormatter} from "../../utils/formatters";
 import {PAGE_SIZES} from "../event/EventTable";
 import {QueryComponent} from "../QueryComponent";
 import {GroupForm} from "./GroupForm";
@@ -28,7 +28,7 @@ const GroupTable: FunctionComponent<{
   const theme = useMantineTheme();
   const {push: pushRoute, locale = "en"} = useRouter();
   const {t} = useTranslation("common");
-  const longDateFormatter = getLongDateFormatter(locale);
+  const longDateFormatter = useLongDateFormatter();
 
   const groupsQuery = api.group.getPaginatedGroups.useQuery({
     page,

@@ -16,7 +16,7 @@ import {QueryComponent} from "../../components/QueryComponent";
 import {RichTextDisplay} from "../../components/rich-text/RichTextDisplay";
 import {DetailedEventType} from "../../models/event/Event";
 import {api} from "../../utils/api";
-import {getLongDateFormatter, getPriceFormatter} from "../../utils/formatters";
+import {useLongDateFormatter, usePriceFormatter} from "../../utils/formatters";
 import {getBackgroundColor} from "../../utils/utilFunctions";
 import {EventStatus} from "../../utils/enums";
 import {RatingComponent} from "../../components/RatingComponent";
@@ -26,8 +26,8 @@ export default function EventDetailsPage() {
   const {query: {id}, isReady, locale = "en"} = useRouter();
   const {data: session} = useSession();
   const {t} = useTranslation("common");
-  const longDateFormatter = getLongDateFormatter(locale);
-  const priceFormatter = getPriceFormatter(locale);
+  const longDateFormatter = useLongDateFormatter();
+  const priceFormatter = usePriceFormatter();
 
   const eventId = parseInt(id as string);
   const eventQuery = api.event.getById.useQuery(eventId, {

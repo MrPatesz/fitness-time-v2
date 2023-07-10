@@ -11,7 +11,7 @@ import {GroupChat} from "../../components/group/GroupChat";
 import {QueryComponent} from "../../components/QueryComponent";
 import {RichTextDisplay} from "../../components/rich-text/RichTextDisplay";
 import {api} from "../../utils/api";
-import {getLongDateFormatter} from "../../utils/formatters";
+import {useLongDateFormatter} from "../../utils/formatters";
 import {useMediaQuery} from "@mantine/hooks";
 import {useMemo} from "react";
 import {GroupFeed} from "../../components/group/GroupFeed";
@@ -26,7 +26,7 @@ export default function GroupDetailsPage() {
   const {query: {id}, isReady, locale = "en"} = useRouter();
   const {data: session} = useSession();
   const {t} = useTranslation("common");
-  const longDateFormatter = getLongDateFormatter(locale);
+  const longDateFormatter = useLongDateFormatter();
 
   const groupId = parseInt(id as string);
   const groupQuery = api.group.getById.useQuery(groupId, {

@@ -4,18 +4,18 @@ import Link from "next/link";
 import {useRouter} from "next/router";
 import {FunctionComponent} from "react";
 import {BasicEventType} from "../../models/event/Event";
-import {getShortDateFormatter} from "../../utils/formatters";
 import {formatDistance, getBackgroundColor} from "../../utils/utilFunctions";
 import {EventStatus, ThemeColor} from "../../utils/enums";
 import {api} from "../../utils/api";
 import {IconStar} from "@tabler/icons";
+import {useShortDateFormatter} from "../../utils/formatters";
 
 export const EventCard: FunctionComponent<{
   event: BasicEventType;
 }> = ({event}) => {
   const {locale = "en", push: pushRoute} = useRouter();
   const {t} = useTranslation("common");
-  const shortDateFormatter = getShortDateFormatter(locale);
+  const shortDateFormatter = useShortDateFormatter();
 
   const userRatingQuery = api.rating.getAverageRatingForUser.useQuery(event.creatorId);
   const groupRatingQuery = api.rating.getAverageRatingForGroup.useQuery(parseInt(`${event.groupId}`), {
