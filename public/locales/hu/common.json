@@ -106,6 +106,9 @@
     }
   },
   "modal": {
+    "members": {
+      "title": "Tagok"
+    },
     "group": {
       "edit": "Csoport szerkesztése",
       "create": "Csoport létrehozása",
