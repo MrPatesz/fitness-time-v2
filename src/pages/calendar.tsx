@@ -50,13 +50,23 @@ export default function CalendarPage() {
     newStart: { value: string };
     newEnd: { value: string };
   }) => {
+    const newStartDate = new Date(event.newStart.value);
+    const newEndDate = new Date(event.newEnd.value);
+
+    if (
+      event.e.data.resource.start.getTime() === newStartDate.getTime() &&
+      event.e.data.resource.end.getTime() === newEndDate.getTime()
+    ) {
+      return;
+    }
+
     if (session?.user.id === event.e.data.resource.creatorId) {
       updateEvent.mutate({
         id: event.e.data.resource.id,
         event: {
           ...event.e.data.resource,
-          start: new Date(event.newStart.value),
-          end: new Date(event.newEnd.value),
+          start: newStartDate,
+          end: newEndDate,
         }
       });
     } else {
