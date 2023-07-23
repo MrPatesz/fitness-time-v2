@@ -15,11 +15,13 @@ import {signOut, useSession} from "next-auth/react";
 import {useTranslation} from "next-i18next";
 import Link from "next/link";
 import {useRouter} from "next/router";
-import {FunctionComponent, useEffect} from "react";
+import {FunctionComponent} from "react";
 import {Adjustments, CalendarEvent, IconProps, Logout, Share, Ticket, UserCircle, Users} from "tabler-icons-react";
 import {getBackgroundColor} from "../../utils/utilFunctions";
 import {ColorSchemeToggle} from "./ColorSchemeToggle";
 import {LanguageToggle} from "./LanguageToggle";
+
+const welcome = "welcome";
 
 const NavBarLink: FunctionComponent<{
   link: {
@@ -53,24 +55,31 @@ export const ApplicationShell: FunctionComponent<{
   const theme = useMantineTheme();
   const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
   const {route, locale = "en", defaultLocale, push: pushRoute} = useRouter();
-  const {data: session} = useSession();
+  const {data: session} = useSession({
+    required: !route.includes(welcome),
+    onUnauthenticated: () => pushRoute(`/${welcome}`, undefined, {locale}),
+  });
   const {t} = useTranslation("common");
-
-  useEffect(() => {
-    if (!session) {
-      pushRoute("/welcome", undefined, {locale})
-    }
-  }, [session]);
 
   const isDefaultLocale = locale === defaultLocale;
   const localePrefix = isDefaultLocale ? "" : `/${locale}`;
-  const calendarRoute = `${localePrefix}/calendar`;
-  const groupsRoute = `${localePrefix}/groups`;
-  const profileRoute = `${localePrefix}/profile`;
-  const welcomeRoute = `${localePrefix}/welcome`;
-  const eventsRoute = `${localePrefix}/events`;
-  const controlPanelRoute = `${localePrefix}/control-panel`;
-  const usersRoute = `${localePrefix}/users`;
+  const [
+    calendarRoute,
+    groupsRoute,
+    profileRoute,
+    welcomeRoute,
+    eventsRoute,
+    controlPanelRoute,
+    usersRoute,
+  ] = [
+    `${localePrefix}/calendar`,
+    `${localePrefix}/groups`,
+    `${localePrefix}/profile`,
+    `${localePrefix}/${welcome}`,
+    `${localePrefix}/events`,
+    `${localePrefix}/control-panel`,
+    `${localePrefix}/users`,
+  ];
 
   const isRouteActive = (givenRoute: string) => {
     if (route === "/") {
