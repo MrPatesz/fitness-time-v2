@@ -3,7 +3,7 @@ import {useForm} from "@mantine/form";
 import {closeAllModals} from "@mantine/modals";
 import {showNotification} from "@mantine/notifications";
 import {useTranslation} from "next-i18next";
-import {FunctionComponent} from "react";
+import {FunctionComponent, useEffect} from "react";
 import {CreateEventType} from "../../models/event/Event";
 import {api} from "../../utils/api";
 import {getDefaultCreateEvent} from "../../utils/defaultObjects";
@@ -41,6 +41,12 @@ export const EventForm: FunctionComponent<{
     refetchOnMount: (query) => !query.isActive(),
   });
 
+  useEffect(() => {
+    if (!editedEventId) {
+      resetForm({...getDefaultCreateEvent(initialInterval), groupId});
+    }
+  }, [initialInterval, groupId]);
+
   const form = useForm<CreateEventType>({
     initialValues: editedEventQuery.data,
     initialErrors: getErrors(editedEventQuery.data, !editedEventId),
@@ -74,7 +80,7 @@ export const EventForm: FunctionComponent<{
     }),
   });
 
-  const isFormDirty = () => JSON.stringify(form.values) !== JSON.stringify(editedEventQuery.data);
+  const isFormDirty = JSON.stringify(form.values) !== JSON.stringify(editedEventQuery.data);
 
   return (
     <form
@@ -138,11 +144,11 @@ export const EventForm: FunctionComponent<{
           <Button
             variant="default"
             onClick={() => resetForm(editedEventQuery.data)}
-            disabled={!isFormDirty()}
+            disabled={!isFormDirty}
           >
             {t("button.reset")}
           </Button>
-          <Button type="submit" disabled={!form.isValid() || !isFormDirty()}>
+          <Button type="submit" disabled={!form.isValid() || !isFormDirty}>
             {t("button.submit")}
           </Button>
         </Group>
