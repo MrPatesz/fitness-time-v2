@@ -1,4 +1,4 @@
-import {Affix, Stack, useMantineTheme} from "@mantine/core";
+import {Affix, useMantineTheme} from "@mantine/core";
 import {DatePicker} from "@mantine/dates";
 import {useMediaQuery} from "@mantine/hooks";
 import {openModal} from "@mantine/modals";
@@ -70,62 +70,60 @@ export default function CalendarPage() {
 
   return (
     <>
-      <Stack>
-        <QueryComponent resourceName={t("resource.calendar")} query={eventsQuery}>
-          <DayPilotCalendar
-            theme={theme.colorScheme === "dark" ? "dark" : undefined}
-            viewType="Week"
-            timeFormat="Clock24Hours"
-            headerDateFormat={xs ? "MMMM d" : "d/MM"}
-            heightSpec="Full"
-            eventMoveHandling="JavaScript"
-            eventResizeHandling="JavaScript"
-            locale={locale}
-            onTimeRangeSelected={(event: {
-              start: { value: string };
-              end: { value: string };
-            }) => {
-              openModal({
-                title: t("modal.event.create"),
-                zIndex: 402,
-                children: (
-                  <EventForm
-                    initialInterval={{
-                      start: new Date(event.start.value),
-                      end: new Date(event.end.value),
-                    }}
-                  />
-                ),
-              });
-            }}
-            onEventResize={onIntervalChange}
-            onEventMove={onIntervalChange}
-            durationBarVisible={false}
-            businessBeginsHour={8}
-            businessEndsHour={17}
-            startDate={startDate}
-            onEventClick={(e: {
-              e: { data: BasicEventType }
-            }) => pushRoute(`/events/${e.e.data.id}`, undefined, {locale})}
-            events={eventsQuery.data?.map((event) => {
-              const offsetInHours = -1 * new Date(event.start).getTimezoneOffset();
-              const start = dayjs(event.start).add(offsetInHours, "minutes").toDate();
-              const end = dayjs(event.end).add(offsetInHours, "minutes").toDate();
-              return {
-                id: event.id,
-                text: event.name,
-                start,
-                end,
-                backColor: session?.user.id === event.creatorId ?
-                  theme.fn.themeColor(theme.primaryColor) :
-                  theme.fn.themeColor(event.creator.themeColor),
-                cssClass: "calendar-event",
-                resource: event,
-              };
-            })}
-          />
-        </QueryComponent>
-      </Stack>
+      <QueryComponent resourceName={t("resource.calendar")} query={eventsQuery}>
+        <DayPilotCalendar
+          theme={theme.colorScheme === "dark" ? "dark" : undefined}
+          viewType="Week"
+          timeFormat="Clock24Hours"
+          headerDateFormat={xs ? "MMMM d" : "d/MM"}
+          heightSpec="Full"
+          eventMoveHandling="JavaScript"
+          eventResizeHandling="JavaScript"
+          locale={locale}
+          onTimeRangeSelected={(event: {
+            start: { value: string };
+            end: { value: string };
+          }) => {
+            openModal({
+              title: t("modal.event.create"),
+              zIndex: 402,
+              children: (
+                <EventForm
+                  initialInterval={{
+                    start: new Date(event.start.value),
+                    end: new Date(event.end.value),
+                  }}
+                />
+              ),
+            });
+          }}
+          onEventResize={onIntervalChange}
+          onEventMove={onIntervalChange}
+          durationBarVisible={false}
+          businessBeginsHour={8}
+          businessEndsHour={17}
+          startDate={startDate}
+          onEventClick={(e: {
+            e: { data: BasicEventType }
+          }) => pushRoute(`/events/${e.e.data.id}`, undefined, {locale})}
+          events={eventsQuery.data?.map((event) => {
+            const offsetInHours = -1 * new Date(event.start).getTimezoneOffset();
+            const start = dayjs(event.start).add(offsetInHours, "minutes").toDate();
+            const end = dayjs(event.end).add(offsetInHours, "minutes").toDate();
+            return {
+              id: event.id,
+              text: event.name,
+              start,
+              end,
+              backColor: session?.user.id === event.creatorId ?
+                theme.fn.themeColor(theme.primaryColor) :
+                theme.fn.themeColor(event.creator.themeColor),
+              cssClass: "calendar-event",
+              resource: event,
+            };
+          })}
+        />
+      </QueryComponent>
       <Affix position={{top: 10, left: xs ? (211 + theme.spacing.md) : 104}} zIndex={401}>
         <DatePicker
           w={155}
