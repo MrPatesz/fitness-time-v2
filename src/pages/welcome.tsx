@@ -13,7 +13,7 @@ export default function WelcomePage() {
 
   useEffect(() => {
     if (session) {
-      replaceRoute("/", undefined, {locale});
+      void replaceRoute("/", undefined, {locale});
     }
   }, [session, locale, replaceRoute]);
 
