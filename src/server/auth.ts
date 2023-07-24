@@ -20,14 +20,14 @@ declare module "next-auth" {
       id: string;
       name: string | null | undefined;
       themeColor: DefaultMantineColor | null;
-      // ...other properties
+      hasLocation: boolean;
       // role: UserRole;
     } & DefaultSession["user"];
   }
 
   interface User {
     themeColor: DefaultMantineColor | null;
-    // ...other properties
+    locationId: number | null;
     // role: UserRole;
   }
 }
@@ -45,7 +45,8 @@ export const authOptions: NextAuthOptions = {
         session.user.id = user.id;
         session.user.name = user.name;
         session.user.themeColor = user.themeColor;
-        // session.user.role = user.role; <-- put other properties on the session here
+        session.user.hasLocation = Boolean(user.locationId);
+        // session.user.role = user.role;
       }
       return session;
     },

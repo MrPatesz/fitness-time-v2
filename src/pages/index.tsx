@@ -1,14 +1,15 @@
 import {Card, Checkbox, Group, Slider, Stack, Text, useMantineTheme} from "@mantine/core";
+import {useIntersection} from "@mantine/hooks";
+import {useSession} from "next-auth/react";
 import {useTranslation} from "next-i18next";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
-import i18nConfig from "../../next-i18next.config.mjs";
-import {api} from "../utils/api";
 import {useEffect, useMemo, useRef, useState} from "react";
-import {formatDistance, getBackgroundColor} from "../utils/utilFunctions";
-import {useIntersection} from "@mantine/hooks";
-import {EventGrid} from "../components/event/EventGrid";
+import i18nConfig from "../../next-i18next.config.mjs";
 import {CenteredLoader} from "../components/CenteredLoader";
+import {EventGrid} from "../components/event/EventGrid";
 import {BasicEventType} from "../models/event/Event";
+import {api} from "../utils/api";
+import {formatDistance, getBackgroundColor} from "../utils/utilFunctions";
 
 export default function FeedPage() {
   const [fluidMaxDistance, setFluidMaxDistance] = useState<number>(100);
@@ -16,6 +17,7 @@ export default function FeedPage() {
   const [enableMaxDistance, setEnableMaxDistance] = useState<boolean>(true);
 
   const theme = useMantineTheme();
+  const {data: session} = useSession();
   const {t} = useTranslation("common");
   const lastEventRef = useRef<HTMLElement>(null);
   const {ref, entry} = useIntersection({
@@ -23,15 +25,13 @@ export default function FeedPage() {
     threshold: 1,
   });
 
-  const userDetailsQuery = api.user.profile.useQuery();
-  const userHasLocation = Boolean(userDetailsQuery.data?.location);
   const {
     data,
     isFetching,
     fetchNextPage,
     hasNextPage,
     error,
-  } = api.event.getFeed.useInfiniteQuery({maxDistance: userHasLocation && enableMaxDistance ? maxDistance : undefined}, {
+  } = api.event.getFeed.useInfiniteQuery({maxDistance: session?.user.hasLocation && enableMaxDistance ? maxDistance : undefined}, {
     getNextPageParam: (lastPage) => lastPage.nextCursor,
   });
 
@@ -47,7 +47,7 @@ export default function FeedPage() {
 
   return (
     <Stack>
-      {userHasLocation && (
+      {session?.user.hasLocation && (
         <Card withBorder sx={{backgroundColor: getBackgroundColor(theme)}}>
           <Stack spacing="xs">
             <Group position="apart">
