@@ -1,6 +1,6 @@
+import {ActionIcon, Text, useMantineColorScheme} from "@mantine/core";
 import {useRouter} from 'next/router';
 import {FunctionComponent} from 'react';
-import {ActionIcon, Text, useMantineColorScheme} from "@mantine/core";
 
 export const LanguageToggle: FunctionComponent = () => {
   const {colorScheme} = useMantineColorScheme();

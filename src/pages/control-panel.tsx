@@ -4,9 +4,9 @@ import {useTranslation} from "next-i18next";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import {Share, Ticket} from "tabler-icons-react";
 import i18nConfig from "../../next-i18next.config.mjs";
+import CommentTable from "../components/comment/CommentTable";
 import EventTable from "../components/event/EventTable";
 import GroupTable from "../components/group/GroupTable";
-import CommentTable from "../components/comment/CommentTable";
 import {EventTableDisplayPlace, GroupTableDisplayPlace} from "../utils/enums";
 
 export default function ControlPanelPage() {

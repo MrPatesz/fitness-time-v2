@@ -26,6 +26,7 @@ export const defaultCreateLocation: CreateLocationType = {
   latitude: 0,
   longitude: 0,
 };
+
 export const getDefaultCreateEvent = (initialInterval?: {
   start: Date;
   end: Date;

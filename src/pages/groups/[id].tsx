@@ -1,24 +1,24 @@
 import {ActionIcon, Box, Group, SimpleGrid, Stack, Text, useMantineTheme} from "@mantine/core";
+import {useMediaQuery} from "@mantine/hooks";
+import {openModal} from "@mantine/modals";
 import {showNotification} from "@mantine/notifications";
 import {useSession} from "next-auth/react";
 import {useTranslation} from "next-i18next";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import Link from "next/link";
 import {useRouter} from "next/router";
+import {useMemo} from "react";
 import {Pencil} from "tabler-icons-react";
 import i18nConfig from "../../../next-i18next.config.mjs";
 import {GroupChat} from "../../components/group/GroupChat";
+import {GroupFeed} from "../../components/group/GroupFeed";
+import {GroupForm} from "../../components/group/GroupForm";
+import {MembersComponent} from "../../components/group/MembersComponent";
 import {QueryComponent} from "../../components/QueryComponent";
+import {RatingComponent} from "../../components/RatingComponent";
 import {RichTextDisplay} from "../../components/rich-text/RichTextDisplay";
 import {api} from "../../utils/api";
 import {useLongDateFormatter} from "../../utils/formatters";
-import {useMediaQuery} from "@mantine/hooks";
-import {useMemo} from "react";
-import {GroupFeed} from "../../components/group/GroupFeed";
-import {openModal} from "@mantine/modals";
-import {GroupForm} from "../../components/group/GroupForm";
-import {RatingComponent} from "../../components/RatingComponent";
-import {MembersComponent} from "../../components/group/MembersComponent";
 
 export default function GroupDetailsPage() {
   const theme = useMantineTheme();

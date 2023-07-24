@@ -10,11 +10,11 @@ import {FunctionComponent, useEffect, useState} from "react";
 import {Pencil, Plus, Trash} from "tabler-icons-react";
 import {BasicGroupType} from "../../models/group/Group";
 import {api} from "../../utils/api";
+import {GroupTableDisplayPlace, SortDirection, SortGroupByProperty} from "../../utils/enums";
 import {useLongDateFormatter} from "../../utils/formatters";
 import {PAGE_SIZES} from "../event/EventTable";
 import {QueryComponent} from "../QueryComponent";
 import {GroupForm} from "./GroupForm";
-import {GroupTableDisplayPlace, SortDirection, SortGroupByProperty} from "../../utils/enums";
 
 const GroupTable: FunctionComponent<{
   groupTableDisplayPlace: GroupTableDisplayPlace;

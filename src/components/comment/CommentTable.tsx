@@ -1,22 +1,22 @@
 import {ActionIcon, Box, Card, Group, MantineNumberSize, Stack, Text, TextInput, useMantineTheme} from "@mantine/core";
+import {useDebouncedValue} from "@mantine/hooks";
 import {openConfirmModal, openModal} from "@mantine/modals";
 import {showNotification} from "@mantine/notifications";
+import {IconSearch} from "@tabler/icons";
 import {DataTable, DataTableSortStatus} from "mantine-datatable";
 import {useTranslation} from "next-i18next";
+import Link from "next/link";
 import {useRouter} from "next/router";
 import {FunctionComponent, useEffect, useState} from "react";
 import {Pencil, Trash} from "tabler-icons-react";
+import {DetailedCommentType} from "../../models/Comment";
 import {api} from "../../utils/api";
+import {SortCommentByProperty, SortDirection} from "../../utils/enums";
 import {useLongDateFormatter} from "../../utils/formatters";
 import {PAGE_SIZES} from "../event/EventTable";
 import {QueryComponent} from "../QueryComponent";
-import {DetailedCommentType} from "../../models/Comment";
-import {CommentForm} from "./CommentForm";
-import Link from "next/link";
 import {RichTextDisplay} from "../rich-text/RichTextDisplay";
-import {IconSearch} from "@tabler/icons";
-import {useDebouncedValue} from "@mantine/hooks";
-import {SortCommentByProperty, SortDirection} from "../../utils/enums";
+import {CommentForm} from "./CommentForm";
 
 const CommentTable: FunctionComponent = () => {
   const [page, setPage] = useState<number>(1);

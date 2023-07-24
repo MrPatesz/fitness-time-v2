@@ -1,7 +1,7 @@
 import {z} from "zod";
 import {IdSchema} from "../../../models/Id";
-import {createTRPCRouter, protectedProcedure} from "../trpc";
 import {AverageRatingSchema, BasicRatingSchema, CreateRatingSchema} from "../../../models/Rating";
+import {createTRPCRouter, protectedProcedure} from "../trpc";
 
 export const ratingRouter = createTRPCRouter({
   getAverageRatingForEvent: protectedProcedure

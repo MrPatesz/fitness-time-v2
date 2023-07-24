@@ -5,10 +5,10 @@ import {useRouter} from "next/router";
 import i18nConfig from "../../../next-i18next.config.mjs";
 import {EventGrid} from "../../components/event/EventGrid";
 import {QueryComponent} from "../../components/QueryComponent";
+import {RatingComponent} from "../../components/RatingComponent";
 import {RichTextDisplay} from "../../components/rich-text/RichTextDisplay";
 import UserImage from "../../components/user/UserImage";
 import {api} from "../../utils/api";
-import {RatingComponent} from "../../components/RatingComponent";
 
 export default function UserDetailsPage() {
   const {query: {id}, isReady} = useRouter();

@@ -3,9 +3,9 @@ import {useForm} from "@mantine/form";
 import {useTranslation} from "next-i18next";
 import {FunctionComponent} from "react";
 import {Send} from "tabler-icons-react";
+import {CreateMessageType} from "../../models/Message";
 import {api} from "../../utils/api";
 import {defaultCreateComment} from "../../utils/defaultObjects";
-import {CreateMessageType} from "../../models/Message";
 
 export const AddMessage: FunctionComponent<{
   groupId: number;

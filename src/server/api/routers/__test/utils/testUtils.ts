@@ -11,11 +11,12 @@ interface User {
   image?: string | null | undefined;
   email?: string | null | undefined;
   themeColor: DefaultMantineColor | null;
+  hasLocation: boolean;
 }
 
 const sessionMock: Session = {
   expires: new Date().toISOString(),
-  user: {id: "", name: undefined, themeColor: null},
+  user: {id: "", name: undefined, themeColor: null, hasLocation: false},
 };
 
 export const testPrismaClient = new PrismaClient({datasources: {db: {url: `${process.env.DATABASE_URL}-test`}}});

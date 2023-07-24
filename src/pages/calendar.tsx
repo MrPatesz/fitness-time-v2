@@ -10,13 +10,13 @@ import dynamic from "next/dynamic";
 import {useRouter} from "next/router";
 import {useState} from "react";
 import i18nConfig from "../../next-i18next.config.mjs";
+import {CenteredLoader} from "../components/CenteredLoader";
 import {EventForm} from "../components/event/EventForm";
 import {QueryComponent} from "../components/QueryComponent";
 import {BasicEventType} from "../models/event/Event";
 import {api} from "../utils/api";
 import dayjs from "../utils/dayjs";
 import {getFirstDayOfWeek} from "../utils/utilFunctions";
-import {CenteredLoader} from "../components/CenteredLoader";
 
 const DayPilotCalendar: any = dynamic(
   () => import("@daypilot/daypilot-lite-react").then((mod) => mod.DayPilotCalendar),
@@ -110,8 +110,6 @@ export default function CalendarPage() {
           onEventResize={onIntervalChange}
           onEventMove={onIntervalChange}
           durationBarVisible={false}
-          businessBeginsHour={8}
-          businessEndsHour={17}
           startDate={startDate}
           onEventClick={(e: {
             e: { data: BasicEventType }

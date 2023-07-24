@@ -1,7 +1,7 @@
 import {describe, expect, it} from "@jest/globals";
-import {AppRouter} from "../../root";
-import {inferProcedureInput, TRPCError} from "@trpc/server";
 import {Example} from "@prisma/client";
+import {inferProcedureInput, TRPCError} from "@trpc/server";
+import {AppRouter} from "../../root";
 import {getTestCaller, TestCaller, testPrismaClient} from "./utils/testUtils";
 
 const examples: Example[] = [

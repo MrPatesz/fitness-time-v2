@@ -1,10 +1,10 @@
 import {z} from "zod";
+import {EventStatus} from "../../utils/enums";
 import {BasicCommentSchema} from "../Comment";
+import {BasicGroupSchema} from "../group/Group";
 import {IdSchema} from "../Id";
 import {CreateLocationSchema, LocationSchema} from "../Location";
 import {BasicUserSchema} from "../user/User";
-import {EventStatus} from "../../utils/enums";
-import {BasicGroupSchema} from "../group/Group";
 
 export const CreateEventSchema = z.object({
   name: z.string().min(1),

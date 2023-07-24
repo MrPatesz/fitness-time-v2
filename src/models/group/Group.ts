@@ -16,8 +16,6 @@ export const BasicGroupSchema = CreateGroupSchema.extend({
 
 export const DetailedGroupSchema = BasicGroupSchema.extend({
   members: BasicUserSchema.array(),
-  // events
-  // messages
 });
 
 export type CreateGroupType = z.infer<typeof CreateGroupSchema>;

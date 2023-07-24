@@ -14,8 +14,8 @@ const MapComponent: FunctionComponent<{
 }> = ({distance, location, size = {width: 400, height: 400}}) => {
   const {t} = useTranslation("common");
   const {isLoaded, loadError: mockLoadError} = useJsApiLoader({
-      googleMapsApiKey: env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
-      libraries: googleMapsLibraries,
+    googleMapsApiKey: env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
+    libraries: googleMapsLibraries,
   });
   const loadError = mockLoadError || true; // TODO remove true to show map
 

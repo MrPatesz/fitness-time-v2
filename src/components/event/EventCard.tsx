@@ -1,14 +1,14 @@
 import {Badge, Card, Divider, Group, Stack, Text} from "@mantine/core";
+import {IconStar} from "@tabler/icons";
 import {useTranslation} from "next-i18next";
 import Link from "next/link";
 import {useRouter} from "next/router";
 import {FunctionComponent} from "react";
 import {BasicEventType} from "../../models/event/Event";
-import {formatDistance, getBackgroundColor} from "../../utils/utilFunctions";
-import {EventStatus, ThemeColor} from "../../utils/enums";
 import {api} from "../../utils/api";
-import {IconStar} from "@tabler/icons";
+import {EventStatus, ThemeColor} from "../../utils/enums";
 import {useShortDateFormatter} from "../../utils/formatters";
+import {formatDistance, getBackgroundColor} from "../../utils/utilFunctions";
 
 export const EventCard: FunctionComponent<{
   event: BasicEventType;

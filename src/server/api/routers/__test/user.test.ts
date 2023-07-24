@@ -1,7 +1,7 @@
 import {describe, expect, it} from "@jest/globals";
-import {getTestCaller, TestCaller, testPrismaClient} from "./utils/testUtils";
 import {BasicUserSchema, DetailedUserSchema, ProfileSchema, UpdateProfileSchema} from "../../../../models/user/User";
 import {user1, user2, users} from "./utils/mockData";
+import {getTestCaller, TestCaller, testPrismaClient} from "./utils/testUtils";
 
 describe("userRouter", () => {
   let caller: TestCaller;

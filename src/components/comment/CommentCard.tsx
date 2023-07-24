@@ -8,13 +8,13 @@ import {useRouter} from "next/router";
 import {FunctionComponent} from "react";
 import {Pencil, Trash} from "tabler-icons-react";
 import {BasicCommentType} from "../../models/Comment";
+import {BasicMessageType} from "../../models/Message";
 import {api} from "../../utils/api";
 import dayjs from "../../utils/dayjs";
 import {useLongDateFormatter} from "../../utils/formatters";
 import {RichTextDisplay} from "../rich-text/RichTextDisplay";
 import UserImage from "../user/UserImage";
 import {CommentForm} from "./CommentForm";
-import {BasicMessageType} from "../../models/Message";
 
 export const CommentCard: FunctionComponent<{
   comment: BasicCommentType | BasicMessageType;

@@ -1,6 +1,6 @@
 import {z} from "zod";
-import {PaginateBaseSchema} from "../PaginateBase";
 import {SortDirection} from "../../utils/enums";
+import {PaginateBaseSchema} from "../PaginateBase";
 
 export const PaginateUsersSchema = PaginateBaseSchema.extend({
   sortBy: z.object({

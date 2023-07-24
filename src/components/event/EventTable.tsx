@@ -20,10 +20,10 @@ import {FunctionComponent, useEffect, useState} from "react";
 import {Pencil, Plus, Trash} from "tabler-icons-react";
 import {BasicEventType} from "../../models/event/Event";
 import {api} from "../../utils/api";
+import {EventTableDisplayPlace, SortDirection, SortEventByProperty} from "../../utils/enums";
 import {useLongDateFormatter, usePriceFormatter} from "../../utils/formatters";
 import {QueryComponent} from "../QueryComponent";
 import {EventForm} from "./EventForm";
-import {EventTableDisplayPlace, SortDirection, SortEventByProperty} from "../../utils/enums";
 
 const DATE_TIME: string = "dateTime";
 export const PAGE_SIZES: number[] = [10, 25, 50];

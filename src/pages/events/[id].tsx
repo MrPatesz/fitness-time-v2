@@ -13,13 +13,13 @@ import {CommentCard} from "../../components/comment/CommentCard";
 import {EventForm} from "../../components/event/EventForm";
 import MapComponent from "../../components/location/MapComponent";
 import {QueryComponent} from "../../components/QueryComponent";
+import {RatingComponent} from "../../components/RatingComponent";
 import {RichTextDisplay} from "../../components/rich-text/RichTextDisplay";
 import {DetailedEventType} from "../../models/event/Event";
 import {api} from "../../utils/api";
+import {EventStatus} from "../../utils/enums";
 import {useLongDateFormatter, usePriceFormatter} from "../../utils/formatters";
 import {getBackgroundColor} from "../../utils/utilFunctions";
-import {EventStatus} from "../../utils/enums";
-import {RatingComponent} from "../../components/RatingComponent";
 
 export default function EventDetailsPage() {
   const theme = useMantineTheme();

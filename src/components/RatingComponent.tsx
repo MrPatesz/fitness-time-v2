@@ -1,5 +1,5 @@
-import {FunctionComponent} from 'react';
 import {Group, Rating, Text, useMantineTheme} from "@mantine/core";
+import {FunctionComponent} from 'react';
 import {AverageRatingType, BasicRatingType} from "../models/Rating";
 
 export const RatingComponent: FunctionComponent<{

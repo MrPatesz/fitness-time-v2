@@ -6,11 +6,11 @@ import {useTranslation} from "next-i18next";
 import {useRouter} from "next/router";
 import {FunctionComponent, useEffect, useState} from "react";
 import {api} from "../../utils/api";
+import {SortDirection} from "../../utils/enums";
 import {PAGE_SIZES} from "../event/EventTable";
 import {QueryComponent} from "../QueryComponent";
 import {RichTextDisplay} from "../rich-text/RichTextDisplay";
 import UserImage from "./UserImage";
-import {SortDirection} from "../../utils/enums";
 
 const UserTable: FunctionComponent = () => {
   const [page, setPage] = useState<number>(1);

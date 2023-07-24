@@ -34,6 +34,7 @@ export enum SortGroupByProperty {
   NAME = "name",
   CREATED_AT = "createdAt",
   // MEMBER_COUNT = "memberCount",
+  // AVERAGE_RATING = "averageRating",
 }
 
 export enum EventTableDisplayPlace {

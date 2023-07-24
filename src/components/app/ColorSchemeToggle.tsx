@@ -1,6 +1,6 @@
 import {ActionIcon, useMantineColorScheme} from "@mantine/core";
-import {FunctionComponent} from "react";
 import {IconMoonStars, IconSun} from "@tabler/icons";
+import {FunctionComponent} from "react";
 
 export const ColorSchemeToggle: FunctionComponent = () => {
   const {colorScheme, toggleColorScheme} = useMantineColorScheme();

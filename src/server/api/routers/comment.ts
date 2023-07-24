@@ -1,10 +1,9 @@
 import {z} from "zod";
 import {BasicCommentSchema, CreateCommentSchema, DetailedCommentSchema} from "../../../models/Comment";
 import {IdSchema} from "../../../models/Id";
+import {SortCommentByProperty, SortDirection} from "../../../utils/enums";
 import {createTRPCRouter, protectedProcedure} from "../trpc";
 import {Prisma} from ".prisma/client";
-
-import {SortCommentByProperty, SortDirection} from "../../../utils/enums";
 
 export const commentRouter = createTRPCRouter({
   getAllByEventId: protectedProcedure

@@ -1,15 +1,15 @@
 import {ActionIcon, Box, Card, Group, ScrollArea, Stack, useMantineTheme} from "@mantine/core";
+import {useIntersection} from "@mantine/hooks";
+import {openModal} from "@mantine/modals";
 import {useTranslation} from "next-i18next";
 import {FunctionComponent, useEffect, useMemo, useRef} from "react";
+import {Plus} from "tabler-icons-react";
+import {BasicEventType} from "../../models/event/Event";
 import {api} from "../../utils/api";
 import {getBackgroundColor} from "../../utils/utilFunctions";
-import {openModal} from "@mantine/modals";
-import {EventForm} from "../event/EventForm";
-import {Plus} from "tabler-icons-react";
-import {EventCard} from "../event/EventCard";
-import {BasicEventType} from "../../models/event/Event";
 import {CenteredLoader} from "../CenteredLoader";
-import {useIntersection} from "@mantine/hooks";
+import {EventCard} from "../event/EventCard";
+import {EventForm} from "../event/EventForm";
 
 export const GroupFeed: FunctionComponent<{
   groupId: number;
