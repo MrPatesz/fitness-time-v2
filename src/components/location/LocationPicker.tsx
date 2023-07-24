@@ -1,7 +1,8 @@
-import {Card, Group, Stack, Text, TextInput} from "@mantine/core";
+import {ActionIcon, Card, Group, Stack, Text, TextInput} from "@mantine/core";
 import {Autocomplete, useJsApiLoader} from "@react-google-maps/api";
 import {useTranslation} from "next-i18next";
 import {FunctionComponent, useEffect, useState} from "react";
+import {X} from "tabler-icons-react";
 import {env} from "../../env.mjs";
 import {CreateLocationType} from "../../models/Location";
 import {googleMapsLibraries} from "../../utils/defaultObjects";
@@ -26,9 +27,7 @@ export const LocationPicker: FunctionComponent<{
   const [address, setAddress] = useState(initialAddress);
 
   useEffect(() => {
-    if (location) {
-      setAddress(location.address);
-    }
+    setAddress(location?.address ?? "");
   }, [location]);
 
   return (
@@ -71,11 +70,22 @@ export const LocationPicker: FunctionComponent<{
             value={address}
             onChange={event => setAddress(event.currentTarget.value)}
             error={error}
-            onBlur={() => {
-              if (!address) {
+            onBlur={event => {
+              if (event.currentTarget.value) {
+                setAddress(location?.address ?? "");
+              } else {
                 setLocation(null);
               }
             }}
+            rightSection={
+              <ActionIcon
+                disabled={!location}
+                variant="transparent"
+                onClick={() => setLocation(null)}
+              >
+                <X/>
+              </ActionIcon>
+            }
           />
         </Autocomplete>
       )}
