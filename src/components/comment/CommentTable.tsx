@@ -168,7 +168,7 @@ const CommentTable: FunctionComponent = () => {
                     <ActionIcon
                       variant="transparent"
                       size="md"
-                      onClick={(e: any) => {
+                      onClick={(e) => {
                         e.stopPropagation();
                         onDeleteClick(comment);
                       }}
