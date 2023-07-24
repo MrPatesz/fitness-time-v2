@@ -4,7 +4,7 @@ import type {GetServerSidePropsContext} from "next";
 import {type DefaultSession, getServerSession, type NextAuthOptions} from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
 import GoogleProvider from "next-auth/providers/google";
-import {env} from "../env.js";
+import {env} from "../env.mjs";
 import {prisma} from "./db";
 
 /**
@@ -40,7 +40,7 @@ declare module "next-auth" {
  **/
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    session({ session, user }) {
+    session({session, user}) {
       if (session.user) {
         session.user.id = user.id;
         session.user.name = user.name;

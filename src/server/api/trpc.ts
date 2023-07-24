@@ -6,18 +6,14 @@
  * tl;dr - This is where all the tRPC server stuff is created and plugged in.
  * The pieces you will need to use are documented accordingly near the end.
  */
+import {initTRPC, TRPCError} from "@trpc/server";
 import {type CreateNextContextOptions} from "@trpc/server/adapters/next";
 import {type Session} from "next-auth";
+import superjson from "superjson";
 import {getServerAuthSession} from "../auth";
 import {prisma} from "../db";
-import {initTRPC, TRPCError} from "@trpc/server";
-import superjson from "superjson";
-import {NodeHTTPCreateContextFnOptions} from "@trpc/server/dist/adapters/node-http";
-import {IncomingMessage} from "http";
-import ws from "ws";
-import {getSession} from "next-auth/react";
-import {emitter} from "../emitter";
 import {kysely} from "../kysely/kysely";
+import {pusher} from "../pusher";
 
 /**
  * 1. CONTEXT
@@ -46,8 +42,8 @@ const createInnerTRPCContext = (opts: CreateContextOptions) => {
   return {
     session: opts.session,
     prisma,
-    emitter,
     kysely,
+    pusher,
   };
 };
 
@@ -57,14 +53,11 @@ const createInnerTRPCContext = (opts: CreateContextOptions) => {
  *
  * @see https://trpc.io/docs/context
  */
-export const createTRPCContext = async (opts: CreateNextContextOptions | NodeHTTPCreateContextFnOptions<IncomingMessage, ws>) => {
+export const createTRPCContext = async (opts: CreateNextContextOptions) => {
   const {req, res} = opts;
 
   // Get the session from the server using the getServerSession wrapper function
-  const session = ("cookies" in req && "statusCode" in res) ? await getServerAuthSession({
-    req,
-    res
-  }) : await getSession(opts);
+  const session = await getServerAuthSession({req, res});
 
   return createInnerTRPCContext({
     session,

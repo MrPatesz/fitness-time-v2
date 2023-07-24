@@ -1,9 +1,9 @@
-import {appRouter} from "../../../root";
-import {Session} from "next-auth";
-import {PrismaClient} from "@prisma/client";
-import {EventEmitter} from "events";
-import {kysely} from "../../../../kysely/kysely";
 import {DefaultMantineColor} from "@mantine/core";
+import {PrismaClient} from "@prisma/client";
+import {Session} from "next-auth";
+import {kysely} from "../../../../kysely/kysely";
+import {pusher} from "../../../../pusher";
+import {appRouter} from "../../../root";
 
 interface User {
   id: string;
@@ -24,7 +24,7 @@ const caller = appRouter.createCaller({
   prisma: testPrismaClient,
   session: null,
   kysely,
-  emitter: new EventEmitter(),
+  pusher,
 });
 
 export type TestCaller = typeof caller;
@@ -36,6 +36,6 @@ export const getTestCaller = (overrideUser?: User | null): TestCaller => {
     prisma: testPrismaClient,
     session,
     kysely,
-    emitter: new EventEmitter(),
+    pusher,
   });
 };

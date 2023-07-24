@@ -1,6 +1,6 @@
-import {Pool} from 'pg'
 import {Kysely, PostgresDialect,} from 'kysely'
-import {env} from "../../env.js";
+import {Pool} from 'pg'
+import {env} from "../../env.mjs";
 import {DB} from "./generatedTypes";
 
 const globalForKysely = globalThis as unknown as { kysely: Kysely<DB> };

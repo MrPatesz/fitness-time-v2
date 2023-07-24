@@ -2,7 +2,7 @@ import {Card, Center, Loader, Stack, Text} from "@mantine/core";
 import {GoogleMap, MarkerF, useJsApiLoader} from "@react-google-maps/api";
 import {useTranslation} from "next-i18next";
 import {FunctionComponent, useMemo} from "react";
-import {env} from "../../env.js";
+import {env} from "../../env.mjs";
 import {LocationType} from "../../models/Location";
 import {googleMapsLibraries} from "../../utils/defaultObjects";
 import {formatDistance} from "../../utils/utilFunctions";

@@ -1,11 +1,12 @@
 import {Box, Card, Center, Loader, ScrollArea, Stack} from "@mantine/core";
+import {useIntersection} from "@mantine/hooks";
 import {useTranslation} from "next-i18next";
 import {FunctionComponent, useEffect, useMemo, useRef} from "react";
 import {api} from "../../utils/api";
+import {pusherClient} from "../../utils/pusher";
 import {getBackgroundColor} from "../../utils/utilFunctions";
 import {CommentCard} from "../comment/CommentCard";
 import {AddMessage} from "./AddMessage";
-import {useIntersection} from "@mantine/hooks";
 
 export const GroupChat: FunctionComponent<{
   groupId: number;
@@ -37,15 +38,12 @@ export const GroupChat: FunctionComponent<{
 
   const refetchAndScrollToBottom = () => refetchMessages().then(() => setTimeout(() => scrollToBottom(true), 100));
 
-  api.groupChat.onCreate.useSubscription(groupId, {
-    onData: (_message) => {
-      refetchAndScrollToBottom();
-    },
-    onError: (err) => {
-      console.error('Subscription error:', err);
-      refetchAndScrollToBottom();
-    },
-  });
+  useEffect(() => {
+    pusherClient.subscribe(groupId.toString());
+    pusherClient.bind("create", refetchAndScrollToBottom);
+
+    return () => pusherClient.unsubscribe(groupId.toString());
+  }, []);
 
   const messages = useMemo(() => {
     if (!data) return [];

@@ -1,15 +1,15 @@
-import {FunctionComponent} from 'react';
 import {ActionIcon, Avatar, Card, Group, ScrollArea, Stack, Text, Tooltip, useMantineTheme} from "@mantine/core";
-import {getInitials} from "../../utils/utilFunctions";
-import {Minus, Plus} from "tabler-icons-react";
-import {useSession} from "next-auth/react";
 import {closeAllModals, openModal} from "@mantine/modals";
-import {BasicUserType} from "../../models/user/User";
+import {useSession} from "next-auth/react";
 import {useTranslation} from "next-i18next";
-import {useSignedNumberFormatter} from "../../utils/formatters";
-import UserImage from "../user/UserImage";
-import {useRouter} from "next/router";
 import Link from "next/link";
+import {useRouter} from "next/router";
+import {FunctionComponent} from 'react';
+import {Minus, Plus} from "tabler-icons-react";
+import {BasicUserType} from "../../models/user/User";
+import {useSignedNumberFormatter} from "../../utils/formatters";
+import {getInitials} from "../../utils/utilFunctions";
+import UserImage from "../user/UserImage";
 
 export const MembersComponent: FunctionComponent<{
   members: BasicUserType[];
@@ -33,11 +33,10 @@ export const MembersComponent: FunctionComponent<{
         const content = (
           <Stack spacing="xs">
             {members.map(member => (
-              <Link href={`/users/${member.id}`} locale={locale} passHref>
+              <Link key={member.id} href={`/users/${member.id}`} locale={locale} passHref>
                 <Card
                   withBorder
                   p={6}
-                  key={member.id}
                   onClick={() => closeAllModals()}
                 >
                   <Group>
@@ -61,15 +60,16 @@ export const MembersComponent: FunctionComponent<{
     >
       {members.slice(0, limit).map(user => (
         <Tooltip
+          key={user.id}
           label={user.name}
           position="bottom"
         >
           <Avatar
-            key={user.id}
             variant="filled"
             radius="xl"
             size="lg"
             src={user.image}
+            color={user.themeColor}
           >
             <Text weight="normal" size={25}>
               {getInitials(user.name)}

@@ -1,9 +1,8 @@
-import {createTRPCRouter, protectedProcedure} from "../trpc";
 import {z} from "zod";
-import {Prisma} from ".prisma/client";
-import {BasicMessageSchema, BasicMessageType, CreateMessageSchema} from "../../../models/Message";
 import {IdSchema} from "../../../models/Id";
-import {observable} from "@trpc/server/observable";
+import {BasicMessageSchema, CreateMessageSchema} from "../../../models/Message";
+import {createTRPCRouter, protectedProcedure} from "../trpc";
+import {Prisma} from ".prisma/client";
 
 export const groupChatRouter = createTRPCRouter({
   getMessages: protectedProcedure
@@ -45,7 +44,7 @@ export const groupChatRouter = createTRPCRouter({
     .mutation(async (
       {
         input: {createMessage, groupId},
-        ctx: {session: {user: {id: callerId}}, emitter, prisma}
+        ctx: {session: {user: {id: callerId}}, prisma, pusher}
       }
     ) => {
       const message = await prisma.message.create({
@@ -58,20 +57,7 @@ export const groupChatRouter = createTRPCRouter({
       });
 
       const result = BasicMessageSchema.parse(message);
-      emitter.emit("create", result);
+      pusher.trigger(result.groupId.toString(), "create", null);
       return result;
-    }),
-  onCreate: protectedProcedure
-    .input(IdSchema)
-    .subscription(({ctx: {emitter}, input: groupId}) => {
-      return observable<BasicMessageType>((emit) => {
-        const onCreate = (data: BasicMessageType) => {
-          if (data.groupId === groupId) {
-            emit.next(data);
-          }
-        };
-        emitter.on('create', onCreate);
-        return () => emitter.off('create', onCreate);
-      });
     }),
 });
