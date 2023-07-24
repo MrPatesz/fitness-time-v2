@@ -57,7 +57,7 @@ export const groupChatRouter = createTRPCRouter({
       });
 
       const result = BasicMessageSchema.parse(message);
-      pusher.trigger(result.groupId.toString(), "create", null);
+      void pusher.trigger(result.groupId.toString(), "create", null);
       return result;
     }),
 });

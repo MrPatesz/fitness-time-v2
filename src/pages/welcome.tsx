@@ -7,7 +7,7 @@ import {useEffect} from "react";
 import i18nConfig from "../../next-i18next.config.mjs";
 
 export default function WelcomePage() {
-  const {replace: replaceRoute, locale, defaultLocale} = useRouter();
+  const {replace: replaceRoute, locale = "en", defaultLocale} = useRouter();
   const {data: session} = useSession();
   const {t} = useTranslation("common");
 
@@ -15,7 +15,7 @@ export default function WelcomePage() {
     if (session) {
       replaceRoute("/", undefined, {locale});
     }
-  }, [session]);
+  }, [session, locale, replaceRoute]);
 
   return (
     <Stack align="center" justify="center" sx={{height: "100vh"}}>
@@ -25,7 +25,9 @@ export default function WelcomePage() {
         </h1>
         <Group position="center">
           <Button
-            onClick={() => signIn(undefined, {callbackUrl: locale !== defaultLocale ? `/${locale}/` : "/"})}
+            onClick={() => {
+              void signIn(undefined, {callbackUrl: locale !== defaultLocale ? `/${locale}/` : "/"});
+            }}
           >
             {t("button.login")}
           </Button>

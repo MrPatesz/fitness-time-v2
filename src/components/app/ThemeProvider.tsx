@@ -12,7 +12,7 @@ export const ThemeProvider: FunctionComponent<{
   children: JSX.Element;
 }> = ({children}) => {
   const systemColorScheme = useColorScheme();
-  const {locale} = useRouter();
+  const {locale = "en"} = useRouter();
   const {data: session} = useSession();
 
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
