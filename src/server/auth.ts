@@ -19,14 +19,14 @@ declare module "next-auth" {
     user: {
       id: string;
       name: string | null | undefined;
-      themeColor: DefaultMantineColor | null;
+      themeColor: DefaultMantineColor;
       hasLocation: boolean;
       // role: UserRole;
     } & DefaultSession["user"];
   }
 
   interface User {
-    themeColor: DefaultMantineColor | null;
+    themeColor: DefaultMantineColor;
     locationId: number | null;
     // role: UserRole;
   }

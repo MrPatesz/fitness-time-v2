@@ -27,7 +27,7 @@ describe("commentRouter", () => {
   let caller: TestCaller;
 
   beforeEach(async () => {
-    caller = getTestCaller(user2);
+    caller = getTestCaller({...user2, hasLocation: false});
 
     await testPrismaClient.$connect();
     await testPrismaClient.user.createMany({data: users});

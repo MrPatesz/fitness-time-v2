@@ -1,5 +1,6 @@
 import {describe, expect, it} from "@jest/globals";
 import {BasicUserSchema, DetailedUserSchema, ProfileSchema, UpdateProfileSchema} from "../../../../models/user/User";
+import {ThemeColor} from "../../../../utils/enums";
 import {user1, user2, users} from "./utils/mockData";
 import {getTestCaller, TestCaller, testPrismaClient} from "./utils/testUtils";
 
@@ -7,7 +8,7 @@ describe("userRouter", () => {
   let caller: TestCaller;
 
   beforeEach(async () => {
-    caller = getTestCaller(user1);
+    caller = getTestCaller({...user1, hasLocation: false});
 
     await testPrismaClient.$connect();
     await testPrismaClient.user.createMany({data: users});
@@ -69,7 +70,7 @@ describe("userRouter", () => {
         name: "user2_update_test",
         introduction: "user2_introduction",
         image: "user2_image",
-        themeColor: "orange",
+        themeColor: ThemeColor.ORANGE,
         location: null,
       });
 

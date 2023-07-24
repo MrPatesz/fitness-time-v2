@@ -1,4 +1,5 @@
 import {Comment, Event, Location, User} from "@prisma/client";
+import {ThemeColor} from "../../../../../utils/enums";
 
 export const user1: User = {
   id: "101",
@@ -7,7 +8,7 @@ export const user1: User = {
   emailVerified: null,
   image: null,
   locationId: null,
-  themeColor: "violet",
+  themeColor: ThemeColor.VIOLET,
   introduction: "",
 };
 export const user2: User = {

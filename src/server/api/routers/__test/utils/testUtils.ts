@@ -1,22 +1,13 @@
-import {DefaultMantineColor} from "@mantine/core";
 import {PrismaClient} from "@prisma/client";
 import {Session} from "next-auth";
+import {ThemeColor} from "../../../../../utils/enums";
 import {kysely} from "../../../../kysely/kysely";
 import {pusher} from "../../../../pusher";
 import {appRouter} from "../../../root";
 
-interface User {
-  id: string;
-  name: string | null | undefined;
-  image?: string | null | undefined;
-  email?: string | null | undefined;
-  themeColor: DefaultMantineColor | null;
-  hasLocation: boolean;
-}
-
 const sessionMock: Session = {
   expires: new Date().toISOString(),
-  user: {id: "", name: undefined, themeColor: null, hasLocation: false},
+  user: {id: "", name: undefined, themeColor: ThemeColor.VIOLET, hasLocation: false},
 };
 
 export const testPrismaClient = new PrismaClient({datasources: {db: {url: `${process.env.DATABASE_URL}-test`}}});
@@ -30,7 +21,7 @@ const caller = appRouter.createCaller({
 
 export type TestCaller = typeof caller;
 
-export const getTestCaller = (overrideUser?: User | null): TestCaller => {
+export const getTestCaller = (overrideUser?: Session["user"] | null): TestCaller => {
   const session = overrideUser ? {...sessionMock, user: overrideUser} : (overrideUser === null ? null : sessionMock);
 
   return appRouter.createCaller({
