@@ -14,7 +14,8 @@ import {GroupTableDisplayPlace, SortDirection, SortGroupByProperty} from "../../
 import {useLongDateFormatter} from "../../utils/formatters";
 import {PAGE_SIZES} from "../event/EventTable";
 import {QueryComponent} from "../QueryComponent";
-import {GroupForm} from "./GroupForm";
+import {CreateGroupForm} from "./CreateGroupForm";
+import {EditGroupForm} from "./EditGroupForm";
 
 const GroupTable: FunctionComponent<{
   groupTableDisplayPlace: GroupTableDisplayPlace;
@@ -87,7 +88,7 @@ const GroupTable: FunctionComponent<{
           color={theme.fn.themeColor(theme.primaryColor)}
           onClick={() => openModal({
             title: t("modal.group.create"),
-            children: <GroupForm/>,
+            children: <CreateGroupForm/>,
           })}
         >
           <Plus/>
@@ -161,7 +162,7 @@ const GroupTable: FunctionComponent<{
                         e.stopPropagation();
                         openModal({
                           title: t("modal.group.edit"),
-                          children: <GroupForm editedGroupId={group.id}/>,
+                          children: <EditGroupForm groupId={group.id}/>,
                         });
                       }}
                       sx={theme => ({

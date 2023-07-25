@@ -1,94 +1,31 @@
 import {Button, Group, NumberInput, Stack, TextInput} from "@mantine/core";
 import {useForm} from "@mantine/form";
-import {closeAllModals} from "@mantine/modals";
-import {showNotification} from "@mantine/notifications";
 import {useTranslation} from "next-i18next";
-import {FunctionComponent, useEffect} from "react";
-import {CreateEventType} from "../../models/event/Event";
-import {api} from "../../utils/api";
-import {getDefaultCreateEvent} from "../../utils/defaultObjects";
+import {FunctionComponent} from "react";
+import {BasicEventType, CreateEventType} from "../../models/event/Event";
 import {LocationPicker} from "../location/LocationPicker";
 import {RichTextField} from "../rich-text/RichTextField";
 import {IntervalPicker} from "./IntervalPicker";
+import {CreateLocationType, LocationType} from "../../models/Location";
 
 export const EventForm: FunctionComponent<{
-  editedEventId?: number;
-  initialInterval?: {
-    start: Date;
-    end: Date;
-  };
-  groupId?: number;
-}> = ({editedEventId, initialInterval, groupId}) => {
-  const {t} = useTranslation("common");
-
-  const getErrors = (data: CreateEventType, isCreation: boolean) => ({
-    name: (isCreation || data.name) ? null : t("eventForm.name.error"),
-    location: (isCreation || Boolean(data.location?.address)) ? null : t("eventForm.location.error"),
-    start: data.start > new Date() ? null : t("eventForm.start.error"),
-    end: (data.end > new Date() && data.end > data.start) ? null : t("eventForm.end.error"),
-  });
-
-  const resetForm = (data: CreateEventType) => {
-    form.setValues(data);
-    form.setErrors(getErrors(data, !editedEventId));
-  };
-
-  const queryContext = api.useContext();
-  const editedEventQuery = api.event.getById.useQuery(editedEventId ?? 0, {
-    enabled: Boolean(editedEventId),
-    initialData: {...getDefaultCreateEvent(initialInterval), groupId},
-    onSuccess: resetForm,
-    refetchOnMount: (query) => !query.isActive(),
-  });
-
-  useEffect(() => {
-    if (!editedEventId) {
-      resetForm({...getDefaultCreateEvent(initialInterval), groupId});
-    }
-  }, [initialInterval, groupId]);
-
-  const form = useForm<CreateEventType>({
-    initialValues: editedEventQuery.data,
-    initialErrors: getErrors(editedEventQuery.data, !editedEventId),
+  originalEvent: CreateEventType | BasicEventType;
+  onSubmit: (event: CreateEventType | BasicEventType) => void;
+}> = ({originalEvent, onSubmit}) => {
+  const form = useForm<CreateEventType | BasicEventType>({
+    initialValues: originalEvent,
     validateInputOnChange: true,
     validate: {
       name: (value) => value ? null : t("eventForm.name.error"),
-      location: (value) => Boolean(value?.address) ? null : t("eventForm.location.error"),
+      location: (value: CreateLocationType | LocationType) => Boolean(value?.address) ? null : t("eventForm.location.error"),
       start: (value) => value > new Date() ? null : t("eventForm.start.error"),
       end: (value, formData) => (value > new Date() && value > formData.start) ? null : t("eventForm.end.error"),
     },
   });
-
-  const useUpdate = api.event.update.useMutation({
-    onSuccess: () => queryContext.event.invalidate().then(() => {
-      closeAllModals();
-      showNotification({
-        color: "green",
-        title: t("notification.event.update.title"),
-        message: t("notification.event.update.message"),
-      });
-    }),
-  });
-  const useCreate = api.event.create.useMutation({
-    onSuccess: () => queryContext.event.invalidate().then(() => {
-      closeAllModals();
-      showNotification({
-        color: "green",
-        title: t("notification.event.create.title"),
-        message: t("notification.event.create.message"),
-      });
-    }),
-  });
-
-  const isFormDirty = JSON.stringify(form.values) !== JSON.stringify(editedEventQuery.data);
+  const {t} = useTranslation("common");
 
   return (
-    <form
-      onSubmit={form.onSubmit((data) => {
-        const changedEvent = {...data, price: data.price ?? null, limit: data.limit ?? null};
-        editedEventId ? useUpdate.mutate({id: editedEventId, event: changedEvent}) : useCreate.mutate(changedEvent);
-      })}
-    >
+    <form onSubmit={form.onSubmit((data) => onSubmit(data))}>
       <Stack>
         <TextInput
           withAsterisk
@@ -143,12 +80,12 @@ export const EventForm: FunctionComponent<{
         <Group position="right">
           <Button
             variant="default"
-            onClick={() => resetForm(editedEventQuery.data)}
-            disabled={!isFormDirty}
+            onClick={() => form.reset()}
+            disabled={!form.isDirty()}
           >
             {t("button.reset")}
           </Button>
-          <Button type="submit" disabled={!form.isValid() || !isFormDirty}>
+          <Button type="submit" disabled={!form.isValid() || !form.isDirty()}>
             {t("button.submit")}
           </Button>
         </Group>

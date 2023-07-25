@@ -10,7 +10,6 @@ import {Pencil} from "tabler-icons-react";
 import i18nConfig from "../../../next-i18next.config.mjs";
 import {AddComment} from "../../components/comment/AddComment";
 import {CommentCard} from "../../components/comment/CommentCard";
-import {EventForm} from "../../components/event/EventForm";
 import MapComponent from "../../components/location/MapComponent";
 import {QueryComponent} from "../../components/QueryComponent";
 import {RatingComponent} from "../../components/RatingComponent";
@@ -20,6 +19,7 @@ import {api} from "../../utils/api";
 import {EventStatus} from "../../utils/enums";
 import {useLongDateFormatter, usePriceFormatter} from "../../utils/formatters";
 import {getBackgroundColor} from "../../utils/utilFunctions";
+import {EditEventForm} from "../../components/event/EditEventForm";
 
 export default function EventDetailsPage() {
   const theme = useMantineTheme();
@@ -141,7 +141,7 @@ export default function EventDetailsPage() {
                       color={theme.fn.themeColor(theme.primaryColor)}
                       onClick={() => openModal({
                         title: t("modal.event.edit"),
-                        children: <EventForm editedEventId={eventId}/>,
+                        children: <EditEventForm eventId={eventId}/>,
                       })}
                     >
                       <Pencil/>

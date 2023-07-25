@@ -11,12 +11,12 @@ import {useRouter} from "next/router";
 import {useState} from "react";
 import i18nConfig from "../../next-i18next.config.mjs";
 import {CenteredLoader} from "../components/CenteredLoader";
-import {EventForm} from "../components/event/EventForm";
 import {QueryComponent} from "../components/QueryComponent";
 import {BasicEventType} from "../models/event/Event";
 import {api} from "../utils/api";
 import dayjs from "../utils/dayjs";
 import {getFirstDayOfWeek} from "../utils/utilFunctions";
+import {CreateEventForm} from "../components/event/CreateEventForm";
 
 const DayPilotCalendar: any = dynamic(
   () => import("@daypilot/daypilot-lite-react").then((mod) => mod.DayPilotCalendar),
@@ -98,7 +98,7 @@ export default function CalendarPage() {
               title: t("modal.event.create"),
               zIndex: 402,
               children: (
-                <EventForm
+                <CreateEventForm
                   initialInterval={{
                     start: new Date(event.start.value),
                     end: new Date(event.end.value),

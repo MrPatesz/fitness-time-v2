@@ -12,13 +12,13 @@ import {Pencil} from "tabler-icons-react";
 import i18nConfig from "../../../next-i18next.config.mjs";
 import {GroupChat} from "../../components/group/GroupChat";
 import {GroupFeed} from "../../components/group/GroupFeed";
-import {GroupForm} from "../../components/group/GroupForm";
 import {MembersComponent} from "../../components/group/MembersComponent";
 import {QueryComponent} from "../../components/QueryComponent";
 import {RatingComponent} from "../../components/RatingComponent";
 import {RichTextDisplay} from "../../components/rich-text/RichTextDisplay";
 import {api} from "../../utils/api";
 import {useLongDateFormatter} from "../../utils/formatters";
+import {EditGroupForm} from "../../components/group/EditGroupForm";
 
 export default function GroupDetailsPage() {
   const theme = useMantineTheme();
@@ -80,8 +80,8 @@ export default function GroupDetailsPage() {
                     variant="filled"
                     color={theme.fn.themeColor(theme.primaryColor)}
                     onClick={() => openModal({
-                      title: t("modal.group.create"),
-                      children: <GroupForm editedGroupId={groupId}/>,
+                      title: t("modal.group.edit"),
+                      children: <EditGroupForm groupId={groupId}/>,
                     })}
                   >
                     <Pencil/>

@@ -9,7 +9,7 @@ import {api} from "../../utils/api";
 import {getBackgroundColor} from "../../utils/utilFunctions";
 import {CenteredLoader} from "../CenteredLoader";
 import {EventCard} from "../event/EventCard";
-import {EventForm} from "../event/EventForm";
+import {CreateEventForm} from "../event/CreateEventForm";
 
 export const GroupFeed: FunctionComponent<{
   groupId: number;
@@ -68,7 +68,7 @@ export const GroupFeed: FunctionComponent<{
             color={theme.fn.themeColor(theme.primaryColor)}
             onClick={() => openModal({
               title: t("modal.event.create"),
-              children: <EventForm groupId={groupId}/>,
+              children: <CreateEventForm groupId={groupId}/>,
             })}
           >
             <Plus/>

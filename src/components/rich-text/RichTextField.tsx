@@ -21,7 +21,7 @@ export const RichTextField: FunctionComponent<{
         placeholder={placeholder}
         sx={{flexGrow: 1}}
         {...formInputProps}
-        disabled={(formInputProps.value as string).includes("</")}
+        disabled={(formInputProps.value as string | undefined)?.includes("</")}
         rightSectionWidth={74}
         rightSection={(
           <Group spacing={4}>

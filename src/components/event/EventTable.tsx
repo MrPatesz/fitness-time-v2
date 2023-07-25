@@ -23,7 +23,8 @@ import {api} from "../../utils/api";
 import {EventTableDisplayPlace, SortDirection, SortEventByProperty} from "../../utils/enums";
 import {useLongDateFormatter, usePriceFormatter} from "../../utils/formatters";
 import {QueryComponent} from "../QueryComponent";
-import {EventForm} from "./EventForm";
+import {EditEventForm} from "./EditEventForm";
+import {CreateEventForm} from "./CreateEventForm";
 
 const DATE_TIME: string = "dateTime";
 export const PAGE_SIZES: number[] = [10, 25, 50];
@@ -107,7 +108,7 @@ const EventTable: FunctionComponent<{
           color={theme.fn.themeColor(theme.primaryColor)}
           onClick={() => openModal({
             title: t("modal.event.create"),
-            children: <EventForm/>,
+            children: <CreateEventForm/>,
           })}
         >
           <Plus/>
@@ -202,7 +203,7 @@ const EventTable: FunctionComponent<{
                         e.stopPropagation();
                         openModal({
                           title: t("modal.event.edit"),
-                          children: <EventForm editedEventId={event.id}/>,
+                          children: <EditEventForm eventId={event.id}/>,
                         });
                       }}
                       sx={theme => ({
