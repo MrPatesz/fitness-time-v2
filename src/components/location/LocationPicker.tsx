@@ -9,14 +9,13 @@ import {googleMapsLibraries} from "../../utils/defaultObjects";
 import {CenteredLoader} from "../CenteredLoader";
 
 export const LocationPicker: FunctionComponent<{
-  initialAddress: string;
   location: CreateLocationType | null;
   setLocation: (location: CreateLocationType | null) => void;
   error?: string | undefined;
   required: boolean;
   placeholder: string;
   description?: string;
-}> = ({location, initialAddress, setLocation, error, required, placeholder, description}) => {
+}> = ({location, setLocation, error, required, placeholder, description}) => {
   const {t} = useTranslation("common");
   const {isLoaded, loadError} = useJsApiLoader({
     googleMapsApiKey: env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
@@ -24,7 +23,7 @@ export const LocationPicker: FunctionComponent<{
   });
 
   const [autocomplete, setAutocomplete] = useState<google.maps.places.Autocomplete | null>(null);
-  const [address, setAddress] = useState(initialAddress);
+  const [address, setAddress] = useState(location?.address ?? "");
 
   useEffect(() => {
     setAddress(location?.address ?? "");

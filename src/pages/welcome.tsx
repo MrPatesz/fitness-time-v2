@@ -13,7 +13,7 @@ export default function WelcomePage() {
 
   useEffect(() => {
     if (session) {
-      replaceRoute("/", undefined, {locale});
+      void replaceRoute("/", undefined, {locale});
     }
   }, [session, locale, replaceRoute]);
 
@@ -25,7 +25,7 @@ export default function WelcomePage() {
         </h1>
         <Group position="center">
           <Button
-            onClick={() => signIn(undefined, {callbackUrl: locale !== defaultLocale ? `/${locale}/` : "/"})}
+            onClick={() => void signIn(undefined, {callbackUrl: locale !== defaultLocale ? `/${locale}/` : "/"})}
           >
             {t("button.login")}
           </Button>

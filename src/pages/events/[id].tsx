@@ -44,8 +44,8 @@ export default function EventDetailsPage() {
   });
   const rateEvent = api.rating.rate.useMutation({
     onSuccess: () => {
-      averageRatingQuery.refetch().then();
-      userRatingQuery.refetch().then();
+      void averageRatingQuery.refetch();
+      void userRatingQuery.refetch();
     },
   });
 

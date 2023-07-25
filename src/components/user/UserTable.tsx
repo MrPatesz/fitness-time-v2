@@ -80,7 +80,7 @@ const UserTable: FunctionComponent = () => {
             }}
             records={usersQuery.data?.users}
             totalRecords={usersQuery.data?.size}
-            onRowClick={(user) => pushRoute(`/users/${user.id}`, undefined, {locale})}
+            onRowClick={(user) => void pushRoute(`/users/${user.id}`, undefined, {locale})}
             columns={[
               {
                 accessor: "name",

@@ -10,6 +10,8 @@ import {LocationPicker} from "../location/LocationPicker";
 import {RichTextField} from "../rich-text/RichTextField";
 import {ThemeColorPicker} from "./ThemeColorPicker";
 import UserImage from "./UserImage";
+import {ThemeColor} from "../../utils/enums";
+import {getFormLocationOnChange, getFormLocationValue} from "../../utils/mantineFormUtils";
 
 export const ProfileForm: FunctionComponent<{
   user: ProfileType;
@@ -60,19 +62,17 @@ export const ProfileForm: FunctionComponent<{
           placeholder={t("profileForm.image.placeholder")}
           rightSection={<UserImage user={form.values} size={30}/>}
           {...form.getInputProps("image")}
-          value={form.getInputProps("image").value ?? ""}
         />
         <ThemeColorPicker
-          value={form.getInputProps("themeColor").value}
-          onChange={form.getInputProps("themeColor").onChange}
+          value={form.getInputProps("themeColor").value as ThemeColor}
+          onChange={form.getInputProps("themeColor").onChange as (newValue: ThemeColor) => void}
         />
         <LocationPicker
-          location={form.getInputProps("location").value}
           required={false}
           placeholder={t("profileForm.location.placeholder")}
           description={t("profileForm.location.description")}
-          initialAddress={form.getInputProps("location").value?.address ?? ""}
-          setLocation={form.getInputProps("location").onChange}
+          location={getFormLocationValue(form)}
+          setLocation={getFormLocationOnChange(form)}
         />
         <Group position="apart">
           <Button onClick={form.reset} color="gray" disabled={!form.isDirty()}>

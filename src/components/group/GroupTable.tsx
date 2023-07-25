@@ -64,7 +64,7 @@ const GroupTable: FunctionComponent<{
           {t("modal.group.delete.message")}
         </Text>
         <Text weight="bold">
-          "{group.name}"
+          &quot;{group.name}&quot;
         </Text>
       </Stack>
     ),
@@ -129,7 +129,7 @@ const GroupTable: FunctionComponent<{
             }}
             records={groupsQuery.data?.groups}
             totalRecords={groupsQuery.data?.size}
-            onRowClick={(group) => pushRoute(`/groups/${group.id}`, undefined, {locale})}
+            onRowClick={(group) => void pushRoute(`/groups/${group.id}`, undefined, {locale})}
             columns={[
               {
                 accessor: "name",

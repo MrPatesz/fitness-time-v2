@@ -14,6 +14,9 @@ export const RichTextField: FunctionComponent<{
 
   const [opened, setOpened] = useState(false);
 
+  const value = formInputProps.value as string | undefined;
+  const onChange = formInputProps.value as (newValue: string) => void;
+
   return (
     <>
       <TextInput
@@ -21,14 +24,14 @@ export const RichTextField: FunctionComponent<{
         placeholder={placeholder}
         sx={{flexGrow: 1}}
         {...formInputProps}
-        disabled={(formInputProps.value as string | undefined)?.includes("</")}
+        disabled={value?.includes("</")}
         rightSectionWidth={74}
         rightSection={(
           <Group spacing={4}>
             <ActionIcon
-              disabled={!formInputProps.value}
+              disabled={!value}
               variant="transparent"
-              onClick={() => formInputProps.onChange("")}
+              onClick={() => onChange("")}
             >
               <X/>
             </ActionIcon>
@@ -53,8 +56,8 @@ export const RichTextField: FunctionComponent<{
         <RichTextEditor
           id="rte"
           placeholder={placeholder}
-          value={formInputProps.value}
-          onChange={formInputProps.onChange}
+          value={value}
+          onChange={onChange}
         />
       </Modal>
     </>

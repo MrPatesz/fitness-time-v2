@@ -1,4 +1,4 @@
-import {ColorSwatch, DefaultMantineColor, Group, Select, Text, useMantineTheme} from "@mantine/core";
+import {ColorSwatch, Group, Select, Text, useMantineTheme} from "@mantine/core";
 import {useTranslation} from "next-i18next";
 import {ComponentPropsWithoutRef, forwardRef, FunctionComponent} from "react";
 import {ThemeColor} from "../../utils/enums";
@@ -23,8 +23,8 @@ const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
 );
 
 export const ThemeColorPicker: FunctionComponent<{
-  value: DefaultMantineColor;
-  onChange: (newValue: DefaultMantineColor | null) => void;
+  value: ThemeColor;
+  onChange: (newValue: ThemeColor) => void;
 }> = ({value, onChange}) => {
   const {t} = useTranslation("common");
 

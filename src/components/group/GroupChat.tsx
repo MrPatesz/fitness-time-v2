@@ -31,7 +31,7 @@ export const GroupChat: FunctionComponent<{
     getNextPageParam: (lastPage) => lastPage.nextCursor,
   });
 
-  const scrollToBottom = (smooth: boolean = false) => viewport.current?.scrollTo({
+  const scrollToBottom = (smooth = false) => viewport.current?.scrollTo({
     top: viewport.current?.scrollHeight,
     behavior: smooth ? "smooth" : undefined,
   });
@@ -59,6 +59,7 @@ export const GroupChat: FunctionComponent<{
 
   useEffect(() => {
     if (entry?.isIntersecting && hasNextPage) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       fetchNextPage().then(() => {
         setTimeout(() => {
           const numberOfPages = data?.pages.length ?? 1;

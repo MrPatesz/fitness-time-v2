@@ -7,6 +7,13 @@ import {LocationPicker} from "../location/LocationPicker";
 import {RichTextField} from "../rich-text/RichTextField";
 import {IntervalPicker} from "./IntervalPicker";
 import {CreateLocationType, LocationType} from "../../models/Location";
+import {
+  getFormDateOnChange,
+  getFormDateValue,
+  getFormError,
+  getFormLocationOnChange,
+  getFormLocationValue
+} from "../../utils/mantineFormUtils";
 
 export const EventForm: FunctionComponent<{
   originalEvent: CreateEventType | BasicEventType;
@@ -35,22 +42,23 @@ export const EventForm: FunctionComponent<{
           {...form.getInputProps("name")}
         />
         <IntervalPicker
-          start={form.getInputProps("start").value}
-          end={form.getInputProps("end").value}
+          start={getFormDateValue(form, "start")}
+          end={getFormDateValue(form, "end")}
           onChange={(newStart, newEnd) => {
-            form.getInputProps("start").onChange(newStart);
-            form.getInputProps("end").onChange(newEnd);
+            const startOnChange = getFormDateOnChange(form, "start");
+            startOnChange(newStart);
+            const endOnChange = getFormDateOnChange(form, "end");
+            endOnChange(newEnd);
           }}
-          startError={form.getInputProps("start").error}
-          endError={form.getInputProps("end").error}
+          startError={getFormError(form, "start")}
+          endError={getFormError(form, "end")}
         />
         <LocationPicker
-          location={form.getInputProps("location").value}
           required={true}
           placeholder={t("eventForm.location.placeholder")}
-          initialAddress={form.getInputProps("location").value?.address ?? ""}
-          setLocation={form.getInputProps("location").onChange}
-          error={form.getInputProps("location").error}
+          location={getFormLocationValue(form)}
+          setLocation={getFormLocationOnChange(form)}
+          error={getFormError(form, "location")}
         />
         <RichTextField
           label={t("eventForm.description.label")}
@@ -66,7 +74,7 @@ export const EventForm: FunctionComponent<{
             value?.replace(/\$\s?|(,*)/g, "")
           }
           formatter={(value: string | undefined) =>
-            !Number.isNaN(parseFloat(`${value}`))
+            value && !Number.isNaN(parseFloat(`${value}`))
               ? `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
               : "$ "
           }

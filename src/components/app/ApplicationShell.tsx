@@ -57,7 +57,7 @@ export const ApplicationShell: FunctionComponent<{
   const {route, locale = "en", defaultLocale, push: pushRoute} = useRouter();
   const {data: session} = useSession({
     required: !route.includes(welcome),
-    onUnauthenticated: () => pushRoute(`/${welcome}`, undefined, {locale}),
+    onUnauthenticated: () => void pushRoute(`/${welcome}`, undefined, {locale}),
   });
   const {t} = useTranslation("common");
 
@@ -115,7 +115,7 @@ export const ApplicationShell: FunctionComponent<{
               <ActionIcon
                 size="lg"
                 variant={theme.colorScheme === 'dark' ? "outline" : "default"}
-                onClick={() => signOut({callbackUrl: welcomeRoute})}
+                onClick={() => void signOut({callbackUrl: welcomeRoute})}
               >
                 <Logout/>
               </ActionIcon>

@@ -8,6 +8,7 @@ import {BasicCommentType, CreateCommentType} from "../../models/Comment";
 import {api} from "../../utils/api";
 import {defaultCreateComment} from "../../utils/defaultObjects";
 import RichTextEditor from "../rich-text/RichTextEditor";
+import {getFormStringOnChange, getFormStringValue} from "../../utils/mantineFormUtils";
 
 export const CommentForm: FunctionComponent<{
   editedComment?: BasicCommentType | CreateCommentType;
@@ -53,8 +54,8 @@ export const CommentForm: FunctionComponent<{
         <RichTextEditor
           id="rte"
           placeholder={t("commentForm.addComment")}
-          value={form.getInputProps("message").value}
-          onChange={form.getInputProps("message").onChange}
+          value={getFormStringValue(form, "message")}
+          onChange={getFormStringOnChange(form, "message")}
         />
         <Group position="right">
           <Button onClick={form.reset} color="gray" disabled={!form.isDirty()}>

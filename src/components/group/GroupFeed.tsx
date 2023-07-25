@@ -34,7 +34,7 @@ export const GroupFeed: FunctionComponent<{
 
   useEffect(() => {
     if (entry?.isIntersecting && hasNextPage) {
-      fetchNextPage();
+      void fetchNextPage();
     }
   }, [entry]);
 

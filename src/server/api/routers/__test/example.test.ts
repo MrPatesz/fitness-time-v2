@@ -61,7 +61,7 @@ describe("exampleRouter", () => {
   });
 
   describe("getSecretMessage", () => {
-    beforeAll(async () => {
+    beforeAll(() => {
       caller = getTestCaller(null);
     });
 

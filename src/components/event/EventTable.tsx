@@ -26,7 +26,7 @@ import {QueryComponent} from "../QueryComponent";
 import {EditEventForm} from "./EditEventForm";
 import {CreateEventForm} from "./CreateEventForm";
 
-const DATE_TIME: string = "dateTime";
+const DATE_TIME = "dateTime";
 export const PAGE_SIZES: number[] = [10, 25, 50];
 
 const EventTable: FunctionComponent<{
@@ -79,7 +79,7 @@ const EventTable: FunctionComponent<{
           {t("modal.event.delete.message")}
         </Text>
         <Text weight="bold">
-          "{event.name}"
+          &quot;{event.name}&quot;
         </Text>
       </Stack>
     ),
@@ -149,7 +149,7 @@ const EventTable: FunctionComponent<{
             }}
             records={eventsQuery.data?.events}
             totalRecords={eventsQuery.data?.size}
-            onRowClick={(event) => pushRoute(`/events/${event.id}`, undefined, {locale})}
+            onRowClick={(event) => void pushRoute(`/events/${event.id}`, undefined, {locale})}
             columns={[
               {
                 accessor: "name",

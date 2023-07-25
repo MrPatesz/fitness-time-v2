@@ -37,7 +37,7 @@ export default function FeedPage() {
 
   useEffect(() => {
     if (entry?.isIntersecting && hasNextPage) {
-      fetchNextPage();
+      void fetchNextPage();
     }
   }, [entry]);
 

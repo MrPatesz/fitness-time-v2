@@ -71,7 +71,7 @@ export const EventCard: FunctionComponent<{
                 variant="outline"
                 onClick={(e) => {
                   e.preventDefault();
-                  pushRoute(`/groups/${event.groupId}`, undefined, {locale}).then();
+                  void pushRoute(`/groups/${event.group!.id}`, undefined, {locale});
                 }}
                 sx={theme => ({
                   ":hover": {
@@ -99,7 +99,7 @@ export const EventCard: FunctionComponent<{
               variant="outline"
               onClick={(e) => {
                 e.preventDefault();
-                pushRoute(`/users/${event.creatorId}`, undefined, {locale}).then();
+                void pushRoute(`/users/${event.creatorId}`, undefined, {locale});
               }}
               sx={theme => ({
                 ":hover": {

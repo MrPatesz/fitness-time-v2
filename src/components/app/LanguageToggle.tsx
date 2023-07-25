@@ -13,7 +13,7 @@ export const LanguageToggle: FunctionComponent = () => {
     <ActionIcon
       size="lg"
       variant={dark ? "outline" : "default"}
-      onClick={() => pushRoute(asPath, undefined, {locale: hu ? "en" : "hu"})}
+      onClick={() => void pushRoute(asPath, undefined, {locale: hu ? "en" : "hu"})}
     >
       <Text>
         {hu ? "🇺🇸" : "🇭🇺"}
