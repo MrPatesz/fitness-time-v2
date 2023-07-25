@@ -8,7 +8,7 @@ import {useTranslation} from "next-i18next";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import dynamic from "next/dynamic";
 import {useRouter} from "next/router";
-import {useState} from "react";
+import {ComponentType, useState} from "react";
 import i18nConfig from "../../next-i18next.config.mjs";
 import {CenteredLoader} from "../components/CenteredLoader";
 import {QueryComponent} from "../components/QueryComponent";
@@ -18,8 +18,47 @@ import dayjs from "../utils/dayjs";
 import {getFirstDayOfWeek} from "../utils/utilFunctions";
 import {CreateEventForm} from "../components/event/CreateEventForm";
 
-const DayPilotCalendar: any = dynamic(
-  () => import("@daypilot/daypilot-lite-react").then((mod) => mod.DayPilotCalendar),
+// TODO this is not complete
+interface DayPilotCalendarInputProps {
+  theme: string | undefined;
+  viewType: "Week";
+  timeFormat: "Clock24Hours";
+  headerDateFormat: string;
+  heightSpec: "Full";
+  eventMoveHandling: "JavaScript"
+  eventResizeHandling: "JavaScript"
+  locale: string;
+  onTimeRangeSelected: (event: { start: { value: string }; end: { value: string }; }) => void;
+  onEventResize: (event: {
+    e: { data: { resource: BasicEventType } };
+    newStart: { value: string };
+    newEnd: { value: string };
+  }) => void;
+  onEventMove: (event: {
+    e: { data: { resource: BasicEventType } };
+    newStart: { value: string };
+    newEnd: { value: string };
+  }) => void;
+  durationBarVisible: boolean;
+  startDate: Date;
+  onEventClick: (e: {
+    e: { data: BasicEventType }
+  }) => void;
+  events: Array<{
+    id: number;
+    text: string;
+    start: Date;
+    end: Date;
+    backColor: string;
+    cssClass: string;
+    resource: BasicEventType;
+  }> | undefined;
+}
+
+const DayPilotCalendar = dynamic<DayPilotCalendarInputProps>(
+  () => import("@daypilot/daypilot-lite-react").then((mod: {
+    DayPilotCalendar: ComponentType<DayPilotCalendarInputProps>
+  }) => mod.DayPilotCalendar),
   {
     ssr: false,
     loading: () => <CenteredLoader/>,
