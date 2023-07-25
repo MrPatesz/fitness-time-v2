@@ -3,11 +3,12 @@ import {useTranslation} from "next-i18next";
 import {FunctionComponent, useState} from "react";
 import {PencilPlus, X} from "tabler-icons-react";
 import RichTextEditor from "./RichTextEditor";
+import {UseFormReturnType} from "@mantine/form";
 
 export const RichTextField: FunctionComponent<{
   label?: string;
   placeholder?: string;
-  formInputProps: { value: any, onChange: any, checked?: any, error?: any, onFocus?: any, onBlur?: any };
+  formInputProps: ReturnType<UseFormReturnType<any>["getInputProps"]>;
 }> = ({label, placeholder, formInputProps}) => {
   const {t} = useTranslation("common");
 

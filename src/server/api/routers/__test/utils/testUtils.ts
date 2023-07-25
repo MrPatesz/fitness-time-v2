@@ -4,13 +4,14 @@ import {ThemeColor} from "../../../../../utils/enums";
 import {kysely} from "../../../../kysely/kysely";
 import {pusher} from "../../../../pusher";
 import {appRouter} from "../../../root";
+import {env} from "../../../../../env.mjs";
 
 const sessionMock: Session = {
   expires: new Date().toISOString(),
   user: {id: "", name: undefined, themeColor: ThemeColor.VIOLET, hasLocation: false},
 };
 
-export const testPrismaClient = new PrismaClient({datasources: {db: {url: `${process.env.DATABASE_URL}-test`}}});
+export const testPrismaClient = new PrismaClient({datasources: {db: {url: `${env.POSTGRES_PRISMA_URL}-test`}}});
 
 const caller = appRouter.createCaller({
   prisma: testPrismaClient,

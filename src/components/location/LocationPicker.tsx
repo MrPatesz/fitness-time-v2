@@ -55,7 +55,7 @@ export const LocationPicker: FunctionComponent<{
               setLocation({
                 longitude: location.lng(),
                 latitude: location.lat(),
-                address: `${place.formatted_address}`,
+                address: place.formatted_address ?? "",
               });
             } else {
               setLocation(null);

@@ -18,8 +18,8 @@ export const EventCard: FunctionComponent<{
   const shortDateFormatter = useShortDateFormatter();
 
   const userRatingQuery = api.rating.getAverageRatingForUser.useQuery(event.creatorId);
-  const groupRatingQuery = api.rating.getAverageRatingForGroup.useQuery(parseInt(`${event.groupId}`), {
-    enabled: Boolean(event.groupId)
+  const groupRatingQuery = api.rating.getAverageRatingForGroup.useQuery(event.groupId as number, {
+    enabled: Boolean(event.groupId),
   });
 
   return (
