@@ -17,7 +17,7 @@ const MapComponent: FunctionComponent<{
     googleMapsApiKey: env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
     libraries: googleMapsLibraries,
   });
-  const loadError = mockLoadError || true; // TODO remove true to show map
+  const loadError = mockLoadError || process.env.NODE_ENV === "development";
 
   const map = useMemo(() => {
     const coordinates = {
