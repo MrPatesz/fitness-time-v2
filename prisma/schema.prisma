@@ -91,12 +91,12 @@ model Event {
   locationId   Int
   location     Location  @relation(fields: [locationId], references: [id], onDelete: Restrict)
   creatorId    String
-  creator      User      @relation(name: "createdEvents", fields: [creatorId], references: [id], onDelete: Restrict)
+  creator      User      @relation(name: "createdEvents", fields: [creatorId], references: [id], onDelete: Cascade)
   participants User[]    @relation(name: "participatedEvents")
   comments     Comment[]
   ratings      Rating[]
   groupId      Int?
-  group        Group?    @relation(fields: [groupId], references: [id])
+  group        Group?    @relation(fields: [groupId], references: [id], onDelete: Cascade)
 }
 
 model Location {
@@ -113,9 +113,9 @@ model Comment {
   message  String
   postedAt DateTime @default(now())
   userId   String
-  user     User     @relation(fields: [userId], references: [id])
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   eventId  Int
-  event    Event    @relation(fields: [eventId], references: [id])
+  event    Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
 }
 
 model Group {
@@ -124,7 +124,7 @@ model Group {
   description String
   createdAt   DateTime  @default(now())
   creatorId   String
-  creator     User      @relation(name: "createdGroups", fields: [creatorId], references: [id], onDelete: Restrict)
+  creator     User      @relation(name: "createdGroups", fields: [creatorId], references: [id], onDelete: Cascade)
   members     User[]    @relation(name: "joinedGroups")
   messages    Message[]
   events      Event[]
@@ -135,16 +135,16 @@ model Message {
   message  String
   postedAt DateTime @unique @default(now())
   userId   String
-  user     User     @relation(fields: [userId], references: [id])
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   groupId  Int
-  group    Group    @relation(fields: [groupId], references: [id])
+  group    Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
 }
 
 model Rating {
   id      Int    @id @default(autoincrement())
   stars   Float
   eventId Int
-  event   Event  @relation(fields: [eventId], references: [id])
+  event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
   userId  String
-  user    User   @relation(fields: [userId], references: [id])
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
