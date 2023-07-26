@@ -9,6 +9,7 @@ import {ThemeProvider} from "../components/app/ThemeProvider";
 import "../styles/calendar.css";
 import "../styles/globals.css";
 import {api} from "../utils/api";
+import {Analytics} from '@vercel/analytics/react';
 
 const App: AppType<{ session: Session | null }> = ({
                                                      Component,
@@ -26,6 +27,7 @@ const App: AppType<{ session: Session | null }> = ({
           </ApplicationShell>
         </ThemeProvider>
       </SessionProvider>
+      <Analytics/>
     </>
   );
 };
