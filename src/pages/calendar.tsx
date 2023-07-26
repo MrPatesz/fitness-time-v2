@@ -8,7 +8,7 @@ import {useTranslation} from "next-i18next";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import dynamic from "next/dynamic";
 import {useRouter} from "next/router";
-import {ComponentType, useEffect, useState} from "react";
+import {ComponentType, useState} from "react";
 import i18nConfig from "../../next-i18next.config.mjs";
 import {CenteredLoader} from "../components/CenteredLoader";
 import {BasicEventType} from "../models/event/Event";
@@ -73,9 +73,6 @@ export default function CalendarPage() {
   const {t} = useTranslation("common");
   const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
 
-  const [showCalendar, setShowCalendar] = useState(false);
-  useEffect(() => setShowCalendar(true), []);
-
   const eventsQuery = api.event.getCalendar.useQuery();
   const updateEvent = api.event.update.useMutation({
     onSuccess: () => eventsQuery.refetch().then(() =>
@@ -123,60 +120,56 @@ export default function CalendarPage() {
   return (
     <>
       <QueryComponent resourceName={t("resource.calendar")} query={eventsQuery}>
-        <>
-          {showCalendar && (
-            <DayPilotCalendar
-              theme={theme.colorScheme === "dark" ? "dark" : undefined}
-              viewType="Week"
-              timeFormat="Clock24Hours"
-              headerDateFormat={xs ? "MMMM d" : "d/MM"}
-              heightSpec="Full"
-              eventMoveHandling="JavaScript"
-              eventResizeHandling="JavaScript"
-              locale={locale}
-              onTimeRangeSelected={(event: {
-                start: { value: string };
-                end: { value: string };
-              }) => {
-                openModal({
-                  title: t("modal.event.create"),
-                  zIndex: 402,
-                  children: (
-                    <CreateEventForm
-                      initialInterval={{
-                        start: new Date(event.start.value),
-                        end: new Date(event.end.value),
-                      }}
-                    />
-                  ),
-                });
-              }}
-              onEventResize={onIntervalChange}
-              onEventMove={onIntervalChange}
-              durationBarVisible={false}
-              startDate={startDate}
-              onEventClick={(e: {
-                e: { data: BasicEventType }
-              }) => void pushRoute(`/events/${e.e.data.id}`, undefined, {locale})}
-              events={eventsQuery.data?.map((event) => {
-                const offsetInHours = -1 * new Date(event.start).getTimezoneOffset();
-                const start = dayjs(event.start).add(offsetInHours, "minutes").toDate();
-                const end = dayjs(event.end).add(offsetInHours, "minutes").toDate();
-                return {
-                  id: event.id,
-                  text: event.name,
-                  start,
-                  end,
-                  backColor: session?.user.id === event.creatorId ?
-                    theme.fn.themeColor(theme.primaryColor) :
-                    theme.fn.themeColor(event.creator.themeColor),
-                  cssClass: "calendar-event",
-                  resource: event,
-                };
-              })}
-            />
-          )}
-        </>
+        <DayPilotCalendar
+          theme={theme.colorScheme === "dark" ? "dark" : undefined}
+          viewType="Week"
+          timeFormat="Clock24Hours"
+          headerDateFormat={xs ? "MMMM d" : "d/MM"}
+          heightSpec="Full"
+          eventMoveHandling="JavaScript"
+          eventResizeHandling="JavaScript"
+          locale={locale}
+          onTimeRangeSelected={(event: {
+            start: { value: string };
+            end: { value: string };
+          }) => {
+            openModal({
+              title: t("modal.event.create"),
+              zIndex: 402,
+              children: (
+                <CreateEventForm
+                  initialInterval={{
+                    start: new Date(event.start.value),
+                    end: new Date(event.end.value),
+                  }}
+                />
+              ),
+            });
+          }}
+          onEventResize={onIntervalChange}
+          onEventMove={onIntervalChange}
+          durationBarVisible={false}
+          startDate={startDate}
+          onEventClick={(e: {
+            e: { data: BasicEventType }
+          }) => void pushRoute(`/events/${e.e.data.id}`, undefined, {locale})}
+          events={eventsQuery.data?.map((event) => {
+            const offsetInHours = -1 * new Date(event.start).getTimezoneOffset();
+            const start = dayjs(event.start).add(offsetInHours, "minutes").toDate();
+            const end = dayjs(event.end).add(offsetInHours, "minutes").toDate();
+            return {
+              id: event.id,
+              text: event.name,
+              start,
+              end,
+              backColor: session?.user.id === event.creatorId ?
+                theme.fn.themeColor(theme.primaryColor) :
+                theme.fn.themeColor(event.creator.themeColor),
+              cssClass: "calendar-event",
+              resource: event,
+            };
+          })}
+        />
       </QueryComponent>
       <Affix position={{top: 10, left: xs ? (211 + theme.spacing.md) : 104}} zIndex={401}>
         <DatePicker
