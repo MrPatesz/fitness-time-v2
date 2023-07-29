@@ -26,6 +26,11 @@ const server = z.object({
   GOOGLE_CLIENT_SECRET: z.string(),
   PUSHER_APP_ID: z.string(),
   PUSHER_SECRET: z.string(),
+  POSTGRES_USER: z.string(),
+  POSTGRES_PASSWORD: z.string(),
+  POSTGRES_HOST: z.string(),
+  POSTGRES_PORT: z.string().transform(port => parseInt(port)),
+  POSTGRES_DATABASE: z.string(),
 });
 
 /**
@@ -57,6 +62,11 @@ const processEnv = {
   GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
   PUSHER_APP_ID: process.env.PUSHER_APP_ID,
   PUSHER_SECRET: process.env.PUSHER_SECRET,
+  POSTGRES_USER: process.env.POSTGRES_USER,
+  POSTGRES_PASSWORD: process.env.POSTGRES_PASSWORD,
+  POSTGRES_HOST: process.env.POSTGRES_HOST,
+  POSTGRES_PORT: process.env.POSTGRES_PORT,
+  POSTGRES_DATABASE: process.env.POSTGRES_DATABASE,
   NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
   NEXT_PUBLIC_PUSHER_APP_KEY: process.env.NEXT_PUBLIC_PUSHER_APP_KEY,
   NEXT_PUBLIC_PUSHER_CLUSTER: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,

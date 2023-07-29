@@ -1,9 +1,9 @@
 import {z} from "zod";
-import {IdSchema} from "./Id";
 import {BasicUserSchema} from "./User";
+import {IdSchema, TextSchema} from "./Utils";
 
 export const CreateMessageSchema = z.object({
-  message: z.string().min(1),
+  text: TextSchema,
 });
 
 export const BasicMessageSchema = CreateMessageSchema.extend({

@@ -1,9 +1,9 @@
 import {z} from "zod";
-import {BasicGroupSchema, CreateGroupSchema, DetailedGroupSchema} from "../../../models/Group";
+import {BasicGroupSchema, DetailedGroupSchema, MutateGroupSchema} from "../../../models/Group";
 import {PaginateGroupsSchema} from "../../../models/pagination/PaginateGroups";
-import {IdSchema} from "../../../models/Id";
 import {createTRPCRouter, protectedProcedure} from "../trpc";
 import {Prisma} from ".prisma/client";
+import {IdSchema} from "../../../models/Utils";
 
 export const groupRouter = createTRPCRouter({
   getPaginatedGroups: protectedProcedure
@@ -58,7 +58,7 @@ export const groupRouter = createTRPCRouter({
       return DetailedGroupSchema.parse(group);
     }),
   create: protectedProcedure
-    .input(CreateGroupSchema)
+    .input(MutateGroupSchema)
     .output(BasicGroupSchema)
     .mutation(async ({input: createGroup, ctx: {session: {user: {id: callerId}}, prisma}}) => {
       const group = await prisma.group.create({
@@ -73,7 +73,7 @@ export const groupRouter = createTRPCRouter({
       return BasicGroupSchema.parse(group);
     }),
   update: protectedProcedure
-    .input(z.object({group: CreateGroupSchema, id: IdSchema}))
+    .input(z.object({group: MutateGroupSchema, id: IdSchema}))
     .output(BasicGroupSchema)
     .mutation(async ({input, ctx: {session: {user: {id: callerId}}, prisma}}) => {
       const updatedGroup = await prisma.group.update({

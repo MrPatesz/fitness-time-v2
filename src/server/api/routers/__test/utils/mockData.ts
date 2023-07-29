@@ -58,21 +58,21 @@ export const events: Event[] = [event1, event2];
 
 export const comment1: Comment = {
   id: 301,
-  message: "comment1_message",
+  text: "comment1_message",
   postedAt: new Date(),
   eventId: event1.id,
   userId: user1.id,
 };
 export const comment2: Comment = {
   id: 302,
-  message: "comment2_message",
+  text: "comment2_message",
   postedAt: new Date(),
   eventId: event1.id,
   userId: user2.id,
 };
 export const comment3: Comment = {
   id: 303,
-  message: "comment3_message",
+  text: "comment3_message",
   postedAt: new Date(),
   eventId: event2.id,
   userId: user2.id,

@@ -1,9 +1,9 @@
 import {z} from "zod";
-import {BasicCommentSchema, CreateCommentSchema, DetailedCommentSchema} from "../../../models/Comment";
-import {IdSchema} from "../../../models/Id";
+import {BasicCommentSchema, DetailedCommentSchema, MutateCommentSchema} from "../../../models/Comment";
 import {SortCommentByProperty, SortDirection} from "../../../utils/enums";
 import {createTRPCRouter, protectedProcedure} from "../trpc";
 import {Prisma} from ".prisma/client";
+import {IdSchema} from "../../../models/Utils";
 
 export const commentRouter = createTRPCRouter({
   getAllByEventId: protectedProcedure
@@ -31,7 +31,7 @@ export const commentRouter = createTRPCRouter({
     .output(z.object({comments: DetailedCommentSchema.array(), size: z.number()}))
     .query(async ({input: {page, pageSize, sortBy, searchQuery}, ctx: {prisma, session: {user: {id: callerId}}}}) => {
       const orderBy: {
-        message?: Prisma.SortOrder;
+        text?: Prisma.SortOrder;
         postedAt?: Prisma.SortOrder;
         event?: { name: Prisma.SortOrder };
       } = {};
@@ -43,7 +43,7 @@ export const commentRouter = createTRPCRouter({
 
       const where = {
         userId: callerId,
-        message: {
+        text: {
           mode: "insensitive",
           contains: searchQuery,
         } as Prisma.StringFilter,
@@ -68,7 +68,7 @@ export const commentRouter = createTRPCRouter({
       };
     }),
   create: protectedProcedure
-    .input(z.object({createComment: CreateCommentSchema, eventId: IdSchema}))
+    .input(z.object({createComment: MutateCommentSchema, eventId: IdSchema}))
     .output(BasicCommentSchema)
     .mutation(async ({input: {createComment, eventId}, ctx: {session: {user: {id: callerId}}, prisma}}) => {
       const comment = await prisma.comment.create({
@@ -83,7 +83,7 @@ export const commentRouter = createTRPCRouter({
       return BasicCommentSchema.parse(comment);
     }),
   update: protectedProcedure
-    .input(z.object({comment: CreateCommentSchema, commentId: IdSchema, eventId: IdSchema}))
+    .input(z.object({comment: MutateCommentSchema, commentId: IdSchema, eventId: IdSchema}))
     .output(BasicCommentSchema)
     .mutation(async ({input: {commentId, comment, eventId}, ctx: {session: {user: {id: callerId}}, prisma}}) => {
       const updatedComment = await prisma.comment.update({

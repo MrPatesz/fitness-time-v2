@@ -13,7 +13,7 @@ export const googleMapsLibraries: (
   )[] = ["places"];
 
 export const defaultCreateComment: CreateCommentType = {
-  message: "",
+  text: "",
 };
 
 export const defaultCreateGroup: CreateGroupType = {

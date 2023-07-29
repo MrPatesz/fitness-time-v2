@@ -54,8 +54,8 @@ export const CommentForm: FunctionComponent<{
         <RichTextEditor
           id="rte"
           placeholder={t("commentForm.addComment")}
-          value={getFormStringValue(form, "message")}
-          onChange={getFormStringOnChange(form, "message")}
+          value={getFormStringValue(form, "text")}
+          onChange={getFormStringOnChange(form, "text")}
         />
         <Group position="right">
           <Button onClick={form.reset} color="gray" disabled={!form.isDirty()}>

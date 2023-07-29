@@ -2,22 +2,26 @@ import {z} from "zod";
 import {EventStatus} from "../utils/enums";
 import {BasicCommentSchema} from "./Comment";
 import {BasicGroupSchema} from "./Group";
-import {IdSchema} from "./Id";
-import {CreateLocationSchema, LocationSchema} from "./Location";
+import {LocationSchema, MutateLocationSchema} from "./Location";
 import {BasicUserSchema} from "./User";
+import {DescriptionSchema, IdSchema, NameSchema} from "./Utils";
 
-export const CreateEventSchema = z.object({
-  name: z.string().min(1),
+export const MutateEventSchema = z.object({
+  name: NameSchema,
+  description: DescriptionSchema,
   start: z.date(),
   end: z.date(),
-  description: z.string(),
-  limit: z.number().min(1).nullable(),
+  limit: z.number().min(2).nullable(),
   price: z.number().min(1).nullable(),
-  location: CreateLocationSchema,
+  location: MutateLocationSchema,
   groupId: IdSchema.nullish(),
+}).refine(event => event.end > event.start, {
+  message: "Event must not start in the past",
+}).refine(event => event.end > event.start, {
+  message: "Event must start before it ends",
 });
 
-export const BasicEventSchema = CreateEventSchema.extend({
+export const BasicEventSchema = MutateEventSchema.innerType().innerType().extend({
   id: IdSchema,
   creatorId: z.string(),
   creator: BasicUserSchema,
@@ -32,15 +36,12 @@ export const BasicEventSchema = CreateEventSchema.extend({
   status: event.start > new Date() ? EventStatus.PLANNED : EventStatus.ARCHIVE,
 }));
 
-export const DetailedEventSchema = BasicEventSchema.innerType().extend({
+export const DetailedEventSchema = BasicEventSchema.and(z.object({
   participants: BasicUserSchema.array(),
   comments: BasicCommentSchema.array(),
-}).transform((event) => ({
-  ...event,
-  status: event.start > new Date() ? EventStatus.PLANNED : EventStatus.ARCHIVE,
 }));
 
-export type CreateEventType = z.infer<typeof CreateEventSchema>;
+export type CreateEventType = z.infer<typeof MutateEventSchema>;
 
 export type BasicEventType = z.infer<typeof BasicEventSchema>;
 

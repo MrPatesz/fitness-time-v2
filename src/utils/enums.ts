@@ -60,7 +60,7 @@ export enum SortEventByProperty {
 }
 
 export enum SortCommentByProperty {
-  MESSAGE = "message",
+  TEXT = "text",
   POSTED_AT = "postedAt",
   EVENT = "event",
 }

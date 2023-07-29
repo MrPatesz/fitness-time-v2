@@ -1,13 +1,13 @@
 import {z} from "zod";
-import {IdSchema} from "./Id";
 import {BasicUserSchema} from "./User";
+import {DescriptionSchema, IdSchema, NameSchema} from "./Utils";
 
-export const CreateGroupSchema = z.object({
-  name: z.string().min(1),
-  description: z.string(),
+export const MutateGroupSchema = z.object({
+  name: NameSchema,
+  description: DescriptionSchema,
 });
 
-export const BasicGroupSchema = CreateGroupSchema.extend({
+export const BasicGroupSchema = MutateGroupSchema.extend({
   id: IdSchema,
   createdAt: z.date(),
   creatorId: z.string(),
@@ -18,7 +18,7 @@ export const DetailedGroupSchema = BasicGroupSchema.extend({
   members: BasicUserSchema.array(),
 });
 
-export type CreateGroupType = z.infer<typeof CreateGroupSchema>;
+export type CreateGroupType = z.infer<typeof MutateGroupSchema>;
 
 export type BasicGroupType = z.infer<typeof BasicGroupSchema>;
 

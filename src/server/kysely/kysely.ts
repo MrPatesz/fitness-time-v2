@@ -10,11 +10,11 @@ export const kysely =
   new Kysely<DB>({
     dialect: new PostgresDialect({
       pool: new Pool({
-        user: "postgres",
-        password: "root",
-        host: 'localhost',
-        port: 5432,
-        database: 'fitness-time-db',
+        user: env.POSTGRES_USER,
+        password: env.POSTGRES_PASSWORD,
+        host: env.POSTGRES_HOST,
+        port: env.POSTGRES_PORT,
+        database: env.POSTGRES_DATABASE,
       })
     })
   })

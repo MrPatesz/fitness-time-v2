@@ -13,7 +13,7 @@ export const GroupForm: FunctionComponent<{
     initialValues: originalGroup,
     validateInputOnChange: true,
     validate: {
-      name: (value) => value ? null : t("groupForm.name.error"),
+      name: value => value.trim() ? null : t("groupForm.name.error"),
     },
   });
   const {t} = useTranslation("common");

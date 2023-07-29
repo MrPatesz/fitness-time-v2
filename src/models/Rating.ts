@@ -1,14 +1,14 @@
 import {z} from "zod";
-import {IdSchema} from "./Id";
 import {BasicUserSchema} from "./User";
+import {IdSchema} from "./Utils";
 
 export const StarsSchema = z.number().min(0.5).max(5);
 
-export const CreateRatingSchema = z.object({
+export const MutateRatingSchema = z.object({
   stars: StarsSchema,
 });
 
-export const BasicRatingSchema = CreateRatingSchema.extend({
+export const BasicRatingSchema = MutateRatingSchema.extend({
   id: IdSchema,
   eventId: IdSchema,
   userId: z.string(),
@@ -20,7 +20,7 @@ export const AverageRatingSchema = z.object({
   averageStars: StarsSchema.nullable(),
 });
 
-export type CreateRatingType = z.infer<typeof CreateRatingSchema>;
+export type CreateRatingType = z.infer<typeof MutateRatingSchema>;
 
 export type BasicRatingType = z.infer<typeof BasicRatingSchema>;
 

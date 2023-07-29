@@ -77,7 +77,7 @@ describe("commentRouter", () => {
         searchQuery: "",
         sortBy: {
           direction: SortDirection.ASC,
-          property: SortCommentByProperty.MESSAGE,
+          property: SortCommentByProperty.TEXT,
         }
       });
 
@@ -92,10 +92,10 @@ describe("commentRouter", () => {
     it("creates new comment for given event", async () => {
       // Arrange
       const newComment: CreateCommentType = {
-        message: "comment4_message",
+        text: "comment4_message",
       };
       const expectedNewComment: BasicCommentType = BasicCommentSchema.parse({
-        message: newComment.message,
+        text: newComment.text,
         id: 304,
         postedAt: new Date(),
         eventId: event2.id,
@@ -127,13 +127,13 @@ describe("commentRouter", () => {
     it("updates the given comment record's data", async () => {
       // Arrange
       const newComment = {
-        comment: {message: "updated_comment1_message"},
+        comment: {text: "updated_comment1_message"},
         commentId: comment1.id,
         eventId: event1.id
       };
       const expected: BasicCommentType = BasicCommentSchema.parse({
         ...comment1,
-        message: newComment.comment.message,
+        text: newComment.comment.text,
         user: user1,
       });
 

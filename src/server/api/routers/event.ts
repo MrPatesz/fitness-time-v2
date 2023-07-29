@@ -1,10 +1,10 @@
 import {TRPCError} from "@trpc/server";
 import {z} from "zod";
-import {BasicEventSchema, CreateEventSchema, DetailedEventSchema,} from "../../../models/Event";
+import {BasicEventSchema, DetailedEventSchema, MutateEventSchema,} from "../../../models/Event";
 import {PaginateEventsSchema} from "../../../models/pagination/PaginateEvents";
-import {IdSchema} from "../../../models/Id";
 import {createTRPCRouter, protectedProcedure} from "../trpc";
 import {Prisma} from ".prisma/client";
+import {IdSchema} from "../../../models/Utils";
 
 export const eventRouter = createTRPCRouter({
   getPaginatedEvents: protectedProcedure
@@ -187,7 +187,7 @@ export const eventRouter = createTRPCRouter({
       });
     }),
   create: protectedProcedure
-    .input(CreateEventSchema)
+    .input(MutateEventSchema)
     .output(BasicEventSchema)
     .mutation(async ({input: createEvent, ctx: {session: {user: {id: callerId}}, prisma}}) => {
       const event = await prisma.event.create({
@@ -239,7 +239,7 @@ export const eventRouter = createTRPCRouter({
       return BasicEventSchema.parse(result);
     }),
   update: protectedProcedure
-    .input(z.object({event: CreateEventSchema, id: IdSchema}))
+    .input(z.object({event: MutateEventSchema, id: IdSchema}))
     .output(BasicEventSchema)
     .mutation(async ({input, ctx: {session: {user: {id: callerId}}, prisma}}) => {
       const updatedEvent = await prisma.event.update({

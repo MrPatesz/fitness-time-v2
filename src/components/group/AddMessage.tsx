@@ -27,7 +27,7 @@ export const AddMessage: FunctionComponent<{
         <TextInput
           sx={{flexGrow: 1}}
           placeholder={t("messageForm.addMessage")}
-          {...form.getInputProps("message")}
+          {...form.getInputProps("text")}
         />
         <ActionIcon
           type="submit"

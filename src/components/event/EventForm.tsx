@@ -23,7 +23,7 @@ export const EventForm: FunctionComponent<{
     initialValues: originalEvent,
     validateInputOnChange: true,
     validate: {
-      name: (value) => value ? null : t("eventForm.name.error"),
+      name: (value) => value.trim() ? null : t("eventForm.name.error"),
       location: (value: CreateLocationType | LocationType) => Boolean(value?.address) ? null : t("eventForm.location.error"),
       start: (value) => value > new Date() ? null : t("eventForm.start.error"),
       end: (value, formData) => (value > new Date() && value > formData.start) ? null : t("eventForm.end.error"),
@@ -37,6 +37,7 @@ export const EventForm: FunctionComponent<{
         <TextInput
           withAsterisk
           data-autofocus
+          maxLength={64}
           label={t("common.name")}
           placeholder={t("eventForm.name.placeholder")}
           {...form.getInputProps("name")}
@@ -66,24 +67,22 @@ export const EventForm: FunctionComponent<{
           formInputProps={form.getInputProps("description")}
         />
         <NumberInput
+          min={1}
           label={t("eventForm.price.label")}
           placeholder={t("eventForm.price.placeholder")}
           {...form.getInputProps("price")}
-          min={1}
-          parser={(value: string | undefined) =>
-            value?.replace(/\$\s?|(,*)/g, "")
-          }
+          parser={(value: string | undefined) => value?.replace(/\$\s?|(,*)/g, "")}
           formatter={(value: string | undefined) =>
-            value && !Number.isNaN(parseFloat(`${value}`))
+            value && !Number.isNaN(parseFloat(value))
               ? `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
               : "$ "
           }
         />
         <NumberInput
+          min={2}
           label={t("eventForm.limit.label")}
           placeholder={t("eventForm.limit.placeholder")}
           {...form.getInputProps("limit")}
-          min={1}
         />
         <Group position="right">
           <Button

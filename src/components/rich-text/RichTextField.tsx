@@ -8,8 +8,9 @@ import {UseFormReturnType} from "@mantine/form";
 export const RichTextField: FunctionComponent<{
   label?: string;
   placeholder?: string;
+  maxLength?: number;
   formInputProps: ReturnType<UseFormReturnType<any>["getInputProps"]>;
-}> = ({label, placeholder, formInputProps}) => {
+}> = ({label, placeholder, formInputProps, maxLength = 1024}) => {
   const {t} = useTranslation("common");
 
   const [opened, setOpened] = useState(false);
@@ -25,6 +26,7 @@ export const RichTextField: FunctionComponent<{
         sx={{flexGrow: 1}}
         {...formInputProps}
         disabled={value?.includes("</")}
+        maxLength={maxLength}
         rightSectionWidth={74}
         rightSection={(
           <Group spacing={4}>

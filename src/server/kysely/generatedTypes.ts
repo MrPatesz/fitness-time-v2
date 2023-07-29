@@ -20,7 +20,7 @@ export type Account = {
 };
 export type Comment = {
   id: Generated<number>;
-  message: string;
+  text: string;
   postedAt: Generated<Timestamp>;
   userId: string;
   eventId: number;
@@ -59,7 +59,7 @@ export type Location = {
 };
 export type Message = {
   id: Generated<number>;
-  message: string;
+  text: string;
   postedAt: Generated<Timestamp>;
   userId: string;
   groupId: number;

@@ -59,13 +59,13 @@ model VerificationToken {
 
 model User {
   id                 String    @id @default(cuid())
-  name               String?
+  name               String?   @db.VarChar(64)
   email              String?   @unique
   emailVerified      DateTime?
   image              String?
   accounts           Account[]
   sessions           Session[]
-  introduction       String    @default("")
+  introduction       String    @default("") @db.VarChar(1024)
   themeColor         String    @default("violet") // TODO enum
   locationId         Int?
   location           Location? @relation(fields: [locationId], references: [id], onDelete: Restrict)
@@ -82,10 +82,10 @@ model Event {
   id           Int       @id @default(autoincrement())
   createdAt    DateTime  @unique @default(now())
   updatedAt    DateTime  @updatedAt
-  name         String
+  name         String    @db.VarChar(64)
   start        DateTime
   end          DateTime
-  description  String
+  description  String    @db.VarChar(1024)
   limit        Int?
   price        Int?
   locationId   Int
@@ -110,7 +110,7 @@ model Location {
 
 model Comment {
   id       Int      @id @default(autoincrement())
-  message  String
+  text     String   @db.VarChar(512)
   postedAt DateTime @default(now())
   userId   String
   user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -120,8 +120,8 @@ model Comment {
 
 model Group {
   id          Int       @id @default(autoincrement())
-  name        String    @unique
-  description String
+  name        String    @unique @db.VarChar(64)
+  description String    @db.VarChar(1024)
   createdAt   DateTime  @default(now())
   creatorId   String
   creator     User      @relation(name: "createdGroups", fields: [creatorId], references: [id], onDelete: Cascade)
@@ -132,7 +132,7 @@ model Group {
 
 model Message {
   id       Int      @id @default(autoincrement())
-  message  String
+  text     String   @db.VarChar(512)
   postedAt DateTime @unique @default(now())
   userId   String
   user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)

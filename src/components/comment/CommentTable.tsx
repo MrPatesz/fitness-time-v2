@@ -62,7 +62,7 @@ const CommentTable: FunctionComponent = () => {
           {t("modal.comment.delete.message")}
         </Text>
         <Card withBorder>
-          <RichTextDisplay richText={comment.message} maxHeight={100}/>
+          <RichTextDisplay richText={comment.text} maxHeight={100}/>
         </Card>
       </Stack>
     ),
@@ -115,11 +115,11 @@ const CommentTable: FunctionComponent = () => {
             totalRecords={commentsQuery.data?.size}
             columns={[
               {
-                accessor: "message",
+                accessor: "text",
                 title: t("commentTable.message"),
                 sortable: true,
                 width: 300,
-                render: ({message}) => <RichTextDisplay scroll richText={message} maxHeight={50}/>,
+                render: ({text}) => <RichTextDisplay scroll richText={text} maxHeight={50}/>,
               },
               {
                 accessor: "postedAt",

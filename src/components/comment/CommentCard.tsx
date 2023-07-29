@@ -83,7 +83,7 @@ export const CommentCard: FunctionComponent<{
                         {t("modal.comment.delete.message")}
                       </Text>
                       <Card withBorder>
-                        <RichTextDisplay richText={comment.message} maxHeight={100}/>
+                        <RichTextDisplay richText={comment.text} maxHeight={100}/>
                       </Card>
                     </Stack>
                   ),
@@ -96,7 +96,7 @@ export const CommentCard: FunctionComponent<{
             </Group>
           )}
         </Group>
-        <RichTextDisplay richText={comment.message} maxHeight={100}/>
+        <RichTextDisplay richText={comment.text} maxHeight={100}/>
       </Stack>
     </Card>
   );

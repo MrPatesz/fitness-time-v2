@@ -1,13 +1,13 @@
 import {z} from "zod";
 import {BasicEventSchema} from "./Event";
-import {IdSchema} from "./Id";
 import {BasicUserSchema} from "./User";
+import {IdSchema, TextSchema} from "./Utils";
 
-export const CreateCommentSchema = z.object({
-  message: z.string().min(1),
+export const MutateCommentSchema = z.object({
+  text: TextSchema,
 });
 
-export const BasicCommentSchema = CreateCommentSchema.extend({
+export const BasicCommentSchema = MutateCommentSchema.extend({
   id: IdSchema,
   postedAt: z.date(),
   eventId: IdSchema,
@@ -19,7 +19,7 @@ export const DetailedCommentSchema = BasicCommentSchema.extend({
   event: z.lazy(() => BasicEventSchema),
 });
 
-export type CreateCommentType = z.infer<typeof CreateCommentSchema>;
+export type CreateCommentType = z.infer<typeof MutateCommentSchema>;
 
 export type BasicCommentType = z.infer<typeof BasicCommentSchema>;
 

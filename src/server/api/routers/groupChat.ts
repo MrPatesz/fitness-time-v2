@@ -1,8 +1,8 @@
 import {z} from "zod";
-import {IdSchema} from "../../../models/Id";
 import {BasicMessageSchema, CreateMessageSchema} from "../../../models/Message";
 import {createTRPCRouter, protectedProcedure} from "../trpc";
 import {Prisma} from ".prisma/client";
+import {IdSchema} from "../../../models/Utils";
 
 export const groupChatRouter = createTRPCRouter({
   getMessages: protectedProcedure
