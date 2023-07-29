@@ -1,6 +1,6 @@
 import {z} from "zod";
 import {IdSchema} from "./Id";
-import {BasicUserSchema} from "./user/User";
+import {BasicUserSchema} from "./User";
 
 export const CreateMessageSchema = z.object({
   message: z.string().min(1),

@@ -1,7 +1,7 @@
 import {z} from "zod";
-import {BasicEventSchema} from "./event/Event";
+import {BasicEventSchema} from "./Event";
 import {IdSchema} from "./Id";
-import {BasicUserSchema} from "./user/User";
+import {BasicUserSchema} from "./User";
 
 export const CreateCommentSchema = z.object({
   message: z.string().min(1),

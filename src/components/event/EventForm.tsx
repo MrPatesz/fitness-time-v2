@@ -2,7 +2,7 @@ import {Button, Group, NumberInput, Stack, TextInput} from "@mantine/core";
 import {useForm} from "@mantine/form";
 import {useTranslation} from "next-i18next";
 import {FunctionComponent} from "react";
-import {BasicEventType, CreateEventType} from "../../models/event/Event";
+import {BasicEventType, CreateEventType} from "../../models/Event";
 import {LocationPicker} from "../location/LocationPicker";
 import {RichTextField} from "../rich-text/RichTextField";
 import {IntervalPicker} from "./IntervalPicker";

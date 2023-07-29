@@ -1,7 +1,7 @@
 import {TRPCError} from "@trpc/server";
 import {z} from "zod";
-import {BasicEventSchema, CreateEventSchema, DetailedEventSchema,} from "../../../models/event/Event";
-import {PaginateEventsSchema} from "../../../models/event/PaginateEvents";
+import {BasicEventSchema, CreateEventSchema, DetailedEventSchema,} from "../../../models/Event";
+import {PaginateEventsSchema} from "../../../models/pagination/PaginateEvents";
 import {IdSchema} from "../../../models/Id";
 import {createTRPCRouter, protectedProcedure} from "../trpc";
 import {Prisma} from ".prisma/client";

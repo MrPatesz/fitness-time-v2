@@ -4,7 +4,7 @@ import {openModal} from "@mantine/modals";
 import {useTranslation} from "next-i18next";
 import {FunctionComponent, useEffect, useMemo, useRef} from "react";
 import {Plus} from "tabler-icons-react";
-import {BasicEventType} from "../../models/event/Event";
+import {BasicEventType} from "../../models/Event";
 import {api} from "../../utils/api";
 import {getBackgroundColor} from "../../utils/utilFunctions";
 import {CenteredLoader} from "../CenteredLoader";

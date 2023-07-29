@@ -14,7 +14,7 @@ import MapComponent from "../../components/location/MapComponent";
 import {QueryComponent} from "../../components/QueryComponent";
 import {RatingComponent} from "../../components/RatingComponent";
 import {RichTextDisplay} from "../../components/rich-text/RichTextDisplay";
-import {DetailedEventType} from "../../models/event/Event";
+import {DetailedEventType} from "../../models/Event";
 import {api} from "../../utils/api";
 import {EventStatus} from "../../utils/enums";
 import {useLongDateFormatter, usePriceFormatter} from "../../utils/formatters";

@@ -8,7 +8,7 @@ import {useTranslation} from "next-i18next";
 import {useRouter} from "next/router";
 import {FunctionComponent, useEffect, useState} from "react";
 import {Pencil, Plus, Trash} from "tabler-icons-react";
-import {BasicGroupType} from "../../models/group/Group";
+import {BasicGroupType} from "../../models/Group";
 import {api} from "../../utils/api";
 import {GroupTableDisplayPlace, SortDirection, SortGroupByProperty} from "../../utils/enums";
 import {useLongDateFormatter} from "../../utils/formatters";

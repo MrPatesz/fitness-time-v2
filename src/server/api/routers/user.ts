@@ -1,6 +1,6 @@
 import {z} from "zod";
-import {PaginateUsersSchema} from "../../../models/user/PaginateUsers";
-import {BasicUserSchema, DetailedUserSchema, ProfileSchema, UpdateProfileSchema} from "../../../models/user/User";
+import {PaginateUsersSchema} from "../../../models/pagination/PaginateUsers";
+import {BasicUserSchema, DetailedUserSchema, ProfileSchema, UpdateProfileSchema} from "../../../models/User";
 import {createTRPCRouter, protectedProcedure} from "../trpc";
 import {Prisma} from ".prisma/client";
 

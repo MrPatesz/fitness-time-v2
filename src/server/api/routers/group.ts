@@ -1,6 +1,6 @@
 import {z} from "zod";
-import {BasicGroupSchema, CreateGroupSchema, DetailedGroupSchema} from "../../../models/group/Group";
-import {PaginateGroupsSchema} from "../../../models/group/PaginateGroups";
+import {BasicGroupSchema, CreateGroupSchema, DetailedGroupSchema} from "../../../models/Group";
+import {PaginateGroupsSchema} from "../../../models/pagination/PaginateGroups";
 import {IdSchema} from "../../../models/Id";
 import {createTRPCRouter, protectedProcedure} from "../trpc";
 import {Prisma} from ".prisma/client";

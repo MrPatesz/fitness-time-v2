@@ -1,5 +1,5 @@
 import {describe, expect, it} from "@jest/globals";
-import {BasicUserSchema, DetailedUserSchema, ProfileSchema, UpdateProfileSchema} from "../../../../models/user/User";
+import {BasicUserSchema, DetailedUserSchema, ProfileSchema, UpdateProfileSchema} from "../../../../models/User";
 import {ThemeColor} from "../../../../utils/enums";
 import {user1, user2, users} from "./utils/mockData";
 import {getTestCaller, TestCaller, testPrismaClient} from "./utils/testUtils";

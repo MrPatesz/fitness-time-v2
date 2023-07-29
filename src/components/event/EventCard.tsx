@@ -4,7 +4,7 @@ import {useTranslation} from "next-i18next";
 import Link from "next/link";
 import {useRouter} from "next/router";
 import {FunctionComponent} from "react";
-import {BasicEventType} from "../../models/event/Event";
+import {BasicEventType} from "../../models/Event";
 import {api} from "../../utils/api";
 import {EventStatus, ThemeColor} from "../../utils/enums";
 import {useShortDateFormatter} from "../../utils/formatters";

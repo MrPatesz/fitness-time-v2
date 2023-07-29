@@ -18,7 +18,7 @@ import {useTranslation} from "next-i18next";
 import {useRouter} from "next/router";
 import {FunctionComponent, useEffect, useState} from "react";
 import {Pencil, Plus, Trash} from "tabler-icons-react";
-import {BasicEventType} from "../../models/event/Event";
+import {BasicEventType} from "../../models/Event";
 import {api} from "../../utils/api";
 import {EventTableDisplayPlace, SortDirection, SortEventByProperty} from "../../utils/enums";
 import {useLongDateFormatter, usePriceFormatter} from "../../utils/formatters";

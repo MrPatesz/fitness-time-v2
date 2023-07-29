@@ -1,6 +1,6 @@
 import {CreateCommentType} from "../models/Comment";
-import {CreateEventType} from "../models/event/Event";
-import {CreateGroupType} from "../models/group/Group";
+import {CreateEventType} from "../models/Event";
+import {CreateGroupType} from "../models/Group";
 import {CreateLocationType} from "../models/Location";
 import dayjs from "./dayjs";
 

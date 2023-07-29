@@ -6,7 +6,7 @@ import Link from "next/link";
 import {useRouter} from "next/router";
 import {FunctionComponent} from 'react';
 import {Minus, Plus} from "tabler-icons-react";
-import {BasicUserType} from "../../models/user/User";
+import {BasicUserType} from "../../models/User";
 import {useSignedNumberFormatter} from "../../utils/formatters";
 import {getInitials} from "../../utils/utilFunctions";
 import UserImage from "../user/UserImage";

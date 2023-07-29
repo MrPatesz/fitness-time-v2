@@ -1,6 +1,6 @@
 import {z} from "zod";
-import {IdSchema} from "../Id";
-import {BasicUserSchema} from "../user/User";
+import {IdSchema} from "./Id";
+import {BasicUserSchema} from "./User";
 
 export const CreateGroupSchema = z.object({
   name: z.string().min(1),

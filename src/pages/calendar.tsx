@@ -11,7 +11,7 @@ import {useRouter} from "next/router";
 import {ComponentType, useState} from "react";
 import i18nConfig from "../../next-i18next.config.mjs";
 import {CenteredLoader} from "../components/CenteredLoader";
-import {BasicEventType} from "../models/event/Event";
+import {BasicEventType} from "../models/Event";
 import {api} from "../utils/api";
 import dayjs from "../utils/dayjs";
 import {getFirstDayOfWeek} from "../utils/utilFunctions";

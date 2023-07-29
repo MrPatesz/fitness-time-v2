@@ -7,7 +7,7 @@ import {useEffect, useMemo, useRef, useState} from "react";
 import i18nConfig from "../../next-i18next.config.mjs";
 import {CenteredLoader} from "../components/CenteredLoader";
 import {EventGrid} from "../components/event/EventGrid";
-import {BasicEventType} from "../models/event/Event";
+import {BasicEventType} from "../models/Event";
 import {api} from "../utils/api";
 import {formatDistance, getBackgroundColor} from "../utils/utilFunctions";
 

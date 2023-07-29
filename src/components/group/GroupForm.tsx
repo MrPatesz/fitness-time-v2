@@ -2,7 +2,7 @@ import {Button, Group, Stack, TextInput} from "@mantine/core";
 import {useForm} from "@mantine/form";
 import {useTranslation} from "next-i18next";
 import {FunctionComponent} from "react";
-import {BasicGroupType, CreateGroupType} from "../../models/group/Group";
+import {BasicGroupType, CreateGroupType} from "../../models/Group";
 import {RichTextField} from "../rich-text/RichTextField";
 
 export const GroupForm: FunctionComponent<{
