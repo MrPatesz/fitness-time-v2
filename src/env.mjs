@@ -37,6 +37,7 @@ const client = z.object({
   NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: z.string().min(1),
   NEXT_PUBLIC_PUSHER_APP_KEY: z.string().min(1),
   NEXT_PUBLIC_PUSHER_CLUSTER: z.string().min(1),
+  NEXT_PUBLIC_VERCEL_ENV: z.enum(["development", "preview", "production"]),
   // NEXT_PUBLIC_CLIENTVAR: z.string().min(1),
 });
 
@@ -59,6 +60,7 @@ const processEnv = {
   NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
   NEXT_PUBLIC_PUSHER_APP_KEY: process.env.NEXT_PUBLIC_PUSHER_APP_KEY,
   NEXT_PUBLIC_PUSHER_CLUSTER: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
+  NEXT_PUBLIC_VERCEL_ENV: process.env.NEXT_PUBLIC_VERCEL_ENV,
   // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
 };
 
