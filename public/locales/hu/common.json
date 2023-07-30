@@ -77,7 +77,7 @@
       },
       "failedToUpdate": {
         "title": "Nem sikerült az esemény módosítása!",
-        "message": "Nem te hoztad létre ezt az eseményt!"
+        "message": "Az esemény nem kezdődhet a múltban!"
       },
       "participation": {
         "title": "Részvétel módosítva!",

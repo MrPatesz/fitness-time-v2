@@ -77,7 +77,7 @@
       },
       "failedToUpdate": {
         "title": "Could not update event!",
-        "message": "You do not own this event!"
+        "message": "Event must not start in the past!"
       },
       "participation": {
         "title": "Updated participation!",
