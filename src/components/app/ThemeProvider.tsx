@@ -1,5 +1,5 @@
 import {ColorScheme, ColorSchemeProvider, MantineProvider, MantineThemeOverride} from "@mantine/core";
-import {useColorScheme, useLocalStorage} from "@mantine/hooks";
+import {useLocalStorage} from "@mantine/hooks";
 import {ModalsProvider} from "@mantine/modals";
 import {NotificationsProvider} from "@mantine/notifications";
 import {useSession} from "next-auth/react";
@@ -11,13 +11,12 @@ import {ThemeColor} from "../../utils/enums";
 export const ThemeProvider: FunctionComponent<{
   children: JSX.Element;
 }> = ({children}) => {
-  const systemColorScheme = useColorScheme();
   const {locale = "en"} = useRouter();
   const {data: session} = useSession();
 
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
     key: 'mantine-color-scheme',
-    defaultValue: systemColorScheme,
+    defaultValue: 'dark',
     getInitialValueInEffect: true,
   });
   const toggleColorScheme = (value?: ColorScheme) => setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'));

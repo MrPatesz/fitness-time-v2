@@ -15,7 +15,7 @@ export const MutateEventSchema = z.object({
   price: z.number().min(1).nullable(),
   location: MutateLocationSchema,
   groupId: IdSchema.nullish(),
-}).refine(event => event.end > event.start, {
+}).refine(event => event.start > new Date(), {
   message: "Event must not start in the past",
 }).refine(event => event.end > event.start, {
   message: "Event must start before it ends",

@@ -19,17 +19,25 @@ export const EventForm: FunctionComponent<{
   originalEvent: CreateEventType | BasicEventType;
   onSubmit: (event: CreateEventType | BasicEventType) => void;
 }> = ({originalEvent, onSubmit}) => {
+  const {t} = useTranslation("common");
+
+  const getStartError = (start: Date) => start > new Date() ? null : t("eventForm.start.error");
+  const getEndError = (end: Date, start: Date) => (end > new Date() && end > start) ? null : t("eventForm.end.error");
+
   const form = useForm<CreateEventType | BasicEventType>({
     initialValues: originalEvent,
     validateInputOnChange: true,
+    initialErrors: {
+      start: getStartError(originalEvent.start),
+      end: getEndError(originalEvent.end, originalEvent.start),
+    },
     validate: {
       name: (value) => value.trim() ? null : t("eventForm.name.error"),
       location: (value: CreateLocationType | LocationType) => Boolean(value?.address) ? null : t("eventForm.location.error"),
-      start: (value) => value > new Date() ? null : t("eventForm.start.error"),
-      end: (value, formData) => (value > new Date() && value > formData.start) ? null : t("eventForm.end.error"),
+      start: getStartError,
+      end: (value, event) => getEndError(value, event.start),
     },
   });
-  const {t} = useTranslation("common");
 
   return (
     <form onSubmit={form.onSubmit((data) => onSubmit(data))}>
