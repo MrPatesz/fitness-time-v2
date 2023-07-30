@@ -8,8 +8,6 @@ import Link from "next/link";
 import {useRouter} from "next/router";
 import {Pencil} from "tabler-icons-react";
 import i18nConfig from "../../../next-i18next.config.mjs";
-import {AddComment} from "../../components/comment/AddComment";
-import {CommentCard} from "../../components/comment/CommentCard";
 import MapComponent from "../../components/location/MapComponent";
 import {QueryComponent} from "../../components/QueryComponent";
 import {RatingComponent} from "../../components/RatingComponent";
@@ -18,8 +16,8 @@ import {DetailedEventType} from "../../models/Event";
 import {api} from "../../utils/api";
 import {EventStatus} from "../../utils/enums";
 import {useLongDateFormatter, usePriceFormatter} from "../../utils/formatters";
-import {getBackgroundColor} from "../../utils/utilFunctions";
 import {EditEventForm} from "../../components/event/EditEventForm";
+import {CommentsComponent} from "../../components/event/CommentsComponent";
 
 export default function EventDetailsPage() {
   const theme = useMantineTheme();
@@ -31,9 +29,6 @@ export default function EventDetailsPage() {
 
   const eventId = parseInt(id as string);
   const eventQuery = api.event.getById.useQuery(eventId, {
-    enabled: isReady,
-  });
-  const commentsQuery = api.comment.getAllByEventId.useQuery(eventId, {
     enabled: isReady,
   });
   const userRatingQuery = api.rating.getCallerRating.useQuery(eventId, {
@@ -222,16 +217,7 @@ export default function EventDetailsPage() {
           </Stack>
         )}
       </QueryComponent>
-      <QueryComponent resourceName={t("resource.comments")} query={commentsQuery}>
-        <Card withBorder sx={{backgroundColor: getBackgroundColor(theme)}}>
-          <Stack>
-            <AddComment eventId={eventId}/>
-            {commentsQuery.data?.map(c => (
-              <CommentCard key={c.id} comment={c}/>
-            ))}
-          </Stack>
-        </Card>
-      </QueryComponent>
+      <CommentsComponent/>
     </Stack>
   );
 }
