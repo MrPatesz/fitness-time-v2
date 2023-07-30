@@ -1,4 +1,4 @@
-import {ActionIcon, Box, Card, Group, ScrollArea, Stack, useMantineTheme} from "@mantine/core";
+import {ActionIcon, Box, Card, Group, ScrollArea, Stack, Text, useMantineTheme} from "@mantine/core";
 import {useIntersection} from "@mantine/hooks";
 import {openModal} from "@mantine/modals";
 import {useTranslation} from "next-i18next";
@@ -61,7 +61,8 @@ export const GroupFeed: FunctionComponent<{
           right: 16,
         }}
       >
-        <Group position="right">
+        <Group position="apart">
+          <Text color="dimmed">{t("resource.events")}</Text>
           <ActionIcon
             size="lg"
             variant="filled"
