@@ -49,11 +49,13 @@ export default function EventDetailsPage() {
     },
   });
 
+  const editable = eventQuery.data?.status === EventStatus.PLANNED && eventQuery.data?.creatorId === session?.user.id;
+
   const defaultSpacing = "md";
   const defaultSpacingSize: number = theme.spacing[defaultSpacing];
   const mapSize = 400; // TODO responsive map size
   const itemHeights = {
-    eventName: 34,
+    eventName: editable ? 34 : 31,
     eventDate: 24.8,
     cardPaddingCount: 2,
     ...(eventQuery.data?.status === EventStatus.ARCHIVE ? {
@@ -134,7 +136,7 @@ export default function EventDetailsPage() {
                       </Text>
                     </Link>
                   </Group>
-                  {eventQuery.data.status === EventStatus.PLANNED && eventQuery.data.creatorId === session?.user.id && (
+                  {editable && (
                     <ActionIcon
                       size="lg"
                       variant="filled"

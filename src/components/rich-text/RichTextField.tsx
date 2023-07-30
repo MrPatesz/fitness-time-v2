@@ -16,7 +16,7 @@ export const RichTextField: FunctionComponent<{
   const [opened, setOpened] = useState(false);
 
   const value = formInputProps.value as string | undefined;
-  const onChange = formInputProps.value as (newValue: string) => void;
+  const onChange = formInputProps.onChange as (newValue: string) => void;
 
   return (
     <>
