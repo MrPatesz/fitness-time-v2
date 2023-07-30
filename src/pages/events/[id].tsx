@@ -183,8 +183,8 @@ export default function EventDetailsPage() {
               />
             </Group>
             <Card withBorder>
-              <Stack>
-                <Group position="apart">
+              <Group position="apart" align="start" noWrap>
+                <Stack>
                   <Group spacing="xs">
                     {eventQuery.data.limit && (
                       <Badge color="red">
@@ -195,24 +195,24 @@ export default function EventDetailsPage() {
                       {t("eventDetails.participants")}
                     </Text>
                   </Group>
-                  {participateButton(eventQuery.data)}
-                </Group>
-                <Group spacing="xs">
-                  {eventQuery.data.participants.map((p, index: number) => (
-                    <Link
-                      href={`/users/${p.id}`}
-                      locale={locale}
-                      passHref
-                      key={p.id}
-                    >
-                      <Text sx={{cursor: "pointer"}}>
-                        {p.name}
-                        {index !== eventQuery.data.participants.length - 1 && ","}
-                      </Text>
-                    </Link>
-                  ))}
-                </Group>
-              </Stack>
+                  <Group spacing="xs">
+                    {eventQuery.data.participants.map((p, index: number) => (
+                      <Link
+                        href={`/users/${p.id}`}
+                        locale={locale}
+                        passHref
+                        key={p.id}
+                      >
+                        <Text sx={{cursor: "pointer"}}>
+                          {p.name}
+                          {index !== eventQuery.data.participants.length - 1 && ","}
+                        </Text>
+                      </Link>
+                    ))}
+                  </Group>
+                </Stack>
+                {participateButton(eventQuery.data)}
+              </Group>
             </Card>
           </Stack>
         )}
