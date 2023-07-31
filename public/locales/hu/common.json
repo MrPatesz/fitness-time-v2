@@ -289,5 +289,10 @@
   "feedPage": {
     "maxDistance": "Maximum távolság:",
     "useMaxDistance": "Maximum távolság használata"
+  },
+  "calendarPage": {
+    "today": "Ma",
+    "month": "Hónap",
+    "week": "Hét"
   }
 }

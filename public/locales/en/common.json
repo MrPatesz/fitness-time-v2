@@ -289,5 +289,10 @@
   "feedPage": {
     "maxDistance": "Maximum Distance:",
     "useMaxDistance": "Use Maximum Distance"
+  },
+  "calendarPage": {
+    "today": "Today",
+    "month": "Month",
+    "week": "Week"
   }
 }

@@ -15,12 +15,16 @@ import interactionPlugin from '@fullcalendar/interaction';
 import {openModal} from "@mantine/modals";
 import {CreateEventForm} from "../components/event/CreateEventForm";
 import {BasicEventType} from "../models/Event";
+import {useMediaQuery} from "@mantine/hooks";
 
 export default function CalendarPage() {
   const theme = useMantineTheme();
   const {push: pushRoute, locale = "en"} = useRouter();
   const {data: session} = useSession();
   const {t} = useTranslation("common");
+  const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
+  const md = useMediaQuery(`(min-width: ${theme.breakpoints.md}px)`);
+  const xl = useMediaQuery(`(min-width: ${theme.breakpoints.xl}px)`);
 
   const eventsQuery = api.event.getCalendar.useQuery();
   const updateEvent = api.event.update.useMutation({
@@ -47,6 +51,32 @@ export default function CalendarPage() {
           left: 'prev,today,next',
           center: 'title',
           right: 'timeGridWeek,dayGridMonth',
+        }}
+        titleFormat={md ? {
+          year: 'numeric', month: 'long',
+        } : xs ? {
+          year: '2-digit', month: 'short',
+        } : {
+          month: 'short',
+        }}
+        buttonText={{
+          today: t('calendarPage.today'),
+          month: t('calendarPage.month'),
+          week: t('calendarPage.week'),
+        }}
+        views={{
+          timeGridWeek: {
+            dayHeaderFormat: xl ? {
+              weekday: 'long', day: '2-digit', omitCommas: true
+            } : md ? {
+              weekday: 'short', day: '2-digit', omitCommas: true
+            } : {
+              weekday: 'short', day: 'numeric', omitCommas: true
+            },
+          },
+          dayGridMonth: {
+            dayHeaderFormat: md ? {weekday: 'long'} : undefined,
+          },
         }}
         editable
         selectable

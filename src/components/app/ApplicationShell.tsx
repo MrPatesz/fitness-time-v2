@@ -93,10 +93,10 @@ export const ApplicationShell: FunctionComponent<{
     <AppShell
       hidden={!session}
       header={
-        <Header height={56} p="xs" pr="md">
-          <Group align="center" position="apart" pl={xs ? "xs" : 1}>
-            <Group>
-              <MediaQuery largerThan="xs" styles={{display: "none"}}>
+        <Header height={56} py="xs" px="md">
+          <Group align="center" position="apart">
+            <Group spacing="xs">
+              <MediaQuery largerThan="sm" styles={{display: "none"}}>
                 <Burger
                   opened={showNavbar}
                   onClick={toggleNavbar}
@@ -123,9 +123,9 @@ export const ApplicationShell: FunctionComponent<{
           </Group>
         </Header>
       }
-      navbarOffsetBreakpoint="xs"
+      navbarOffsetBreakpoint="sm"
       navbar={
-        <Navbar width={{base: 211}} p="xs" hiddenBreakpoint="xs" hidden={!showNavbar} zIndex={401}>
+        <Navbar width={{base: 211}} p="xs" hiddenBreakpoint="sm" hidden={!showNavbar} zIndex={401}>
           <Navbar.Section grow>
             {[
               {label: t("navbar.calendar"), route: calendarRoute, icon: CalendarEvent},
