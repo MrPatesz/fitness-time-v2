@@ -77,7 +77,7 @@ export const groupRouter = createTRPCRouter({
     .output(BasicGroupSchema)
     .mutation(async ({input, ctx: {session: {user: {id: callerId}}, prisma}}) => {
       const updatedGroup = await prisma.group.update({
-        where: {id: input.id},
+        where: {id: input.id, creatorId: callerId},
         data: {
           ...input.group,
           creator: {connect: {id: callerId}},

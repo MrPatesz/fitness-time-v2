@@ -87,7 +87,7 @@ export const commentRouter = createTRPCRouter({
     .output(BasicCommentSchema)
     .mutation(async ({input: {commentId, comment, eventId}, ctx: {session: {user: {id: callerId}}, prisma}}) => {
       const updatedComment = await prisma.comment.update({
-        where: {id: commentId},
+        where: {id: commentId, userId: callerId},
         data: {
           ...comment,
           event: {connect: {id: eventId}},

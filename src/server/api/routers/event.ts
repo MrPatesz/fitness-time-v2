@@ -243,7 +243,7 @@ export const eventRouter = createTRPCRouter({
     .output(BasicEventSchema)
     .mutation(async ({input, ctx: {session: {user: {id: callerId}}, prisma}}) => {
       const updatedEvent = await prisma.event.update({
-        where: {id: input.id},
+        where: {id: input.id, creatorId: callerId},
         data: {
           ...input.event,
           groupId: undefined,

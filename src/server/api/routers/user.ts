@@ -74,9 +74,9 @@ export const userRouter = createTRPCRouter({
   update: protectedProcedure
     .input(UpdateProfileSchema)
     .output(UpdateProfileSchema)
-    .mutation(async ({input, ctx: {prisma}}) => {
+    .mutation(async ({input, ctx: {session: {user: {id: callerId}}, prisma}}) => {
       const updatedUser = await prisma.user.update({
-        where: {id: input.id},
+        where: {id: callerId},
         data: {
           ...input,
           location: input.location ? {
