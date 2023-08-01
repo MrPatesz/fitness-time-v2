@@ -66,12 +66,10 @@ export default function CalendarPage() {
         }}
         views={{
           timeGridWeek: {
-            dayHeaderFormat: xl ? {
-              weekday: 'long', day: '2-digit', omitCommas: true
-            } : md ? {
-              weekday: 'short', day: '2-digit', omitCommas: true
-            } : {
-              weekday: 'short', day: 'numeric', omitCommas: true
+            dayHeaderFormat: {
+              weekday: xl ? 'long' : 'narrow',
+              day: '2-digit',
+              omitCommas: true,
             },
           },
           dayGridMonth: {
