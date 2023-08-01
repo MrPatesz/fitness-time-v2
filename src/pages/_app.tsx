@@ -1,14 +1,14 @@
-import {type Session} from "next-auth";
-import {SessionProvider} from "next-auth/react";
-import {appWithTranslation} from "next-i18next";
-import {type AppType} from "next/app";
-import Head from "next/head";
-import i18nConfig from "../../next-i18next.config.mjs";
-import {ApplicationShell} from "../components/app/ApplicationShell";
-import {ThemeProvider} from "../components/app/ThemeProvider";
-import "../styles/calendar.css";
-import "../styles/globals.css";
-import {api} from "../utils/api";
+import {type Session} from 'next-auth';
+import {SessionProvider} from 'next-auth/react';
+import {appWithTranslation} from 'next-i18next';
+import {type AppType} from 'next/app';
+import Head from 'next/head';
+import i18nConfig from '../../next-i18next.config.mjs';
+import {ApplicationShell} from '../components/app/ApplicationShell';
+import {ThemeProvider} from '../components/app/ThemeProvider';
+import '../styles/calendar.css';
+import '../styles/globals.css';
+import {api} from '../utils/api';
 import {Analytics} from '@vercel/analytics/react';
 
 const App: AppType<{ session: Session | null }> = ({

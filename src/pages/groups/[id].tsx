@@ -1,31 +1,31 @@
-import {ActionIcon, Box, Group, SimpleGrid, Stack, Text, useMantineTheme} from "@mantine/core";
-import {useMediaQuery} from "@mantine/hooks";
-import {openModal} from "@mantine/modals";
-import {showNotification} from "@mantine/notifications";
-import {useSession} from "next-auth/react";
-import {useTranslation} from "next-i18next";
-import {serverSideTranslations} from "next-i18next/serverSideTranslations";
-import Link from "next/link";
-import {useRouter} from "next/router";
-import {useMemo} from "react";
-import {Pencil} from "tabler-icons-react";
-import i18nConfig from "../../../next-i18next.config.mjs";
-import {GroupChat} from "../../components/group/GroupChat";
-import {GroupFeed} from "../../components/group/GroupFeed";
-import {MembersComponent} from "../../components/group/MembersComponent";
-import {QueryComponent} from "../../components/QueryComponent";
-import {RatingComponent} from "../../components/RatingComponent";
-import {RichTextDisplay} from "../../components/rich-text/RichTextDisplay";
-import {api} from "../../utils/api";
-import {useLongDateFormatter} from "../../utils/formatters";
-import {EditGroupForm} from "../../components/group/EditGroupForm";
+import {ActionIcon, Box, Group, SimpleGrid, Stack, Text, useMantineTheme} from '@mantine/core';
+import {useMediaQuery} from '@mantine/hooks';
+import {openModal} from '@mantine/modals';
+import {showNotification} from '@mantine/notifications';
+import {useSession} from 'next-auth/react';
+import {useTranslation} from 'next-i18next';
+import {serverSideTranslations} from 'next-i18next/serverSideTranslations';
+import Link from 'next/link';
+import {useRouter} from 'next/router';
+import {useMemo} from 'react';
+import {Pencil} from 'tabler-icons-react';
+import i18nConfig from '../../../next-i18next.config.mjs';
+import {GroupChat} from '../../components/group/GroupChat';
+import {GroupFeed} from '../../components/group/GroupFeed';
+import {MembersComponent} from '../../components/group/MembersComponent';
+import {QueryComponent} from '../../components/QueryComponent';
+import {RatingComponent} from '../../components/RatingComponent';
+import {RichTextDisplay} from '../../components/rich-text/RichTextDisplay';
+import {api} from '../../utils/api';
+import {useLongDateFormatter} from '../../utils/formatters';
+import {EditGroupForm} from '../../components/group/EditGroupForm';
 
 export default function GroupDetailsPage() {
   const theme = useMantineTheme();
   const md = useMediaQuery(`(min-width: ${theme.breakpoints.md}px)`);
-  const {query: {id}, isReady, locale = "en"} = useRouter();
+  const {query: {id}, isReady, locale = 'en'} = useRouter();
   const {data: session} = useSession();
-  const {t} = useTranslation("common");
+  const {t} = useTranslation('common');
   const longDateFormatter = useLongDateFormatter();
 
   const groupId = parseInt(id as string);
@@ -39,21 +39,21 @@ export default function GroupDetailsPage() {
   const useJoinGroup = api.group.join.useMutation({
     onSuccess: (_data, {join}) => groupQuery.refetch().then(() =>
       showNotification({
-        color: "green",
-        title: t(join ? "notification.group.join.title" : "notification.group.leave.title"),
-        message: t(join ? "notification.group.join.message" : "notification.group.leave.message"),
+        color: 'green',
+        title: t(join ? 'notification.group.join.title' : 'notification.group.leave.title'),
+        message: t(join ? 'notification.group.join.message' : 'notification.group.leave.message'),
       })
     ),
   });
 
   const isMember = useMemo(() => {
     return Boolean(groupQuery.data?.members.find(m => m.id === session?.user.id));
-  }, [groupQuery.data?.members, session?.user.id])
+  }, [groupQuery.data?.members, session?.user.id]);
 
   return (
-    <QueryComponent resourceName={t("resource.groupDetails")} query={groupQuery}>
+    <QueryComponent resourceName={t('resource.groupDetails')} query={groupQuery}>
       {groupQuery.data && (
-        <Stack sx={{height: "100%"}}>
+        <Stack sx={{height: '100%'}}>
           <Group position="apart" align="start">
             <Stack>
               <Group align="end">
@@ -80,7 +80,7 @@ export default function GroupDetailsPage() {
                     variant="filled"
                     color={theme.fn.themeColor(theme.primaryColor)}
                     onClick={() => openModal({
-                      title: t("modal.group.edit"),
+                      title: t('modal.group.edit'),
                       children: <EditGroupForm groupId={groupId}/>,
                     })}
                   >
@@ -119,5 +119,5 @@ export default function GroupDetailsPage() {
 }
 
 export const getServerSideProps = async ({locale}: { locale: string }) => ({
-  props: {...(await serverSideTranslations(locale, ["common"], i18nConfig))},
+  props: {...(await serverSideTranslations(locale, ['common'], i18nConfig))},
 });

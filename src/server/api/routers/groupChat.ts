@@ -1,8 +1,8 @@
-import {z} from "zod";
-import {BasicMessageSchema, CreateMessageSchema} from "../../../models/Message";
-import {createTRPCRouter, protectedProcedure} from "../trpc";
-import {Prisma} from ".prisma/client";
-import {IdSchema} from "../../../models/Utils";
+import {z} from 'zod';
+import {BasicMessageSchema, CreateMessageSchema} from '../../../models/Message';
+import {createTRPCRouter, protectedProcedure} from '../trpc';
+import {Prisma} from '.prisma/client';
+import {IdSchema} from '../../../models/Utils';
 
 export const groupChatRouter = createTRPCRouter({
   getMessages: protectedProcedure
@@ -57,7 +57,7 @@ export const groupChatRouter = createTRPCRouter({
       });
 
       const result = BasicMessageSchema.parse(message);
-      void pusher.trigger(result.groupId.toString(), "create", null);
+      void pusher.trigger(result.groupId.toString(), 'create', null);
       return result;
     }),
 });

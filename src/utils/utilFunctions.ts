@@ -1,12 +1,12 @@
-import {MantineTheme} from "@mantine/core";
+import {MantineTheme} from '@mantine/core';
 
 export const refreshSession = () => {
-  const event = new Event("visibilitychange");
+  const event = new Event('visibilitychange');
   document.dispatchEvent(event);
 };
 
 export const getBackgroundColor = (theme: MantineTheme) => {
-  return theme.colorScheme === "dark"
+  return theme.colorScheme === 'dark'
     ? theme.colors.dark[8]
     : theme.colors.gray[0];
 };
@@ -20,16 +20,16 @@ export const isValidUrl = (url: string) => {
 };
 
 export const getFirstDayOfWeek = (locale: string) => {
-  if (locale === "hu") {
-    return "monday";
+  if (locale === 'hu') {
+    return 'monday';
   } else {
-    return "sunday";
+    return 'sunday';
   }
 };
 
 export const getInitials = (username: string) => {
-  const names: string[] = username.split(" ");
-  let initials: string[] | string = "";
+  const names: string[] = username.split(' ');
+  let initials: string[] | string = '';
 
   switch (names.length) {
     case 0:
@@ -55,5 +55,5 @@ export const formatDistance = (distance: number | undefined) => {
   if (distance === undefined) {
     return;
   }
-  return `${distance.toFixed(0)} km`
+  return `${distance.toFixed(0)} km`;
 };

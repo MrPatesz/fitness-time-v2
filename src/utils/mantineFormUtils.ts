@@ -1,7 +1,7 @@
-import {UseFormReturnType} from "@mantine/form";
-import {CreateLocationType} from "../models/Location";
+import {UseFormReturnType} from '@mantine/form';
+import {CreateLocationType} from '../models/Location';
 
-export const getFormStringValue = (form: UseFormReturnType<any>, path: string) => (form.getInputProps(path).value as string | undefined) ?? "";
+export const getFormStringValue = (form: UseFormReturnType<any>, path: string) => (form.getInputProps(path).value as string | undefined) ?? '';
 
 export const getFormStringOnChange = (form: UseFormReturnType<any>, path: string) => (form.getInputProps(path).onChange as (newValue: string) => void);
 
@@ -13,6 +13,6 @@ export const getFormDateOnChange = (form: UseFormReturnType<any>, path: string) 
 
 export const getFormError = (form: UseFormReturnType<any>, path: string) => (form.getInputProps(path).error as string | undefined);
 
-export const getFormLocationValue = (form: UseFormReturnType<any>) => (form.getInputProps("location").value as CreateLocationType | null);
+export const getFormLocationValue = (form: UseFormReturnType<any>) => (form.getInputProps('location').value as CreateLocationType | null);
 
-export const getFormLocationOnChange = (form: UseFormReturnType<any>) => (form.getInputProps("location").onChange as (newValue: CreateLocationType | null) => void);
+export const getFormLocationOnChange = (form: UseFormReturnType<any>) => (form.getInputProps('location').onChange as (newValue: CreateLocationType | null) => void);

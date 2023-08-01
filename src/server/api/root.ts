@@ -1,11 +1,11 @@
-import {eventRouter} from "./routers/event";
-import {exampleRouter} from "./routers/example";
-import {groupRouter} from "./routers/group";
-import {userRouter} from "./routers/user";
-import {createTRPCRouter} from "./trpc";
-import {commentRouter} from "./routers/comment";
-import {groupChatRouter} from "./routers/groupChat";
-import {ratingRouter} from "./routers/rating";
+import {eventRouter} from './routers/event';
+import {exampleRouter} from './routers/example';
+import {groupRouter} from './routers/group';
+import {userRouter} from './routers/user';
+import {createTRPCRouter} from './trpc';
+import {commentRouter} from './routers/comment';
+import {groupChatRouter} from './routers/groupChat';
+import {ratingRouter} from './routers/rating';
 
 /**
  * This is the primary router for your server.

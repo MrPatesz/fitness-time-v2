@@ -1,15 +1,15 @@
-import {closeAllModals} from "@mantine/modals";
-import {showNotification} from "@mantine/notifications";
-import {useTranslation} from "next-i18next";
-import {FunctionComponent} from "react";
-import {api} from "../../utils/api";
-import {EventForm} from "./EventForm";
-import {QueryComponent} from "../QueryComponent";
+import {closeAllModals} from '@mantine/modals';
+import {showNotification} from '@mantine/notifications';
+import {useTranslation} from 'next-i18next';
+import {FunctionComponent} from 'react';
+import {api} from '../../utils/api';
+import {EventForm} from './EventForm';
+import {QueryComponent} from '../QueryComponent';
 
 export const EditEventForm: FunctionComponent<{
   eventId: number;
 }> = ({eventId}) => {
-  const {t} = useTranslation("common");
+  const {t} = useTranslation('common');
 
   const queryContext = api.useContext();
   const editedEventQuery = api.event.getById.useQuery(eventId, {
@@ -20,9 +20,9 @@ export const EditEventForm: FunctionComponent<{
     onSuccess: () => queryContext.event.invalidate().then(() => {
       closeAllModals();
       showNotification({
-        color: "green",
-        title: t("notification.event.update.title"),
-        message: t("notification.event.update.message"),
+        color: 'green',
+        title: t('notification.event.update.title'),
+        message: t('notification.event.update.message'),
       });
     }),
   });
@@ -30,7 +30,7 @@ export const EditEventForm: FunctionComponent<{
   return (
     <QueryComponent
       query={editedEventQuery}
-      resourceName={t("resource.eventDetails")}
+      resourceName={t('resource.eventDetails')}
     >
       {editedEventQuery.data && (
         <EventForm

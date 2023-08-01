@@ -1,9 +1,9 @@
-import {Box, SimpleGrid, useMantineTheme} from "@mantine/core";
-import {useMediaQuery} from "@mantine/hooks";
-import {ForwardedRef, forwardRef} from "react";
-import {BasicEventType} from "../../models/Event";
-import {CenteredLoader} from "../CenteredLoader";
-import {EventCard} from "./EventCard";
+import {Box, SimpleGrid, useMantineTheme} from '@mantine/core';
+import {useMediaQuery} from '@mantine/hooks';
+import {ForwardedRef, forwardRef} from 'react';
+import {BasicEventType} from '../../models/Event';
+import {CenteredLoader} from '../CenteredLoader';
+import {EventCard} from './EventCard';
 
 export const EventGrid = forwardRef(({events}: {
   events: BasicEventType[];

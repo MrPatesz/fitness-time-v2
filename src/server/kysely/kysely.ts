@@ -1,7 +1,7 @@
-import {Kysely, PostgresDialect,} from 'kysely'
-import {Pool} from 'pg'
-import {env} from "../../env.mjs";
-import {DB} from "./generatedTypes";
+import {Kysely, PostgresDialect,} from 'kysely';
+import {Pool} from 'pg';
+import {env} from '../../env.mjs';
+import {DB} from './generatedTypes';
 
 const globalForKysely = globalThis as unknown as { kysely: Kysely<DB> };
 
@@ -17,6 +17,6 @@ export const kysely =
         database: env.POSTGRES_DATABASE,
       })
     })
-  })
+  });
 
-if (env.NODE_ENV !== "production") globalForKysely.kysely = kysely;
+if (env.NODE_ENV !== 'production') globalForKysely.kysely = kysely;

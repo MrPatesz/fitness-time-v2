@@ -1,8 +1,8 @@
-import {z} from "zod";
-import {ThemeColor} from "../utils/enums";
-import {BasicEventSchema} from "./Event";
-import {LocationSchema, MutateLocationSchema} from "./Location";
-import {DescriptionSchema, NameSchema} from "./Utils";
+import {z} from 'zod';
+import {ThemeColor} from '../utils/enums';
+import {BasicEventSchema} from './Event';
+import {LocationSchema, MutateLocationSchema} from './Location';
+import {DescriptionSchema, NameSchema} from './Utils';
 
 export const BasicUserSchema = z.object({
   id: z.string(),

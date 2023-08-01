@@ -1,4 +1,4 @@
-import {z} from "zod";
+import {z} from 'zod';
 
 export const PaginateBaseSchema = z.object({
   page: z.number().min(1),

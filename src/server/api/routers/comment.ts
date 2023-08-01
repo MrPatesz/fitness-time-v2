@@ -1,9 +1,9 @@
-import {z} from "zod";
-import {BasicCommentSchema, DetailedCommentSchema, MutateCommentSchema} from "../../../models/Comment";
-import {SortCommentByProperty, SortDirection} from "../../../utils/enums";
-import {createTRPCRouter, protectedProcedure} from "../trpc";
-import {Prisma} from ".prisma/client";
-import {IdSchema} from "../../../models/Utils";
+import {z} from 'zod';
+import {BasicCommentSchema, DetailedCommentSchema, MutateCommentSchema} from '../../../models/Comment';
+import {SortCommentByProperty, SortDirection} from '../../../utils/enums';
+import {createTRPCRouter, protectedProcedure} from '../trpc';
+import {Prisma} from '.prisma/client';
+import {IdSchema} from '../../../models/Utils';
 
 export const commentRouter = createTRPCRouter({
   getAllByEventId: protectedProcedure
@@ -44,7 +44,7 @@ export const commentRouter = createTRPCRouter({
       const where = {
         userId: callerId,
         text: {
-          mode: "insensitive",
+          mode: 'insensitive',
           contains: searchQuery,
         } as Prisma.StringFilter,
       };

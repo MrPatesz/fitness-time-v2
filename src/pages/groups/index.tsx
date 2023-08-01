@@ -1,7 +1,7 @@
-import {serverSideTranslations} from "next-i18next/serverSideTranslations";
-import i18nConfig from "../../../next-i18next.config.mjs";
-import GroupTable from "../../components/group/GroupTable";
-import {GroupTableDisplayPlace} from "../../utils/enums";
+import {serverSideTranslations} from 'next-i18next/serverSideTranslations';
+import i18nConfig from '../../../next-i18next.config.mjs';
+import GroupTable from '../../components/group/GroupTable';
+import {GroupTableDisplayPlace} from '../../utils/enums';
 
 export default function GroupsPage() {
   return (
@@ -10,5 +10,5 @@ export default function GroupsPage() {
 }
 
 export const getServerSideProps = async ({locale}: { locale: string }) => ({
-  props: {...(await serverSideTranslations(locale, ["common"], i18nConfig))},
+  props: {...(await serverSideTranslations(locale, ['common'], i18nConfig))},
 });

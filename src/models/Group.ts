@@ -1,6 +1,6 @@
-import {z} from "zod";
-import {BasicUserSchema} from "./User";
-import {DescriptionSchema, IdSchema, NameSchema} from "./Utils";
+import {z} from 'zod';
+import {BasicUserSchema} from './User';
+import {DescriptionSchema, IdSchema, NameSchema} from './Utils';
 
 export const MutateGroupSchema = z.object({
   name: NameSchema,

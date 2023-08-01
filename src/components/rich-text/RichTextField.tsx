@@ -1,17 +1,17 @@
-import {ActionIcon, Group, Modal, TextInput} from "@mantine/core";
-import {useTranslation} from "next-i18next";
-import {FunctionComponent, useState} from "react";
-import {PencilPlus, X} from "tabler-icons-react";
-import RichTextEditor from "./RichTextEditor";
-import {UseFormReturnType} from "@mantine/form";
+import {ActionIcon, Group, Modal, TextInput} from '@mantine/core';
+import {useTranslation} from 'next-i18next';
+import {FunctionComponent, useState} from 'react';
+import {PencilPlus, X} from 'tabler-icons-react';
+import RichTextEditor from './RichTextEditor';
+import {UseFormReturnType} from '@mantine/form';
 
 export const RichTextField: FunctionComponent<{
   label?: string;
   placeholder?: string;
   maxLength?: number;
-  formInputProps: ReturnType<UseFormReturnType<any>["getInputProps"]>;
+  formInputProps: ReturnType<UseFormReturnType<any>['getInputProps']>;
 }> = ({label, placeholder, formInputProps, maxLength = 1024}) => {
-  const {t} = useTranslation("common");
+  const {t} = useTranslation('common');
 
   const [opened, setOpened] = useState(false);
 
@@ -25,7 +25,7 @@ export const RichTextField: FunctionComponent<{
         placeholder={placeholder}
         sx={{flexGrow: 1}}
         {...formInputProps}
-        disabled={value?.includes("</")}
+        disabled={value?.includes('</')}
         maxLength={maxLength}
         rightSectionWidth={74}
         rightSection={(
@@ -33,7 +33,7 @@ export const RichTextField: FunctionComponent<{
             <ActionIcon
               disabled={!value}
               variant="transparent"
-              onClick={() => onChange("")}
+              onClick={() => onChange('')}
             >
               <X/>
             </ActionIcon>
@@ -49,7 +49,7 @@ export const RichTextField: FunctionComponent<{
       <Modal
         opened={opened}
         onClose={() => setOpened(false)}
-        title={label ? t("modal.edit", {propertyName: label}) : t("modal.comment.edit")}
+        title={label ? t('modal.edit', {propertyName: label}) : t('modal.comment.edit')}
         size="xl"
         centered={true}
         closeOnClickOutside={false}

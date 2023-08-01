@@ -1,8 +1,8 @@
-import {z} from "zod";
-import {PaginateUsersSchema} from "../../../models/pagination/PaginateUsers";
-import {BasicUserSchema, DetailedUserSchema, ProfileSchema, UpdateProfileSchema} from "../../../models/User";
-import {createTRPCRouter, protectedProcedure} from "../trpc";
-import {Prisma} from ".prisma/client";
+import {z} from 'zod';
+import {PaginateUsersSchema} from '../../../models/pagination/PaginateUsers';
+import {BasicUserSchema, DetailedUserSchema, ProfileSchema, UpdateProfileSchema} from '../../../models/User';
+import {createTRPCRouter, protectedProcedure} from '../trpc';
+import {Prisma} from '.prisma/client';
 
 export const userRouter = createTRPCRouter({
   getPaginatedUsers: protectedProcedure
@@ -14,7 +14,7 @@ export const userRouter = createTRPCRouter({
                   }) => {
       const where = searchQuery ? {
         name: {
-          mode: "insensitive",
+          mode: 'insensitive',
           contains: searchQuery,
         } as Prisma.StringFilter,
       } : undefined;

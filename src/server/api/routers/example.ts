@@ -1,5 +1,5 @@
-import {z} from "zod";
-import {createTRPCRouter, protectedProcedure, publicProcedure} from "../trpc";
+import {z} from 'zod';
+import {createTRPCRouter, protectedProcedure, publicProcedure} from '../trpc';
 
 export const exampleRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ctx}) => {
@@ -11,10 +11,10 @@ export const exampleRouter = createTRPCRouter({
     .query(({input: {text}}) => {
       return {
         greeting: `Hello ${text}`,
-      }
+      };
     }),
 
   getSecretMessage: protectedProcedure.query(() => {
-    return "you can now see this secret message!"
+    return 'you can now see this secret message!';
   })
 });

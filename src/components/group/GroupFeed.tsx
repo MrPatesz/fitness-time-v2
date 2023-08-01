@@ -1,21 +1,21 @@
-import {ActionIcon, Box, Card, Group, ScrollArea, Stack, Text, useMantineTheme} from "@mantine/core";
-import {useIntersection} from "@mantine/hooks";
-import {openModal} from "@mantine/modals";
-import {useTranslation} from "next-i18next";
-import {FunctionComponent, useEffect, useMemo, useRef} from "react";
-import {Plus} from "tabler-icons-react";
-import {BasicEventType} from "../../models/Event";
-import {api} from "../../utils/api";
-import {getBackgroundColor} from "../../utils/utilFunctions";
-import {CenteredLoader} from "../CenteredLoader";
-import {EventCard} from "../event/EventCard";
-import {CreateEventForm} from "../event/CreateEventForm";
+import {ActionIcon, Box, Card, Group, ScrollArea, Stack, Text, useMantineTheme} from '@mantine/core';
+import {useIntersection} from '@mantine/hooks';
+import {openModal} from '@mantine/modals';
+import {useTranslation} from 'next-i18next';
+import {FunctionComponent, useEffect, useMemo, useRef} from 'react';
+import {Plus} from 'tabler-icons-react';
+import {BasicEventType} from '../../models/Event';
+import {api} from '../../utils/api';
+import {getBackgroundColor} from '../../utils/utilFunctions';
+import {CenteredLoader} from '../CenteredLoader';
+import {EventCard} from '../event/EventCard';
+import {CreateEventForm} from '../event/CreateEventForm';
 
 export const GroupFeed: FunctionComponent<{
   groupId: number;
 }> = ({groupId}) => {
   const theme = useMantineTheme();
-  const {t} = useTranslation("common");
+  const {t} = useTranslation('common');
   const lastEventRef = useRef<HTMLElement>(null);
   const {ref, entry} = useIntersection({
     root: lastEventRef.current,
@@ -40,21 +40,21 @@ export const GroupFeed: FunctionComponent<{
 
   const events: BasicEventType[] = useMemo(() => {
     return data?.pages.flatMap(page => page.events) ?? [];
-  }, [data?.pages])
+  }, [data?.pages]);
 
   return (
     <Card
       withBorder
       sx={theme => ({
         backgroundColor: getBackgroundColor(theme),
-        height: "100%",
+        height: '100%',
         minHeight: 300,
-        position: "relative",
+        position: 'relative',
       })}
     >
       <Stack
         sx={{
-          position: "absolute",
+          position: 'absolute',
           top: 16,
           bottom: 16,
           left: 16,
@@ -62,13 +62,13 @@ export const GroupFeed: FunctionComponent<{
         }}
       >
         <Group position="apart">
-          <Text color="dimmed">{t("resource.events")}</Text>
+          <Text color="dimmed">{t('resource.events')}</Text>
           <ActionIcon
             size="lg"
             variant="filled"
             color={theme.fn.themeColor(theme.primaryColor)}
             onClick={() => openModal({
-              title: t("modal.event.create"),
+              title: t('modal.event.create'),
               children: <CreateEventForm groupId={groupId}/>,
             })}
           >
@@ -78,7 +78,7 @@ export const GroupFeed: FunctionComponent<{
         <ScrollArea>
           <Stack>
             {error ? (
-              <Card withBorder>{t("queryComponent.error", {resourceName: t("resource.feed")})}</Card>
+              <Card withBorder>{t('queryComponent.error', {resourceName: t('resource.feed')})}</Card>
             ) : events.map((event, index) => (
               <Box ref={(index === events.length - 1) ? ref : undefined} key={event.id}>
                 <EventCard event={event}/>

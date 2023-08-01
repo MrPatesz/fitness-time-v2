@@ -1,33 +1,33 @@
-import {ActionIcon, Box, Card, Group, MantineNumberSize, Stack, Text, TextInput, useMantineTheme} from "@mantine/core";
-import {useDebouncedValue} from "@mantine/hooks";
-import {openConfirmModal, openModal} from "@mantine/modals";
-import {showNotification} from "@mantine/notifications";
-import {IconSearch} from "@tabler/icons";
-import {DataTable, DataTableSortStatus} from "mantine-datatable";
-import {useTranslation} from "next-i18next";
-import Link from "next/link";
-import {useRouter} from "next/router";
-import {FunctionComponent, useEffect, useState} from "react";
-import {Pencil, Trash} from "tabler-icons-react";
-import {DetailedCommentType} from "../../models/Comment";
-import {api} from "../../utils/api";
-import {SortCommentByProperty, SortDirection} from "../../utils/enums";
-import {useLongDateFormatter} from "../../utils/formatters";
-import {PAGE_SIZES} from "../event/EventTable";
-import {QueryComponent} from "../QueryComponent";
-import {RichTextDisplay} from "../rich-text/RichTextDisplay";
-import {CommentForm} from "./CommentForm";
+import {ActionIcon, Box, Card, Group, MantineNumberSize, Stack, Text, TextInput, useMantineTheme} from '@mantine/core';
+import {useDebouncedValue} from '@mantine/hooks';
+import {openConfirmModal, openModal} from '@mantine/modals';
+import {showNotification} from '@mantine/notifications';
+import {IconSearch} from '@tabler/icons';
+import {DataTable, DataTableSortStatus} from 'mantine-datatable';
+import {useTranslation} from 'next-i18next';
+import Link from 'next/link';
+import {useRouter} from 'next/router';
+import {FunctionComponent, useEffect, useState} from 'react';
+import {Pencil, Trash} from 'tabler-icons-react';
+import {DetailedCommentType} from '../../models/Comment';
+import {api} from '../../utils/api';
+import {SortCommentByProperty, SortDirection} from '../../utils/enums';
+import {useLongDateFormatter} from '../../utils/formatters';
+import {PAGE_SIZES} from '../event/EventTable';
+import {QueryComponent} from '../QueryComponent';
+import {RichTextDisplay} from '../rich-text/RichTextDisplay';
+import {CommentForm} from './CommentForm';
 
 const CommentTable: FunctionComponent = () => {
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(PAGE_SIZES.at(0) as number);
-  const [sortBy, setSortBy] = useState<DataTableSortStatus>({columnAccessor: "postedAt", direction: "desc"});
-  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [sortBy, setSortBy] = useState<DataTableSortStatus>({columnAccessor: 'postedAt', direction: 'desc'});
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const [debouncedSearchQuery] = useDebouncedValue(searchQuery, 500);
 
   const theme = useMantineTheme();
-  const {locale = "en"} = useRouter();
-  const {t} = useTranslation("common");
+  const {locale = 'en'} = useRouter();
+  const {t} = useTranslation('common');
   const longDateFormatter = useLongDateFormatter();
 
   const commentsQuery = api.comment.getAllCreated.useQuery({
@@ -42,9 +42,9 @@ const CommentTable: FunctionComponent = () => {
   const deleteComment = api.comment.delete.useMutation({
     onSuccess: () => commentsQuery.refetch().then(() =>
       showNotification({
-        color: "green",
-        title: t("notification.comment.delete.title"),
-        message: t("notification.comment.delete.message"),
+        color: 'green',
+        title: t('notification.comment.delete.title'),
+        message: t('notification.comment.delete.message'),
       })),
   });
 
@@ -55,40 +55,40 @@ const CommentTable: FunctionComponent = () => {
   }, [commentsQuery.data, page]);
 
   const onDeleteClick = (comment: DetailedCommentType) => openConfirmModal({
-    title: t("modal.comment.delete.title"),
+    title: t('modal.comment.delete.title'),
     children: (
       <Stack>
         <Text>
-          {t("modal.comment.delete.message")}
+          {t('modal.comment.delete.message')}
         </Text>
         <Card withBorder>
           <RichTextDisplay richText={comment.text} maxHeight={100}/>
         </Card>
       </Stack>
     ),
-    labels: {confirm: t("button.confirm"), cancel: t("button.cancel")},
+    labels: {confirm: t('button.confirm'), cancel: t('button.cancel')},
     onConfirm: () => deleteComment.mutate(comment.id),
   });
 
   return (
-    <Stack sx={{height: "100%"}}>
+    <Stack sx={{height: '100%'}}>
       <TextInput
         icon={<IconSearch/>}
-        placeholder={t("filterEvents.search")}
+        placeholder={t('filterEvents.search')}
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.currentTarget.value)}
       />
-      <QueryComponent resourceName={t("resource.comments")} query={commentsQuery}>
+      <QueryComponent resourceName={t('resource.comments')} query={commentsQuery}>
         <Box
           sx={{
-            height: "100%",
+            height: '100%',
             minHeight: 300,
-            position: "relative",
+            position: 'relative',
           }}
         >
           <DataTable
             sx={{
-              position: "absolute",
+              position: 'absolute',
               top: 0,
               bottom: 0,
               left: 0,
@@ -99,13 +99,13 @@ const CommentTable: FunctionComponent = () => {
             withColumnBorders
             textSelectionDisabled
             borderRadius={theme.defaultRadius as MantineNumberSize}
-            noRecordsText={t("commentTable.noRecords")}
+            noRecordsText={t('commentTable.noRecords')}
             sortStatus={sortBy}
             onSortStatusChange={setSortBy}
             page={page}
             onPageChange={setPage}
             recordsPerPageOptions={PAGE_SIZES}
-            recordsPerPageLabel={t("commentTable.recordsPerPage")}
+            recordsPerPageLabel={t('commentTable.recordsPerPage')}
             recordsPerPage={pageSize}
             onRecordsPerPageChange={(newPageSize) => {
               setPageSize(newPageSize);
@@ -115,21 +115,21 @@ const CommentTable: FunctionComponent = () => {
             totalRecords={commentsQuery.data?.size}
             columns={[
               {
-                accessor: "text",
-                title: t("commentTable.message"),
+                accessor: 'text',
+                title: t('commentTable.message'),
                 sortable: true,
                 width: 300,
                 render: ({text}) => <RichTextDisplay scroll richText={text} maxHeight={50}/>,
               },
               {
-                accessor: "postedAt",
-                title: t("commentTable.postedAt"),
+                accessor: 'postedAt',
+                title: t('commentTable.postedAt'),
                 sortable: true,
                 render: ({postedAt}) => longDateFormatter.format(postedAt),
               },
               {
-                accessor: "event",
-                title: t("commentTable.event"),
+                accessor: 'event',
+                title: t('commentTable.event'),
                 sortable: true,
                 render: ({event}) => (
                   <Link
@@ -142,8 +142,8 @@ const CommentTable: FunctionComponent = () => {
                 ),
               },
               {
-                accessor: "actions",
-                title: t("myEvents.actions"),
+                accessor: 'actions',
+                title: t('myEvents.actions'),
                 width: 85,
                 render: (comment) => (
                   <Group spacing="xs" noWrap>
@@ -153,12 +153,12 @@ const CommentTable: FunctionComponent = () => {
                       onClick={(e) => {
                         e.stopPropagation();
                         openModal({
-                          title: t("modal.comment.edit"),
+                          title: t('modal.comment.edit'),
                           children: <CommentForm eventId={comment.event.id} editedComment={comment}/>,
                         });
                       }}
                       sx={theme => ({
-                        "&:hover": {
+                        '&:hover': {
                           color: theme.fn.themeColor(theme.primaryColor),
                         },
                       })}
@@ -173,7 +173,7 @@ const CommentTable: FunctionComponent = () => {
                         onDeleteClick(comment);
                       }}
                       sx={theme => ({
-                        "&:hover": {
+                        '&:hover': {
                           color: theme.colors.red[6],
                         },
                       })}

@@ -1,7 +1,7 @@
-import {z} from "zod";
-import {BasicEventSchema} from "./Event";
-import {BasicUserSchema} from "./User";
-import {IdSchema, TextSchema} from "./Utils";
+import {z} from 'zod';
+import {BasicEventSchema} from './Event';
+import {BasicUserSchema} from './User';
+import {IdSchema, TextSchema} from './Utils';
 
 export const MutateCommentSchema = z.object({
   text: TextSchema,

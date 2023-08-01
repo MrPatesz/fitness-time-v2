@@ -9,19 +9,19 @@ import {
   NavLink,
   Title,
   useMantineTheme
-} from "@mantine/core";
-import {useDisclosure, useMediaQuery} from "@mantine/hooks";
-import {signOut, useSession} from "next-auth/react";
-import {useTranslation} from "next-i18next";
-import Link from "next/link";
-import {useRouter} from "next/router";
-import {FunctionComponent} from "react";
-import {Adjustments, CalendarEvent, IconProps, Logout, Share, Ticket, UserCircle, Users} from "tabler-icons-react";
-import {getBackgroundColor} from "../../utils/utilFunctions";
-import {ColorSchemeToggle} from "./ColorSchemeToggle";
-import {LanguageToggle} from "./LanguageToggle";
+} from '@mantine/core';
+import {useDisclosure, useMediaQuery} from '@mantine/hooks';
+import {signOut, useSession} from 'next-auth/react';
+import {useTranslation} from 'next-i18next';
+import Link from 'next/link';
+import {useRouter} from 'next/router';
+import {FunctionComponent} from 'react';
+import {Adjustments, CalendarEvent, IconProps, Logout, Share, Ticket, UserCircle, Users} from 'tabler-icons-react';
+import {getBackgroundColor} from '../../utils/utilFunctions';
+import {ColorSchemeToggle} from './ColorSchemeToggle';
+import {LanguageToggle} from './LanguageToggle';
 
-const welcome = "welcome";
+const welcome = 'welcome';
 
 const NavBarLink: FunctionComponent<{
   link: {
@@ -54,15 +54,15 @@ export const ApplicationShell: FunctionComponent<{
 
   const theme = useMantineTheme();
   const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
-  const {route, locale = "en", defaultLocale, push: pushRoute} = useRouter();
+  const {route, locale = 'en', defaultLocale, push: pushRoute} = useRouter();
   const {data: session} = useSession({
     required: !route.includes(welcome),
     onUnauthenticated: () => void pushRoute(`/${welcome}`, undefined, {locale}),
   });
-  const {t} = useTranslation("common");
+  const {t} = useTranslation('common');
 
   const isDefaultLocale = locale === defaultLocale;
-  const localePrefix = isDefaultLocale ? "" : `/${locale}`;
+  const localePrefix = isDefaultLocale ? '' : `/${locale}`;
   const [
     calendarRoute,
     groupsRoute,
@@ -82,10 +82,10 @@ export const ApplicationShell: FunctionComponent<{
   ];
 
   const isRouteActive = (givenRoute: string) => {
-    if (route === "/") {
+    if (route === '/') {
       return false;
     }
-    const actualRoute = givenRoute.split("/").at(isDefaultLocale ? 1 : 2) as string;
+    const actualRoute = givenRoute.split('/').at(isDefaultLocale ? 1 : 2) as string;
     return route.includes(actualRoute);
   };
 
@@ -96,7 +96,7 @@ export const ApplicationShell: FunctionComponent<{
         <Header height={56} py="xs" px="md">
           <Group align="center" position="apart">
             <Group spacing="xs">
-              <MediaQuery largerThan="sm" styles={{display: "none"}}>
+              <MediaQuery largerThan="sm" styles={{display: 'none'}}>
                 <Burger
                   opened={showNavbar}
                   onClick={toggleNavbar}
@@ -105,7 +105,7 @@ export const ApplicationShell: FunctionComponent<{
                 />
               </MediaQuery>
               <Link href="/" locale={locale} passHref>
-                <Title order={2}>{t(xs ? "application.name" : "application.shortName")}</Title>
+                <Title order={2}>{t(xs ? 'application.name' : 'application.shortName')}</Title>
               </Link>
             </Group>
 
@@ -114,7 +114,7 @@ export const ApplicationShell: FunctionComponent<{
               <ColorSchemeToggle/>
               <ActionIcon
                 size="lg"
-                variant={theme.colorScheme === 'dark' ? "outline" : "default"}
+                variant={theme.colorScheme === 'dark' ? 'outline' : 'default'}
                 onClick={() => void signOut({callbackUrl: welcomeRoute})}
               >
                 <Logout/>
@@ -128,10 +128,10 @@ export const ApplicationShell: FunctionComponent<{
         <Navbar width={{base: 211}} p="xs" hiddenBreakpoint="sm" hidden={!showNavbar} zIndex={401}>
           <Navbar.Section grow>
             {[
-              {label: t("navbar.calendar"), route: calendarRoute, icon: CalendarEvent},
-              {label: t("navbar.events"), route: eventsRoute, icon: Ticket},
-              {label: t("navbar.groups"), route: groupsRoute, icon: Share},
-              {label: t("navbar.users"), route: usersRoute, icon: Users},
+              {label: t('navbar.calendar'), route: calendarRoute, icon: CalendarEvent},
+              {label: t('navbar.events'), route: eventsRoute, icon: Ticket},
+              {label: t('navbar.groups'), route: groupsRoute, icon: Share},
+              {label: t('navbar.users'), route: usersRoute, icon: Users},
             ].map((link) => (
               <NavBarLink
                 key={link.label}
@@ -148,7 +148,7 @@ export const ApplicationShell: FunctionComponent<{
             <NavBarLink
               locale={locale}
               link={{
-                label: t("navbar.controlPanel"),
+                label: t('navbar.controlPanel'),
                 route: controlPanelRoute,
                 icon: Adjustments,
                 active: isRouteActive(controlPanelRoute),

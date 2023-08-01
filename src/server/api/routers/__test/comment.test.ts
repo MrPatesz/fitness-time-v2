@@ -1,11 +1,11 @@
-import {describe, expect, it} from "@jest/globals";
+import {describe, expect, it} from '@jest/globals';
 import {
   BasicCommentSchema,
   BasicCommentType,
   CreateCommentType,
   DetailedCommentSchema
-} from "../../../../models/Comment";
-import {SortCommentByProperty, SortDirection} from "../../../../utils/enums";
+} from '../../../../models/Comment';
+import {SortCommentByProperty, SortDirection} from '../../../../utils/enums';
 import {
   comment1,
   comment2,
@@ -20,10 +20,10 @@ import {
   user1,
   user2,
   users
-} from "./utils/mockData";
-import {getTestCaller, TestCaller, testPrismaClient} from "./utils/testUtils";
+} from './utils/mockData';
+import {getTestCaller, TestCaller, testPrismaClient} from './utils/testUtils';
 
-describe("commentRouter", () => {
+describe('commentRouter', () => {
   let caller: TestCaller;
 
   beforeEach(async () => {
@@ -44,8 +44,8 @@ describe("commentRouter", () => {
     await testPrismaClient.$disconnect();
   });
 
-  describe("getAllByEventId", () => {
-    it("returns all comments for given event", async () => {
+  describe('getAllByEventId', () => {
+    it('returns all comments for given event', async () => {
       // Arrange
       const expected = BasicCommentSchema.array().parse(
         [{...comment1, user: user1}, {...comment2, user: user2}]
@@ -56,11 +56,11 @@ describe("commentRouter", () => {
 
       // Assert
       expect(result).toEqual(expected);
-    })
+    });
   });
 
-  describe("getAllCreated", () => {
-    it("returns all comments that were created by caller", async () => {
+  describe('getAllCreated', () => {
+    it('returns all comments that were created by caller', async () => {
       // Arrange
       const expected = {
         comments: DetailedCommentSchema.array().parse([
@@ -74,7 +74,7 @@ describe("commentRouter", () => {
       const result = await caller.comment.getAllCreated({
         page: 1,
         pageSize: 5,
-        searchQuery: "",
+        searchQuery: '',
         sortBy: {
           direction: SortDirection.ASC,
           property: SortCommentByProperty.TEXT,
@@ -88,11 +88,11 @@ describe("commentRouter", () => {
     // TODO it("returns all comments that were created by caller that have search term in the message", () => {})
   });
 
-  describe("create", () => {
-    it("creates new comment for given event", async () => {
+  describe('create', () => {
+    it('creates new comment for given event', async () => {
       // Arrange
       const newComment: CreateCommentType = {
-        text: "comment4_message",
+        text: 'comment4_message',
       };
       const expectedNewComment: BasicCommentType = BasicCommentSchema.parse({
         text: newComment.text,
@@ -123,11 +123,11 @@ describe("commentRouter", () => {
     });
   });
 
-  describe("update", () => {
-    it("updates the given comment record's data", async () => {
+  describe('update', () => {
+    it('updates the given comment record\'s data', async () => {
       // Arrange
       const newComment = {
-        comment: {text: "updated_comment1_message"},
+        comment: {text: 'updated_comment1_message'},
         commentId: comment1.id,
         eventId: event1.id
       };
@@ -142,11 +142,11 @@ describe("commentRouter", () => {
 
       // Assert
       expect(result).toEqual(expected); // TODO this test is failing because caller is not the creator of the comment!
-    })
+    });
   });
 
-  describe("delete", () => {
-    it("deletes the given comment", async () => {
+  describe('delete', () => {
+    it('deletes the given comment', async () => {
       // Arrange
       const expectedComments = BasicCommentSchema.array().parse(
         [{...comment1, user: user1}]
@@ -159,6 +159,6 @@ describe("commentRouter", () => {
       // Assert
       expect(result).toEqual(true);
       expect(comments).toEqual(expectedComments);
-    })
+    });
   });
 });

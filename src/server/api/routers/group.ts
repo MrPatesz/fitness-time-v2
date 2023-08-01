@@ -1,9 +1,9 @@
-import {z} from "zod";
-import {BasicGroupSchema, DetailedGroupSchema, MutateGroupSchema} from "../../../models/Group";
-import {PaginateGroupsSchema} from "../../../models/pagination/PaginateGroups";
-import {createTRPCRouter, protectedProcedure} from "../trpc";
-import {Prisma} from ".prisma/client";
-import {IdSchema} from "../../../models/Utils";
+import {z} from 'zod';
+import {BasicGroupSchema, DetailedGroupSchema, MutateGroupSchema} from '../../../models/Group';
+import {PaginateGroupsSchema} from '../../../models/pagination/PaginateGroups';
+import {createTRPCRouter, protectedProcedure} from '../trpc';
+import {Prisma} from '.prisma/client';
+import {IdSchema} from '../../../models/Utils';
 
 export const groupRouter = createTRPCRouter({
   getPaginatedGroups: protectedProcedure
@@ -23,7 +23,7 @@ export const groupRouter = createTRPCRouter({
       const where = {
         creatorId: createdOnly ? callerId : undefined,
         name: searchQuery ? ({
-          mode: "insensitive",
+          mode: 'insensitive',
           contains: searchQuery,
         } as Prisma.StringFilter) : undefined,
       };

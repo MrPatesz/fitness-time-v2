@@ -1,8 +1,8 @@
-import dynamic from "next/dynamic";
-import {CenteredLoader} from "../CenteredLoader";
+import dynamic from 'next/dynamic';
+import {CenteredLoader} from '../CenteredLoader';
 
 const RichTextEditor = dynamic(
-  () => import("@mantine/rte").then((mod) => mod.RichTextEditor),
+  () => import('@mantine/rte').then((mod) => mod.RichTextEditor),
   {
     ssr: false, loading: () => (
       <CenteredLoader/>

@@ -1,20 +1,20 @@
-import {Badge, Card, Divider, Group, Stack, Text} from "@mantine/core";
-import {IconStar} from "@tabler/icons";
-import {useTranslation} from "next-i18next";
-import Link from "next/link";
-import {useRouter} from "next/router";
-import {FunctionComponent} from "react";
-import {BasicEventType} from "../../models/Event";
-import {api} from "../../utils/api";
-import {EventStatus, ThemeColor} from "../../utils/enums";
-import {useShortDateFormatter} from "../../utils/formatters";
-import {formatDistance, getBackgroundColor} from "../../utils/utilFunctions";
+import {Badge, Card, Divider, Group, Stack, Text} from '@mantine/core';
+import {IconStar} from '@tabler/icons';
+import {useTranslation} from 'next-i18next';
+import Link from 'next/link';
+import {useRouter} from 'next/router';
+import {FunctionComponent} from 'react';
+import {BasicEventType} from '../../models/Event';
+import {api} from '../../utils/api';
+import {EventStatus, ThemeColor} from '../../utils/enums';
+import {useShortDateFormatter} from '../../utils/formatters';
+import {formatDistance, getBackgroundColor} from '../../utils/utilFunctions';
 
 export const EventCard: FunctionComponent<{
   event: BasicEventType;
 }> = ({event}) => {
-  const {locale = "en", push: pushRoute} = useRouter();
-  const {t} = useTranslation("common");
+  const {locale = 'en', push: pushRoute} = useRouter();
+  const {t} = useTranslation('common');
   const shortDateFormatter = useShortDateFormatter();
 
   const userRatingQuery = api.rating.getAverageRatingForUser.useQuery(event.creatorId);
@@ -27,13 +27,13 @@ export const EventCard: FunctionComponent<{
       <Card
         withBorder
         sx={theme => ({
-          height: "100%",
-          ":hover": {
+          height: '100%',
+          ':hover': {
             backgroundColor: getBackgroundColor(theme),
           },
         })}
       >
-        <Stack spacing="xs" justify="space-between" sx={{height: "100%"}}>
+        <Stack spacing="xs" justify="space-between" sx={{height: '100%'}}>
           <Stack spacing="xs">
             <Group position="apart" spacing="xs">
               <Text weight="bold" size="lg">{event.name}</Text>
@@ -48,12 +48,12 @@ export const EventCard: FunctionComponent<{
               <Group spacing="xs">
                 {!event.price && (
                   <Badge color="green" variant="light">
-                    {t("common.free")}
+                    {t('common.free')}
                   </Badge>
                 )}
                 {event.limit && (
                   <Badge color="red" variant="light">
-                    {t("filterEvents.limited")}
+                    {t('filterEvents.limited')}
                   </Badge>
                 )}
               </Group>
@@ -64,7 +64,7 @@ export const EventCard: FunctionComponent<{
               )}
             </Group>
           </Stack>
-          <Group position={event.group ? "apart" : "right"} spacing="xs">
+          <Group position={event.group ? 'apart' : 'right'} spacing="xs">
             {event.group && (
               <Badge
                 color={event.group.creator.themeColor}
@@ -74,7 +74,7 @@ export const EventCard: FunctionComponent<{
                   void pushRoute(`/groups/${event.group!.id}`, undefined, {locale});
                 }}
                 sx={theme => ({
-                  ":hover": {
+                  ':hover': {
                     backgroundColor: theme.fn.themeColor(event.group!.creator.themeColor),
                     color: theme.white,
                   },
@@ -102,7 +102,7 @@ export const EventCard: FunctionComponent<{
                 void pushRoute(`/users/${event.creatorId}`, undefined, {locale});
               }}
               sx={theme => ({
-                ":hover": {
+                ':hover': {
                   backgroundColor: theme.fn.themeColor(event.creator.themeColor),
                   color: theme.white,
                 },

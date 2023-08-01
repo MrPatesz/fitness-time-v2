@@ -1,5 +1,5 @@
-import {z} from "zod";
-import {IdSchema} from "./Utils";
+import {z} from 'zod';
+import {IdSchema} from './Utils';
 
 export const MutateLocationSchema = z.object({
   address: z.string().min(1),

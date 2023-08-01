@@ -1,9 +1,9 @@
-import {ColorSwatch, Group, Select, Text, useMantineTheme} from "@mantine/core";
-import {useTranslation} from "next-i18next";
-import {ComponentPropsWithoutRef, forwardRef, FunctionComponent} from "react";
-import {ThemeColor} from "../../utils/enums";
+import {ColorSwatch, Group, Select, Text, useMantineTheme} from '@mantine/core';
+import {useTranslation} from 'next-i18next';
+import {ComponentPropsWithoutRef, forwardRef, FunctionComponent} from 'react';
+import {ThemeColor} from '../../utils/enums';
 
-interface ItemProps extends ComponentPropsWithoutRef<"div"> {
+interface ItemProps extends ComponentPropsWithoutRef<'div'> {
   value: ThemeColor;
   label: string;
 }
@@ -26,25 +26,25 @@ export const ThemeColorPicker: FunctionComponent<{
   value: ThemeColor;
   onChange: (newValue: ThemeColor) => void;
 }> = ({value, onChange}) => {
-  const {t} = useTranslation("common");
+  const {t} = useTranslation('common');
 
   return (
     <Select
-      label={t("themeColorPicker.label")}
+      label={t('themeColorPicker.label')}
       itemComponent={SelectItem}
       data={[
-        {value: ThemeColor.RED, label: t("color.red")},
-        {value: ThemeColor.PINK, label: t("color.pink")},
-        {value: ThemeColor.GRAPE, label: t("color.grape")},
-        {value: ThemeColor.VIOLET, label: t("color.violet")},
-        {value: ThemeColor.INDIGO, label: t("color.indigo")},
-        {value: ThemeColor.BLUE, label: t("color.blue")},
-        {value: ThemeColor.CYAN, label: t("color.cyan")},
-        {value: ThemeColor.TEAL, label: t("color.teal")},
-        {value: ThemeColor.GREEN, label: t("color.green")},
-        {value: ThemeColor.LIME, label: t("color.lime")},
-        {value: ThemeColor.YELLOW, label: t("color.yellow")},
-        {value: ThemeColor.ORANGE, label: t("color.orange")},
+        {value: ThemeColor.RED, label: t('color.red')},
+        {value: ThemeColor.PINK, label: t('color.pink')},
+        {value: ThemeColor.GRAPE, label: t('color.grape')},
+        {value: ThemeColor.VIOLET, label: t('color.violet')},
+        {value: ThemeColor.INDIGO, label: t('color.indigo')},
+        {value: ThemeColor.BLUE, label: t('color.blue')},
+        {value: ThemeColor.CYAN, label: t('color.cyan')},
+        {value: ThemeColor.TEAL, label: t('color.teal')},
+        {value: ThemeColor.GREEN, label: t('color.green')},
+        {value: ThemeColor.LIME, label: t('color.lime')},
+        {value: ThemeColor.YELLOW, label: t('color.yellow')},
+        {value: ThemeColor.ORANGE, label: t('color.orange')},
       ]}
       value={value}
       onChange={onChange}

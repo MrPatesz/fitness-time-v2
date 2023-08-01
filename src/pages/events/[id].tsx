@@ -1,29 +1,29 @@
-import {ActionIcon, Badge, Button, Card, Group, Stack, Text, useMantineTheme} from "@mantine/core";
-import {openModal} from "@mantine/modals";
-import {showNotification} from "@mantine/notifications";
-import {useSession} from "next-auth/react";
-import {useTranslation} from "next-i18next";
-import {serverSideTranslations} from "next-i18next/serverSideTranslations";
-import Link from "next/link";
-import {useRouter} from "next/router";
-import {Pencil} from "tabler-icons-react";
-import i18nConfig from "../../../next-i18next.config.mjs";
-import MapComponent from "../../components/location/MapComponent";
-import {QueryComponent} from "../../components/QueryComponent";
-import {RatingComponent} from "../../components/RatingComponent";
-import {RichTextDisplay} from "../../components/rich-text/RichTextDisplay";
-import {DetailedEventType} from "../../models/Event";
-import {api} from "../../utils/api";
-import {EventStatus} from "../../utils/enums";
-import {useLongDateFormatter, usePriceFormatter} from "../../utils/formatters";
-import {EditEventForm} from "../../components/event/EditEventForm";
-import {CommentsComponent} from "../../components/event/CommentsComponent";
+import {ActionIcon, Badge, Button, Card, Group, Stack, Text, useMantineTheme} from '@mantine/core';
+import {openModal} from '@mantine/modals';
+import {showNotification} from '@mantine/notifications';
+import {useSession} from 'next-auth/react';
+import {useTranslation} from 'next-i18next';
+import {serverSideTranslations} from 'next-i18next/serverSideTranslations';
+import Link from 'next/link';
+import {useRouter} from 'next/router';
+import {Pencil} from 'tabler-icons-react';
+import i18nConfig from '../../../next-i18next.config.mjs';
+import MapComponent from '../../components/location/MapComponent';
+import {QueryComponent} from '../../components/QueryComponent';
+import {RatingComponent} from '../../components/RatingComponent';
+import {RichTextDisplay} from '../../components/rich-text/RichTextDisplay';
+import {DetailedEventType} from '../../models/Event';
+import {api} from '../../utils/api';
+import {EventStatus} from '../../utils/enums';
+import {useLongDateFormatter, usePriceFormatter} from '../../utils/formatters';
+import {EditEventForm} from '../../components/event/EditEventForm';
+import {CommentsComponent} from '../../components/event/CommentsComponent';
 
 export default function EventDetailsPage() {
   const theme = useMantineTheme();
-  const {query: {id}, isReady, locale = "en"} = useRouter();
+  const {query: {id}, isReady, locale = 'en'} = useRouter();
   const {data: session} = useSession();
-  const {t} = useTranslation("common");
+  const {t} = useTranslation('common');
   const longDateFormatter = useLongDateFormatter();
   const priceFormatter = usePriceFormatter();
 
@@ -46,7 +46,7 @@ export default function EventDetailsPage() {
 
   const editable = eventQuery.data?.status === EventStatus.PLANNED && eventQuery.data?.creatorId === session?.user.id;
 
-  const defaultSpacing = "md";
+  const defaultSpacing = 'md';
   const defaultSpacingSize: number = theme.spacing[defaultSpacing];
   const mapSize = 400; // TODO responsive map size
   const itemHeights = {
@@ -74,9 +74,9 @@ export default function EventDetailsPage() {
   const participate = api.event.participate.useMutation({
     onSuccess: () => eventQuery.refetch().then(() =>
       showNotification({
-        color: "green",
-        title: t("notification.event.participation.title"),
-        message: t("notification.event.participation.message"),
+        color: 'green',
+        title: t('notification.event.participation.title'),
+        message: t('notification.event.participation.message'),
       })
     ),
   });
@@ -99,7 +99,7 @@ export default function EventDetailsPage() {
           participate: !isParticipated,
         })}
       >
-        {isParticipated ? t("eventDetails.removeParticipation") : t("eventDetails.participate")}
+        {isParticipated ? t('eventDetails.removeParticipation') : t('eventDetails.participate')}
       </Button>
     );
   };
@@ -108,7 +108,7 @@ export default function EventDetailsPage() {
 
   return (
     <Stack>
-      <QueryComponent resourceName={t("resource.eventDetails")} query={eventQuery}>
+      <QueryComponent resourceName={t('resource.eventDetails')} query={eventQuery}>
         {eventQuery.data && (
           <Stack>
             <Group spacing={defaultSpacing} align="start" position="apart">
@@ -137,7 +137,7 @@ export default function EventDetailsPage() {
                       variant="filled"
                       color={theme.fn.themeColor(theme.primaryColor)}
                       onClick={() => openModal({
-                        title: t("modal.event.edit"),
+                        title: t('modal.event.edit'),
                         children: <EditEventForm eventId={eventId}/>,
                       })}
                     >
@@ -152,7 +152,7 @@ export default function EventDetailsPage() {
                   {eventQuery.data.price && (
                     <Group spacing="xs">
                       <Text>
-                        {t("common.price")}:
+                        {t('common.price')}:
                       </Text>
                       <Text weight="bold">{priceFormatter.format(eventQuery.data.price)}</Text>
                     </Group>
@@ -192,7 +192,7 @@ export default function EventDetailsPage() {
                       </Badge>
                     )}
                     <Text>
-                      {t("eventDetails.participants")}
+                      {t('eventDetails.participants')}
                     </Text>
                   </Group>
                   <Group spacing="xs">
@@ -203,9 +203,9 @@ export default function EventDetailsPage() {
                         passHref
                         key={p.id}
                       >
-                        <Text sx={{cursor: "pointer"}}>
+                        <Text sx={{cursor: 'pointer'}}>
                           {p.name}
-                          {index !== eventQuery.data.participants.length - 1 && ","}
+                          {index !== eventQuery.data.participants.length - 1 && ','}
                         </Text>
                       </Link>
                     ))}
@@ -223,5 +223,5 @@ export default function EventDetailsPage() {
 }
 
 export const getServerSideProps = async ({locale}: { locale: string }) => ({
-  props: {...(await serverSideTranslations(locale, ["common"], i18nConfig))},
+  props: {...(await serverSideTranslations(locale, ['common'], i18nConfig))},
 });

@@ -1,18 +1,18 @@
-import {Box, Card, Center, Loader, ScrollArea, Stack} from "@mantine/core";
-import {useIntersection} from "@mantine/hooks";
-import {useTranslation} from "next-i18next";
-import {FunctionComponent, useEffect, useMemo, useRef} from "react";
-import {api} from "../../utils/api";
-import {pusherClient} from "../../utils/pusher";
-import {getBackgroundColor} from "../../utils/utilFunctions";
-import {CommentCard} from "../comment/CommentCard";
-import {AddMessage} from "./AddMessage";
+import {Box, Card, Center, Loader, ScrollArea, Stack} from '@mantine/core';
+import {useIntersection} from '@mantine/hooks';
+import {useTranslation} from 'next-i18next';
+import {FunctionComponent, useEffect, useMemo, useRef} from 'react';
+import {api} from '../../utils/api';
+import {pusherClient} from '../../utils/pusher';
+import {getBackgroundColor} from '../../utils/utilFunctions';
+import {CommentCard} from '../comment/CommentCard';
+import {AddMessage} from './AddMessage';
 
 export const GroupChat: FunctionComponent<{
   groupId: number;
 }> = ({groupId}) => {
   const viewport = useRef<HTMLDivElement>(null);
-  const {t} = useTranslation("common");
+  const {t} = useTranslation('common');
   const lastMessageRef = useRef<HTMLElement>(null);
   const {ref, entry} = useIntersection({
     root: lastMessageRef.current,
@@ -33,14 +33,14 @@ export const GroupChat: FunctionComponent<{
 
   const scrollToBottom = (smooth = false) => viewport.current?.scrollTo({
     top: viewport.current?.scrollHeight,
-    behavior: smooth ? "smooth" : undefined,
+    behavior: smooth ? 'smooth' : undefined,
   });
 
   const refetchAndScrollToBottom = () => refetchMessages().then(() => setTimeout(() => scrollToBottom(true), 100));
 
   useEffect(() => {
     pusherClient.subscribe(groupId.toString());
-    pusherClient.bind("create", refetchAndScrollToBottom);
+    pusherClient.bind('create', refetchAndScrollToBottom);
 
     return () => pusherClient.unsubscribe(groupId.toString());
   }, []);
@@ -75,15 +75,15 @@ export const GroupChat: FunctionComponent<{
       withBorder
       sx={theme => ({
         backgroundColor: getBackgroundColor(theme),
-        height: "100%",
+        height: '100%',
         minHeight: 300,
-        position: "relative",
+        position: 'relative',
       })}
     >
       <Stack
         justify="end"
         sx={{
-          position: "absolute",
+          position: 'absolute',
           top: 16,
           bottom: 16,
           left: 16,
@@ -91,7 +91,7 @@ export const GroupChat: FunctionComponent<{
         }}
       >
         <ScrollArea viewportRef={viewport}>
-          <Center ref={ref} sx={{width: "100%"}}>
+          <Center ref={ref} sx={{width: '100%'}}>
             {isFetching && (
               <Box h={25}>
                 <Loader/>
@@ -101,7 +101,7 @@ export const GroupChat: FunctionComponent<{
           <Stack>
             {error ? (
               <Card withBorder>
-                {t("queryComponent.error", {resourceName: t("resource.chat")})}
+                {t('queryComponent.error', {resourceName: t('resource.chat')})}
               </Card>
             ) : messages.map((message) => (
               <CommentCard key={message.id} comment={message}/>

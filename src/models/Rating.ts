@@ -1,6 +1,6 @@
-import {z} from "zod";
-import {BasicUserSchema} from "./User";
-import {IdSchema} from "./Utils";
+import {z} from 'zod';
+import {BasicUserSchema} from './User';
+import {IdSchema} from './Utils';
 
 export const StarsSchema = z.number().min(0.5).max(5);
 

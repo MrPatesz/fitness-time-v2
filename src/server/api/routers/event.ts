@@ -1,10 +1,10 @@
-import {TRPCError} from "@trpc/server";
-import {z} from "zod";
-import {BasicEventSchema, DetailedEventSchema, MutateEventSchema,} from "../../../models/Event";
-import {PaginateEventsSchema} from "../../../models/pagination/PaginateEvents";
-import {createTRPCRouter, protectedProcedure} from "../trpc";
-import {Prisma} from ".prisma/client";
-import {IdSchema} from "../../../models/Utils";
+import {TRPCError} from '@trpc/server';
+import {z} from 'zod';
+import {BasicEventSchema, DetailedEventSchema, MutateEventSchema,} from '../../../models/Event';
+import {PaginateEventsSchema} from '../../../models/pagination/PaginateEvents';
+import {createTRPCRouter, protectedProcedure} from '../trpc';
+import {Prisma} from '.prisma/client';
+import {IdSchema} from '../../../models/Utils';
 
 export const eventRouter = createTRPCRouter({
   getPaginatedEvents: protectedProcedure
@@ -34,7 +34,7 @@ export const eventRouter = createTRPCRouter({
           gt: new Date(),
         },
         name: searchQuery ? ({
-          mode: "insensitive",
+          mode: 'insensitive',
           contains: searchQuery,
         } as Prisma.StringFilter) : undefined,
       };
@@ -142,7 +142,7 @@ export const eventRouter = createTRPCRouter({
       });
 
       if (!caller) {
-        throw new TRPCError({code: "UNAUTHORIZED", message: "User doesn't exist!"});
+        throw new TRPCError({code: 'UNAUTHORIZED', message: 'User doesn\'t exist!'});
       }
 
       return BasicEventSchema.array().parse(caller.participatedEvents);
@@ -158,7 +158,7 @@ export const eventRouter = createTRPCRouter({
           participants: true,
           location: true,
           group: {include: {creator: true}},
-          comments: {include: {user: true}, orderBy: {postedAt: "desc"}}
+          comments: {include: {user: true}, orderBy: {postedAt: 'desc'}}
         },
       });
 
@@ -221,7 +221,7 @@ export const eventRouter = createTRPCRouter({
       });
 
       if (event?.limit && (event.participants.length >= event.limit)) {
-        throw new TRPCError({code: "BAD_REQUEST", message: "Event is already full!"});
+        throw new TRPCError({code: 'BAD_REQUEST', message: 'Event is already full!'});
       }
 
       const result = await prisma.event.update({

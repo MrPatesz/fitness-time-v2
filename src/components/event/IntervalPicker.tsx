@@ -1,10 +1,10 @@
-import {Group} from "@mantine/core";
-import {DatePicker, TimeInput} from "@mantine/dates";
-import {useTranslation} from "next-i18next";
-import {useRouter} from "next/router";
-import {FunctionComponent} from "react";
-import dayjs from "../../utils/dayjs";
-import {getFirstDayOfWeek} from "../../utils/utilFunctions";
+import {Group} from '@mantine/core';
+import {DatePicker, TimeInput} from '@mantine/dates';
+import {useTranslation} from 'next-i18next';
+import {useRouter} from 'next/router';
+import {FunctionComponent} from 'react';
+import dayjs from '../../utils/dayjs';
+import {getFirstDayOfWeek} from '../../utils/utilFunctions';
 
 const calculateDateTime = (date: Date, time: Date): Date => {
   const hour = dayjs(time).hour();
@@ -25,15 +25,15 @@ export const IntervalPicker: FunctionComponent<{
   startError: string | undefined;
   endError: string | undefined;
 }> = ({start, end, onChange, startError, endError}) => {
-  const {t} = useTranslation("common");
-  const {locale = "en"} = useRouter();
+  const {t} = useTranslation('common');
+  const {locale = 'en'} = useRouter();
 
   return (
     <Group spacing="xs">
       <DatePicker
         withAsterisk
-        sx={{width: "229px", marginBottom: "auto"}}
-        label={t("intervalPicker.on")}
+        sx={{width: '229px', marginBottom: 'auto'}}
+        label={t('intervalPicker.on')}
         value={start}
         onChange={(newDate) => {
           if (newDate) {
@@ -50,16 +50,16 @@ export const IntervalPicker: FunctionComponent<{
       />
       <TimeInput
         withAsterisk
-        sx={{marginBottom: "auto"}}
-        label={t("intervalPicker.start.label")}
+        sx={{marginBottom: 'auto'}}
+        label={t('intervalPicker.start.label')}
         value={start}
         onChange={(event) => onChange(calculateDateTime(start, event), end)}
         error={startError}
       />
       <TimeInput
         withAsterisk
-        sx={{marginBottom: "auto"}}
-        label={t("intervalPicker.end.label")}
+        sx={{marginBottom: 'auto'}}
+        label={t('intervalPicker.end.label')}
         value={end}
         onChange={(event) => onChange(start, calculateDateTime(end, event))}
         error={endError}

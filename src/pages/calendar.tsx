@@ -1,27 +1,27 @@
-import {useMantineTheme} from "@mantine/core";
-import {showNotification} from "@mantine/notifications";
-import {useSession} from "next-auth/react";
-import {useTranslation} from "next-i18next";
-import {serverSideTranslations} from "next-i18next/serverSideTranslations";
-import {useRouter} from "next/router";
-import i18nConfig from "../../next-i18next.config.mjs";
-import {api} from "../utils/api";
-import {getFirstDayOfWeek} from "../utils/utilFunctions";
-import {QueryComponent} from "../components/QueryComponent";
+import {useMantineTheme} from '@mantine/core';
+import {showNotification} from '@mantine/notifications';
+import {useSession} from 'next-auth/react';
+import {useTranslation} from 'next-i18next';
+import {serverSideTranslations} from 'next-i18next/serverSideTranslations';
+import {useRouter} from 'next/router';
+import i18nConfig from '../../next-i18next.config.mjs';
+import {api} from '../utils/api';
+import {getFirstDayOfWeek} from '../utils/utilFunctions';
+import {QueryComponent} from '../components/QueryComponent';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import {openModal} from "@mantine/modals";
-import {CreateEventForm} from "../components/event/CreateEventForm";
-import {BasicEventType} from "../models/Event";
-import {useMediaQuery} from "@mantine/hooks";
+import {openModal} from '@mantine/modals';
+import {CreateEventForm} from '../components/event/CreateEventForm';
+import {BasicEventType} from '../models/Event';
+import {useMediaQuery} from '@mantine/hooks';
 
 export default function CalendarPage() {
   const theme = useMantineTheme();
-  const {push: pushRoute, locale = "en"} = useRouter();
+  const {push: pushRoute, locale = 'en'} = useRouter();
   const {data: session} = useSession();
-  const {t} = useTranslation("common");
+  const {t} = useTranslation('common');
   const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
   const md = useMediaQuery(`(min-width: ${theme.breakpoints.md}px)`);
   const xl = useMediaQuery(`(min-width: ${theme.breakpoints.xl}px)`);
@@ -30,20 +30,20 @@ export default function CalendarPage() {
   const updateEvent = api.event.update.useMutation({
     onSuccess: () => eventsQuery.refetch().then(() =>
       showNotification({
-        color: "green",
-        title: t("notification.event.update.title"),
-        message: t("notification.event.update.message"),
+        color: 'green',
+        title: t('notification.event.update.title'),
+        message: t('notification.event.update.message'),
       })
     ),
     onError: () => showNotification({
-      color: "red",
-      title: t("notification.event.failedToUpdate.title"),
-      message: t("notification.event.failedToUpdate.message"),
+      color: 'red',
+      title: t('notification.event.failedToUpdate.title'),
+      message: t('notification.event.failedToUpdate.message'),
     }),
   });
 
   return (
-    <QueryComponent resourceName={t("resource.calendar")} query={eventsQuery}>
+    <QueryComponent resourceName={t('resource.calendar')} query={eventsQuery}>
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         initialView="timeGridWeek"
@@ -82,11 +82,11 @@ export default function CalendarPage() {
         height="100%"
         allDaySlot={false}
         locale={locale}
-        firstDay={getFirstDayOfWeek(locale) === "monday" ? 1 : 0}
+        firstDay={getFirstDayOfWeek(locale) === 'monday' ? 1 : 0}
         eventColor={theme.fn.themeColor(theme.primaryColor)}
         eventClick={({event}) => void pushRoute(`/events/${event.id}`, undefined, {locale})}
         select={({start, end}) => openModal({
-          title: t("modal.event.create"),
+          title: t('modal.event.create'),
           zIndex: 402,
           children: (<CreateEventForm initialInterval={{start, end}}/>),
         })}
@@ -119,5 +119,5 @@ export default function CalendarPage() {
 }
 
 export const getServerSideProps = async ({locale}: { locale: string }) => ({
-  props: {...(await serverSideTranslations(locale, ["common"], i18nConfig))},
+  props: {...(await serverSideTranslations(locale, ['common'], i18nConfig))},
 });

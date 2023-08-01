@@ -1,7 +1,7 @@
-import {Card, ScrollArea, Spoiler, TypographyStylesProvider} from "@mantine/core";
-import {useTranslation} from "next-i18next";
-import {FunctionComponent, useMemo, useRef} from "react";
-import {getBackgroundColor} from "../../utils/utilFunctions";
+import {Card, ScrollArea, Spoiler, TypographyStylesProvider} from '@mantine/core';
+import {useTranslation} from 'next-i18next';
+import {FunctionComponent, useMemo, useRef} from 'react';
+import {getBackgroundColor} from '../../utils/utilFunctions';
 
 export const RichTextDisplay: FunctionComponent<{
   richText: string;
@@ -9,7 +9,7 @@ export const RichTextDisplay: FunctionComponent<{
   scroll?: boolean;
   bordered?: boolean;
 }> = ({richText, maxHeight, scroll = false, bordered = false}) => {
-  const {t} = useTranslation("common");
+  const {t} = useTranslation('common');
   const ref = useRef<HTMLDivElement>(null);
 
   const height = useMemo(() => {
@@ -29,7 +29,7 @@ export const RichTextDisplay: FunctionComponent<{
 
   const richTextComponent = (
     <TypographyStylesProvider ref={ref}>
-      <div dangerouslySetInnerHTML={{__html: richText}} style={{overflowWrap: "break-word"}}/>
+      <div dangerouslySetInnerHTML={{__html: richText}} style={{overflowWrap: 'break-word'}}/>
     </TypographyStylesProvider>
   );
 
@@ -45,8 +45,8 @@ export const RichTextDisplay: FunctionComponent<{
         ) : (
           <Spoiler
             maxHeight={height}
-            showLabel={t("richTextDisplay.showLabel")}
-            hideLabel={t("richTextDisplay.hideLabel")}
+            showLabel={t('richTextDisplay.showLabel')}
+            hideLabel={t('richTextDisplay.hideLabel')}
           >
             {richTextComponent}
           </Spoiler>
@@ -69,4 +69,4 @@ const BorderComponent: FunctionComponent<{
       {children}
     </Card>
   );
-}
+};

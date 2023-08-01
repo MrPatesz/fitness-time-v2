@@ -6,14 +6,14 @@
  * tl;dr - This is where all the tRPC server stuff is created and plugged in.
  * The pieces you will need to use are documented accordingly near the end.
  */
-import {initTRPC, TRPCError} from "@trpc/server";
-import {type CreateNextContextOptions} from "@trpc/server/adapters/next";
-import {type Session} from "next-auth";
-import superjson from "superjson";
-import {getServerAuthSession} from "../auth";
-import {prisma} from "../db";
-import {kysely} from "../kysely/kysely";
-import {pusher} from "../pusher";
+import {initTRPC, TRPCError} from '@trpc/server';
+import {type CreateNextContextOptions} from '@trpc/server/adapters/next';
+import {type Session} from 'next-auth';
+import superjson from 'superjson';
+import {getServerAuthSession} from '../auth';
+import {prisma} from '../db';
+import {kysely} from '../kysely/kysely';
+import {pusher} from '../pusher';
 
 /**
  * 1. CONTEXT
@@ -106,7 +106,7 @@ export const publicProcedure = t.procedure;
  */
 const enforceUserIsAuthed = t.middleware(({ctx, next}) => {
   if (!ctx.session || !ctx.session.user) {
-    throw new TRPCError({code: "UNAUTHORIZED"});
+    throw new TRPCError({code: 'UNAUTHORIZED'});
   }
   return next({
     ctx: {

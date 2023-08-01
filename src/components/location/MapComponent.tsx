@@ -1,23 +1,23 @@
-import {Card, Center, Loader, Stack, Text} from "@mantine/core";
-import {GoogleMap, MarkerF, useJsApiLoader} from "@react-google-maps/api";
-import {useTranslation} from "next-i18next";
-import {FunctionComponent, useMemo} from "react";
-import {env} from "../../env.mjs";
-import {LocationType} from "../../models/Location";
-import {googleMapsLibraries} from "../../utils/defaultObjects";
-import {formatDistance} from "../../utils/utilFunctions";
+import {Card, Center, Loader, Stack, Text} from '@mantine/core';
+import {GoogleMap, MarkerF, useJsApiLoader} from '@react-google-maps/api';
+import {useTranslation} from 'next-i18next';
+import {FunctionComponent, useMemo} from 'react';
+import {env} from '../../env.mjs';
+import {LocationType} from '../../models/Location';
+import {googleMapsLibraries} from '../../utils/defaultObjects';
+import {formatDistance} from '../../utils/utilFunctions';
 
 const MapComponent: FunctionComponent<{
   location: LocationType;
   size?: { width: number, height: number }
   distance: number | undefined;
 }> = ({distance, location, size = {width: 400, height: 400}}) => {
-  const {t} = useTranslation("common");
+  const {t} = useTranslation('common');
   const {isLoaded, loadError: mockLoadError} = useJsApiLoader({
     googleMapsApiKey: env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
     libraries: googleMapsLibraries,
   });
-  const loadError = mockLoadError || env.NEXT_PUBLIC_VERCEL_ENV === "development";
+  const loadError = mockLoadError || env.NEXT_PUBLIC_VERCEL_ENV === 'development';
 
   const map = useMemo(() => {
     const coordinates = {
@@ -41,7 +41,7 @@ const MapComponent: FunctionComponent<{
         withBorder
         p={8}
         sx={{
-          position: "absolute",
+          position: 'absolute',
           bottom: 9,
           left: 9,
           right: loadError ? 9 : 59,
@@ -53,8 +53,8 @@ const MapComponent: FunctionComponent<{
           {distance !== undefined && (<Text>{formatDistance(distance)}</Text>)}
         </Stack>
       </Card>
-      <Center sx={{height: "100%", width: "100%"}}>
-        {loadError ? t("mapComponent.error") : !isLoaded ? <Loader/> : map}
+      <Center sx={{height: '100%', width: '100%'}}>
+        {loadError ? t('mapComponent.error') : !isLoaded ? <Loader/> : map}
       </Center>
     </Card>
   );

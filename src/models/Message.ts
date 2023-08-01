@@ -1,6 +1,6 @@
-import {z} from "zod";
-import {BasicUserSchema} from "./User";
-import {IdSchema, TextSchema} from "./Utils";
+import {z} from 'zod';
+import {BasicUserSchema} from './User';
+import {IdSchema, TextSchema} from './Utils';
 
 export const CreateMessageSchema = z.object({
   text: TextSchema,
