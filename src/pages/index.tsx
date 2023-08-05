@@ -71,11 +71,16 @@ export default function FeedPage() {
           </Stack>
         </Card>
       )}
-      <QueryComponent resourceName={t('resource.feed')} query={feedQuery}
-                      eventInfo={{event: InvalidateEvent.EventGetFeed}}>
-        <EventGrid ref={ref} events={events}/>
+      <QueryComponent
+        resourceName={t('resource.feed')}
+        query={feedQuery}
+        eventInfo={{event: InvalidateEvent.EventGetFeed}}
+      >
+        <Stack>
+          <EventGrid ref={ref} events={events}/>
+          {feedQuery.isFetching && <CenteredLoader/>}
+        </Stack>
       </QueryComponent>
-      {feedQuery.isFetching && <CenteredLoader/>}
     </Stack>
   );
 }

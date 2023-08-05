@@ -79,9 +79,9 @@ export const GroupFeed: FunctionComponent<{
                   <EventCard event={event}/>
                 </Box>
               ))}
+              {eventsQuery.isFetching && <CenteredLoader/>}
             </Stack>
           </QueryComponent>
-          {eventsQuery.isFetching && <CenteredLoader/>}
         </ScrollArea>
       </Stack>
     </Card>

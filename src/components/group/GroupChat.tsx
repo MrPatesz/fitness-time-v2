@@ -74,17 +74,17 @@ export const GroupChat: FunctionComponent<{
         }}
       >
         <ScrollArea viewportRef={viewport}>
-          <Box ref={ref}>
-            {messagesQuery.isFetching && <CenteredLoader/>}
-          </Box>
           <QueryComponent
             resourceName={t('resource.chat')}
             query={messagesQuery}
             eventInfo={{event: InvalidateEvent.GroupChatGetMessages, id: groupId}}
           >
             <Stack>
-              {messages.map((message) => (
-                <CommentCard key={message.id} comment={message}/>
+              {messagesQuery.isFetching && <CenteredLoader/>}
+              {messages.map((message, index) => (
+                <Box ref={(index === 0) ? ref : undefined} key={message.id}>
+                  <CommentCard comment={message}/>
+                </Box>
               ))}
             </Stack>
           </QueryComponent>
