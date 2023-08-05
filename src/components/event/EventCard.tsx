@@ -24,11 +24,14 @@ export const EventCard: FunctionComponent<{
     enabled: Boolean(event.groupId),
   });
 
-  usePusher({event: InvalidateEvent.RatingGetAverageRatingForUser, id: event.creatorId}, userRatingQuery.refetch);
+  usePusher({
+    event: InvalidateEvent.RatingGetAverageRatingForUser,
+    id: event.creatorId
+  }, () => void userRatingQuery.refetch);
   usePusher(event.groupId ? {
     event: InvalidateEvent.RatingGetAverageRatingForGroup,
     id: event.groupId
-  } : undefined, groupRatingQuery.refetch);
+  } : undefined, () => void groupRatingQuery.refetch);
 
   return (
     <Link href={`/events/${event.id}`} locale={locale} passHref>

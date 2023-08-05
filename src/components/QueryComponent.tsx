@@ -23,7 +23,7 @@ export const QueryComponent: FunctionComponent<{
     }
   }, [query.data, setState]);
 
-  usePusher(eventInfo, query.refetch);
+  usePusher(eventInfo, () => void query.refetch);
 
   return (
     <>
