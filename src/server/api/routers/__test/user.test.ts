@@ -1,5 +1,5 @@
 import {describe, expect, it} from '@jest/globals';
-import {BasicUserSchema, DetailedUserSchema, ProfileSchema, UpdateProfileSchema} from '../../../../models/User';
+import {DetailedUserSchema, ProfileSchema, UpdateProfileSchema} from '../../../../models/User';
 import {ThemeColor} from '../../../../utils/enums';
 import {user1, user2, users} from './utils/mockData';
 import {getTestCaller, TestCaller, testPrismaClient} from './utils/testUtils';
@@ -17,19 +17,6 @@ describe('userRouter', () => {
   afterEach(async () => {
     await testPrismaClient.user.deleteMany();
     await testPrismaClient.$disconnect();
-  });
-
-  describe('getAll', () => {
-    it('returns all user records ordered by name', async () => {
-      // Arrange
-      const expected = BasicUserSchema.array().parse([...users].sort((a, b) => (!a.name || !b.name) ? 0 : a.name.localeCompare(b.name)));
-
-      // Act
-      const result = await caller.user.getAll();
-
-      // Assert
-      expect(result).toEqual(expected);
-    });
   });
 
   describe('profile', () => {

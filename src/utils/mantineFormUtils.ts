@@ -1,6 +1,8 @@
 import {UseFormReturnType} from '@mantine/form';
 import {CreateLocationType} from '../models/Location';
 
+// TODO type-safety
+
 export const getFormStringValue = (form: UseFormReturnType<any>, path: string) => (form.getInputProps(path).value as string | undefined) ?? '';
 
 export const getFormStringOnChange = (form: UseFormReturnType<any>, path: string) => (form.getInputProps(path).onChange as (newValue: string) => void);

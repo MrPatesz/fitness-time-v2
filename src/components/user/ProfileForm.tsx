@@ -14,16 +14,16 @@ import {ThemeColor} from '../../utils/enums';
 import {getFormLocationOnChange, getFormLocationValue} from '../../utils/mantineFormUtils';
 import {useSession} from 'next-auth/react';
 import {Session} from 'next-auth';
+import {UseTRPCQueryResult} from '@trpc/react-query/dist/shared';
 
 export const ProfileForm: FunctionComponent<{
-  user: ProfileType;
-}> = ({user}) => {
+  profileQuery: UseTRPCQueryResult<ProfileType, unknown>;
+}> = ({profileQuery}) => {
   const {data: session, update} = useSession();
   const {t} = useTranslation('common');
 
-  const queryContext = api.useContext();
   const useUpdate = api.user.update.useMutation({
-    onSuccess: (profile) => queryContext.user.profile.invalidate().then(() => {
+    onSuccess: (profile) => profileQuery.refetch().then(() => {
       if (session) {
         void update({
           ...session,
@@ -44,7 +44,7 @@ export const ProfileForm: FunctionComponent<{
   });
 
   const form = useForm<UpdateProfileType>({
-    initialValues: user,
+    initialValues: profileQuery.data,
     validateInputOnChange: true,
     validate: {
       name: (value) => value.trim() ? null : t('profileForm.displayName.error'),
@@ -57,7 +57,7 @@ export const ProfileForm: FunctionComponent<{
   return (
     <form onSubmit={form.onSubmit((data) => useUpdate.mutate(data))}>
       <Stack>
-        <Title order={2}>{user.name}</Title>
+        <Title order={2}>{profileQuery.data?.name}</Title>
         <TextInput
           withAsterisk
           data-autofocus

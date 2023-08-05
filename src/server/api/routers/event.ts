@@ -267,13 +267,13 @@ export const eventRouter = createTRPCRouter({
     .input(IdSchema)
     .output(z.boolean())
     .mutation(async ({input, ctx: {session: {user: {id: callerId}}, prisma}}) => {
-      const {count} = await prisma.event.deleteMany({
+      const deletedEvent = await prisma.event.delete({
         where: {
           id: input,
           creatorId: callerId,
         },
       });
 
-      return Boolean(count);
+      return Boolean(deletedEvent);
     }),
 });

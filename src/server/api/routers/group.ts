@@ -91,14 +91,14 @@ export const groupRouter = createTRPCRouter({
     .input(IdSchema)
     .output(z.boolean())
     .mutation(async ({input, ctx: {session: {user: {id: callerId}}, prisma}}) => {
-      const {count} = await prisma.group.deleteMany({
+      const deletedGroup = await prisma.group.delete({
         where: {
           id: input,
           creatorId: callerId,
         },
       });
 
-      return Boolean(count);
+      return Boolean(deletedGroup);
     }),
   join: protectedProcedure
     .input(z.object({id: IdSchema, join: z.boolean()}))

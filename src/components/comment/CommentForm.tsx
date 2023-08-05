@@ -10,6 +10,7 @@ import {defaultCreateComment} from '../../utils/defaultObjects';
 import RichTextEditor from '../rich-text/RichTextEditor';
 import {getFormStringOnChange, getFormStringValue} from '../../utils/mantineFormUtils';
 
+// TODO only used for editing now
 export const CommentForm: FunctionComponent<{
   editedComment?: BasicCommentType | CreateCommentType;
   eventId: number;

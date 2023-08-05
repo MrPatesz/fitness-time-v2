@@ -36,14 +36,6 @@ export const userRouter = createTRPCRouter({
         size: numberOfUsers,
       };
     }),
-  getAll: protectedProcedure
-    .output(BasicUserSchema.array())
-    .query(async ({ctx}) => {
-      const users = await ctx.prisma.user.findMany({
-        orderBy: {name: Prisma.SortOrder.asc},
-      });
-      return BasicUserSchema.array().parse(users);
-    }),
   profile: protectedProcedure
     .output(ProfileSchema)
     .query(async ({ctx: {prisma, session: {user: {id: userId}}}}) => {
@@ -65,7 +57,11 @@ export const userRouter = createTRPCRouter({
             include: {location: true, creator: true, group: {include: {creator: true}}},
             orderBy: {start: Prisma.SortOrder.desc},
           },
-          participatedEvents: {include: {location: true, creator: true, group: {include: {creator: true}}}},
+          participatedEvents: {
+            where: {creatorId: {not: id}},
+            include: {location: true, creator: true, group: {include: {creator: true}}},
+            orderBy: {start: Prisma.SortOrder.desc},
+          },
         },
       });
 

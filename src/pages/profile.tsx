@@ -8,14 +8,12 @@ import {api} from '../utils/api';
 export default function ProfilePage() {
   const {t} = useTranslation('common');
 
-  const userDetailsQuery = api.user.profile.useQuery();
+  const profileQuery = api.user.profile.useQuery();
 
   return (
-    <QueryComponent resourceName={t('resource.profile')} query={userDetailsQuery}>
-      {userDetailsQuery.data && (
-        <ProfileForm
-          user={userDetailsQuery.data}
-        />
+    <QueryComponent resourceName={t('resource.profile')} query={profileQuery}>
+      {profileQuery.data && (
+        <ProfileForm profileQuery={profileQuery}/>
       )}
     </QueryComponent>
   );

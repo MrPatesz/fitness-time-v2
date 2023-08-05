@@ -9,7 +9,7 @@ export const RichTextField: FunctionComponent<{
   label?: string;
   placeholder?: string;
   maxLength?: number;
-  formInputProps: ReturnType<UseFormReturnType<any>['getInputProps']>;
+  formInputProps: ReturnType<UseFormReturnType<unknown>['getInputProps']>;
 }> = ({label, placeholder, formInputProps, maxLength = 1024}) => {
   const {t} = useTranslation('common');
 

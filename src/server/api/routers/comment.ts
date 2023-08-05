@@ -10,13 +10,17 @@ export const commentRouter = createTRPCRouter({
     .input(IdSchema)
     .output(BasicCommentSchema.array())
     .query(async ({input: eventId, ctx}) => {
-      const comments = await ctx.prisma.comment.findMany({
-        where: {eventId},
-        include: {user: true},
-        orderBy: {postedAt: Prisma.SortOrder.desc},
+      const event = await ctx.prisma.event.findUnique({
+        where: {id: eventId},
+        include: {
+          comments: {
+            include: {user: true},
+            orderBy: {postedAt: Prisma.SortOrder.desc},
+          }
+        },
       });
 
-      return BasicCommentSchema.array().parse(comments);
+      return BasicCommentSchema.array().parse(event?.comments);
     }),
   getAllCreated: protectedProcedure
     .input(z.object({
@@ -103,6 +107,7 @@ export const commentRouter = createTRPCRouter({
     .output(z.boolean())
     .mutation(async ({input, ctx: {session: {user: {id: callerId}}, prisma}}) => {
       const {count} = await prisma.comment.deleteMany({
+      const deletedComment = await prisma.comment.delete({
         where: {
           id: input,
           userId: callerId,
@@ -110,5 +115,6 @@ export const commentRouter = createTRPCRouter({
       });
 
       return Boolean(count);
+      return Boolean(deletedComment);
     }),
 });
