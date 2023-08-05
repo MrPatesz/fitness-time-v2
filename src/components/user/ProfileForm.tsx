@@ -5,23 +5,36 @@ import {useTranslation} from 'next-i18next';
 import {FunctionComponent} from 'react';
 import {ProfileType, UpdateProfileType} from '../../models/User';
 import {api} from '../../utils/api';
-import {isValidUrl, refreshSession} from '../../utils/utilFunctions';
+import {isValidUrl} from '../../utils/utilFunctions';
 import {LocationPicker} from '../location/LocationPicker';
 import {RichTextField} from '../rich-text/RichTextField';
 import {ThemeColorPicker} from './ThemeColorPicker';
 import UserImage from './UserImage';
 import {ThemeColor} from '../../utils/enums';
 import {getFormLocationOnChange, getFormLocationValue} from '../../utils/mantineFormUtils';
+import {useSession} from 'next-auth/react';
+import {Session} from 'next-auth';
 
 export const ProfileForm: FunctionComponent<{
   user: ProfileType;
 }> = ({user}) => {
+  const {data: session, update} = useSession();
   const {t} = useTranslation('common');
 
   const queryContext = api.useContext();
   const useUpdate = api.user.update.useMutation({
-    onSuccess: () => queryContext.user.invalidate().then(() => {
-      refreshSession();
+    onSuccess: (profile) => queryContext.user.profile.invalidate().then(() => {
+      if (session) {
+        void update({
+          ...session,
+          user: {
+            id: profile.id,
+            name: profile.name,
+            themeColor: profile.themeColor,
+            hasLocation: Boolean(profile.location),
+          },
+        } satisfies Session);
+      }
       showNotification({
         color: 'green',
         title: t('notification.profile.update.title'),

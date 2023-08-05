@@ -8,14 +8,18 @@ import i18nConfig from '../../next-i18next.config.mjs';
 
 export default function WelcomePage() {
   const {replace: replaceRoute, locale = 'en', defaultLocale} = useRouter();
-  const {data: session} = useSession();
+  const {status} = useSession();
   const {t} = useTranslation('common');
 
   useEffect(() => {
-    if (session) {
+    if (status === 'authenticated') {
       void replaceRoute('/', undefined, {locale});
     }
-  }, [session, locale, replaceRoute]);
+  }, [status, locale, replaceRoute]);
+
+  if (status !== 'unauthenticated') {
+    return <></>;
+  }
 
   return (
     <Stack align="center" justify="center" sx={{height: '100vh'}}>
