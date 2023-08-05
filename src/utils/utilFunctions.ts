@@ -6,14 +6,6 @@ export const getBackgroundColor = (theme: MantineTheme) => {
     : theme.colors.gray[0];
 };
 
-export const isValidUrl = (url: string) => {
-  try {
-    return Boolean(new URL(url));
-  } catch (_) {
-    return false;
-  }
-};
-
 export const getFirstDayOfWeek = (locale: string) => {
   if (locale === 'hu') {
     return 'monday';

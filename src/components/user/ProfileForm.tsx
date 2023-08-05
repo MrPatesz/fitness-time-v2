@@ -5,7 +5,6 @@ import {useTranslation} from 'next-i18next';
 import {FunctionComponent} from 'react';
 import {ProfileType, UpdateProfileType} from '../../models/User';
 import {api} from '../../utils/api';
-import {isValidUrl} from '../../utils/utilFunctions';
 import {LocationPicker} from '../location/LocationPicker';
 import {RichTextField} from '../rich-text/RichTextField';
 import {ThemeColorPicker} from './ThemeColorPicker';
@@ -15,6 +14,7 @@ import {getFormLocationOnChange, getFormLocationValue} from '../../utils/mantine
 import {useSession} from 'next-auth/react';
 import {Session} from 'next-auth';
 import {UseTRPCQueryResult} from '@trpc/react-query/dist/shared';
+import {z} from 'zod';
 
 export const ProfileForm: FunctionComponent<{
   profileQuery: UseTRPCQueryResult<ProfileType, unknown>;
@@ -48,7 +48,7 @@ export const ProfileForm: FunctionComponent<{
     validateInputOnChange: true,
     validate: {
       name: (value) => value.trim() ? null : t('profileForm.displayName.error'),
-      image: (value) => !value || isValidUrl(value) ? null : t('profileForm.image.error'),
+      image: (value) => !value || z.string().url().safeParse(value).success ? null : t('profileForm.image.error'),
     },
   });
 
