@@ -19,7 +19,6 @@ import {CommentForm} from './CommentForm';
 export const CommentCard: FunctionComponent<{
   comment: BasicCommentType | BasicMessageType;
 }> = ({comment}) => {
-  const queryContext = api.useContext();
   const longDateFormatter = useLongDateFormatter();
   const theme = useMantineTheme();
   const {locale = 'en'} = useRouter();
@@ -27,13 +26,11 @@ export const CommentCard: FunctionComponent<{
   const {t} = useTranslation('common');
 
   const deleteComment = api.comment.delete.useMutation({
-    onSuccess: () => queryContext.comment.invalidate().then(() =>
-      showNotification({
-        color: 'green',
-        title: t('notification.comment.delete.title'),
-        message: t('notification.comment.delete.message'),
-      })
-    )
+    onSuccess: () => showNotification({
+      color: 'green',
+      title: t('notification.comment.delete.title'),
+      message: t('notification.comment.delete.message'),
+    })
   });
 
   return (

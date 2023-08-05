@@ -10,7 +10,7 @@ import {FunctionComponent, useEffect, useState} from 'react';
 import {Pencil, Plus, Trash} from 'tabler-icons-react';
 import {BasicGroupType} from '../../models/Group';
 import {api} from '../../utils/api';
-import {GroupTableDisplayPlace, SortDirection, SortGroupByProperty} from '../../utils/enums';
+import {GroupTableDisplayPlace, InvalidateEvent, SortDirection, SortGroupByProperty} from '../../utils/enums';
 import {useLongDateFormatter} from '../../utils/formatters';
 import {PAGE_SIZES} from '../event/EventTable';
 import {QueryComponent} from '../QueryComponent';
@@ -42,12 +42,11 @@ const GroupTable: FunctionComponent<{
     createdOnly: groupTableDisplayPlace === GroupTableDisplayPlace.CONTROL_PANEL,
   });
   const deleteGroup = api.group.delete.useMutation({
-    onSuccess: () => groupsQuery.refetch().then(() =>
-      showNotification({
-        color: 'green',
-        title: t('notification.group.delete.title'),
-        message: t('notification.group.delete.message'),
-      })),
+    onSuccess: () => showNotification({
+      color: 'green',
+      title: t('notification.group.delete.title'),
+      message: t('notification.group.delete.message'),
+    }),
   });
 
   useEffect(() => {
@@ -94,7 +93,11 @@ const GroupTable: FunctionComponent<{
           <Plus/>
         </ActionIcon>
       </Group>
-      <QueryComponent resourceName={t('resource.groups')} query={groupsQuery}>
+      <QueryComponent
+        resourceName={t('resource.groups')}
+        query={groupsQuery}
+        eventInfo={{event: InvalidateEvent.GroupGetPaginatedGroups}}
+      >
         <Box
           sx={{
             height: '100%',

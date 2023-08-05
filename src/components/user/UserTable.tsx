@@ -6,7 +6,7 @@ import {useTranslation} from 'next-i18next';
 import {useRouter} from 'next/router';
 import {FunctionComponent, useEffect, useState} from 'react';
 import {api} from '../../utils/api';
-import {SortDirection} from '../../utils/enums';
+import {InvalidateEvent, SortDirection} from '../../utils/enums';
 import {PAGE_SIZES} from '../event/EventTable';
 import {QueryComponent} from '../QueryComponent';
 import {RichTextDisplay} from '../rich-text/RichTextDisplay';
@@ -45,7 +45,11 @@ const UserTable: FunctionComponent = () => {
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.currentTarget.value)}
       />
-      <QueryComponent resourceName={t('resource.users')} query={usersQuery}>
+      <QueryComponent
+        resourceName={t('resource.users')}
+        query={usersQuery}
+        eventInfo={{event: InvalidateEvent.UserGetPaginatedUsers}}
+      >
         <Box
           sx={{
             height: '100%',

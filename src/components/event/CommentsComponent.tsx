@@ -6,6 +6,7 @@ import {getBackgroundColor} from '../../utils/utilFunctions';
 import {AddComment} from '../comment/AddComment';
 import {CommentCard} from '../comment/CommentCard';
 import {useTranslation} from 'next-i18next';
+import {InvalidateEvent} from '../../utils/enums';
 
 export const CommentsComponent = () => {
   const {query: {id}, isReady} = useRouter();
@@ -17,7 +18,11 @@ export const CommentsComponent = () => {
   });
 
   return (
-    <QueryComponent resourceName={t('resource.comments')} query={commentsQuery}>
+    <QueryComponent
+      resourceName={t('resource.comments')}
+      query={commentsQuery}
+      eventInfo={{event: InvalidateEvent.CommentGetAllByEventId, id: eventId}}
+    >
       <Card
         withBorder
         sx={theme => ({

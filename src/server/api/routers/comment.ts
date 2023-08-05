@@ -1,6 +1,6 @@
 import {z} from 'zod';
 import {BasicCommentSchema, DetailedCommentSchema, MutateCommentSchema} from '../../../models/Comment';
-import {SortCommentByProperty, SortDirection} from '../../../utils/enums';
+import {InvalidateEvent, PusherChannel, SortCommentByProperty, SortDirection} from '../../../utils/enums';
 import {createTRPCRouter, protectedProcedure} from '../trpc';
 import {Prisma} from '.prisma/client';
 import {IdSchema} from '../../../models/Utils';
@@ -74,7 +74,7 @@ export const commentRouter = createTRPCRouter({
   create: protectedProcedure
     .input(z.object({createComment: MutateCommentSchema, eventId: IdSchema}))
     .output(BasicCommentSchema)
-    .mutation(async ({input: {createComment, eventId}, ctx: {session: {user: {id: callerId}}, prisma}}) => {
+    .mutation(async ({input: {createComment, eventId}, ctx: {session: {user: {id: callerId}}, prisma, pusher}}) => {
       const comment = await prisma.comment.create({
         data: {
           ...createComment,
@@ -84,12 +84,17 @@ export const commentRouter = createTRPCRouter({
         include: {user: true},
       });
 
+      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.CommentGetAllByEventId, eventId);
+
       return BasicCommentSchema.parse(comment);
     }),
   update: protectedProcedure
     .input(z.object({comment: MutateCommentSchema, commentId: IdSchema, eventId: IdSchema}))
     .output(BasicCommentSchema)
-    .mutation(async ({input: {commentId, comment, eventId}, ctx: {session: {user: {id: callerId}}, prisma}}) => {
+    .mutation(async ({
+                       input: {commentId, comment, eventId},
+                       ctx: {session: {user: {id: callerId}}, prisma, pusher}
+                     }) => {
       const updatedComment = await prisma.comment.update({
         where: {id: commentId, userId: callerId},
         data: {
@@ -100,13 +105,14 @@ export const commentRouter = createTRPCRouter({
         include: {user: true},
       });
 
+      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.CommentGetAllByEventId, eventId);
+
       return BasicCommentSchema.parse(updatedComment);
     }),
   delete: protectedProcedure
     .input(IdSchema)
     .output(z.boolean())
-    .mutation(async ({input, ctx: {session: {user: {id: callerId}}, prisma}}) => {
-      const {count} = await prisma.comment.deleteMany({
+    .mutation(async ({input, ctx: {session: {user: {id: callerId}}, prisma, pusher}}) => {
       const deletedComment = await prisma.comment.delete({
         where: {
           id: input,
@@ -114,7 +120,8 @@ export const commentRouter = createTRPCRouter({
         },
       });
 
-      return Boolean(count);
+      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.CommentGetAllByEventId, deletedComment.eventId);
+
       return Boolean(deletedComment);
     }),
 });

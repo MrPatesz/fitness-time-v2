@@ -31,7 +31,8 @@
     "users": "Felhasználók",
     "groups": "Csoportok",
     "groupDetails": "Csoport részletek",
-    "chat": "Csoport csevegés"
+    "chat": "Csoport csevegés",
+    "rating": "Értékelés"
   },
   "notification": {
     "message": {
@@ -179,7 +180,8 @@
     "search": "Keresés név alapján"
   },
   "userDetails": {
-    "createdEvents": "Létrehozott események"
+    "createdEvents": "Létrehozott események",
+    "participatedEvents": "Részt vett események"
   },
   "eventDetails": {
     "participate": "Részvétel",

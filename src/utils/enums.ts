@@ -64,3 +64,27 @@ export enum SortCommentByProperty {
   POSTED_AT = 'postedAt',
   EVENT = 'event',
 }
+
+export enum PusherChannel {
+  INVALIDATE = 'invalidate',
+}
+
+export enum InvalidateEvent {
+  CommentGetAllByEventId = 'comment.getAllByEventId',
+  EventGetById = 'event.getById',
+  EventGetCalendar = 'event.getCalendar',
+  EventGetFeed = 'event.getFeed',
+  EventGetPaginatedEvents = 'event.getPaginatedEvents',
+  GroupGetById = 'group.getById',
+  GroupGetPaginatedGroups = 'group.getPaginatedGroups',
+  GroupChatGetMessages = 'groupChat.getMessages',
+  RatingGetAverageRatingForEvent = 'rating.getAverageRatingForEvent',
+  RatingGetAverageRatingForUser = 'rating.getAverageRatingForUser',
+  RatingGetAverageRatingForGroup = 'rating.getAverageRatingForGroup',
+  UserGetById = 'user.getById',
+  UserGetPaginatedUsers = 'user.getPaginatedUsers',
+  /* these should be invalidated locally
+  CommentGetAllCreated = 'comment.getAllCreated',
+  RatingGetCallerRating = 'rating.getCallerRating',
+  UserProfile = 'user.profile',*/
+}

@@ -31,7 +31,8 @@
     "users": "Users",
     "groups": "Groups",
     "groupDetails": "Group Details",
-    "chat": "Group Chat"
+    "chat": "Group Chat",
+    "rating": "Rating"
   },
   "notification": {
     "message": {
@@ -179,7 +180,8 @@
     "search": "Search by Name"
   },
   "userDetails": {
-    "createdEvents": "Created Events"
+    "createdEvents": "Created Events",
+    "participatedEvents": "Participated Events"
   },
   "eventDetails": {
     "participate": "Participate",

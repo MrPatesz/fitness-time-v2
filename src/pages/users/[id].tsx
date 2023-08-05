@@ -9,6 +9,7 @@ import {RatingComponent} from '../../components/RatingComponent';
 import {RichTextDisplay} from '../../components/rich-text/RichTextDisplay';
 import UserImage from '../../components/user/UserImage';
 import {api} from '../../utils/api';
+import {InvalidateEvent} from '../../utils/enums';
 
 export default function UserDetailsPage() {
   const {query: {id}, isReady} = useRouter();
@@ -23,7 +24,11 @@ export default function UserDetailsPage() {
   });
 
   return (
-    <QueryComponent resourceName={t('resource.userDetails')} query={userDetailsQuery}>
+    <QueryComponent
+      resourceName={t('resource.userDetails')}
+      query={userDetailsQuery}
+      eventInfo={{event: InvalidateEvent.UserGetById, id: userId}}
+    >
       {userDetailsQuery.data && (
         <Stack>
           <Group position="apart" align="start">
@@ -32,7 +37,13 @@ export default function UserDetailsPage() {
                 <Text weight="bold" size="xl">
                   {userDetailsQuery.data.name}
                 </Text>
-                <RatingComponent averageRating={userRatingQuery.data}/>
+                <QueryComponent
+                  resourceName={t('resource.rating')}
+                  query={userRatingQuery}
+                  eventInfo={{event: InvalidateEvent.RatingGetAverageRatingForUser, id: userId}}
+                >
+                  <RatingComponent averageRating={userRatingQuery.data}/>
+                </QueryComponent>
               </Group>
               <RichTextDisplay bordered richText={userDetailsQuery.data.introduction} maxHeight={300}/>
             </Stack>
@@ -44,6 +55,14 @@ export default function UserDetailsPage() {
                 {t('userDetails.createdEvents')}
               </Text>
               <EventGrid events={userDetailsQuery.data.createdEvents}/>
+            </>
+          )}
+          {Boolean(userDetailsQuery.data.participatedEvents.length) && (
+            <>
+              <Text size="lg">
+                {t('userDetails.participatedEvents')}
+              </Text>
+              <EventGrid events={userDetailsQuery.data.participatedEvents}/>
             </>
           )}
         </Stack>

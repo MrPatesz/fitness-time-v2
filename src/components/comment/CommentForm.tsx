@@ -21,26 +21,25 @@ export const CommentForm: FunctionComponent<{
     initialValues: editedComment ?? defaultCreateComment,
   });
 
-  const queryContext = api.useContext();
   const createComment = api.comment.create.useMutation({
-    onSuccess: () => queryContext.comment.invalidate().then(() => {
+    onSuccess: () => {
       closeAllModals();
       showNotification({
         color: 'green',
         title: t('notification.comment.create.title'),
         message: t('notification.comment.create.message'),
       });
-    })
+    }
   });
   const updateComment = api.comment.update.useMutation({
-    onSuccess: () => queryContext.comment.invalidate().then(() => {
+    onSuccess: () => {
       closeAllModals();
       showNotification({
         color: 'green',
         title: t('notification.comment.update.title'),
         message: t('notification.comment.update.message'),
       });
-    })
+    }
   });
 
   return (

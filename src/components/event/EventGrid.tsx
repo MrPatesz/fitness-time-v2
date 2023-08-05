@@ -22,12 +22,10 @@ export const EventGrid = forwardRef(({events}: {
 
   return (
     <SimpleGrid cols={qxl ? 7 : txl ? 6 : xxl ? 5 : xl ? 4 : md ? 3 : xs ? 2 : 1}>
-      {events.map((event, index) => (index === events.length - 1) ? (
-        <Box key={event.id} ref={ref}>
+      {events.map((event, index) => (
+        <Box key={event.id} ref={(index === events.length - 1) ? ref : undefined}>
           <EventCard event={event}/>
         </Box>
-      ) : (
-        <EventCard event={event} key={event.id}/>
       ))}
     </SimpleGrid>
   );

@@ -6,9 +6,10 @@ import {useRouter} from 'next/router';
 import {FunctionComponent} from 'react';
 import {BasicEventType} from '../../models/Event';
 import {api} from '../../utils/api';
-import {EventStatus, ThemeColor} from '../../utils/enums';
+import {EventStatus, InvalidateEvent, ThemeColor} from '../../utils/enums';
 import {useShortDateFormatter} from '../../utils/formatters';
 import {formatDistance, getBackgroundColor} from '../../utils/utilFunctions';
+import {usePusher} from '../../hooks/usePusher';
 
 export const EventCard: FunctionComponent<{
   event: BasicEventType;
@@ -17,10 +18,17 @@ export const EventCard: FunctionComponent<{
   const {t} = useTranslation('common');
   const shortDateFormatter = useShortDateFormatter();
 
+  // TODO don't do this for all events
   const userRatingQuery = api.rating.getAverageRatingForUser.useQuery(event.creatorId);
   const groupRatingQuery = api.rating.getAverageRatingForGroup.useQuery(event.groupId as number, {
     enabled: Boolean(event.groupId),
   });
+
+  usePusher({event: InvalidateEvent.RatingGetAverageRatingForUser, id: event.creatorId}, userRatingQuery.refetch);
+  usePusher(event.groupId ? {
+    event: InvalidateEvent.RatingGetAverageRatingForGroup,
+    id: event.groupId
+  } : undefined, groupRatingQuery.refetch);
 
   return (
     <Link href={`/events/${event.id}`} locale={locale} passHref>

@@ -14,7 +14,7 @@ import {RatingComponent} from '../../components/RatingComponent';
 import {RichTextDisplay} from '../../components/rich-text/RichTextDisplay';
 import {DetailedEventType} from '../../models/Event';
 import {api} from '../../utils/api';
-import {EventStatus} from '../../utils/enums';
+import {EventStatus, InvalidateEvent} from '../../utils/enums';
 import {useLongDateFormatter, usePriceFormatter} from '../../utils/formatters';
 import {EditEventForm} from '../../components/event/EditEventForm';
 import {CommentsComponent} from '../../components/event/CommentsComponent';
@@ -31,17 +31,21 @@ export default function EventDetailsPage() {
   const eventQuery = api.event.getById.useQuery(eventId, {
     enabled: isReady,
   });
-  const userRatingQuery = api.rating.getCallerRating.useQuery(eventId, {
-    enabled: isReady,
-  });
   const averageRatingQuery = api.rating.getAverageRatingForEvent.useQuery(eventId, {
     enabled: isReady,
   });
+  const userRatingQuery = api.rating.getCallerRating.useQuery(eventId, {
+    enabled: isReady,
+  });
   const rateEvent = api.rating.rate.useMutation({
-    onSuccess: () => {
-      void averageRatingQuery.refetch();
-      void userRatingQuery.refetch();
-    },
+    onSuccess: () => void userRatingQuery.refetch(),
+  });
+  const participate = api.event.participate.useMutation({
+    onSuccess: () => showNotification({
+      color: 'green',
+      title: t('notification.event.participation.title'),
+      message: t('notification.event.participation.message'),
+    }),
   });
 
   const editable = eventQuery.data?.status === EventStatus.PLANNED && eventQuery.data?.creatorId === session?.user.id;
@@ -71,16 +75,6 @@ export default function EventDetailsPage() {
     itemHeights.cardBorders
   );
 
-  const participate = api.event.participate.useMutation({
-    onSuccess: () => eventQuery.refetch().then(() =>
-      showNotification({
-        color: 'green',
-        title: t('notification.event.participation.title'),
-        message: t('notification.event.participation.message'),
-      })
-    ),
-  });
-
   const participateButton = (event: DetailedEventType) => {
     if (event.creatorId === session?.user.id || event.status === EventStatus.ARCHIVE) {
       return;
@@ -108,7 +102,11 @@ export default function EventDetailsPage() {
 
   return (
     <Stack>
-      <QueryComponent resourceName={t('resource.eventDetails')} query={eventQuery}>
+      <QueryComponent
+        resourceName={t('resource.eventDetails')}
+        query={eventQuery}
+        eventInfo={{event: InvalidateEvent.EventGetById, id: eventId}}
+      >
         {eventQuery.data && (
           <Stack>
             <Group spacing={defaultSpacing} align="start" position="apart">
@@ -159,15 +157,21 @@ export default function EventDetailsPage() {
                   )}
                 </Group>
                 {eventQuery.data.status === EventStatus.ARCHIVE && (
-                  <RatingComponent
-                    averageRating={averageRatingQuery.data}
-                    previousRating={userRatingQuery.data}
-                    canRate={!(eventQuery.data.creatorId === session?.user.id || !eventQuery.data.participants.find(p => p.id === session?.user.id))}
-                    onChange={(value) => rateEvent.mutate({
-                      createRating: {stars: value},
-                      eventId,
-                    })}
-                  />
+                  <QueryComponent
+                    resourceName={t('resource.rating')}
+                    query={averageRatingQuery}
+                    eventInfo={{event: InvalidateEvent.RatingGetAverageRatingForEvent, id: eventId}}
+                  >
+                    <RatingComponent
+                      averageRating={averageRatingQuery.data}
+                      previousRating={userRatingQuery.data}
+                      canRate={!(eventQuery.data.creatorId === session?.user.id || !eventQuery.data.participants.find(p => p.id === session?.user.id))}
+                      onChange={(value) => rateEvent.mutate({
+                        createRating: {stars: value},
+                        eventId,
+                      })}
+                    />
+                  </QueryComponent>
                 )}
                 <RichTextDisplay
                   bordered

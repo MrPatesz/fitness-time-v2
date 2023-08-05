@@ -12,22 +12,19 @@ import {RichTextField} from '../rich-text/RichTextField';
 export const AddComment: FunctionComponent<{
   eventId: number;
 }> = ({eventId}) => {
+  const theme = useMantineTheme();
   const {t} = useTranslation('common');
 
   const form = useForm<CreateCommentType>({
     initialValues: defaultCreateComment,
   });
 
-  const theme = useMantineTheme();
-  const queryContext = api.useContext();
   const createComment = api.comment.create.useMutation({
-    onSuccess: () => queryContext.comment.invalidate().then(() =>
-      showNotification({
-        color: 'green',
-        title: t('notification.comment.create.title'),
-        message: t('notification.comment.create.message'),
-      })
-    )
+    onSuccess: () => showNotification({
+      color: 'green',
+      title: t('notification.comment.create.title'),
+      message: t('notification.comment.create.message'),
+    })
   });
 
   return (

@@ -19,6 +19,7 @@ import {RichTextDisplay} from '../../components/rich-text/RichTextDisplay';
 import {api} from '../../utils/api';
 import {useLongDateFormatter} from '../../utils/formatters';
 import {EditGroupForm} from '../../components/group/EditGroupForm';
+import {InvalidateEvent} from '../../utils/enums';
 
 export default function GroupDetailsPage() {
   const theme = useMantineTheme();
@@ -37,13 +38,12 @@ export default function GroupDetailsPage() {
   });
 
   const useJoinGroup = api.group.join.useMutation({
-    onSuccess: (_data, {join}) => groupQuery.refetch().then(() =>
-      showNotification({
-        color: 'green',
-        title: t(join ? 'notification.group.join.title' : 'notification.group.leave.title'),
-        message: t(join ? 'notification.group.join.message' : 'notification.group.leave.message'),
-      })
-    ),
+    // TODO remove groupQuery.refetch(), buggy on leave + rejoin
+    onSuccess: (_data, {join}) => groupQuery.refetch().then(() => showNotification({
+      color: 'green',
+      title: t(join ? 'notification.group.join.title' : 'notification.group.leave.title'),
+      message: t(join ? 'notification.group.join.message' : 'notification.group.leave.message'),
+    })),
   });
 
   const isMember = useMemo(() => {
@@ -51,7 +51,11 @@ export default function GroupDetailsPage() {
   }, [groupQuery.data?.members, session?.user.id]);
 
   return (
-    <QueryComponent resourceName={t('resource.groupDetails')} query={groupQuery}>
+    <QueryComponent
+      resourceName={t('resource.groupDetails')}
+      query={groupQuery}
+      eventInfo={{event: InvalidateEvent.GroupGetById, id: groupId}}
+    >
       {groupQuery.data && (
         <Stack sx={{height: '100%'}}>
           <Group position="apart" align="start">
@@ -88,7 +92,13 @@ export default function GroupDetailsPage() {
                   </ActionIcon>
                 )}
               </Group>
-              <RatingComponent averageRating={groupRatingQuery.data}/>
+              <QueryComponent
+                resourceName={t('resource.rating')}
+                query={groupRatingQuery}
+                eventInfo={{event: InvalidateEvent.RatingGetAverageRatingForGroup, id: groupId}}
+              >
+                <RatingComponent averageRating={groupRatingQuery.data}/>
+              </QueryComponent>
             </Stack>
             <MembersComponent
               members={groupQuery.data.members}

@@ -3,13 +3,15 @@ import {useIntersection} from '@mantine/hooks';
 import {useSession} from 'next-auth/react';
 import {useTranslation} from 'next-i18next';
 import {serverSideTranslations} from 'next-i18next/serverSideTranslations';
-import {useEffect, useMemo, useRef, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import i18nConfig from '../../next-i18next.config.mjs';
 import {CenteredLoader} from '../components/CenteredLoader';
 import {EventGrid} from '../components/event/EventGrid';
 import {BasicEventType} from '../models/Event';
 import {api} from '../utils/api';
 import {formatDistance, getBackgroundColor} from '../utils/utilFunctions';
+import {QueryComponent} from '../components/QueryComponent';
+import {InvalidateEvent} from '../utils/enums';
 
 export default function FeedPage() {
   const [fluidMaxDistance, setFluidMaxDistance] = useState<number>(100);
@@ -19,31 +21,21 @@ export default function FeedPage() {
   const theme = useMantineTheme();
   const {data: session} = useSession();
   const {t} = useTranslation('common');
-  const lastEventRef = useRef<HTMLElement>(null);
-  const {ref, entry} = useIntersection({
-    root: lastEventRef.current,
-    threshold: 1,
-  });
+  const {ref, entry} = useIntersection({threshold: 0.1});
 
-  const {
-    data,
-    isFetching,
-    fetchNextPage,
-    hasNextPage,
-    error,
-  } = api.event.getFeed.useInfiniteQuery({maxDistance: session?.user.hasLocation && enableMaxDistance ? maxDistance : undefined}, {
+  const feedQuery = api.event.getFeed.useInfiniteQuery({maxDistance: session?.user.hasLocation && enableMaxDistance ? maxDistance : undefined}, {
     getNextPageParam: (lastPage) => lastPage.nextCursor,
   });
 
   useEffect(() => {
-    if (entry?.isIntersecting && hasNextPage) {
-      void fetchNextPage();
+    if (entry?.isIntersecting && feedQuery.hasNextPage && !feedQuery.isFetching) {
+      void feedQuery.fetchNextPage();
     }
   }, [entry]);
 
   const events: BasicEventType[] = useMemo(() => {
-    return data?.pages.flatMap(page => page.events) ?? [];
-  }, [data?.pages]);
+    return feedQuery.data?.pages.flatMap(page => page.events) ?? [];
+  }, [feedQuery.data?.pages]);
 
   return (
     <Stack>
@@ -79,12 +71,11 @@ export default function FeedPage() {
           </Stack>
         </Card>
       )}
-      {error ? (
-        <Card withBorder>{t('queryComponent.error', {resourceName: t('resource.feed')})}</Card>
-      ) : (
+      <QueryComponent resourceName={t('resource.feed')} query={feedQuery}
+                      eventInfo={{event: InvalidateEvent.EventGetFeed}}>
         <EventGrid ref={ref} events={events}/>
-      )}
-      {isFetching && <CenteredLoader/>}
+      </QueryComponent>
+      {feedQuery.isFetching && <CenteredLoader/>}
     </Stack>
   );
 }

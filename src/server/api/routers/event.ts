@@ -5,6 +5,7 @@ import {PaginateEventsSchema} from '../../../models/pagination/PaginateEvents';
 import {createTRPCRouter, protectedProcedure} from '../trpc';
 import {Prisma} from '.prisma/client';
 import {IdSchema} from '../../../models/Utils';
+import {InvalidateEvent, PusherChannel} from '../../../utils/enums';
 
 export const eventRouter = createTRPCRouter({
   getPaginatedEvents: protectedProcedure
@@ -189,7 +190,7 @@ export const eventRouter = createTRPCRouter({
   create: protectedProcedure
     .input(MutateEventSchema)
     .output(BasicEventSchema)
-    .mutation(async ({input: createEvent, ctx: {session: {user: {id: callerId}}, prisma}}) => {
+    .mutation(async ({input: createEvent, ctx: {session: {user: {id: callerId}}, prisma, pusher}}) => {
       const event = await prisma.event.create({
         data: {
           ...createEvent,
@@ -209,12 +210,17 @@ export const eventRouter = createTRPCRouter({
         include: {location: true, creator: true, group: {include: {creator: true}}},
       });
 
+      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetCalendar, callerId);
+      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetFeed, null);
+      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetPaginatedEvents, null);
+      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.UserGetById, callerId);
+
       return BasicEventSchema.parse(event);
     }),
   participate: protectedProcedure
     .input(z.object({id: IdSchema, participate: z.boolean()}))
     .output(BasicEventSchema)
-    .mutation(async ({input, ctx: {session: {user: {id: callerId}}, prisma}}) => {
+    .mutation(async ({input, ctx: {session: {user: {id: callerId}}, prisma, pusher}}) => {
       const event = await prisma.event.findUnique({
         where: {id: input.id},
         include: {participants: true},
@@ -236,12 +242,15 @@ export const eventRouter = createTRPCRouter({
         include: {creator: true, location: true, group: {include: {creator: true}}},
       });
 
+      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetById, input.id);
+      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.UserGetById, callerId);
+
       return BasicEventSchema.parse(result);
     }),
   update: protectedProcedure
     .input(z.object({event: MutateEventSchema, id: IdSchema}))
     .output(BasicEventSchema)
-    .mutation(async ({input, ctx: {session: {user: {id: callerId}}, prisma}}) => {
+    .mutation(async ({input, ctx: {session: {user: {id: callerId}}, prisma, pusher}}) => {
       const updatedEvent = await prisma.event.update({
         where: {id: input.id, creatorId: callerId},
         data: {
@@ -261,18 +270,31 @@ export const eventRouter = createTRPCRouter({
         include: {location: true, creator: true, group: {include: {creator: true}}},
       });
 
+      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetById, input.id);
+      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetCalendar, null);
+      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetFeed, null);
+      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetPaginatedEvents, null);
+      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.UserGetById, callerId);
+
       return BasicEventSchema.parse(updatedEvent);
     }),
   delete: protectedProcedure
     .input(IdSchema)
     .output(z.boolean())
-    .mutation(async ({input, ctx: {session: {user: {id: callerId}}, prisma}}) => {
+    .mutation(async ({input, ctx: {session: {user: {id: callerId}}, prisma, pusher}}) => {
       const deletedEvent = await prisma.event.delete({
         where: {
           id: input,
           creatorId: callerId,
         },
       });
+
+      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetById, input);
+      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetCalendar, null);
+      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetFeed, null);
+      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetPaginatedEvents, null);
+      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.CommentGetAllByEventId, input);
+      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.UserGetById, callerId);
 
       return Boolean(deletedEvent);
     }),

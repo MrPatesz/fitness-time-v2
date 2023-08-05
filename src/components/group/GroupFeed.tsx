@@ -2,7 +2,7 @@ import {ActionIcon, Box, Card, Group, ScrollArea, Stack, Text, useMantineTheme} 
 import {useIntersection} from '@mantine/hooks';
 import {openModal} from '@mantine/modals';
 import {useTranslation} from 'next-i18next';
-import {FunctionComponent, useEffect, useMemo, useRef} from 'react';
+import {FunctionComponent, useEffect, useMemo} from 'react';
 import {Plus} from 'tabler-icons-react';
 import {BasicEventType} from '../../models/Event';
 import {api} from '../../utils/api';
@@ -10,37 +10,29 @@ import {getBackgroundColor} from '../../utils/utilFunctions';
 import {CenteredLoader} from '../CenteredLoader';
 import {EventCard} from '../event/EventCard';
 import {CreateEventForm} from '../event/CreateEventForm';
+import {QueryComponent} from '../QueryComponent';
+import {InvalidateEvent} from '../../utils/enums';
 
 export const GroupFeed: FunctionComponent<{
   groupId: number;
 }> = ({groupId}) => {
   const theme = useMantineTheme();
   const {t} = useTranslation('common');
-  const lastEventRef = useRef<HTMLElement>(null);
-  const {ref, entry} = useIntersection({
-    root: lastEventRef.current,
-    threshold: 1,
-  });
+  const {ref, entry} = useIntersection({threshold: 0.1});
 
-  const {
-    data,
-    isFetching,
-    fetchNextPage,
-    hasNextPage,
-    error,
-  } = api.event.getFeed.useInfiniteQuery({groupId}, {
+  const eventsQuery = api.event.getFeed.useInfiniteQuery({groupId}, {
     getNextPageParam: (lastPage) => lastPage.nextCursor,
   });
 
   useEffect(() => {
-    if (entry?.isIntersecting && hasNextPage) {
-      void fetchNextPage();
+    if (entry?.isIntersecting && eventsQuery.hasNextPage && !eventsQuery.isFetching) {
+      void eventsQuery.fetchNextPage();
     }
   }, [entry]);
 
   const events: BasicEventType[] = useMemo(() => {
-    return data?.pages.flatMap(page => page.events) ?? [];
-  }, [data?.pages]);
+    return eventsQuery.data?.pages.flatMap(page => page.events) ?? [];
+  }, [eventsQuery.data?.pages]);
 
   return (
     <Card
@@ -76,16 +68,20 @@ export const GroupFeed: FunctionComponent<{
           </ActionIcon>
         </Group>
         <ScrollArea>
-          <Stack>
-            {error ? (
-              <Card withBorder>{t('queryComponent.error', {resourceName: t('resource.feed')})}</Card>
-            ) : events.map((event, index) => (
-              <Box ref={(index === events.length - 1) ? ref : undefined} key={event.id}>
-                <EventCard event={event}/>
-              </Box>
-            ))}
-            {isFetching && <CenteredLoader/>}
-          </Stack>
+          <QueryComponent
+            resourceName={t('resource.feed')}
+            query={eventsQuery}
+            eventInfo={{event: InvalidateEvent.EventGetFeed, id: groupId}}
+          >
+            <Stack>
+              {events.map((event, index) => (
+                <Box ref={(index === events.length - 1) ? ref : undefined} key={event.id}>
+                  <EventCard event={event}/>
+                </Box>
+              ))}
+            </Stack>
+          </QueryComponent>
+          {eventsQuery.isFetching && <CenteredLoader/>}
         </ScrollArea>
       </Stack>
     </Card>

@@ -3,6 +3,7 @@ import {BasicMessageSchema, CreateMessageSchema} from '../../../models/Message';
 import {createTRPCRouter, protectedProcedure} from '../trpc';
 import {Prisma} from '.prisma/client';
 import {IdSchema} from '../../../models/Utils';
+import {InvalidateEvent, PusherChannel} from '../../../utils/enums';
 
 export const groupChatRouter = createTRPCRouter({
   getMessages: protectedProcedure
@@ -56,8 +57,8 @@ export const groupChatRouter = createTRPCRouter({
         include: {user: true},
       });
 
-      const result = BasicMessageSchema.parse(message);
-      void pusher.trigger(result.groupId.toString(), 'create', null);
-      return result;
+      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.GroupChatGetMessages, groupId);
+
+      return BasicMessageSchema.parse(message);
     }),
 });

@@ -8,16 +8,15 @@ import {GroupForm} from './GroupForm';
 export const CreateGroupForm = () => {
   const {t} = useTranslation('common');
 
-  const queryContext = api.useContext();
   const useCreate = api.group.create.useMutation({
-    onSuccess: () => queryContext.group.invalidate().then(() => {
+    onSuccess: () => {
       closeAllModals();
       showNotification({
         color: 'green',
         title: t('notification.group.create.title'),
         message: t('notification.group.create.message'),
       });
-    }),
+    },
   });
 
   return (

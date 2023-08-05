@@ -11,20 +11,19 @@ export const EditEventForm: FunctionComponent<{
 }> = ({eventId}) => {
   const {t} = useTranslation('common');
 
-  const queryContext = api.useContext();
   const editedEventQuery = api.event.getById.useQuery(eventId, {
     refetchOnMount: (query) => !query.isActive(),
   });
 
   const useUpdate = api.event.update.useMutation({
-    onSuccess: () => queryContext.event.invalidate().then(() => {
+    onSuccess: () => {
       closeAllModals();
       showNotification({
         color: 'green',
         title: t('notification.event.update.title'),
         message: t('notification.event.update.message'),
       });
-    }),
+    },
   });
 
   return (

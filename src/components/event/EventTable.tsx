@@ -20,7 +20,7 @@ import {FunctionComponent, useEffect, useState} from 'react';
 import {Pencil, Plus, Trash} from 'tabler-icons-react';
 import {BasicEventType} from '../../models/Event';
 import {api} from '../../utils/api';
-import {EventTableDisplayPlace, SortDirection, SortEventByProperty} from '../../utils/enums';
+import {EventTableDisplayPlace, InvalidateEvent, SortDirection, SortEventByProperty} from '../../utils/enums';
 import {useLongDateFormatter, usePriceFormatter} from '../../utils/formatters';
 import {QueryComponent} from '../QueryComponent';
 import {EditEventForm} from './EditEventForm';
@@ -57,12 +57,11 @@ const EventTable: FunctionComponent<{
     createdOnly: eventTableDisplayPlace === EventTableDisplayPlace.CONTROL_PANEL,
   });
   const deleteEvent = api.event.delete.useMutation({
-    onSuccess: () => eventsQuery.refetch().then(() =>
-      showNotification({
-        color: 'green',
-        title: t('notification.event.delete.title'),
-        message: t('notification.event.delete.message'),
-      })),
+    onSuccess: () => showNotification({
+      color: 'green',
+      title: t('notification.event.delete.title'),
+      message: t('notification.event.delete.message'),
+    }),
   });
 
   useEffect(() => {
@@ -114,7 +113,11 @@ const EventTable: FunctionComponent<{
           <Plus/>
         </ActionIcon>
       </Group>
-      <QueryComponent resourceName={t('resource.events')} query={eventsQuery}>
+      <QueryComponent
+        resourceName={t('resource.events')}
+        query={eventsQuery}
+        eventInfo={{event: InvalidateEvent.EventGetPaginatedEvents}}
+      >
         <Box
           sx={{
             height: '100%',

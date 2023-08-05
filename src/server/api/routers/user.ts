@@ -3,6 +3,7 @@ import {PaginateUsersSchema} from '../../../models/pagination/PaginateUsers';
 import {BasicUserSchema, DetailedUserSchema, ProfileSchema, UpdateProfileSchema} from '../../../models/User';
 import {createTRPCRouter, protectedProcedure} from '../trpc';
 import {Prisma} from '.prisma/client';
+import {InvalidateEvent, PusherChannel} from '../../../utils/enums';
 
 export const userRouter = createTRPCRouter({
   getPaginatedUsers: protectedProcedure
@@ -70,7 +71,7 @@ export const userRouter = createTRPCRouter({
   update: protectedProcedure
     .input(UpdateProfileSchema)
     .output(UpdateProfileSchema)
-    .mutation(async ({input, ctx: {session: {user: {id: callerId}}, prisma}}) => {
+    .mutation(async ({input, ctx: {session: {user: {id: callerId}}, prisma, pusher}}) => {
       const updatedUser = await prisma.user.update({
         where: {id: callerId},
         data: {
@@ -86,6 +87,10 @@ export const userRouter = createTRPCRouter({
         },
         include: {location: true},
       });
+
+      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.UserGetById, callerId);
+      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.UserGetPaginatedUsers, null);
+
       return ProfileSchema.parse(updatedUser);
     }),
 });

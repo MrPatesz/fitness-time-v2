@@ -15,16 +15,15 @@ export const CreateEventForm: FunctionComponent<{
 }> = ({groupId, initialInterval}) => {
   const {t} = useTranslation('common');
 
-  const queryContext = api.useContext();
   const useCreate = api.event.create.useMutation({
-    onSuccess: () => queryContext.event.invalidate().then(() => {
+    onSuccess: () => {
       closeAllModals();
       showNotification({
         color: 'green',
         title: t('notification.event.create.title'),
         message: t('notification.event.create.message'),
       });
-    }),
+    },
   });
 
   return (

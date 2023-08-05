@@ -1,34 +1,25 @@
-import {Box, Card, Center, Loader, ScrollArea, Stack} from '@mantine/core';
+import {Box, Card, ScrollArea, Stack} from '@mantine/core';
 import {useIntersection} from '@mantine/hooks';
 import {useTranslation} from 'next-i18next';
 import {FunctionComponent, useEffect, useMemo, useRef} from 'react';
 import {api} from '../../utils/api';
-import {pusherClient} from '../../utils/pusher';
 import {getBackgroundColor} from '../../utils/utilFunctions';
 import {CommentCard} from '../comment/CommentCard';
 import {AddMessage} from './AddMessage';
+import {CenteredLoader} from '../CenteredLoader';
+import {QueryComponent} from '../QueryComponent';
+import {InvalidateEvent} from '../../utils/enums';
 
 export const GroupChat: FunctionComponent<{
   groupId: number;
 }> = ({groupId}) => {
   const viewport = useRef<HTMLDivElement>(null);
   const {t} = useTranslation('common');
-  const lastMessageRef = useRef<HTMLElement>(null);
-  const {ref, entry} = useIntersection({
-    root: lastMessageRef.current,
-    threshold: 1,
-  });
+  const {ref, entry} = useIntersection({threshold: 0.1});
 
-  const {
-    data,
-    isLoading,
-    isFetching,
-    fetchNextPage,
-    hasNextPage,
-    error,
-    refetch: refetchMessages,
-  } = api.groupChat.getMessages.useInfiniteQuery({groupId}, {
+  const messagesQuery = api.groupChat.getMessages.useInfiniteQuery({groupId}, {
     getNextPageParam: (lastPage) => lastPage.nextCursor,
+    // onSuccess: () => scrollToBottom(true), // TODO on new message
   });
 
   const scrollToBottom = (smooth = false) => viewport.current?.scrollTo({
@@ -36,33 +27,25 @@ export const GroupChat: FunctionComponent<{
     behavior: smooth ? 'smooth' : undefined,
   });
 
-  const refetchAndScrollToBottom = () => refetchMessages().then(() => setTimeout(() => scrollToBottom(true), 100));
-
-  useEffect(() => {
-    pusherClient.subscribe(groupId.toString());
-    pusherClient.bind('create', refetchAndScrollToBottom);
-
-    return () => pusherClient.unsubscribe(groupId.toString());
-  }, []);
-
   const messages = useMemo(() => {
-    if (!data) return [];
+    if (!messagesQuery.data) return [];
 
-    return [...data.pages]
+    return [...messagesQuery.data.pages]
       .reverse()
       .flatMap(page => page.messages);
-  }, [data?.pages]);
+  }, [messagesQuery.data?.pages]);
 
   useEffect(() => {
     scrollToBottom();
-  }, [viewport.current, isLoading]);
+  }, [viewport.current, messagesQuery.isLoading]);
 
+  // TODO refactor this
   useEffect(() => {
-    if (entry?.isIntersecting && hasNextPage) {
+    if (entry?.isIntersecting && messagesQuery.hasNextPage && !messagesQuery.isFetching) {
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      fetchNextPage().then(() => {
+      messagesQuery.fetchNextPage().then(() => {
         setTimeout(() => {
-          const numberOfPages = data?.pages.length ?? 1;
+          const numberOfPages = messagesQuery.data?.pages.length ?? 1;
           const scrollRatio = 1 - (numberOfPages / (numberOfPages + 1));
           viewport.current?.scrollTo({top: viewport.current?.scrollHeight * scrollRatio});
         }, 100);
@@ -91,22 +74,20 @@ export const GroupChat: FunctionComponent<{
         }}
       >
         <ScrollArea viewportRef={viewport}>
-          <Center ref={ref} sx={{width: '100%'}}>
-            {isFetching && (
-              <Box h={25}>
-                <Loader/>
-              </Box>
-            )}
-          </Center>
-          <Stack>
-            {error ? (
-              <Card withBorder>
-                {t('queryComponent.error', {resourceName: t('resource.chat')})}
-              </Card>
-            ) : messages.map((message) => (
-              <CommentCard key={message.id} comment={message}/>
-            ))}
-          </Stack>
+          <Box ref={ref}>
+            {messagesQuery.isFetching && <CenteredLoader/>}
+          </Box>
+          <QueryComponent
+            resourceName={t('resource.chat')}
+            query={messagesQuery}
+            eventInfo={{event: InvalidateEvent.GroupChatGetMessages, id: groupId}}
+          >
+            <Stack>
+              {messages.map((message) => (
+                <CommentCard key={message.id} comment={message}/>
+              ))}
+            </Stack>
+          </QueryComponent>
         </ScrollArea>
         <AddMessage groupId={groupId}/>
       </Stack>

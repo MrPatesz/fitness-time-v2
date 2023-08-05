@@ -16,6 +16,7 @@ import {openModal} from '@mantine/modals';
 import {CreateEventForm} from '../components/event/CreateEventForm';
 import {BasicEventType} from '../models/Event';
 import {useMediaQuery} from '@mantine/hooks';
+import {InvalidateEvent} from '../utils/enums';
 
 export default function CalendarPage() {
   const theme = useMantineTheme();
@@ -28,13 +29,11 @@ export default function CalendarPage() {
 
   const eventsQuery = api.event.getCalendar.useQuery();
   const updateEvent = api.event.update.useMutation({
-    onSuccess: () => eventsQuery.refetch().then(() =>
-      showNotification({
-        color: 'green',
-        title: t('notification.event.update.title'),
-        message: t('notification.event.update.message'),
-      })
-    ),
+    onSuccess: () => showNotification({
+      color: 'green',
+      title: t('notification.event.update.title'),
+      message: t('notification.event.update.message'),
+    }),
     onError: () => showNotification({
       color: 'red',
       title: t('notification.event.failedToUpdate.title'),
@@ -43,7 +42,11 @@ export default function CalendarPage() {
   });
 
   return (
-    <QueryComponent resourceName={t('resource.calendar')} query={eventsQuery}>
+    <QueryComponent
+      resourceName={t('resource.calendar')}
+      query={eventsQuery}
+      eventInfo={{event: InvalidateEvent.EventGetCalendar, id: session?.user.id}}
+    >
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         initialView="timeGridWeek"

@@ -12,6 +12,8 @@ import {EventTableDisplayPlace, GroupTableDisplayPlace} from '../utils/enums';
 export default function ControlPanelPage() {
   const {t} = useTranslation('common');
 
+  // TODO ratings, participated events, joined groups
+
   return (
     <Tabs defaultValue="events" sx={{height: '100%'}}>
       <Tabs.List grow>

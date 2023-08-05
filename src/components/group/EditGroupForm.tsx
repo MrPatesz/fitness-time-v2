@@ -11,20 +11,19 @@ export const EditGroupForm: FunctionComponent<{
 }> = ({groupId}) => {
   const {t} = useTranslation('common');
 
-  const queryContext = api.useContext();
   const editedGroupQuery = api.group.getById.useQuery(groupId, {
     refetchOnMount: (query) => !query.isActive(),
   });
 
   const useUpdate = api.group.update.useMutation({
-    onSuccess: () => queryContext.group.invalidate().then(() => {
+    onSuccess: () => {
       closeAllModals();
       showNotification({
         color: 'green',
         title: t('notification.group.update.title'),
         message: t('notification.group.update.message'),
       });
-    }),
+    },
   });
 
   return (
