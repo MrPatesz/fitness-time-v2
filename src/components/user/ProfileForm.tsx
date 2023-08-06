@@ -22,7 +22,7 @@ export const ProfileForm: FunctionComponent<{
   const {data: session, update} = useSession();
   const {t} = useTranslation('common');
 
-  const useUpdate = api.user.update.useMutation({
+  const updateProfile = api.user.update.useMutation({
     onSuccess: (profile) => profileQuery.refetch().then(() => {
       if (session) {
         void update({
@@ -55,7 +55,7 @@ export const ProfileForm: FunctionComponent<{
   // TODO public/private information sections: edit button to open form
 
   return (
-    <form onSubmit={form.onSubmit((data) => useUpdate.mutate(data))}>
+    <form onSubmit={form.onSubmit((data) => updateProfile.mutate(data))}>
       <Stack>
         <Title order={2}>{profileQuery.data?.name}</Title>
         <TextInput

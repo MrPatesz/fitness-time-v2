@@ -8,7 +8,7 @@ import {GroupForm} from './GroupForm';
 export const CreateGroupForm = () => {
   const {t} = useTranslation('common');
 
-  const useCreate = api.group.create.useMutation({
+  const createGroup = api.group.create.useMutation({
     onSuccess: () => {
       closeAllModals();
       showNotification({
@@ -22,7 +22,7 @@ export const CreateGroupForm = () => {
   return (
     <GroupForm
       originalGroup={defaultCreateGroup}
-      onSubmit={(data) => useCreate.mutate(data)}
+      onSubmit={(data) => createGroup.mutate(data)}
     />
   );
 };

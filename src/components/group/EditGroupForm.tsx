@@ -15,7 +15,7 @@ export const EditGroupForm: FunctionComponent<{
     refetchOnMount: (query) => !query.isActive(),
   });
 
-  const useUpdate = api.group.update.useMutation({
+  const updateGroup = api.group.update.useMutation({
     onSuccess: () => {
       closeAllModals();
       showNotification({
@@ -34,7 +34,7 @@ export const EditGroupForm: FunctionComponent<{
       {editedGroupQuery.data && (
         <GroupForm
           originalGroup={editedGroupQuery.data}
-          onSubmit={(data) => useUpdate.mutate({
+          onSubmit={(data) => updateGroup.mutate({
             id: groupId,
             group: data,
           })}

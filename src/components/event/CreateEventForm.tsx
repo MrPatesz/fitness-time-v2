@@ -15,7 +15,7 @@ export const CreateEventForm: FunctionComponent<{
 }> = ({groupId, initialInterval}) => {
   const {t} = useTranslation('common');
 
-  const useCreate = api.event.create.useMutation({
+  const createEvent = api.event.create.useMutation({
     onSuccess: () => {
       closeAllModals();
       showNotification({
@@ -29,7 +29,7 @@ export const CreateEventForm: FunctionComponent<{
   return (
     <EventForm
       originalEvent={{...getDefaultCreateEvent(initialInterval), groupId}}
-      onSubmit={(data) => useCreate.mutate({...data, price: data.price ?? null, limit: data.limit ?? null})}
+      onSubmit={(data) => createEvent.mutate({...data, price: data.price ?? null, limit: data.limit ?? null})}
     />
   );
 };

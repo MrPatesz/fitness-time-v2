@@ -15,7 +15,7 @@ export const EditEventForm: FunctionComponent<{
     refetchOnMount: (query) => !query.isActive(),
   });
 
-  const useUpdate = api.event.update.useMutation({
+  const updateEvent = api.event.update.useMutation({
     onSuccess: () => {
       closeAllModals();
       showNotification({
@@ -34,7 +34,7 @@ export const EditEventForm: FunctionComponent<{
       {editedEventQuery.data && (
         <EventForm
           originalEvent={editedEventQuery.data}
-          onSubmit={(data) => useUpdate.mutate({
+          onSubmit={(data) => updateEvent.mutate({
             id: eventId,
             event: {...data, price: data.price ?? null, limit: data.limit ?? null},
           })}

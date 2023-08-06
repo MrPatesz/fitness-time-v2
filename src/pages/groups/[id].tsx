@@ -37,7 +37,7 @@ export default function GroupDetailsPage() {
     enabled: isReady,
   });
 
-  const useJoinGroup = api.group.join.useMutation({
+  const joinGroup = api.group.join.useMutation({
     // TODO remove groupQuery.refetch(), buggy on leave + rejoin
     onSuccess: (_data, {join}) => groupQuery.refetch().then(() => showNotification({
       color: 'green',
@@ -46,6 +46,7 @@ export default function GroupDetailsPage() {
     })),
   });
 
+  const isCreator = groupQuery.data?.creatorId === session?.user.id;
   const isMember = useMemo(() => {
     return Boolean(groupQuery.data?.members.find(m => m.id === session?.user.id));
   }, [groupQuery.data?.members, session?.user.id]);
@@ -78,7 +79,7 @@ export default function GroupDetailsPage() {
                 <Text>
                   {longDateFormatter.format(groupQuery.data.createdAt)}
                 </Text>
-                {groupQuery.data?.creatorId === session?.user.id && (
+                {isCreator && (
                   <ActionIcon
                     size="lg"
                     variant="filled"
@@ -102,8 +103,8 @@ export default function GroupDetailsPage() {
             </Stack>
             <MembersComponent
               members={groupQuery.data.members}
-              isCreator={groupQuery.data.creatorId === session?.user.id}
-              onJoin={(join) => useJoinGroup.mutate({id: groupId, join})}
+              isCreator={isCreator}
+              onJoin={(join) => joinGroup.mutate({id: groupId, join})}
             />
           </Group>
           {isMember ? (
