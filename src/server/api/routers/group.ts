@@ -71,8 +71,8 @@ export const groupRouter = createTRPCRouter({
         include: {creator: true},
       });
 
-      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.GroupGetPaginatedGroups, null);
-      // TODO void pusher.trigger(PusherChannel.INVALIDATE, PusherEvent.UserGetById, callerId);
+      await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.GroupGetPaginatedGroups, null);
+      // TODO await pusher.trigger(PusherChannel.INVALIDATE, PusherEvent.UserGetById, callerId);
 
       return BasicGroupSchema.parse(group);
     }),
@@ -89,9 +89,9 @@ export const groupRouter = createTRPCRouter({
         include: {creator: true},
       });
 
-      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.GroupGetById, input.id);
-      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.GroupGetPaginatedGroups, null);
-      // TODO void pusher.trigger(PusherChannel.INVALIDATE, PusherEvent.UserGetById, null);
+      await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.GroupGetById, input.id);
+      await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.GroupGetPaginatedGroups, null);
+      // TODO await pusher.trigger(PusherChannel.INVALIDATE, PusherEvent.UserGetById, null);
 
       return BasicGroupSchema.parse(updatedGroup);
     }),
@@ -106,9 +106,9 @@ export const groupRouter = createTRPCRouter({
         },
       });
 
-      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.GroupGetById, input);
-      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.GroupGetPaginatedGroups, null);
-      // TODO void pusher.trigger(PusherChannel.INVALIDATE, PusherEvent.UserGetById, null);
+      await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.GroupGetById, input);
+      await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.GroupGetPaginatedGroups, null);
+      // TODO await pusher.trigger(PusherChannel.INVALIDATE, PusherEvent.UserGetById, null);
 
       return Boolean(deletedGroup);
     }),
@@ -127,8 +127,8 @@ export const groupRouter = createTRPCRouter({
         },
       });
 
-      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.GroupGetById, groupId);
-      // TODO void pusher.trigger(PusherChannel.INVALIDATE, PusherEvent.UserGetById, callerId);
+      await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.GroupGetById, groupId);
+      // TODO await pusher.trigger(PusherChannel.INVALIDATE, PusherEvent.UserGetById, callerId);
 
       return Boolean(result);
     }),

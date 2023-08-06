@@ -86,10 +86,10 @@ export const ratingRouter = createTRPCRouter({
       });
 
       const pusherEvents = () => {
-        void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.RatingGetAverageRatingForEvent, eventId);
-        void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.RatingGetAverageRatingForUser, callerId);
+        await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.RatingGetAverageRatingForEvent, eventId);
+        await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.RatingGetAverageRatingForUser, callerId);
         if (foundRating?.event.groupId) {
-          void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.RatingGetAverageRatingForGroup, foundRating.event.groupId);
+          await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.RatingGetAverageRatingForGroup, foundRating.event.groupId);
         }
       };
 

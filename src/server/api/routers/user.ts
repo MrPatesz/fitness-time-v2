@@ -88,8 +88,8 @@ export const userRouter = createTRPCRouter({
         include: {location: true},
       });
 
-      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.UserGetById, callerId);
-      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.UserGetPaginatedUsers, null);
+      await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.UserGetById, callerId);
+      await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.UserGetPaginatedUsers, null);
 
       return ProfileSchema.parse(updatedUser);
     }),

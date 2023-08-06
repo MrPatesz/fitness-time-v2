@@ -210,10 +210,10 @@ export const eventRouter = createTRPCRouter({
         include: {location: true, creator: true, group: {include: {creator: true}}},
       });
 
-      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetCalendar, callerId);
-      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetFeed, null);
-      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetPaginatedEvents, null);
-      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.UserGetById, callerId);
+      await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetCalendar, callerId);
+      await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetFeed, null);
+      await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetPaginatedEvents, null);
+      await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.UserGetById, callerId);
 
       return BasicEventSchema.parse(event);
     }),
@@ -242,8 +242,8 @@ export const eventRouter = createTRPCRouter({
         include: {creator: true, location: true, group: {include: {creator: true}}},
       });
 
-      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetById, input.id);
-      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.UserGetById, callerId);
+      await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetById, input.id);
+      await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.UserGetById, callerId);
 
       return BasicEventSchema.parse(result);
     }),
@@ -270,11 +270,11 @@ export const eventRouter = createTRPCRouter({
         include: {location: true, creator: true, group: {include: {creator: true}}},
       });
 
-      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetById, input.id);
-      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetCalendar, null);
-      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetFeed, null);
-      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetPaginatedEvents, null);
-      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.UserGetById, callerId);
+      await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetById, input.id);
+      await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetCalendar, null);
+      await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetFeed, null);
+      await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetPaginatedEvents, null);
+      await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.UserGetById, callerId);
 
       return BasicEventSchema.parse(updatedEvent);
     }),
@@ -289,12 +289,12 @@ export const eventRouter = createTRPCRouter({
         },
       });
 
-      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetById, input);
-      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetCalendar, null);
-      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetFeed, null);
-      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetPaginatedEvents, null);
-      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.CommentGetAllByEventId, input);
-      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.UserGetById, callerId);
+      await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetById, input);
+      await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetCalendar, null);
+      await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetFeed, null);
+      await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetPaginatedEvents, null);
+      await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.CommentGetAllByEventId, input);
+      await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.UserGetById, callerId);
 
       return Boolean(deletedEvent);
     }),

@@ -84,7 +84,7 @@ export const commentRouter = createTRPCRouter({
         include: {user: true},
       });
 
-      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.CommentGetAllByEventId, eventId);
+      await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.CommentGetAllByEventId, eventId);
 
       return BasicCommentSchema.parse(comment);
     }),
@@ -105,7 +105,7 @@ export const commentRouter = createTRPCRouter({
         include: {user: true},
       });
 
-      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.CommentGetAllByEventId, eventId);
+      await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.CommentGetAllByEventId, eventId);
 
       return BasicCommentSchema.parse(updatedComment);
     }),
@@ -120,7 +120,7 @@ export const commentRouter = createTRPCRouter({
         },
       });
 
-      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.CommentGetAllByEventId, deletedComment.eventId);
+      await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.CommentGetAllByEventId, deletedComment.eventId);
 
       return Boolean(deletedComment);
     }),

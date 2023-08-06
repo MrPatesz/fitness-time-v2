@@ -57,7 +57,7 @@ export const groupChatRouter = createTRPCRouter({
         include: {user: true},
       });
 
-      void pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.GroupChatGetMessages, groupId);
+      await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.GroupChatGetMessages, groupId);
 
       return BasicMessageSchema.parse(message);
     }),
