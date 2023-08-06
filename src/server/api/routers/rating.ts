@@ -85,7 +85,7 @@ export const ratingRouter = createTRPCRouter({
         include: {event: true},
       });
 
-      const pusherEvents = () => {
+      const pusherEvents = async () => {
         await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.RatingGetAverageRatingForEvent, eventId);
         await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.RatingGetAverageRatingForUser, callerId);
         if (foundRating?.event.groupId) {
@@ -100,7 +100,7 @@ export const ratingRouter = createTRPCRouter({
           include: {user: true},
         });
 
-        pusherEvents();
+        await pusherEvents();
 
         return BasicRatingSchema.parse(editedRating);
       } else {
@@ -113,7 +113,7 @@ export const ratingRouter = createTRPCRouter({
           include: {user: true},
         });
 
-        pusherEvents();
+        await pusherEvents();
 
         return BasicRatingSchema.parse(newRating);
       }
