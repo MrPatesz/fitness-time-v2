@@ -39,7 +39,7 @@ export default function GroupDetailsPage() {
 
   const joinGroup = api.group.join.useMutation({
     // TODO remove groupQuery.refetch(), buggy on leave + rejoin
-    onSuccess: (_data, {join}) => groupQuery.refetch().then(() => showNotification({
+    onSuccess: (_, {join}) => groupQuery.refetch().then(() => showNotification({
       color: 'green',
       title: t(join ? 'notification.group.join.title' : 'notification.group.leave.title'),
       message: t(join ? 'notification.group.join.message' : 'notification.group.leave.message'),

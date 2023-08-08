@@ -70,8 +70,9 @@ export const userRouter = createTRPCRouter({
     }),
   update: protectedProcedure
     .input(UpdateProfileSchema)
+    .output(UpdateProfileSchema)
     .mutation(async ({input, ctx: {session: {user: {id: callerId}}, prisma, pusher}}) => {
-      await prisma.user.update({
+      const updatedUser = await prisma.user.update({
         where: {id: callerId},
         data: {
           ...input,
@@ -84,9 +85,12 @@ export const userRouter = createTRPCRouter({
             }
           } : {disconnect: true},
         },
+        include: {location: true},
       });
 
       await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.UserGetById, callerId);
       await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.UserGetPaginatedUsers, null);
+
+      return ProfileSchema.parse(updatedUser);
     }),
 });
