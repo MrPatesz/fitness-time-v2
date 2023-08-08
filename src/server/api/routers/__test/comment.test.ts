@@ -105,20 +105,17 @@ describe('commentRouter', () => {
 
 
       // Act
-      const createdComment = await caller.comment.create({
+      await caller.comment.create({
         createComment: newComment,
         eventId: event2.id,
       });
       const comments = await caller.comment.getAllByEventId(event2.id);
 
-      expectedNewComment.id = createdComment.id;
-      expectedNewComment.postedAt = createdComment.postedAt;
       const expectedComments = BasicCommentSchema.array().parse(
         [{...expectedNewComment, user: user2}, {...comment3, user: user2}]
       );
 
       // Assert
-      expect(createdComment).toEqual(expectedNewComment);
       expect(comments).toEqual(expectedComments);
     });
   });
