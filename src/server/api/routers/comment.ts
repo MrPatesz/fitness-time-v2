@@ -73,45 +73,36 @@ export const commentRouter = createTRPCRouter({
     }),
   create: protectedProcedure
     .input(z.object({createComment: MutateCommentSchema, eventId: IdSchema}))
-    .output(BasicCommentSchema)
     .mutation(async ({input: {createComment, eventId}, ctx: {session: {user: {id: callerId}}, prisma, pusher}}) => {
-      const comment = await prisma.comment.create({
+      await prisma.comment.create({
         data: {
           ...createComment,
           event: {connect: {id: eventId}},
           user: {connect: {id: callerId}},
         },
-        include: {user: true},
       });
 
       await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.CommentGetAllByEventId, eventId);
-
-      return BasicCommentSchema.parse(comment);
     }),
   update: protectedProcedure
     .input(z.object({comment: MutateCommentSchema, commentId: IdSchema, eventId: IdSchema}))
-    .output(BasicCommentSchema)
     .mutation(async ({
                        input: {commentId, comment, eventId},
                        ctx: {session: {user: {id: callerId}}, prisma, pusher}
                      }) => {
-      const updatedComment = await prisma.comment.update({
+      await prisma.comment.update({
         where: {id: commentId, userId: callerId},
         data: {
           ...comment,
           event: {connect: {id: eventId}},
           user: {connect: {id: callerId}},
         },
-        include: {user: true},
       });
 
       await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.CommentGetAllByEventId, eventId);
-
-      return BasicCommentSchema.parse(updatedComment);
     }),
   delete: protectedProcedure
     .input(IdSchema)
-    .output(z.boolean())
     .mutation(async ({input, ctx: {session: {user: {id: callerId}}, prisma, pusher}}) => {
       const deletedComment = await prisma.comment.delete({
         where: {
@@ -121,7 +112,5 @@ export const commentRouter = createTRPCRouter({
       });
 
       await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.CommentGetAllByEventId, deletedComment.eventId);
-
-      return Boolean(deletedComment);
     }),
 });

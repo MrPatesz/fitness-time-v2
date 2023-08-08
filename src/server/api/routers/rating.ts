@@ -78,44 +78,31 @@ export const ratingRouter = createTRPCRouter({
       createRating: MutateRatingSchema,
       eventId: IdSchema,
     }))
-    .output(BasicRatingSchema)
     .mutation(async ({input: {createRating, eventId}, ctx: {session: {user: {id: callerId}}, prisma, pusher}}) => {
       const foundRating = await prisma.rating.findFirst({
         where: {userId: callerId, eventId},
         include: {event: true},
       });
 
-      const pusherEvents = async () => {
-        await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.RatingGetAverageRatingForEvent, eventId);
-        await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.RatingGetAverageRatingForUser, callerId);
-        if (foundRating?.event.groupId) {
-          await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.RatingGetAverageRatingForGroup, foundRating.event.groupId);
-        }
-      };
-
-      if (!!foundRating) {
-        const editedRating = await prisma.rating.update({
+      if (foundRating) {
+        await prisma.rating.update({
           where: {id: foundRating.id},
           data: {stars: createRating.stars},
-          include: {user: true},
         });
-
-        await pusherEvents();
-
-        return BasicRatingSchema.parse(editedRating);
       } else {
-        const newRating = await prisma.rating.create({
+        await prisma.rating.create({
           data: {
             ...createRating,
             event: {connect: {id: eventId}},
             user: {connect: {id: callerId}},
           },
-          include: {user: true},
         });
+      }
 
-        await pusherEvents();
-
-        return BasicRatingSchema.parse(newRating);
+      await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.RatingGetAverageRatingForEvent, eventId);
+      await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.RatingGetAverageRatingForUser, callerId);
+      if (foundRating?.event.groupId) {
+        await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.RatingGetAverageRatingForGroup, foundRating.event.groupId);
       }
     }),
 });

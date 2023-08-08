@@ -60,46 +60,36 @@ export const groupRouter = createTRPCRouter({
     }),
   create: protectedProcedure
     .input(MutateGroupSchema)
-    .output(BasicGroupSchema)
     .mutation(async ({input: createGroup, ctx: {session: {user: {id: callerId}}, prisma, pusher}}) => {
-      const group = await prisma.group.create({
+      await prisma.group.create({
         data: {
           ...createGroup,
           creator: {connect: {id: callerId}},
           members: {connect: {id: callerId}},
         },
-        include: {creator: true},
       });
-
       await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.GroupGetPaginatedGroups, null);
       // TODO await pusher.trigger(PusherChannel.INVALIDATE, PusherEvent.UserGetById, callerId);
-
-      return BasicGroupSchema.parse(group);
     }),
   update: protectedProcedure
     .input(z.object({group: MutateGroupSchema, id: IdSchema}))
-    .output(BasicGroupSchema)
     .mutation(async ({input, ctx: {session: {user: {id: callerId}}, prisma, pusher}}) => {
-      const updatedGroup = await prisma.group.update({
+      await prisma.group.update({
         where: {id: input.id, creatorId: callerId},
         data: {
           ...input.group,
           creator: {connect: {id: callerId}},
         },
-        include: {creator: true},
       });
 
       await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.GroupGetById, input.id);
       await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.GroupGetPaginatedGroups, null);
       // TODO await pusher.trigger(PusherChannel.INVALIDATE, PusherEvent.UserGetById, null);
-
-      return BasicGroupSchema.parse(updatedGroup);
     }),
   delete: protectedProcedure
     .input(IdSchema)
-    .output(z.boolean())
     .mutation(async ({input, ctx: {session: {user: {id: callerId}}, prisma, pusher}}) => {
-      const deletedGroup = await prisma.group.delete({
+      await prisma.group.delete({
         where: {
           id: input,
           creatorId: callerId,
@@ -109,14 +99,11 @@ export const groupRouter = createTRPCRouter({
       await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.GroupGetById, input);
       await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.GroupGetPaginatedGroups, null);
       // TODO await pusher.trigger(PusherChannel.INVALIDATE, PusherEvent.UserGetById, null);
-
-      return Boolean(deletedGroup);
     }),
   join: protectedProcedure
     .input(z.object({id: IdSchema, join: z.boolean()}))
-    .output(z.boolean())
     .mutation(async ({input: {id: groupId, join}, ctx: {session: {user: {id: callerId}}, prisma, pusher}}) => {
-      const result = await prisma.group.update({
+      await prisma.group.update({
         where: {id: groupId},
         data: {
           members: join ? {
@@ -129,8 +116,6 @@ export const groupRouter = createTRPCRouter({
 
       await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.GroupGetById, groupId);
       // TODO await pusher.trigger(PusherChannel.INVALIDATE, PusherEvent.UserGetById, callerId);
-
-      return Boolean(result);
     }),
   // TODO give ownership
 });

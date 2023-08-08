@@ -189,9 +189,8 @@ export const eventRouter = createTRPCRouter({
     }),
   create: protectedProcedure
     .input(MutateEventSchema)
-    .output(BasicEventSchema)
     .mutation(async ({input: createEvent, ctx: {session: {user: {id: callerId}}, prisma, pusher}}) => {
-      const event = await prisma.event.create({
+      await prisma.event.create({
         data: {
           ...createEvent,
           groupId: undefined,
@@ -207,19 +206,15 @@ export const eventRouter = createTRPCRouter({
             },
           },
         },
-        include: {location: true, creator: true, group: {include: {creator: true}}},
       });
 
       await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetCalendar, callerId);
       await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetFeed, null);
       await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetPaginatedEvents, null);
       await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.UserGetById, callerId);
-
-      return BasicEventSchema.parse(event);
     }),
   participate: protectedProcedure
     .input(z.object({id: IdSchema, participate: z.boolean()}))
-    .output(BasicEventSchema)
     .mutation(async ({input, ctx: {session: {user: {id: callerId}}, prisma, pusher}}) => {
       const event = await prisma.event.findUnique({
         where: {id: input.id},
@@ -230,7 +225,7 @@ export const eventRouter = createTRPCRouter({
         throw new TRPCError({code: 'BAD_REQUEST', message: 'Event is already full!'});
       }
 
-      const result = await prisma.event.update({
+      await prisma.event.update({
         where: {id: input.id},
         data: {
           participants: input.participate ? {
@@ -239,19 +234,15 @@ export const eventRouter = createTRPCRouter({
             disconnect: {id: callerId},
           },
         },
-        include: {creator: true, location: true, group: {include: {creator: true}}},
       });
 
       await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetById, input.id);
       await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.UserGetById, callerId);
-
-      return BasicEventSchema.parse(result);
     }),
   update: protectedProcedure
     .input(z.object({event: MutateEventSchema, id: IdSchema}))
-    .output(BasicEventSchema)
     .mutation(async ({input, ctx: {session: {user: {id: callerId}}, prisma, pusher}}) => {
-      const updatedEvent = await prisma.event.update({
+      await prisma.event.update({
         where: {id: input.id, creatorId: callerId},
         data: {
           ...input.event,
@@ -267,7 +258,6 @@ export const eventRouter = createTRPCRouter({
             },
           },
         },
-        include: {location: true, creator: true, group: {include: {creator: true}}},
       });
 
       await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetById, input.id);
@@ -275,14 +265,11 @@ export const eventRouter = createTRPCRouter({
       await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetFeed, null);
       await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetPaginatedEvents, null);
       await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.UserGetById, callerId);
-
-      return BasicEventSchema.parse(updatedEvent);
     }),
   delete: protectedProcedure
     .input(IdSchema)
-    .output(z.boolean())
     .mutation(async ({input, ctx: {session: {user: {id: callerId}}, prisma, pusher}}) => {
-      const deletedEvent = await prisma.event.delete({
+      await prisma.event.delete({
         where: {
           id: input,
           creatorId: callerId,
@@ -295,7 +282,5 @@ export const eventRouter = createTRPCRouter({
       await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetPaginatedEvents, null);
       await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.CommentGetAllByEventId, input);
       await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.UserGetById, callerId);
-
-      return Boolean(deletedEvent);
     }),
 });

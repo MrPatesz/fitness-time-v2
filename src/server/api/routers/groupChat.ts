@@ -41,24 +41,20 @@ export const groupChatRouter = createTRPCRouter({
     }),
   create: protectedProcedure
     .input(z.object({createMessage: CreateMessageSchema, groupId: IdSchema}))
-    .output(BasicMessageSchema)
     .mutation(async (
       {
         input: {createMessage, groupId},
         ctx: {session: {user: {id: callerId}}, prisma, pusher}
       }
     ) => {
-      const message = await prisma.message.create({
+      await prisma.message.create({
         data: {
           ...createMessage,
           group: {connect: {id: groupId}},
           user: {connect: {id: callerId}},
         },
-        include: {user: true},
       });
 
       await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.GroupChatGetMessages, groupId);
-
-      return BasicMessageSchema.parse(message);
     }),
 });
