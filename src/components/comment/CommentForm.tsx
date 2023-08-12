@@ -9,12 +9,14 @@ import {api} from '../../utils/api';
 import {defaultCreateComment} from '../../utils/defaultObjects';
 import RichTextEditor from '../rich-text/RichTextEditor';
 import {getFormStringOnChange, getFormStringValue} from '../../utils/mantineFormUtils';
+import {OverlayLoader} from '../OverlayLoader';
 
 // TODO only used for editing now
 export const CommentForm: FunctionComponent<{
   editedComment?: BasicCommentType | CreateCommentType;
   eventId: number;
 }> = ({editedComment, eventId}) => {
+  const queryContext = api.useContext();
   const {t} = useTranslation('common');
 
   const form = useForm<CreateCommentType>({
@@ -33,6 +35,7 @@ export const CommentForm: FunctionComponent<{
   });
   const updateComment = api.comment.update.useMutation({
     onSuccess: () => {
+      void queryContext.comment.getAllCreated.refetch();
       closeAllModals();
       showNotification({
         color: 'green',
@@ -43,29 +46,31 @@ export const CommentForm: FunctionComponent<{
   });
 
   return (
-    <form
-      onSubmit={form.onSubmit((data) =>
-        editedComment && 'id' in editedComment ?
-          updateComment.mutate({commentId: editedComment.id, comment: data, eventId}) :
-          createComment.mutate({createComment: data, eventId})
-      )}
-    >
-      <Stack>
-        <RichTextEditor
-          id="rte"
-          placeholder={t('commentForm.addComment')}
-          value={getFormStringValue(form, 'text')}
-          onChange={getFormStringOnChange(form, 'text')}
-        />
-        <Group position="right">
-          <Button onClick={form.reset} color="gray" disabled={!form.isDirty()}>
-            {t('button.reset')}
-          </Button>
-          <Button type="submit" disabled={!form.isValid() || !form.isDirty()}>
-            {t('button.submit')}
-          </Button>
-        </Group>
-      </Stack>
-    </form>
+    <OverlayLoader loading={createComment.isLoading || updateComment.isLoading}>
+      <form
+        onSubmit={form.onSubmit((data) =>
+          editedComment && 'id' in editedComment ?
+            updateComment.mutate({commentId: editedComment.id, comment: data, eventId}) :
+            createComment.mutate({createComment: data, eventId})
+        )}
+      >
+        <Stack>
+          <RichTextEditor
+            id="rte"
+            placeholder={t('commentForm.addComment')}
+            value={getFormStringValue(form, 'text')}
+            onChange={getFormStringOnChange(form, 'text')}
+          />
+          <Group position="right">
+            <Button onClick={form.reset} color="gray" disabled={!form.isDirty()}>
+              {t('button.reset')}
+            </Button>
+            <Button type="submit" disabled={!form.isValid() || !form.isDirty()}>
+              {t('button.submit')}
+            </Button>
+          </Group>
+        </Stack>
+      </form>
+    </OverlayLoader>
   );
 };

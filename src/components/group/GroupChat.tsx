@@ -6,7 +6,6 @@ import {api} from '../../utils/api';
 import {getBackgroundColor} from '../../utils/utilFunctions';
 import {CommentCard} from '../comment/CommentCard';
 import {AddMessage} from './AddMessage';
-import {CenteredLoader} from '../CenteredLoader';
 import {QueryComponent} from '../QueryComponent';
 import {InvalidateEvent} from '../../utils/enums';
 
@@ -80,7 +79,6 @@ export const GroupChat: FunctionComponent<{
             eventInfo={{event: InvalidateEvent.GroupChatGetMessages, id: groupId}}
           >
             <Stack>
-              {messagesQuery.isFetching && <CenteredLoader/>}
               {messages.map((message, index) => (
                 <Box ref={(index === 0) ? ref : undefined} key={message.id}>
                   <CommentCard comment={message}/>

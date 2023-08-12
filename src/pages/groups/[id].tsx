@@ -38,12 +38,14 @@ export default function GroupDetailsPage() {
   });
 
   const joinGroup = api.group.join.useMutation({
-    // TODO remove groupQuery.refetch(), buggy on leave + rejoin
-    onSuccess: (_, {join}) => groupQuery.refetch().then(() => showNotification({
-      color: 'green',
-      title: t(join ? 'notification.group.join.title' : 'notification.group.leave.title'),
-      message: t(join ? 'notification.group.join.message' : 'notification.group.leave.message'),
-    })),
+    onSuccess: (_, {join}) => {
+      void groupQuery.refetch(); // TODO remove: buggy on leave + rejoin
+      showNotification({
+        color: 'green',
+        title: t(join ? 'notification.group.join.title' : 'notification.group.leave.title'),
+        message: t(join ? 'notification.group.join.message' : 'notification.group.leave.message'),
+      });
+    },
   });
 
   const isCreator = groupQuery.data?.creatorId === session?.user.id;
@@ -56,6 +58,7 @@ export default function GroupDetailsPage() {
       resourceName={t('resource.groupDetails')}
       query={groupQuery}
       eventInfo={{event: InvalidateEvent.GroupGetById, id: groupId}}
+      loading={joinGroup.isLoading}
     >
       {groupQuery.data && (
         <Stack sx={{height: '100%'}}>
@@ -75,24 +78,9 @@ export default function GroupDetailsPage() {
                   </Text>
                 </Link>
               </Group>
-              <Group>
-                <Text>
-                  {longDateFormatter.format(groupQuery.data.createdAt)}
-                </Text>
-                {isCreator && (
-                  <ActionIcon
-                    size="lg"
-                    variant="filled"
-                    color={theme.fn.themeColor(theme.primaryColor)}
-                    onClick={() => openModal({
-                      title: t('modal.group.edit'),
-                      children: <EditGroupForm groupId={groupId}/>,
-                    })}
-                  >
-                    <Pencil/>
-                  </ActionIcon>
-                )}
-              </Group>
+              <Text>
+                {t('groupTable.createdAt')}: {longDateFormatter.format(groupQuery.data.createdAt)}
+              </Text>
               <QueryComponent
                 resourceName={t('resource.rating')}
                 query={groupRatingQuery}
@@ -101,11 +89,26 @@ export default function GroupDetailsPage() {
                 <RatingComponent averageRating={groupRatingQuery.data}/>
               </QueryComponent>
             </Stack>
-            <MembersComponent
-              members={groupQuery.data.members}
-              isCreator={isCreator}
-              onJoin={(join) => joinGroup.mutate({id: groupId, join})}
-            />
+            <Stack align="end">
+              <MembersComponent
+                members={groupQuery.data.members}
+                isCreator={isCreator}
+                onJoin={(join) => joinGroup.mutate({id: groupId, join})}
+              />
+              {isCreator && (
+                <ActionIcon
+                  size="lg"
+                  variant="filled"
+                  color={theme.fn.themeColor(theme.primaryColor)}
+                  onClick={() => openModal({
+                    title: t('modal.group.edit'),
+                    children: <EditGroupForm groupId={groupId}/>,
+                  })}
+                >
+                  <Pencil/>
+                </ActionIcon>
+              )}
+            </Stack>
           </Group>
           {isMember ? (
             <SimpleGrid

@@ -6,6 +6,7 @@ import {Send} from 'tabler-icons-react';
 import {CreateMessageType} from '../../models/Message';
 import {api} from '../../utils/api';
 import {defaultCreateComment} from '../../utils/defaultObjects';
+import {OverlayLoader} from '../OverlayLoader';
 
 export const AddMessage: FunctionComponent<{
   groupId: number;
@@ -22,23 +23,25 @@ export const AddMessage: FunctionComponent<{
   });
 
   return (
-    <form onSubmit={form.onSubmit((data) => createMessage.mutate({createMessage: data, groupId}))}>
-      <Group>
-        <TextInput
-          sx={{flexGrow: 1}}
-          placeholder={t('messageForm.addMessage')}
-          {...form.getInputProps('text')}
-        />
-        <ActionIcon
-          type="submit"
-          disabled={!form.isValid() || !form.isDirty()}
-          size={36}
-          color={theme.primaryColor}
-          variant="filled"
-        >
-          <Send/>
-        </ActionIcon>
-      </Group>
-    </form>
+    <OverlayLoader loading={createMessage.isLoading}>
+      <form onSubmit={form.onSubmit((data) => createMessage.mutate({createMessage: data, groupId}))}>
+        <Group>
+          <TextInput
+            sx={{flexGrow: 1}}
+            placeholder={t('messageForm.addMessage')}
+            {...form.getInputProps('text')}
+          />
+          <ActionIcon
+            type="submit"
+            disabled={!form.isValid() || !form.isDirty()}
+            size={36}
+            color={theme.primaryColor}
+            variant="filled"
+          >
+            <Send/>
+          </ActionIcon>
+        </Group>
+      </form>
+    </OverlayLoader>
   );
 };

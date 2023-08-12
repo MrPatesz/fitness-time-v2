@@ -46,6 +46,7 @@ export default function CalendarPage() {
       resourceName={t('resource.calendar')}
       query={eventsQuery}
       eventInfo={{event: InvalidateEvent.EventGetCalendar, id: session?.user.id}}
+      loading={updateEvent.isLoading}
     >
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}

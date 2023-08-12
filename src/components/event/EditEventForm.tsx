@@ -38,6 +38,7 @@ export const EditEventForm: FunctionComponent<{
             id: eventId,
             event: {...data, price: data.price ?? null, limit: data.limit ?? null},
           })}
+          loading={updateEvent.isLoading}
         />
       )}
     </QueryComponent>

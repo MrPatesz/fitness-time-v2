@@ -225,6 +225,7 @@ export const eventRouter = createTRPCRouter({
         throw new TRPCError({code: 'BAD_REQUEST', message: 'Event is already full!'});
       }
 
+      // TODO shall not be able to participate archive event!
       await prisma.event.update({
         where: {id: input.id},
         data: {
@@ -242,6 +243,7 @@ export const eventRouter = createTRPCRouter({
   update: protectedProcedure
     .input(z.object({event: MutateEventSchema, id: IdSchema}))
     .mutation(async ({input, ctx: {session: {user: {id: callerId}}, prisma, pusher}}) => {
+      // TODO shall not be able to edit archive event!
       await prisma.event.update({
         where: {id: input.id, creatorId: callerId},
         data: {
@@ -269,6 +271,7 @@ export const eventRouter = createTRPCRouter({
   delete: protectedProcedure
     .input(IdSchema)
     .mutation(async ({input, ctx: {session: {user: {id: callerId}}, prisma, pusher}}) => {
+      // TODO shall not be able to delete archive event!
       await prisma.event.delete({
         where: {
           id: input,

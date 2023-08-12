@@ -1,9 +1,9 @@
 import {Card, Checkbox, Group, Slider, Stack, Text, useMantineTheme} from '@mantine/core';
-import {useIntersection} from '@mantine/hooks';
+import {useIntersection, useLocalStorage} from '@mantine/hooks';
 import {useSession} from 'next-auth/react';
 import {useTranslation} from 'next-i18next';
 import {serverSideTranslations} from 'next-i18next/serverSideTranslations';
-import {useEffect, useMemo, useState} from 'react';
+import {useEffect, useMemo} from 'react';
 import i18nConfig from '../../next-i18next.config.mjs';
 import {CenteredLoader} from '../components/CenteredLoader';
 import {EventGrid} from '../components/event/EventGrid';
@@ -14,9 +14,18 @@ import {QueryComponent} from '../components/QueryComponent';
 import {InvalidateEvent} from '../utils/enums';
 
 export default function FeedPage() {
-  const [fluidMaxDistance, setFluidMaxDistance] = useState<number>(100);
-  const [maxDistance, setMaxDistance] = useState<number>(100);
-  const [enableMaxDistance, setEnableMaxDistance] = useState<boolean>(true);
+  const [fluidMaxDistance, setFluidMaxDistance] = useLocalStorage<number>({
+    key: 'fluid-max-distance',
+    defaultValue: 40,
+  });
+  const [maxDistance, setMaxDistance] = useLocalStorage<number>({
+    key: 'max-distance',
+    defaultValue: 40,
+  });
+  const [enableMaxDistance, setEnableMaxDistance] = useLocalStorage<boolean>({
+    key: 'enable-max-distance',
+    defaultValue: false,
+  });
 
   const theme = useMantineTheme();
   const {data: session} = useSession();

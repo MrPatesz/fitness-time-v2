@@ -20,6 +20,7 @@ import {CommentForm} from './CommentForm';
 
 const CommentTable: FunctionComponent = () => {
   const [page, setPage] = useState<number>(1);
+  // TODO useLocalStorage, same for all tables
   const [pageSize, setPageSize] = useState<number>(PAGE_SIZES.at(0) as number);
   const [sortBy, setSortBy] = useState<DataTableSortStatus>({columnAccessor: 'postedAt', direction: 'desc'});
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -40,12 +41,14 @@ const CommentTable: FunctionComponent = () => {
     },
   });
   const deleteComment = api.comment.delete.useMutation({
-    onSuccess: () => commentsQuery.refetch().then(() =>
+    onSuccess: () => {
+      void commentsQuery.refetch();
       showNotification({
         color: 'green',
         title: t('notification.comment.delete.title'),
         message: t('notification.comment.delete.message'),
-      })),
+      });
+    },
   });
 
   useEffect(() => {
@@ -78,7 +81,11 @@ const CommentTable: FunctionComponent = () => {
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.currentTarget.value)}
       />
-      <QueryComponent resourceName={t('resource.comments')} query={commentsQuery}>
+      <QueryComponent
+        resourceName={t('resource.comments')}
+        query={commentsQuery}
+        loading={deleteComment.isLoading}
+      >
         <Box
           sx={{
             height: '100%',

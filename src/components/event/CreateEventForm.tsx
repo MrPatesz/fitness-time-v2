@@ -30,6 +30,7 @@ export const CreateEventForm: FunctionComponent<{
     <EventForm
       originalEvent={{...getDefaultCreateEvent(initialInterval), groupId}}
       onSubmit={(data) => createEvent.mutate({...data, price: data.price ?? null, limit: data.limit ?? null})}
+      loading={createEvent.isLoading}
     />
   );
 };

@@ -8,6 +8,7 @@ import {CreateCommentType} from '../../models/Comment';
 import {api} from '../../utils/api';
 import {defaultCreateComment} from '../../utils/defaultObjects';
 import {RichTextField} from '../rich-text/RichTextField';
+import {OverlayLoader} from '../OverlayLoader';
 
 export const AddComment: FunctionComponent<{
   eventId: number;
@@ -20,31 +21,36 @@ export const AddComment: FunctionComponent<{
   });
 
   const createComment = api.comment.create.useMutation({
-    onSuccess: () => showNotification({
-      color: 'green',
-      title: t('notification.comment.create.title'),
-      message: t('notification.comment.create.message'),
-    })
+    onSuccess: () => {
+      form.reset();
+      showNotification({
+        color: 'green',
+        title: t('notification.comment.create.title'),
+        message: t('notification.comment.create.message'),
+      });
+    }
   });
 
   return (
-    <form onSubmit={form.onSubmit((data) => createComment.mutate({createComment: data, eventId}))}>
-      <Group>
-        <RichTextField
-          maxLength={512}
-          placeholder={t('commentForm.addComment')}
-          formInputProps={form.getInputProps('text')}
-        />
-        <ActionIcon
-          type="submit"
-          disabled={!form.isValid() || !form.isDirty()}
-          size={36}
-          color={theme.primaryColor}
-          variant="filled"
-        >
-          <Send/>
-        </ActionIcon>
-      </Group>
-    </form>
+    <OverlayLoader loading={createComment.isLoading}>
+      <form onSubmit={form.onSubmit((data) => createComment.mutate({createComment: data, eventId}))}>
+        <Group>
+          <RichTextField
+            maxLength={512}
+            placeholder={t('commentForm.addComment')}
+            formInputProps={form.getInputProps('text')}
+          />
+          <ActionIcon
+            type="submit"
+            disabled={!form.isValid() || !form.isDirty()}
+            size={36}
+            color={theme.primaryColor}
+            variant="filled"
+          >
+            <Send/>
+          </ActionIcon>
+        </Group>
+      </form>
+    </OverlayLoader>
   );
 };

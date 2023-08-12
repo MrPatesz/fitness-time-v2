@@ -15,6 +15,7 @@ import {useLongDateFormatter} from '../../utils/formatters';
 import {RichTextDisplay} from '../rich-text/RichTextDisplay';
 import UserImage from '../user/UserImage';
 import {CommentForm} from './CommentForm';
+import {OverlayLoader} from '../OverlayLoader';
 
 export const CommentCard: FunctionComponent<{
   comment: BasicCommentType | BasicMessageType;
@@ -34,67 +35,69 @@ export const CommentCard: FunctionComponent<{
   });
 
   return (
-    <Card withBorder key={comment.id}>
-      <Stack spacing="xs">
-        <Group position="apart" align="start">
-          <Group>
-            <UserImage user={comment.user} size={53.6}/>
-            <Stack spacing={4}>
-              <Link href={`/users/${comment.user.id}`} locale={locale} passHref>
-                <Text weight="bold">
-                  {comment.user.name}
-                </Text>
-              </Link>
-              <Tooltip
-                label={longDateFormatter.format(comment.postedAt)}
-                color={theme.primaryColor}
-                position="right"
-              >
-                <Text color="dimmed" sx={{width: 'fit-content'}}>
-                  {dayjs(comment.postedAt).fromNow()}
-                </Text>
-              </Tooltip>
-            </Stack>
-          </Group>
-          {'eventId' in comment && comment.userId === session?.user.id && (
-            <Group position="right" spacing="xs">
-              <ActionIcon
-                size="sm"
-                variant="transparent"
-                onClick={() => openModal({
-                  title: t('modal.comment.edit'),
-                  children: <CommentForm eventId={comment.eventId} editedComment={comment}/>,
-                  size: 'xl'
-                })}
-              >
-                <Pencil/>
-              </ActionIcon>
-              <ActionIcon
-                size="sm"
-                variant="transparent"
-                onClick={() => openConfirmModal({
-                  title: t('modal.comment.delete.title'),
-                  children: (
-                    <Stack>
-                      <Text>
-                        {t('modal.comment.delete.message')}
-                      </Text>
-                      <Card withBorder>
-                        <RichTextDisplay richText={comment.text} maxHeight={100}/>
-                      </Card>
-                    </Stack>
-                  ),
-                  labels: {confirm: t('button.confirm'), cancel: t('button.cancel')},
-                  onConfirm: () => deleteComment.mutate(comment.id),
-                })}
-              >
-                <Trash/>
-              </ActionIcon>
+    <OverlayLoader loading={deleteComment.isLoading}>
+      <Card withBorder key={comment.id}>
+        <Stack spacing="xs">
+          <Group position="apart" align="start">
+            <Group>
+              <UserImage user={comment.user} size={53.6}/>
+              <Stack spacing={4}>
+                <Link href={`/users/${comment.user.id}`} locale={locale} passHref>
+                  <Text weight="bold">
+                    {comment.user.name}
+                  </Text>
+                </Link>
+                <Tooltip
+                  label={longDateFormatter.format(comment.postedAt)}
+                  color={theme.primaryColor}
+                  position="right"
+                >
+                  <Text color="dimmed" sx={{width: 'fit-content'}}>
+                    {dayjs(comment.postedAt).fromNow()}
+                  </Text>
+                </Tooltip>
+              </Stack>
             </Group>
-          )}
-        </Group>
-        <RichTextDisplay richText={comment.text} maxHeight={100}/>
-      </Stack>
-    </Card>
+            {'eventId' in comment && comment.userId === session?.user.id && (
+              <Group position="right" spacing="xs">
+                <ActionIcon
+                  size="sm"
+                  variant="transparent"
+                  onClick={() => openModal({
+                    title: t('modal.comment.edit'),
+                    children: <CommentForm eventId={comment.eventId} editedComment={comment}/>,
+                    size: 'xl'
+                  })}
+                >
+                  <Pencil/>
+                </ActionIcon>
+                <ActionIcon
+                  size="sm"
+                  variant="transparent"
+                  onClick={() => openConfirmModal({
+                    title: t('modal.comment.delete.title'),
+                    children: (
+                      <Stack>
+                        <Text>
+                          {t('modal.comment.delete.message')}
+                        </Text>
+                        <Card withBorder>
+                          <RichTextDisplay richText={comment.text} maxHeight={100}/>
+                        </Card>
+                      </Stack>
+                    ),
+                    labels: {confirm: t('button.confirm'), cancel: t('button.cancel')},
+                    onConfirm: () => deleteComment.mutate(comment.id),
+                  })}
+                >
+                  <Trash/>
+                </ActionIcon>
+              </Group>
+            )}
+          </Group>
+          <RichTextDisplay richText={comment.text} maxHeight={100}/>
+        </Stack>
+      </Card>
+    </OverlayLoader>
   );
 };

@@ -106,6 +106,7 @@ export default function EventDetailsPage() {
         resourceName={t('resource.eventDetails')}
         query={eventQuery}
         eventInfo={{event: InvalidateEvent.EventGetById, id: eventId}}
+        loading={participate.isLoading}
       >
         {eventQuery.data && (
           <Stack>
@@ -161,6 +162,7 @@ export default function EventDetailsPage() {
                     resourceName={t('resource.rating')}
                     query={averageRatingQuery}
                     eventInfo={{event: InvalidateEvent.RatingGetAverageRatingForEvent, id: eventId}}
+                    loading={rateEvent.isLoading}
                   >
                     <RatingComponent
                       averageRating={averageRatingQuery.data}

@@ -38,6 +38,7 @@ export const EditGroupForm: FunctionComponent<{
             id: groupId,
             group: data,
           })}
+          loading={updateGroup.isLoading}
         />
       )}
     </QueryComponent>

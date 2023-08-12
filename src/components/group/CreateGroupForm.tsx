@@ -23,6 +23,7 @@ export const CreateGroupForm = () => {
     <GroupForm
       originalGroup={defaultCreateGroup}
       onSubmit={(data) => createGroup.mutate(data)}
+      loading={createGroup.isLoading}
     />
   );
 };

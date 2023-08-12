@@ -97,6 +97,7 @@ const GroupTable: FunctionComponent<{
         resourceName={t('resource.groups')}
         query={groupsQuery}
         eventInfo={{event: InvalidateEvent.GroupGetPaginatedGroups}}
+        loading={deleteGroup.isLoading}
       >
         <Box
           sx={{

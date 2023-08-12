@@ -117,6 +117,7 @@ const EventTable: FunctionComponent<{
         resourceName={t('resource.events')}
         query={eventsQuery}
         eventInfo={{event: InvalidateEvent.EventGetPaginatedEvents}}
+        loading={deleteEvent.isLoading}
       >
         <Box
           sx={{
