@@ -37,7 +37,7 @@ const UserTable: FunctionComponent = () => {
   }, [usersQuery.data, page]);
 
   return (
-    <Stack sx={{height: '100%'}}>
+    <Stack h="100%">
       <TextInput
         sx={{flexGrow: 1}}
         icon={<IconSearch/>}

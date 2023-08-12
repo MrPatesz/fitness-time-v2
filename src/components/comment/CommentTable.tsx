@@ -72,7 +72,7 @@ const CommentTable: FunctionComponent = () => {
   });
 
   return (
-    <Stack sx={{height: '100%'}}>
+    <Stack h="100%">
       <TextInput
         icon={<IconSearch/>}
         placeholder={t('filterEvents.search')}

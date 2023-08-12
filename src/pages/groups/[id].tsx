@@ -61,7 +61,7 @@ export default function GroupDetailsPage() {
       loading={joinGroup.isLoading}
     >
       {groupQuery.data && (
-        <Stack sx={{height: '100%'}}>
+        <Stack h="100%">
           <Group position="apart" align="start">
             <Stack>
               <Group align="end">

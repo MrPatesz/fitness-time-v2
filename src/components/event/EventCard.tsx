@@ -44,7 +44,7 @@ export const EventCard: FunctionComponent<{
           },
         })}
       >
-        <Stack spacing="xs" justify="space-between" sx={{height: '100%'}}>
+        <Stack spacing="xs" justify="space-between" h="100%">
           <Stack spacing="xs">
             <Group position="apart" spacing="xs">
               <Text weight="bold" size="lg">{event.name}</Text>

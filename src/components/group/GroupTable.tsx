@@ -72,7 +72,7 @@ const GroupTable: FunctionComponent<{
   });
 
   return (
-    <Stack sx={{height: '100%'}}>
+    <Stack h="100%">
       <Group>
         <TextInput
           sx={{flexGrow: 1}}

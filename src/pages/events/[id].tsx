@@ -1,4 +1,4 @@
-import {ActionIcon, Badge, Button, Card, Group, Stack, Text, useMantineTheme} from '@mantine/core';
+import {ActionIcon, Badge, Button, Group, Stack, Text, useMantineTheme} from '@mantine/core';
 import {openModal} from '@mantine/modals';
 import {showNotification} from '@mantine/notifications';
 import {useSession} from 'next-auth/react';
@@ -18,6 +18,7 @@ import {EventStatus, InvalidateEvent} from '../../utils/enums';
 import {useLongDateFormatter, usePriceFormatter} from '../../utils/formatters';
 import {EditEventForm} from '../../components/event/EditEventForm';
 import {CommentsComponent} from '../../components/event/CommentsComponent';
+import {BorderComponent} from '../../components/BorderComponent';
 
 export default function EventDetailsPage() {
   const theme = useMantineTheme();
@@ -101,7 +102,7 @@ export default function EventDetailsPage() {
   // TODO group badge
 
   return (
-    <Stack>
+    <Stack h="100%">
       <QueryComponent
         resourceName={t('resource.eventDetails')}
         query={eventQuery}
@@ -188,7 +189,7 @@ export default function EventDetailsPage() {
                 distance={eventQuery.data.distance}
               />
             </Group>
-            <Card withBorder>
+            <BorderComponent>
               <Group position="apart" align="start" noWrap>
                 <Stack>
                   <Group spacing="xs">
@@ -219,7 +220,7 @@ export default function EventDetailsPage() {
                 </Stack>
                 {participateButton(eventQuery.data)}
               </Group>
-            </Card>
+            </BorderComponent>
           </Stack>
         )}
       </QueryComponent>
