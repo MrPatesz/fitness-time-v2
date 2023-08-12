@@ -81,9 +81,7 @@ export const CommentCard: FunctionComponent<{
                         <Text>
                           {t('modal.comment.delete.message')}
                         </Text>
-                        <Card withBorder>
-                          <RichTextDisplay richText={comment.text} maxHeight={100}/>
-                        </Card>
+                        <RichTextDisplay bordered richText={comment.text} maxHeight={100}/>
                       </Stack>
                     ),
                     labels: {confirm: t('button.confirm'), cancel: t('button.cancel')},

@@ -1,7 +1,7 @@
-import {Card, ScrollArea, Spoiler, TypographyStylesProvider} from '@mantine/core';
+import {ScrollArea, Spoiler, TypographyStylesProvider} from '@mantine/core';
 import {useTranslation} from 'next-i18next';
 import {FunctionComponent, useMemo, useRef} from 'react';
-import {getBackgroundColor} from '../../utils/utilFunctions';
+import {BorderComponent} from '../BorderComponent';
 
 export const RichTextDisplay: FunctionComponent<{
   richText: string;
@@ -34,7 +34,7 @@ export const RichTextDisplay: FunctionComponent<{
   );
 
   return (
-    <BorderComponent bordered={bordered}>
+    <ConditionalBorderComponent bordered={bordered}>
       {maxHeight !== height ? (
         richTextComponent
       ) : (
@@ -52,11 +52,11 @@ export const RichTextDisplay: FunctionComponent<{
           </Spoiler>
         )
       )}
-    </BorderComponent>
+    </ConditionalBorderComponent>
   );
 };
 
-const BorderComponent: FunctionComponent<{
+const ConditionalBorderComponent: FunctionComponent<{
   bordered: boolean;
   children: JSX.Element;
 }> = ({bordered, children}) => {
@@ -65,8 +65,8 @@ const BorderComponent: FunctionComponent<{
   }
 
   return (
-    <Card withBorder sx={theme => ({backgroundColor: getBackgroundColor(theme)})}>
+    <BorderComponent>
       {children}
-    </Card>
+    </BorderComponent>
   );
 };

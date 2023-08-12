@@ -1,4 +1,4 @@
-import {ActionIcon, Box, Card, Group, MantineNumberSize, Stack, Text, TextInput, useMantineTheme} from '@mantine/core';
+import {ActionIcon, Box, Group, MantineNumberSize, Stack, Text, TextInput, useMantineTheme} from '@mantine/core';
 import {useDebouncedValue} from '@mantine/hooks';
 import {openConfirmModal, openModal} from '@mantine/modals';
 import {showNotification} from '@mantine/notifications';
@@ -64,9 +64,7 @@ const CommentTable: FunctionComponent = () => {
         <Text>
           {t('modal.comment.delete.message')}
         </Text>
-        <Card withBorder>
-          <RichTextDisplay richText={comment.text} maxHeight={100}/>
-        </Card>
+        <RichTextDisplay bordered richText={comment.text} maxHeight={100}/>
       </Stack>
     ),
     labels: {confirm: t('button.confirm'), cancel: t('button.cancel')},

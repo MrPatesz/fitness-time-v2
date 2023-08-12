@@ -1,4 +1,4 @@
-import {Card, Checkbox, Group, Slider, Stack, Text, useMantineTheme} from '@mantine/core';
+import {Checkbox, Group, Slider, Stack, Text, useMantineTheme} from '@mantine/core';
 import {useIntersection, useLocalStorage} from '@mantine/hooks';
 import {useSession} from 'next-auth/react';
 import {useTranslation} from 'next-i18next';
@@ -9,9 +9,11 @@ import {CenteredLoader} from '../components/CenteredLoader';
 import {EventGrid} from '../components/event/EventGrid';
 import {BasicEventType} from '../models/Event';
 import {api} from '../utils/api';
-import {formatDistance, getBackgroundColor} from '../utils/utilFunctions';
+import {formatDistance} from '../utils/utilFunctions';
 import {QueryComponent} from '../components/QueryComponent';
 import {InvalidateEvent} from '../utils/enums';
+
+import {BorderComponent} from '../components/BorderComponent';
 
 export default function FeedPage() {
   const [fluidMaxDistance, setFluidMaxDistance] = useLocalStorage<number>({
@@ -49,7 +51,7 @@ export default function FeedPage() {
   return (
     <Stack>
       {session?.user.hasLocation && (
-        <Card withBorder sx={{backgroundColor: getBackgroundColor(theme)}}>
+        <BorderComponent>
           <Stack spacing="xs">
             <Group position="apart">
               <Group spacing={4}>
@@ -78,7 +80,7 @@ export default function FeedPage() {
               onChangeEnd={setMaxDistance}
             />
           </Stack>
-        </Card>
+        </BorderComponent>
       )}
       <QueryComponent
         resourceName={t('resource.feed')}
