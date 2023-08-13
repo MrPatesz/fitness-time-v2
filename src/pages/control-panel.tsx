@@ -12,7 +12,10 @@ import {EventTableDisplayPlace, GroupTableDisplayPlace} from '../utils/enums';
 export default function ControlPanelPage() {
   const {t} = useTranslation('common');
 
-  // TODO ratings, participated events, joined groups
+  // TODO EventTable: created / participated events (SegmentedControl) instead of archive button
+  // TODO GroupTable: created / joined groups (SegmentedControl)
+  // TODO MessageTable
+  // TODO RatingTable
 
   return (
     <Tabs defaultValue="events" sx={{height: '100%'}}>

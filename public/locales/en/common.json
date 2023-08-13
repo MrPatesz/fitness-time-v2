@@ -295,6 +295,12 @@
   "calendarPage": {
     "today": "Today",
     "month": "Month",
-    "week": "Week"
+    "week": "Week",
+    "export": "Export",
+    "iCalExport": "Export to iCal",
+    "interval": {
+      "label": "Time Interval",
+      "error": "Invalid interval!"
+    }
   }
 }

@@ -1,6 +1,6 @@
 import {TRPCError} from '@trpc/server';
 import {z} from 'zod';
-import {BasicEventSchema, DetailedEventSchema, MutateEventSchema,} from '../../../models/Event';
+import {BasicEventSchema, DetailedEventSchema, IntervalSchema, MutateEventSchema,} from '../../../models/Event';
 import {PaginateEventsSchema} from '../../../models/pagination/PaginateEvents';
 import {createTRPCRouter, protectedProcedure} from '../trpc';
 import {Prisma} from '.prisma/client';
@@ -142,11 +142,23 @@ export const eventRouter = createTRPCRouter({
         },
       });
 
-      if (!caller) {
-        throw new TRPCError({code: 'UNAUTHORIZED', message: 'User doesn\'t exist!'});
-      }
+      return BasicEventSchema.array().parse(caller?.participatedEvents);
+    }),
+  getParticipatedInInterval: protectedProcedure
+    .input(IntervalSchema)
+    .output(BasicEventSchema.array())
+    .query(async ({input: {start, end}, ctx: {session: {user: {id: callerId}}, prisma}}) => {
+      const caller = await prisma.user.findUnique({
+        where: {id: callerId},
+        include: {
+          participatedEvents: {
+            where: {start: {gte: start, lte: end}},
+            include: {location: true, creator: true, group: {include: {creator: true}}},
+          },
+        },
+      });
 
-      return BasicEventSchema.array().parse(caller.participatedEvents);
+      return BasicEventSchema.array().parse(caller?.participatedEvents);
     }),
   getById: protectedProcedure
     .input(IdSchema)

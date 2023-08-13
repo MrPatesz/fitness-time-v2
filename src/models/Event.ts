@@ -6,6 +6,14 @@ import {LocationSchema, MutateLocationSchema} from './Location';
 import {BasicUserSchema} from './User';
 import {DescriptionSchema, IdSchema, NameSchema} from './Utils';
 
+export const IntervalSchema = z.object({
+  start: z.date(),
+  end: z.date(),
+}).refine(interval => interval.start < interval.end, {
+  message: 'Interval must start before it ends',
+});
+
+// TODO IntervalSchema.extend
 export const MutateEventSchema = z.object({
   name: NameSchema,
   description: DescriptionSchema,
@@ -15,9 +23,9 @@ export const MutateEventSchema = z.object({
   price: z.number().min(1).nullable(),
   location: MutateLocationSchema,
   groupId: IdSchema.nullish(),
-}).refine(event => event.start > new Date(), {
+}).refine(event => new Date() < event.start, {
   message: 'Event must not start in the past',
-}).refine(event => event.end > event.start, {
+}).refine(event => event.start < event.end, {
   message: 'Event must start before it ends',
 });
 

@@ -31,6 +31,7 @@ export const IntervalPicker: FunctionComponent<{
   return (
     <Group spacing="xs">
       <DatePicker
+        locale={locale}
         withAsterisk
         sx={{width: '229px', marginBottom: 'auto'}}
         label={t('intervalPicker.on')}

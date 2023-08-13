@@ -17,6 +17,7 @@ import {CreateEventForm} from '../components/event/CreateEventForm';
 import {BasicEventType} from '../models/Event';
 import {useMediaQuery} from '@mantine/hooks';
 import {InvalidateEvent} from '../utils/enums';
+import {ExportForm} from '../components/event/ExportForm';
 
 export default function CalendarPage() {
   const theme = useMantineTheme();
@@ -51,10 +52,19 @@ export default function CalendarPage() {
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         initialView="timeGridWeek"
+        customButtons={{
+          exportButton: {
+            text: t('calendarPage.export'),
+            click: () => openModal({
+              title: t('calendarPage.iCalExport'),
+              children: <ExportForm/>,
+            }),
+          },
+        }}
         headerToolbar={{
           left: 'prev,today,next',
           center: 'title',
-          right: 'timeGridWeek,dayGridMonth',
+          right: 'timeGridWeek,dayGridMonth exportButton',
         }}
         titleFormat={md ? {
           year: 'numeric', month: 'long',
@@ -92,7 +102,7 @@ export default function CalendarPage() {
         select={({start, end}) => openModal({
           title: t('modal.event.create'),
           zIndex: 402,
-          children: (<CreateEventForm initialInterval={{start, end}}/>),
+          children: <CreateEventForm initialInterval={{start, end}}/>,
         })}
         eventChange={({event: {start, end, extendedProps}, revert}) => {
           if (!start || !end) {

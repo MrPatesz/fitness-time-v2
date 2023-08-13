@@ -295,6 +295,12 @@
   "calendarPage": {
     "today": "Ma",
     "month": "Hónap",
-    "week": "Hét"
+    "week": "Hét",
+    "export": "Exportálás",
+    "iCalExport": "iCal exportálás",
+    "interval": {
+      "label": "Időintervallum",
+      "error": "Hibás intervallum!"
+    }
   }
 }
