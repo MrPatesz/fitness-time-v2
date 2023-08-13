@@ -76,7 +76,7 @@ export const ExportForm: FunctionComponent = () => {
   };
 
   return (
-    <form onSubmit={onSubmit(() => iCalDownload(eventsQuery.data))}>
+    <form onSubmit={onSubmit(() => void iCalDownload(eventsQuery.data))}>
       <Stack>
         <DateRangePicker
           label={t('calendarPage.interval.label')}
