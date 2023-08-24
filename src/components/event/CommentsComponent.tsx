@@ -44,8 +44,8 @@ export const CommentsComponent = () => {
           <AddComment eventId={eventId}/>
           <ScrollArea>
             <Stack>
-              {commentsQuery.data?.map(c => (
-                <CommentCard key={c.id} comment={c}/>
+              {commentsQuery.data?.map(comment => (
+                <CommentCard key={comment.id} comment={comment}/>
               ))}
             </Stack>
           </ScrollArea>

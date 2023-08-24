@@ -301,6 +301,7 @@
     "interval": {
       "label": "Time Interval",
       "error": "Invalid interval!"
-    }
+    },
+    "eventCount": "{{count}} Events"
   }
 }

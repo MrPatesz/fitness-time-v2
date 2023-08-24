@@ -68,7 +68,6 @@ export const ratingRouter = createTRPCRouter({
     .query(async ({input: eventId, ctx: {session: {user: {id: callerId}}, prisma}}) => {
       const findRating = await prisma.rating.findFirst({
         where: {userId: callerId, eventId},
-        include: {user: true},
       });
 
       return BasicRatingSchema.nullish().parse(findRating);
@@ -78,6 +77,7 @@ export const ratingRouter = createTRPCRouter({
       createRating: MutateRatingSchema,
       eventId: IdSchema,
     }))
+    .output(z.void())
     .mutation(async ({input: {createRating, eventId}, ctx: {session: {user: {id: callerId}}, prisma, pusher}}) => {
       const foundRating = await prisma.rating.findFirst({
         where: {userId: callerId, eventId},

@@ -4,7 +4,7 @@ import {showNotification} from '@mantine/notifications';
 import {useTranslation} from 'next-i18next';
 import {FunctionComponent} from 'react';
 import {Send} from 'tabler-icons-react';
-import {CreateCommentType} from '../../models/Comment';
+import {MutateCommentType} from '../../models/Comment';
 import {api} from '../../utils/api';
 import {defaultCreateComment} from '../../utils/defaultObjects';
 import {RichTextField} from '../rich-text/RichTextField';
@@ -16,7 +16,7 @@ export const AddComment: FunctionComponent<{
   const theme = useMantineTheme();
   const {t} = useTranslation('common');
 
-  const form = useForm<CreateCommentType>({
+  const form = useForm<MutateCommentType>({
     initialValues: defaultCreateComment,
   });
 

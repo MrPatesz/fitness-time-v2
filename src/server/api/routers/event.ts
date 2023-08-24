@@ -1,6 +1,13 @@
 import {TRPCError} from '@trpc/server';
 import {z} from 'zod';
-import {BasicEventSchema, DetailedEventSchema, IntervalSchema, MutateEventSchema,} from '../../../models/Event';
+import {
+  BasicEventSchema,
+  DetailedEventSchema,
+  EventWithCreatorSchema,
+  EventWithLocationSchema,
+  IntervalSchema,
+  MutateEventSchema,
+} from '../../../models/Event';
 import {PaginateEventsSchema} from '../../../models/pagination/PaginateEvents';
 import {createTRPCRouter, protectedProcedure} from '../trpc';
 import {Prisma} from '.prisma/client';
@@ -133,32 +140,32 @@ export const eventRouter = createTRPCRouter({
       };
     }),
   getCalendar: protectedProcedure
-    .output(BasicEventSchema.array())
+    .output(EventWithCreatorSchema.array())
     .query(async ({ctx: {session: {user: {id: callerId}}, prisma}}) => {
       const caller = await prisma.user.findUnique({
         where: {id: callerId},
         include: {
-          participatedEvents: {include: {location: true, creator: true, group: {include: {creator: true}}}},
+          participatedEvents: {include: {creator: true}},
         },
       });
 
-      return BasicEventSchema.array().parse(caller?.participatedEvents);
+      return EventWithCreatorSchema.array().parse(caller?.participatedEvents);
     }),
   getParticipatedInInterval: protectedProcedure
     .input(IntervalSchema)
-    .output(BasicEventSchema.array())
+    .output(EventWithLocationSchema.array())
     .query(async ({input: {start, end}, ctx: {session: {user: {id: callerId}}, prisma}}) => {
       const caller = await prisma.user.findUnique({
         where: {id: callerId},
         include: {
           participatedEvents: {
             where: {start: {gte: start, lte: end}},
-            include: {location: true, creator: true, group: {include: {creator: true}}},
+            include: {location: true},
           },
         },
       });
 
-      return BasicEventSchema.array().parse(caller?.participatedEvents);
+      return EventWithLocationSchema.array().parse(caller?.participatedEvents);
     }),
   getById: protectedProcedure
     .input(IdSchema)
@@ -171,7 +178,6 @@ export const eventRouter = createTRPCRouter({
           participants: true,
           location: true,
           group: {include: {creator: true}},
-          comments: {include: {user: true}, orderBy: {postedAt: 'desc'}}
         },
       });
 
@@ -201,6 +207,7 @@ export const eventRouter = createTRPCRouter({
     }),
   create: protectedProcedure
     .input(MutateEventSchema)
+    .output(z.void())
     .mutation(async ({input: createEvent, ctx: {session: {user: {id: callerId}}, prisma, pusher}}) => {
       await prisma.event.create({
         data: {
@@ -227,6 +234,7 @@ export const eventRouter = createTRPCRouter({
     }),
   participate: protectedProcedure
     .input(z.object({id: IdSchema, participate: z.boolean()}))
+    .output(z.void())
     .mutation(async ({input, ctx: {session: {user: {id: callerId}}, prisma, pusher}}) => {
       const event = await prisma.event.findUnique({
         where: {id: input.id},
@@ -254,6 +262,7 @@ export const eventRouter = createTRPCRouter({
     }),
   update: protectedProcedure
     .input(z.object({event: MutateEventSchema, id: IdSchema}))
+    .output(z.void())
     .mutation(async ({input, ctx: {session: {user: {id: callerId}}, prisma, pusher}}) => {
       // TODO shall not be able to edit archive event!
       await prisma.event.update({
@@ -282,6 +291,7 @@ export const eventRouter = createTRPCRouter({
     }),
   delete: protectedProcedure
     .input(IdSchema)
+    .output(z.void())
     .mutation(async ({input, ctx: {session: {user: {id: callerId}}, prisma, pusher}}) => {
       // TODO shall not be able to delete archive event!
       await prisma.event.delete({

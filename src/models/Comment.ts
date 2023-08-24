@@ -15,11 +15,11 @@ export const BasicCommentSchema = MutateCommentSchema.extend({
   user: BasicUserSchema,
 });
 
-export const DetailedCommentSchema = BasicCommentSchema.extend({
-  event: z.lazy(() => BasicEventSchema),
+export const DetailedCommentSchema = BasicCommentSchema.omit({user: true}).extend({
+  event: z.lazy(() => BasicEventSchema.innerType().pick({id: true, name: true})),
 });
 
-export type CreateCommentType = z.infer<typeof MutateCommentSchema>;
+export type MutateCommentType = z.infer<typeof MutateCommentSchema>;
 
 export type BasicCommentType = z.infer<typeof BasicCommentSchema>;
 

@@ -41,6 +41,7 @@ export const groupChatRouter = createTRPCRouter({
     }),
   create: protectedProcedure
     .input(z.object({createMessage: CreateMessageSchema, groupId: IdSchema}))
+    .output(z.void())
     .mutation(async (
       {
         input: {createMessage, groupId},

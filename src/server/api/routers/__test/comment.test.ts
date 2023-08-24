@@ -2,8 +2,8 @@ import {describe, expect, it} from '@jest/globals';
 import {
   BasicCommentSchema,
   BasicCommentType,
-  CreateCommentType,
-  DetailedCommentSchema
+  DetailedCommentSchema,
+  MutateCommentType
 } from '../../../../models/Comment';
 import {SortCommentByProperty, SortDirection} from '../../../../utils/enums';
 import {
@@ -91,7 +91,7 @@ describe('commentRouter', () => {
   describe('create', () => {
     it('creates new comment for given event', async () => {
       // Arrange
-      const newComment: CreateCommentType = {
+      const newComment: MutateCommentType = {
         text: 'comment4_message',
       };
       const expectedNewComment: BasicCommentType = BasicCommentSchema.parse({

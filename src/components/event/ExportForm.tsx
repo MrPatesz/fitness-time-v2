@@ -2,14 +2,14 @@ import {useTranslation} from 'next-i18next';
 import {FunctionComponent} from 'react';
 import dayjs from '../../utils/dayjs';
 import {createEvents, DateArray} from 'ics';
-import {Button, Group, Stack} from '@mantine/core';
+import {Button, Group, Stack, Text} from '@mantine/core';
 import {api} from '../../utils/api';
 import {closeAllModals} from '@mantine/modals';
 import {useForm} from '@mantine/form';
 import {getFirstDayOfWeek} from '../../utils/utilFunctions';
 import {DateRangePicker, DateRangePickerValue} from '@mantine/dates';
 import {useRouter} from 'next/router';
-import {BasicEventType} from '../../models/Event';
+import {EventWithLocationType} from '../../models/Event';
 
 export const ExportForm: FunctionComponent = () => {
   const {t} = useTranslation('common');
@@ -33,7 +33,7 @@ export const ExportForm: FunctionComponent = () => {
     enabled: values.interval.length === 2 && !values.interval.includes(null),
   });
 
-  const iCalDownload = async (events: BasicEventType[] | undefined) => {
+  const iCalDownload = async (events: EventWithLocationType[] | undefined) => {
     if (!events) return;
 
     const iCalEvents = events.map(event => {
@@ -86,10 +86,13 @@ export const ExportForm: FunctionComponent = () => {
           firstDayOfWeek={getFirstDayOfWeek(locale)}
           {...getInputProps('interval')}
         />
-        <Group position="right">
+        <Group position="apart">
+          <Text color="dimmed">
+            {eventsQuery.data && t('calendarPage.eventCount', {count: eventsQuery.data.length})}
+          </Text>
           <Button
             type="submit"
-            disabled={!isValid()}
+            disabled={!isValid() || eventsQuery.data?.length === 0}
             loading={eventsQuery.isFetching}
           >
             {t('calendarPage.export')}

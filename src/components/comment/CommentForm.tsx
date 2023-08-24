@@ -4,7 +4,7 @@ import {closeAllModals} from '@mantine/modals';
 import {showNotification} from '@mantine/notifications';
 import {useTranslation} from 'next-i18next';
 import {FunctionComponent} from 'react';
-import {BasicCommentType, CreateCommentType} from '../../models/Comment';
+import {BasicCommentType, MutateCommentType} from '../../models/Comment';
 import {api} from '../../utils/api';
 import {defaultCreateComment} from '../../utils/defaultObjects';
 import RichTextEditor from '../rich-text/RichTextEditor';
@@ -13,13 +13,13 @@ import {OverlayLoader} from '../OverlayLoader';
 
 // TODO only used for editing now
 export const CommentForm: FunctionComponent<{
-  editedComment?: BasicCommentType | CreateCommentType;
+  editedComment?: BasicCommentType | MutateCommentType;
   eventId: number;
 }> = ({editedComment, eventId}) => {
   const queryContext = api.useContext();
   const {t} = useTranslation('common');
 
-  const form = useForm<CreateCommentType>({
+  const form = useForm<MutateCommentType>({
     initialValues: editedComment ?? defaultCreateComment,
   });
 

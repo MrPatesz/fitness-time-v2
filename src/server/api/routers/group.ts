@@ -60,6 +60,7 @@ export const groupRouter = createTRPCRouter({
     }),
   create: protectedProcedure
     .input(MutateGroupSchema)
+    .output(z.void())
     .mutation(async ({input: createGroup, ctx: {session: {user: {id: callerId}}, prisma, pusher}}) => {
       await prisma.group.create({
         data: {
@@ -73,6 +74,7 @@ export const groupRouter = createTRPCRouter({
     }),
   update: protectedProcedure
     .input(z.object({group: MutateGroupSchema, id: IdSchema}))
+    .output(z.void())
     .mutation(async ({input, ctx: {session: {user: {id: callerId}}, prisma, pusher}}) => {
       await prisma.group.update({
         where: {id: input.id, creatorId: callerId},
@@ -88,6 +90,7 @@ export const groupRouter = createTRPCRouter({
     }),
   delete: protectedProcedure
     .input(IdSchema)
+    .output(z.void())
     .mutation(async ({input, ctx: {session: {user: {id: callerId}}, prisma, pusher}}) => {
       await prisma.group.delete({
         where: {
@@ -102,6 +105,7 @@ export const groupRouter = createTRPCRouter({
     }),
   join: protectedProcedure
     .input(z.object({id: IdSchema, join: z.boolean()}))
+    .output(z.void())
     .mutation(async ({input: {id: groupId, join}, ctx: {session: {user: {id: callerId}}, prisma, pusher}}) => {
       await prisma.group.update({
         where: {id: groupId},

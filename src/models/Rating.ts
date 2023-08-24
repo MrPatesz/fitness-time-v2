@@ -1,5 +1,4 @@
 import {z} from 'zod';
-import {BasicUserSchema} from './User';
 import {IdSchema} from './Utils';
 
 export const StarsSchema = z.number().min(0.5).max(5);
@@ -12,7 +11,6 @@ export const BasicRatingSchema = MutateRatingSchema.extend({
   id: IdSchema,
   eventId: IdSchema,
   userId: z.string(),
-  user: BasicUserSchema,
 });
 
 export const AverageRatingSchema = z.object({

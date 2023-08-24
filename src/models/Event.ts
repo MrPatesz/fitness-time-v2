@@ -1,6 +1,5 @@
 import {z} from 'zod';
 import {EventStatus} from '../utils/enums';
-import {BasicCommentSchema} from './Comment';
 import {BasicGroupSchema} from './Group';
 import {LocationSchema, MutateLocationSchema} from './Location';
 import {BasicUserSchema} from './User';
@@ -44,9 +43,16 @@ export const BasicEventSchema = MutateEventSchema.innerType().innerType().extend
   status: event.start > new Date() ? EventStatus.PLANNED : EventStatus.ARCHIVE,
 }));
 
+export const EventWithCreatorSchema = BasicEventSchema
+  .innerType()
+  .omit({location: true, group: true});
+
+export const EventWithLocationSchema = BasicEventSchema
+  .innerType()
+  .omit({creator: true, group: true});
+
 export const DetailedEventSchema = BasicEventSchema.and(z.object({
   participants: BasicUserSchema.array(),
-  comments: BasicCommentSchema.array(),
 }));
 
 export type CreateEventType = z.infer<typeof MutateEventSchema>;
@@ -54,3 +60,5 @@ export type CreateEventType = z.infer<typeof MutateEventSchema>;
 export type BasicEventType = z.infer<typeof BasicEventSchema>;
 
 export type DetailedEventType = z.infer<typeof DetailedEventSchema>;
+
+export type EventWithLocationType = z.infer<typeof EventWithLocationSchema>;

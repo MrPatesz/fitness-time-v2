@@ -56,7 +56,7 @@ export const commentRouter = createTRPCRouter({
       const [comments, numberOfComments] = await prisma.$transaction([
         prisma.comment.findMany({
           where,
-          include: {user: true, event: {include: {location: true, creator: true, group: {include: {creator: true}}}}},
+          include: {event: true},
           skip: (page - 1) * pageSize,
           take: pageSize,
           orderBy,
@@ -73,6 +73,7 @@ export const commentRouter = createTRPCRouter({
     }),
   create: protectedProcedure
     .input(z.object({createComment: MutateCommentSchema, eventId: IdSchema}))
+    .output(z.void())
     .mutation(async ({input: {createComment, eventId}, ctx: {session: {user: {id: callerId}}, prisma, pusher}}) => {
       await prisma.comment.create({
         data: {
@@ -86,6 +87,7 @@ export const commentRouter = createTRPCRouter({
     }),
   update: protectedProcedure
     .input(z.object({comment: MutateCommentSchema, commentId: IdSchema, eventId: IdSchema}))
+    .output(z.void())
     .mutation(async ({
                        input: {commentId, comment, eventId},
                        ctx: {session: {user: {id: callerId}}, prisma, pusher}
@@ -103,6 +105,7 @@ export const commentRouter = createTRPCRouter({
     }),
   delete: protectedProcedure
     .input(IdSchema)
+    .output(z.void())
     .mutation(async ({input, ctx: {session: {user: {id: callerId}}, prisma, pusher}}) => {
       const deletedComment = await prisma.comment.delete({
         where: {

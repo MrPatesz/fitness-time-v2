@@ -1,4 +1,4 @@
-import {CreateCommentType} from '../models/Comment';
+import {MutateCommentType} from '../models/Comment';
 import {CreateEventType} from '../models/Event';
 import {CreateGroupType} from '../models/Group';
 import {CreateLocationType} from '../models/Location';
@@ -12,7 +12,7 @@ export const googleMapsLibraries: (
   | 'visualization'
   )[] = ['places'];
 
-export const defaultCreateComment: CreateCommentType = {
+export const defaultCreateComment: MutateCommentType = {
   text: '',
 };
 
