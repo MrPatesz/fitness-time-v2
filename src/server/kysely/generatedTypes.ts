@@ -39,11 +39,6 @@ export type Event = {
   creatorId: string;
   groupId: number | null;
 };
-export type Example = {
-  id: string;
-  createdAt: Generated<Timestamp>;
-  updatedAt: Timestamp;
-};
 export type Group = {
   id: Generated<number>;
   name: string;
@@ -95,7 +90,6 @@ export type DB = {
   Account: Account;
   Comment: Comment;
   Event: Event;
-  Example: Example;
   Group: Group;
   Location: Location;
   Message: Message;

@@ -1,5 +1,4 @@
 import {eventRouter} from './routers/event';
-import {exampleRouter} from './routers/example';
 import {groupRouter} from './routers/group';
 import {userRouter} from './routers/user';
 import {createTRPCRouter} from './trpc';
@@ -15,7 +14,6 @@ import {ratingRouter} from './routers/rating';
 export const appRouter = createTRPCRouter({
   comment: commentRouter,
   event: eventRouter,
-  example: exampleRouter,
   group: groupRouter,
   user: userRouter,
   groupChat: groupChatRouter,
