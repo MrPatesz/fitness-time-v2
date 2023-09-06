@@ -300,7 +300,8 @@
   },
   "feedPage": {
     "maxDistance": "Maximum Distance:",
-    "useMaxDistance": "Use Maximum Distance"
+    "useMaxDistance": "Use Maximum Distance",
+    "slider": "Maximum Distance"
   },
   "calendarPage": {
     "today": "Today",

@@ -300,7 +300,8 @@
   },
   "feedPage": {
     "maxDistance": "Maximum távolság:",
-    "useMaxDistance": "Maximum távolság használata"
+    "useMaxDistance": "Maximum távolság használata",
+    "slider": "Maximum távolság"
   },
   "calendarPage": {
     "today": "Ma",

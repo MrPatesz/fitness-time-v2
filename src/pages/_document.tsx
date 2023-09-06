@@ -9,7 +9,12 @@ export default class _Document extends Document {
   render() {
     return (
       <Html>
-        <Head/>
+        <Head>
+          <meta
+            name="description"
+            content="Fitness Time is a social media application where you can create groups and organize events."
+          />
+        </Head>
         <body>
         <Main/>
         <NextScript/>

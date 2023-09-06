@@ -70,6 +70,7 @@ export default function FeedPage() {
               />
             </Group>
             <Slider
+              title={t('feedPage.slider')}
               step={10}
               min={10}
               max={200}
