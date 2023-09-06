@@ -98,6 +98,7 @@ export const ApplicationShell: FunctionComponent<{
             <Group spacing="xs">
               <MediaQuery largerThan="sm" styles={{display: 'none'}}>
                 <Burger
+                  title={t('application.menu')}
                   opened={showNavbar}
                   onClick={toggleNavbar}
                   size="sm"
@@ -113,6 +114,7 @@ export const ApplicationShell: FunctionComponent<{
               <LanguageToggle/>
               <ColorSchemeToggle/>
               <ActionIcon
+                title={t('application.logout')}
                 size="lg"
                 variant={theme.colorScheme === 'dark' ? 'outline' : 'default'}
                 onClick={() => void signOut({callbackUrl: welcomeRoute})}

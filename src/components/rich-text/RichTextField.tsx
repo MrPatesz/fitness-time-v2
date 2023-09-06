@@ -31,6 +31,7 @@ export const RichTextField: FunctionComponent<{
         rightSection={(
           <Group spacing={4}>
             <ActionIcon
+              title={t('button.reset')}
               disabled={!value}
               variant="transparent"
               onClick={() => onChange('')}
@@ -38,6 +39,7 @@ export const RichTextField: FunctionComponent<{
               <X/>
             </ActionIcon>
             <ActionIcon
+              title={t('button.richText')}
               variant="transparent"
               onClick={() => setOpened(true)}
             >

@@ -2,7 +2,11 @@
   "application": {
     "name": "Fitness Time",
     "shortName": "FT",
-    "welcome": "Üdvözöl a Fitness Time!"
+    "welcome": "Üdvözöl a Fitness Time!",
+    "logout": "Kijelentkezés",
+    "colorScheme": "Színséma váltása",
+    "language": "Nyelv váltása",
+    "menu": "Menü"
   },
   "navbar": {
     "calendar": "Naptár",
@@ -17,7 +21,8 @@
     "confirm": "Megerősítés",
     "cancel": "Mégse",
     "reset": "Visszaállít",
-    "submit": "Beküld"
+    "submit": "Beküld",
+    "richText": "Szöveg formázása"
   },
   "resource": {
     "calendar": "Naptár",
@@ -183,6 +188,10 @@
     "createdEvents": "Létrehozott események",
     "participatedEvents": "Részt vett események"
   },
+  "groupDetails": {
+    "join": "Csatlakozás a csoporthoz",
+    "leave": "Kilépés a csoportból"
+  },
   "eventDetails": {
     "participate": "Részvétel",
     "removeParticipation": "Részvétel eltávolítása",
@@ -229,7 +238,8 @@
     "error": "Térkép betöltése közben hiba történt!"
   },
   "locationPicker": {
-    "error": "Helyek betöltése közben hiba történt!"
+    "error": "Helyek betöltése közben hiba történt!",
+    "remove": "Pozíció eltávolítása"
   },
   "intervalPicker": {
     "on": "Dátum",

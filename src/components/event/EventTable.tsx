@@ -102,6 +102,7 @@ const EventTable: FunctionComponent<{
           onChange={(e) => setArchive(e.currentTarget.checked)}
         />
         <ActionIcon
+          title={t('modal.event.create')}
           size="lg"
           variant="filled"
           color={theme.fn.themeColor(theme.primaryColor)}
@@ -201,6 +202,7 @@ const EventTable: FunctionComponent<{
                 render: (event) => (
                   <Group spacing="xs" noWrap>
                     <ActionIcon
+                      title={t('modal.event.edit')}
                       variant="transparent"
                       size="md"
                       onClick={(e) => {
@@ -219,6 +221,7 @@ const EventTable: FunctionComponent<{
                       <Pencil/>
                     </ActionIcon>
                     <ActionIcon
+                      title={t('modal.event.delete.title')}
                       variant="transparent"
                       size="md"
                       onClick={(e) => {

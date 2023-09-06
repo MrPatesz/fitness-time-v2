@@ -2,7 +2,11 @@
   "application": {
     "name": "Fitness Time",
     "shortName": "FT",
-    "welcome": "Welcome to Fitness Time!"
+    "welcome": "Welcome to Fitness Time!",
+    "logout": "Logout",
+    "colorScheme": "Change Color Scheme",
+    "language": "Change Language",
+    "menu": "Menu"
   },
   "navbar": {
     "calendar": "Calendar",
@@ -17,7 +21,8 @@
     "confirm": "Confirm",
     "cancel": "Cancel",
     "reset": "Reset",
-    "submit": "Submit"
+    "submit": "Submit",
+    "richText": "Format Text"
   },
   "resource": {
     "calendar": "Calendar",
@@ -183,6 +188,10 @@
     "createdEvents": "Created Events",
     "participatedEvents": "Participated Events"
   },
+  "groupDetails": {
+    "join": "Join Group",
+    "leave": "Leave Group"
+  },
   "eventDetails": {
     "participate": "Participate",
     "removeParticipation": "Remove participation",
@@ -229,7 +238,8 @@
     "error": "An error occurred while loading map!"
   },
   "locationPicker": {
-    "error": "An error occurred while loading places!"
+    "error": "An error occurred while loading places!",
+    "remove": "Remove Location"
   },
   "intervalPicker": {
     "on": "On",

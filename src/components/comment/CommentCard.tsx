@@ -61,6 +61,7 @@ export const CommentCard: FunctionComponent<{
             {'eventId' in comment && comment.userId === session?.user.id && (
               <Group position="right" spacing="xs">
                 <ActionIcon
+                  title={t('modal.comment.edit')}
                   size="sm"
                   variant="transparent"
                   onClick={() => openModal({
@@ -72,6 +73,7 @@ export const CommentCard: FunctionComponent<{
                   <Pencil/>
                 </ActionIcon>
                 <ActionIcon
+                  title={t('modal.comment.delete.title')}
                   size="sm"
                   variant="transparent"
                   onClick={() => openConfirmModal({

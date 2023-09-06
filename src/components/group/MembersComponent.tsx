@@ -93,6 +93,7 @@ export const MembersComponent: FunctionComponent<{
           color={userColor}
         >
           <ActionIcon
+            title={t(isMember ? 'groupDetails.leave' : 'groupDetails.join')}
             radius="xl"
             variant="filled"
             color={userColor}

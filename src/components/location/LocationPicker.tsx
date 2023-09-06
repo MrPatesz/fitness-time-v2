@@ -78,6 +78,7 @@ export const LocationPicker: FunctionComponent<{
             }}
             rightSection={
               <ActionIcon
+                title={t('locationPicker.remove')}
                 disabled={!location}
                 variant="transparent"
                 onClick={() => setLocation(null)}

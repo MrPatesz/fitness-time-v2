@@ -32,6 +32,7 @@ export const AddMessage: FunctionComponent<{
             {...form.getInputProps('text')}
           />
           <ActionIcon
+            title={t('messageForm.addMessage')}
             type="submit"
             disabled={!form.isValid() || !form.isDirty()}
             size={36}

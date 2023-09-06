@@ -82,6 +82,7 @@ const GroupTable: FunctionComponent<{
           onChange={(e) => setSearchQuery(e.currentTarget.value)}
         />
         <ActionIcon
+          title={t('modal.group.create')}
           size="lg"
           variant="filled"
           color={theme.fn.themeColor(theme.primaryColor)}
@@ -160,6 +161,7 @@ const GroupTable: FunctionComponent<{
                 render: (group) => (
                   <Group spacing="xs" noWrap>
                     <ActionIcon
+                      title={t('modal.group.edit')}
                       variant="transparent"
                       size="md"
                       onClick={(e) => {
@@ -178,6 +180,7 @@ const GroupTable: FunctionComponent<{
                       <Pencil/>
                     </ActionIcon>
                     <ActionIcon
+                      title={t('modal.group.delete.title')}
                       variant="transparent"
                       size="md"
                       onClick={(e) => {

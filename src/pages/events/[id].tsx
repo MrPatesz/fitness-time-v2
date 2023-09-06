@@ -94,7 +94,7 @@ export default function EventDetailsPage() {
           participate: !isParticipated,
         })}
       >
-        {isParticipated ? t('eventDetails.removeParticipation') : t('eventDetails.participate')}
+        {t(isParticipated ? 'eventDetails.removeParticipation' : 'eventDetails.participate')}
       </Button>
     );
   };
@@ -133,6 +133,7 @@ export default function EventDetailsPage() {
                   </Group>
                   {editable && (
                     <ActionIcon
+                      title={t('modal.event.edit')}
                       size="lg"
                       variant="filled"
                       color={theme.fn.themeColor(theme.primaryColor)}

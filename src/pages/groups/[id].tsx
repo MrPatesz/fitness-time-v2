@@ -97,6 +97,7 @@ export default function GroupDetailsPage() {
               />
               {isCreator && (
                 <ActionIcon
+                  title={t('modal.group.edit')}
                   size="lg"
                   variant="filled"
                   color={theme.fn.themeColor(theme.primaryColor)}

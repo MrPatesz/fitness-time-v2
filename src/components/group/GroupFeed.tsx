@@ -56,6 +56,7 @@ export const GroupFeed: FunctionComponent<{
         <Group position="apart">
           <Text color="dimmed">{t('resource.events')}</Text>
           <ActionIcon
+            title={t('modal.event.create')}
             size="lg"
             variant="filled"
             color={theme.fn.themeColor(theme.primaryColor)}

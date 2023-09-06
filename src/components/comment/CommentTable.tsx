@@ -153,6 +153,7 @@ const CommentTable: FunctionComponent = () => {
                 render: (comment) => (
                   <Group spacing="xs" noWrap>
                     <ActionIcon
+                      title={t('modal.comment.edit')}
                       variant="transparent"
                       size="md"
                       onClick={(e) => {
@@ -171,6 +172,7 @@ const CommentTable: FunctionComponent = () => {
                       <Pencil/>
                     </ActionIcon>
                     <ActionIcon
+                      title={t('modal.comment.delete.title')}
                       variant="transparent"
                       size="md"
                       onClick={(e) => {

@@ -41,6 +41,7 @@ export const AddComment: FunctionComponent<{
             formInputProps={form.getInputProps('text')}
           />
           <ActionIcon
+            title={t('commentForm.addComment')}
             type="submit"
             disabled={!form.isValid() || !form.isDirty()}
             size={36}
