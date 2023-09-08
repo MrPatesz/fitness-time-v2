@@ -14,29 +14,73 @@ import {Prisma} from '.prisma/client';
 import {IdSchema} from '../../../models/Utils';
 import {InvalidateEvent, PusherChannel} from '../../../utils/enums';
 import {PrismaClient} from '@prisma/client';
+import {CreateLocationType, MutateLocationSchema} from '../../../models/Location';
 
-const getEventDistance = async (eventId: number, userId: string, prisma: PrismaClient) => {
+const getEventDistance = async (prisma: PrismaClient, userId: string, eventId: number, location?: CreateLocationType) => {
   // TODO write this in kysely
-  const distance: { distanceInKilometers: number }[] = await prisma.$queryRaw`
-    SELECT ST_Distance(eventLocation.location, userLocation.location, false)/1000 as "distanceInKilometers"
-    FROM (
-      (
-        SELECT ST_MakePoint(longitude, latitude) as location
-        FROM "Event" as e
-        JOIN "Location" as l ON e."locationId" = l.id
-        WHERE e.id = ${eventId}
-      ) as eventLocation
-      CROSS JOIN 
-      (
-        SELECT ST_MakePoint(longitude, latitude) as location
-        FROM "User" as u
-        JOIN "Location" as l ON u."locationId" = l.id
-        WHERE u.id = ${userId}
-      ) as userLocation
-    )
-  `;
+  const distance: {
+    distanceInKilometers: number
+  }[] =
+    location ?
+      await prisma.$queryRaw`
+        SELECT ST_Distance(eventLocation.location, center.location, false)/1000 as "distanceInKilometers"
+        FROM (
+          (
+            SELECT ST_MakePoint(longitude, latitude) as location
+            FROM (
+              SELECT "Event"."locationId"
+              FROM "Event"
+              WHERE "Event".id = ${eventId}
+              LIMIT 1
+            ) as e JOIN "Location" ON e."locationId" = "Location".id
+          ) as eventLocation
+          CROSS JOIN
+          (SELECT * FROM ST_MakePoint(${location.longitude}, ${location.latitude}) as location) as center
+        )
+      ` :
+      await prisma.$queryRaw`
+        SELECT ST_Distance(eventLocation.location, userLocation.location, false)/1000 as "distanceInKilometers"
+        FROM (
+          (
+            SELECT ST_MakePoint(longitude, latitude) as location
+            FROM (
+              SELECT "Event"."locationId"
+              FROM "Event"
+              WHERE "Event".id = ${eventId}
+              LIMIT 1
+            ) as e JOIN "Location" ON e."locationId" = "Location".id
+          ) as eventLocation
+          CROSS JOIN
+          (
+            SELECT ST_MakePoint(longitude, latitude) as location
+            FROM (
+              SELECT "User"."locationId"
+              FROM "User"
+              WHERE "User".id = ${userId}
+              LIMIT 1
+            ) as u JOIN "Location" ON u."locationId" = "Location".id
+          ) as userLocation
+        )
+      `;
 
   return distance.at(0)?.distanceInKilometers;
+};
+
+const filterDistantEvents = async <EventType extends {
+  id: number
+}>(
+  prisma: PrismaClient,
+  userId: string,
+  events: EventType[],
+  maxDistance: number | null,
+  center?: CreateLocationType
+) => {
+  const eventsWithDistance = await Promise.all(events.map(async event => ({
+    ...event,
+    distance: await getEventDistance(prisma, userId, event.id, center),
+  })));
+
+  return maxDistance ? eventsWithDistance.filter(event => event.distance === undefined || event.distance < maxDistance) : eventsWithDistance;
 };
 
 export const eventRouter = createTRPCRouter({
@@ -94,7 +138,7 @@ export const eventRouter = createTRPCRouter({
     .input(z.object({
       cursor: z.date().nullish(),
       groupId: IdSchema.nullish(),
-      maxDistance: z.number().min(0).optional(),
+      maxDistance: z.number().nonnegative().optional(),
     }))
     .output(z.object({
       events: BasicEventSchema.array(),
@@ -123,25 +167,60 @@ export const eventRouter = createTRPCRouter({
         nextCursor = nextItem?.createdAt;
       }
 
+      const basicEvents = BasicEventSchema.array().parse(events);
+
       const user = await prisma.user.findUnique({where: {id: callerId}});
 
       if (!user?.locationId) {
         return {
-          events: BasicEventSchema.array().parse(events),
+          events: basicEvents,
           nextCursor,
         };
       }
 
-      const eventsWithDistance = await Promise.all(events.map(async event => ({
-        ...event,
-        distance: await getEventDistance(event.id, callerId, prisma),
-      })));
-
-      const eventsResult = maxDistance ? eventsWithDistance.filter(e => e.distance === undefined || e.distance < maxDistance) : eventsWithDistance;
+      const filteredEvents = await filterDistantEvents(prisma, callerId, basicEvents, maxDistance ?? null);
 
       return {
-        events: BasicEventSchema.array().parse(eventsResult),
+        events: filteredEvents,
         nextCursor,
+      };
+    }),
+  getMap: protectedProcedure
+    .input(z.object({
+      center: MutateLocationSchema.nullable(),
+      maxDistance: z.number().nonnegative().nullable(),
+    }))
+    .output(z.object({
+      center: MutateLocationSchema,
+      events: EventWithLocationSchema.array(),
+    }))
+    .query(async ({input: {center, maxDistance}, ctx: {session: {user: {id: callerId}}, prisma}}) => {
+      let actualCenter = center;
+      if (!actualCenter) {
+        const user = await prisma.user.findUnique({
+          where: {id: callerId},
+          include: {location: true},
+        });
+        actualCenter = user?.location ?? {latitude: 47.497912, longitude: 19.040235, address: 'Budapest, Magyarország'};
+      }
+
+      const events = await prisma.event.findMany({
+        where: {
+          creatorId: {not: callerId},
+          OR: [
+            {groupId: null},
+            {group: {members: {some: {id: callerId}}}},
+          ],
+          start: {gt: new Date()},
+        },
+        include: {location: true},
+      });
+
+      const filteredEvents = await filterDistantEvents(prisma, callerId, events, maxDistance, actualCenter);
+
+      return {
+        center: actualCenter,
+        events: filteredEvents,
       };
     }),
   getCalendar: protectedProcedure
@@ -188,7 +267,7 @@ export const eventRouter = createTRPCRouter({
 
       return DetailedEventSchema.parse({
         ...event,
-        distance: await getEventDistance(id, callerId, prisma),
+        distance: await getEventDistance(prisma, callerId, id),
       });
     }),
   create: protectedProcedure

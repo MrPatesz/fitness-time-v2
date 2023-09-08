@@ -16,7 +16,7 @@ import {useTranslation} from 'next-i18next';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
 import {FunctionComponent} from 'react';
-import {Adjustments, CalendarEvent, IconProps, Logout, Share, Ticket, UserCircle, Users} from 'tabler-icons-react';
+import {Adjustments, CalendarEvent, IconProps, Logout, Map, Share, Ticket, UserCircle, Users} from 'tabler-icons-react';
 import {getBackgroundColor} from '../../utils/utilFunctions';
 import {ColorSchemeToggle} from './ColorSchemeToggle';
 import {LanguageToggle} from './LanguageToggle';
@@ -71,6 +71,7 @@ export const ApplicationShell: FunctionComponent<{
     eventsRoute,
     controlPanelRoute,
     usersRoute,
+    mapRoute,
   ] = [
     `${localePrefix}/calendar`,
     `${localePrefix}/groups`,
@@ -79,6 +80,7 @@ export const ApplicationShell: FunctionComponent<{
     `${localePrefix}/events`,
     `${localePrefix}/control-panel`,
     `${localePrefix}/users`,
+    `${localePrefix}/map`,
   ];
 
   const isRouteActive = (givenRoute: string) => {
@@ -131,6 +133,7 @@ export const ApplicationShell: FunctionComponent<{
           <Navbar.Section grow>
             {[
               {label: t('navbar.calendar'), route: calendarRoute, icon: CalendarEvent},
+              {label: t('navbar.map'), route: mapRoute, icon: Map},
               {label: t('navbar.events'), route: eventsRoute, icon: Ticket},
               {label: t('navbar.groups'), route: groupsRoute, icon: Share},
               {label: t('navbar.users'), route: usersRoute, icon: Users},

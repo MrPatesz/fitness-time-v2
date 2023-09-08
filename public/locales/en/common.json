@@ -13,7 +13,8 @@
     "events": "Events",
     "controlPanel": "Control Panel",
     "users": "Users",
-    "groups": "Groups"
+    "groups": "Groups",
+    "map": "Map"
   },
   "button": {
     "login": "Login",

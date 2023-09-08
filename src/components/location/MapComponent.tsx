@@ -3,10 +3,14 @@ import {FunctionComponent} from 'react';
 import {LocationType} from '../../models/Location';
 import {formatDistance} from '../../utils/utilFunctions';
 import {Map} from './Map';
+import {MarkerF} from '@react-google-maps/api';
 
 const MapComponent: FunctionComponent<{
   location: LocationType;
-  size?: { width: number, height: number }
+  size?: {
+    width: number,
+    height: number
+  }
   distance: number | undefined;
 }> = ({distance, location, size = {width: 400, height: 400}}) => {
   return (
@@ -34,8 +38,15 @@ const MapComponent: FunctionComponent<{
           lng: location.longitude,
         }}
         mapContainerStyle={size}
-        markerLocations={[location]}
-      />
+      >
+        <MarkerF
+          title={location.address}
+          position={{
+            lat: location.latitude,
+            lng: location.longitude,
+          }}
+        />
+      </Map>
     </Card>
   );
 };

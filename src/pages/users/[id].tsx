@@ -34,7 +34,7 @@ export default function UserDetailsPage() {
           <Group position="apart" align="start">
             <Stack sx={{flexGrow: 1}}>
               <Group align="end" position="apart">
-                <Text weight="bold" size="xl" sx={{overflowWrap: 'anywhere'}}>
+                <Text weight="bold" size="xl">
                   {userDetailsQuery.data.name}
                 </Text>
                 <QueryComponent

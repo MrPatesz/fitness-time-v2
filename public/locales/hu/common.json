@@ -13,7 +13,8 @@
     "events": "Események",
     "controlPanel": "Vezérlőpult",
     "users": "Felhasználók",
-    "groups": "Csoportok"
+    "groups": "Csoportok",
+    "map": "Térkép"
   },
   "button": {
     "login": "Bejelentkezés",
