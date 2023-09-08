@@ -10,10 +10,7 @@ export default class _Document extends Document {
     return (
       <Html>
         <Head>
-          <meta
-            name="description"
-            content="Fitness Time is a social media application where you can create groups and organize events."
-          />
+          <link rel="manifest" href="/manifest.json"/>
         </Head>
         <body>
         <Main/>

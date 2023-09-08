@@ -1,5 +1,6 @@
 // @ts-check
 import i18nConfig from './next-i18next.config.mjs';
+import createWithPWA from 'next-pwa';
 
 /**
  * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.
@@ -7,8 +8,12 @@ import i18nConfig from './next-i18next.config.mjs';
  */
 !process.env.SKIP_ENV_VALIDATION && (await import('./src/env.mjs'));
 
-/** @type {import('next').NextConfig} */
-const config = {
+const withPWA = createWithPWA({
+  dest: 'public',
+  disable: process.env.NODE_ENV === 'development',
+});
+
+const config = withPWA({
   reactStrictMode: true,
 
   /**
@@ -18,5 +23,5 @@ const config = {
    * @see https://github.com/vercel/next.js/issues/41980
    */
   i18n: i18nConfig.i18n,
-};
+});
 export default config;
