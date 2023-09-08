@@ -118,7 +118,7 @@ export default function EventDetailsPage() {
               >
                 <Group position="apart">
                   <Group align="end">
-                    <Text weight="bold" size="xl">
+                    <Text weight="bold" size="xl" sx={{overflowWrap: 'anywhere'}}>
                       {eventQuery.data.name}
                     </Text>
                     <Link

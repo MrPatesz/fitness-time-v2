@@ -65,7 +65,7 @@ export default function GroupDetailsPage() {
           <Group position="apart" align="start">
             <Stack>
               <Group align="end">
-                <Text weight="bold" size="xl">
+                <Text weight="bold" size="xl" sx={{overflowWrap: 'anywhere'}}>
                   {groupQuery.data.name}
                 </Text>
                 <Link

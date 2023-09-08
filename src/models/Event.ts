@@ -37,7 +37,7 @@ export const BasicEventSchema = MutateEventSchema.innerType().innerType().extend
   groupId: IdSchema.nullable(),
   group: BasicGroupSchema.nullable(),
   status: z.nativeEnum(EventStatus).optional(),
-  distance: z.number().min(0).optional(),
+  distance: z.number().nonnegative().optional(),
 }).transform((event) => ({
   ...event,
   status: event.start > new Date() ? EventStatus.PLANNED : EventStatus.ARCHIVE,

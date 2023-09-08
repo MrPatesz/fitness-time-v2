@@ -14,7 +14,7 @@ export const BasicRatingSchema = MutateRatingSchema.extend({
 });
 
 export const AverageRatingSchema = z.object({
-  count: z.number().min(0),
+  count: z.number().int().nonnegative(),
   averageStars: StarsSchema.nullable(),
 });
 
