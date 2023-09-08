@@ -3,7 +3,7 @@
     "short_name": "Fitness Time",
     "description": "Fitness Time is a social media application in which users can form groups and organize events.",
     "theme_color": "#141517",
-    "background_color": "#000000",
+    "background_color": "#141517",
     "display": "standalone",
     "scope": "/",
     "start_url": "/",
@@ -22,14 +22,12 @@
         {
             "src": "/icon-384x384.png",
             "sizes": "384x384",
-            "type": "image/png",
-            "purpose": "any maskable"
+            "type": "image/png"
         },
         {
             "src": "/icon-512x512.png",
             "sizes": "512x512",
-            "type": "image/png",
-            "purpose": "any maskable"
+            "type": "image/png"
         }
     ]
 }
