@@ -4,14 +4,6 @@ import {CreateGroupType} from '../models/Group';
 import {CreateLocationType} from '../models/Location';
 import dayjs from './dayjs';
 
-export const googleMapsLibraries: (
-  | 'places'
-  | 'drawing'
-  | 'geometry'
-  | 'localContext'
-  | 'visualization'
-  )[] = ['places'];
-
 export const defaultCreateComment: MutateCommentType = {
   text: '',
 };

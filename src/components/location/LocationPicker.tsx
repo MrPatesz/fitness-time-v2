@@ -1,12 +1,11 @@
 import {ActionIcon, Card, Group, Stack, Text, TextInput} from '@mantine/core';
-import {Autocomplete, useJsApiLoader} from '@react-google-maps/api';
+import {Autocomplete} from '@react-google-maps/api';
 import {useTranslation} from 'next-i18next';
 import {FunctionComponent, useEffect, useState} from 'react';
 import {X} from 'tabler-icons-react';
-import {env} from '../../env.mjs';
 import {CreateLocationType} from '../../models/Location';
-import {googleMapsLibraries} from '../../utils/defaultObjects';
 import {CenteredLoader} from '../CenteredLoader';
+import {useGoogleMaps} from '../../hooks/useGoogleMaps';
 
 export const LocationPicker: FunctionComponent<{
   location: CreateLocationType | null;
@@ -16,11 +15,8 @@ export const LocationPicker: FunctionComponent<{
   placeholder: string;
   description?: string;
 }> = ({location, setLocation, error, required, placeholder, description}) => {
+  const {loading, error: mapsError} = useGoogleMaps();
   const {t} = useTranslation('common');
-  const {isLoaded, loadError} = useJsApiLoader({
-    googleMapsApiKey: env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
-    libraries: googleMapsLibraries,
-  });
 
   const [autocomplete, setAutocomplete] = useState<google.maps.places.Autocomplete | null>(null);
   const [address, setAddress] = useState(location?.address ?? '');
@@ -31,9 +27,9 @@ export const LocationPicker: FunctionComponent<{
 
   return (
     <>
-      {loadError ? (
+      {mapsError ? (
         <Card withBorder>{t('locationPicker.error')}</Card>
-      ) : !isLoaded ? (
+      ) : loading ? (
         <Stack spacing={2} mt={2} mb={-1}>
           <Group spacing={4}>
             <Text weight={500} size="sm">{t('common.location')}</Text>

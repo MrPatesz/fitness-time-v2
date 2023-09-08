@@ -13,6 +13,31 @@ import {createTRPCRouter, protectedProcedure} from '../trpc';
 import {Prisma} from '.prisma/client';
 import {IdSchema} from '../../../models/Utils';
 import {InvalidateEvent, PusherChannel} from '../../../utils/enums';
+import {PrismaClient} from '@prisma/client';
+
+const getEventDistance = async (eventId: number, userId: string, prisma: PrismaClient) => {
+  // TODO write this in kysely
+  const distance: { distanceInKilometers: number }[] = await prisma.$queryRaw`
+    SELECT ST_Distance(eventLocation.location, userLocation.location, false)/1000 as "distanceInKilometers"
+    FROM (
+      (
+        SELECT ST_MakePoint(longitude, latitude) as location
+        FROM "Event" as e
+        JOIN "Location" as l ON e."locationId" = l.id
+        WHERE e.id = ${eventId}
+      ) as eventLocation
+      CROSS JOIN 
+      (
+        SELECT ST_MakePoint(longitude, latitude) as location
+        FROM "User" as u
+        JOIN "Location" as l ON u."locationId" = l.id
+        WHERE u.id = ${userId}
+      ) as userLocation
+    )
+  `;
+
+  return distance.at(0)?.distanceInKilometers;
+};
 
 export const eventRouter = createTRPCRouter({
   getPaginatedEvents: protectedProcedure
@@ -107,30 +132,10 @@ export const eventRouter = createTRPCRouter({
         };
       }
 
-      // TODO write this whole thing in kysely
-      const eventsWithDistance = await Promise.all(events.map(async (e) => {
-        const distance: { distanceInKilometers: number }[] = await prisma.$queryRaw`
-        SELECT ST_Distance(eventLocation.location, userLocation.location, false)/1000 as "distanceInKilometers"
-        FROM (
-          (
-            SELECT ST_MakePoint(longitude, latitude) as location
-            FROM "Event" as e
-            JOIN "Location" as l ON e."locationId" = l.id
-            WHERE e.id = ${e.id}
-          ) as eventLocation
-          CROSS JOIN 
-          (
-            SELECT ST_MakePoint(longitude, latitude) as location
-            FROM "User" as u
-            JOIN "Location" as l ON u."locationId" = l.id
-            WHERE u.id = ${callerId}
-          ) as userLocation
-        )`;
-        return {
-          ...e,
-          distance: distance.at(0)?.distanceInKilometers,
-        };
-      }));
+      const eventsWithDistance = await Promise.all(events.map(async event => ({
+        ...event,
+        distance: await getEventDistance(event.id, callerId, prisma),
+      })));
 
       const eventsResult = maxDistance ? eventsWithDistance.filter(e => e.distance === undefined || e.distance < maxDistance) : eventsWithDistance;
 
@@ -181,28 +186,9 @@ export const eventRouter = createTRPCRouter({
         },
       });
 
-      // TODO write this in kysely
-      const distance: { distanceInKilometers: number }[] = await prisma.$queryRaw`
-        SELECT ST_Distance(eventLocation.location, userLocation.location, false)/1000 as "distanceInKilometers"
-        FROM (
-          (
-            SELECT ST_MakePoint(longitude, latitude) as location
-            FROM "Event" as e
-            JOIN "Location" as l ON e."locationId" = l.id
-            WHERE e.id = ${id}
-          ) as eventLocation
-          CROSS JOIN 
-          (
-            SELECT ST_MakePoint(longitude, latitude) as location
-            FROM "User" as u
-            JOIN "Location" as l ON u."locationId" = l.id
-            WHERE u.id = ${callerId}
-          ) as userLocation
-        )`;
-
       return DetailedEventSchema.parse({
         ...event,
-        distance: distance.at(0)?.distanceInKilometers,
+        distance: await getEventDistance(id, callerId, prisma),
       });
     }),
   create: protectedProcedure
