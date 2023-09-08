@@ -11,6 +11,11 @@ export default class _Document extends Document {
       <Html>
         <Head>
           <link rel="manifest" href="/manifest.json"/>
+          <meta name="theme-color" content="#141517"/>
+          <meta
+            name="description"
+            content="Fitness Time is a social media application in which users can form groups and organize events."
+          />
         </Head>
         <body>
         <Main/>
