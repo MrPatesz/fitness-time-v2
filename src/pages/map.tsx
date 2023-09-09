@@ -9,12 +9,14 @@ import {LocationPicker} from '../components/location/LocationPicker';
 import {CircleF, MarkerF} from '@react-google-maps/api';
 import {useRouter} from 'next/router';
 import {useShortDateFormatter} from '../utils/formatters';
-import {useDebouncedValue, useLocalStorage} from '@mantine/hooks';
+import {useDebouncedValue, useLocalStorage, useMediaQuery} from '@mantine/hooks';
 import {usePusher} from '../hooks/usePusher';
 import {InvalidateEvent} from '../utils/enums';
 
 export default function MapPage() {
   const theme = useMantineTheme();
+  const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
+  const md = useMediaQuery(`(min-width: ${theme.breakpoints.md}px)`);
   const {locale = 'en', push: pushRoute} = useRouter();
   const shortDateFormatter = useShortDateFormatter();
 
@@ -23,7 +25,10 @@ export default function MapPage() {
     key: 'google-map-zoom',
     defaultValue: 12,
   });
-  const maxDistance = useMemo(() => 40000 / Math.pow(2, zoom), [zoom]);
+  const maxDistance = useMemo(() => {
+    const increment = md ? 0 : xs ? 0.5 : 1;
+    return 40000 / Math.pow(2, zoom + increment);
+  }, [zoom, xs, md]);
   const [debouncedMaxDistance] = useDebouncedValue(maxDistance, 500);
 
   const eventsQuery = api.event.getMap.useQuery({center, maxDistance: debouncedMaxDistance});
