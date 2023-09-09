@@ -43,10 +43,6 @@ export const BasicEventSchema = MutateEventSchema.innerType().innerType().extend
   status: event.start > new Date() ? EventStatus.PLANNED : EventStatus.ARCHIVE,
 }));
 
-export const EventWithCreatorSchema = BasicEventSchema
-  .innerType()
-  .omit({location: true, group: true});
-
 export const EventWithLocationSchema = BasicEventSchema
   .innerType()
   .omit({creator: true, group: true});

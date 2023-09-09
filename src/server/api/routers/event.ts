@@ -333,6 +333,7 @@ export const eventRouter = createTRPCRouter({
     .input(z.object({event: MutateEventSchema, id: IdSchema}))
     .output(z.void())
     .mutation(async ({input, ctx: {session: {user: {id: callerId}}, prisma, pusher}}) => {
+      // TODO already x participants, should not be able to set limit to less than x
       await prisma.event.update({
         where: {
           id: input.id,

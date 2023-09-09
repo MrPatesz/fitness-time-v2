@@ -79,11 +79,13 @@ export const ratingRouter = createTRPCRouter({
     }))
     .output(z.void())
     .mutation(async ({input: {createRating, eventId}, ctx: {session: {user: {id: callerId}}, prisma, pusher}}) => {
+      // TODO don’t let user rate event that is not participated by them
       const foundRating = await prisma.rating.findFirst({
         where: {userId: callerId, eventId},
         include: {event: true},
       });
 
+      // TODO refactor with upsert
       if (foundRating) {
         await prisma.rating.update({
           where: {id: foundRating.id},
