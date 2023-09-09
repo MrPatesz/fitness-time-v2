@@ -3,7 +3,6 @@ import {z} from 'zod';
 import {
   BasicEventSchema,
   DetailedEventSchema,
-  EventWithCreatorSchema,
   EventWithLocationSchema,
   IntervalSchema,
   MutateEventSchema,
@@ -188,11 +187,11 @@ export const eventRouter = createTRPCRouter({
   getMap: protectedProcedure
     .input(z.object({
       center: MutateLocationSchema.nullable(),
-      maxDistance: z.number().nonnegative().nullable(),
+      maxDistance: z.number().positive(),
     }))
     .output(z.object({
       center: MutateLocationSchema,
-      events: EventWithLocationSchema.array(),
+      events: BasicEventSchema.array(),
     }))
     .query(async ({input: {center, maxDistance}, ctx: {session: {user: {id: callerId}}, prisma}}) => {
       let actualCenter = center;
@@ -213,27 +212,29 @@ export const eventRouter = createTRPCRouter({
           ],
           start: {gt: new Date()},
         },
-        include: {location: true},
+        include: {location: true, creator: true, group: {include: {creator: true}}},
       });
 
       const filteredEvents = await filterDistantEvents(prisma, callerId, events, maxDistance, actualCenter);
 
       return {
         center: actualCenter,
-        events: filteredEvents,
+        events: BasicEventSchema.array().parse(filteredEvents),
       };
     }),
   getCalendar: protectedProcedure
-    .output(EventWithCreatorSchema.array())
+    .output(BasicEventSchema.array())
     .query(async ({ctx: {session: {user: {id: callerId}}, prisma}}) => {
       const caller = await prisma.user.findUnique({
         where: {id: callerId},
         include: {
-          participatedEvents: {include: {creator: true}},
+          participatedEvents: {
+            include: {location: true, creator: true, group: {include: {creator: true}}}
+          },
         },
       });
 
-      return EventWithCreatorSchema.array().parse(caller?.participatedEvents);
+      return BasicEventSchema.array().parse(caller?.participatedEvents);
     }),
   getParticipatedInInterval: protectedProcedure
     .input(IntervalSchema)
@@ -294,6 +295,7 @@ export const eventRouter = createTRPCRouter({
 
       await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetCalendar, callerId);
       await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetFeed, null);
+      await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetMap, null);
       await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetPaginatedEvents, null);
       await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.UserGetById, callerId);
     }),
@@ -306,13 +308,15 @@ export const eventRouter = createTRPCRouter({
         include: {participants: true},
       });
 
-      if (event?.limit && (event.participants.length >= event.limit)) {
+      if (input.participate && event?.limit && (event.participants.length >= event.limit)) {
         throw new TRPCError({code: 'BAD_REQUEST', message: 'Event is already full!'});
       }
 
-      // TODO shall not be able to participate archive event!
       await prisma.event.update({
-        where: {id: input.id},
+        where: {
+          id: input.id,
+          start: {gt: new Date()},
+        },
         data: {
           participants: input.participate ? {
             connect: {id: callerId},
@@ -329,9 +333,12 @@ export const eventRouter = createTRPCRouter({
     .input(z.object({event: MutateEventSchema, id: IdSchema}))
     .output(z.void())
     .mutation(async ({input, ctx: {session: {user: {id: callerId}}, prisma, pusher}}) => {
-      // TODO shall not be able to edit archive event!
       await prisma.event.update({
-        where: {id: input.id, creatorId: callerId},
+        where: {
+          id: input.id,
+          creatorId: callerId,
+          start: {gt: new Date()},
+        },
         data: {
           ...input.event,
           groupId: undefined,
@@ -351,6 +358,7 @@ export const eventRouter = createTRPCRouter({
       await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetById, input.id);
       await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetCalendar, null);
       await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetFeed, null);
+      await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetMap, null);
       await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetPaginatedEvents, null);
       await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.UserGetById, callerId);
     }),
@@ -358,17 +366,18 @@ export const eventRouter = createTRPCRouter({
     .input(IdSchema)
     .output(z.void())
     .mutation(async ({input, ctx: {session: {user: {id: callerId}}, prisma, pusher}}) => {
-      // TODO shall not be able to delete archive event!
       await prisma.event.delete({
         where: {
           id: input,
           creatorId: callerId,
+          start: {gt: new Date()},
         },
       });
 
       await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetById, input);
       await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetCalendar, null);
       await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetFeed, null);
+      await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetMap, null);
       await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetPaginatedEvents, null);
       await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.CommentGetAllByEventId, input);
       await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.UserGetById, callerId);

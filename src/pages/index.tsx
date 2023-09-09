@@ -1,5 +1,5 @@
 import {Checkbox, Group, Slider, Stack, Text, useMantineTheme} from '@mantine/core';
-import {useIntersection, useLocalStorage} from '@mantine/hooks';
+import {useDebouncedValue, useIntersection, useLocalStorage} from '@mantine/hooks';
 import {useSession} from 'next-auth/react';
 import {useTranslation} from 'next-i18next';
 import {serverSideTranslations} from 'next-i18next/serverSideTranslations';
@@ -16,37 +16,34 @@ import {InvalidateEvent} from '../utils/enums';
 import {BorderComponent} from '../components/BorderComponent';
 
 export default function FeedPage() {
-  const [fluidMaxDistance, setFluidMaxDistance] = useLocalStorage<number>({
-    key: 'fluid-max-distance',
-    defaultValue: 40,
-  });
-  const [maxDistance, setMaxDistance] = useLocalStorage<number>({
-    key: 'max-distance',
-    defaultValue: 40,
-  });
   const [enableMaxDistance, setEnableMaxDistance] = useLocalStorage<boolean>({
     key: 'enable-max-distance',
     defaultValue: false,
   });
+  const [maxDistance, setMaxDistance] = useLocalStorage<number>({
+    key: 'fluid-max-distance',
+    defaultValue: 40,
+  });
+  const [debouncedMaxDistance] = useDebouncedValue(maxDistance, 500);
 
   const theme = useMantineTheme();
   const {data: session} = useSession();
   const {t} = useTranslation('common');
   const {ref, entry} = useIntersection({threshold: 0.1});
 
-  const feedQuery = api.event.getFeed.useInfiniteQuery({maxDistance: session?.user.hasLocation && enableMaxDistance ? maxDistance : undefined}, {
+  const feedQuery = api.event.getFeed.useInfiniteQuery({maxDistance: session?.user.hasLocation && enableMaxDistance ? debouncedMaxDistance : undefined}, {
     getNextPageParam: (lastPage) => lastPage.nextCursor,
   });
+
+  const events: BasicEventType[] = useMemo(() => {
+    return feedQuery.data?.pages.flatMap(page => page.events) ?? [];
+  }, [feedQuery.data?.pages]);
 
   useEffect(() => {
     if (entry?.isIntersecting && feedQuery.hasNextPage && !feedQuery.isFetching) {
       void feedQuery.fetchNextPage();
     }
   }, [entry]);
-
-  const events: BasicEventType[] = useMemo(() => {
-    return feedQuery.data?.pages.flatMap(page => page.events) ?? [];
-  }, [feedQuery.data?.pages]);
 
   return (
     <Stack>
@@ -60,7 +57,7 @@ export default function FeedPage() {
                   weight="bold"
                   color={enableMaxDistance ? theme.primaryColor : 'dimmed'}
                 >
-                  {formatDistance(fluidMaxDistance)}
+                  {formatDistance(maxDistance)}
                 </Text>
               </Group>
               <Checkbox
@@ -76,9 +73,9 @@ export default function FeedPage() {
               max={200}
               label={null}
               disabled={!enableMaxDistance}
-              value={fluidMaxDistance}
-              onChange={setFluidMaxDistance}
-              onChangeEnd={setMaxDistance}
+              value={maxDistance}
+              onChange={setMaxDistance}
+              // onChangeEnd={setMaxDistance}
             />
           </Stack>
         </BorderComponent>

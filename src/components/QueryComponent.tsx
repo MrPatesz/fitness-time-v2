@@ -7,7 +7,7 @@ import {EventInfo, usePusher} from '../hooks/usePusher';
 import {OverlayLoader} from './OverlayLoader';
 
 // TODO generic component: query.data has to match setState arg
-// TODO consider passing in a function to render children -> .data won't be undefined there
+// TODO consider passing in a function to render children -> .data won't be undefined there, but more renders
 export const QueryComponent: FunctionComponent<PropsWithChildren<{
   query: UseTRPCQueryResult<unknown, unknown>;
   resourceName: string;

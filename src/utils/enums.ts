@@ -74,6 +74,7 @@ export enum InvalidateEvent {
   EventGetById = 'event.getById',
   EventGetCalendar = 'event.getCalendar',
   EventGetFeed = 'event.getFeed',
+  EventGetMap = 'event.getMap',
   EventGetPaginatedEvents = 'event.getPaginatedEvents',
   GroupGetById = 'group.getById',
   GroupGetPaginatedGroups = 'group.getPaginatedGroups',

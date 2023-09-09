@@ -32,7 +32,7 @@ const MapComponent: FunctionComponent<{
         </Stack>
       </Card>
       <Map
-        zoom={17}
+        zoom={15}
         center={{
           lat: location.latitude,
           lng: location.longitude,

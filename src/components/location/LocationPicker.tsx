@@ -11,10 +11,10 @@ export const LocationPicker: FunctionComponent<{
   location: CreateLocationType | null;
   setLocation: (location: CreateLocationType | null) => void;
   error?: string | undefined;
-  required: boolean;
-  placeholder: string;
+  required?: boolean;
+  placeholder?: string;
   description?: string;
-}> = ({location, setLocation, error, required, placeholder, description}) => {
+}> = ({location, setLocation, error, required = false, placeholder, description}) => {
   const {loading, error: mapsError} = useGoogleMaps();
   const {t} = useTranslation('common');
 

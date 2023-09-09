@@ -1,25 +1,33 @@
-import {useTranslation} from 'next-i18next';
 import {serverSideTranslations} from 'next-i18next/serverSideTranslations';
 import i18nConfig from '../../next-i18next.config.mjs';
 import {api} from '../utils/api';
-import {NumberInput, Stack, useMantineTheme} from '@mantine/core';
+import {Stack, useMantineTheme} from '@mantine/core';
 import {Map} from '../components/location/Map';
-import {useEffect, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {CreateLocationType} from '../models/Location';
 import {LocationPicker} from '../components/location/LocationPicker';
 import {CircleF, MarkerF} from '@react-google-maps/api';
-
+import {useRouter} from 'next/router';
+import {useShortDateFormatter} from '../utils/formatters';
+import {useDebouncedValue, useLocalStorage} from '@mantine/hooks';
+import {usePusher} from '../hooks/usePusher';
+import {InvalidateEvent} from '../utils/enums';
 
 export default function MapPage() {
-  const {t} = useTranslation('common');
   const theme = useMantineTheme();
+  const {locale = 'en', push: pushRoute} = useRouter();
+  const shortDateFormatter = useShortDateFormatter();
 
   const [center, setCenter] = useState<CreateLocationType | null>(null);
-  const [maxDistance, setMaxDistance] = useState<number | null>(null);
-  // TODO set maxDistance with debounce from map zoom
+  const [zoom, setZoom] = useLocalStorage({
+    key: 'google-map-zoom',
+    defaultValue: 12,
+  });
+  const maxDistance = useMemo(() => 40000 / Math.pow(2, zoom), [zoom]);
+  const [debouncedMaxDistance] = useDebouncedValue(maxDistance, 500);
 
-  const eventsQuery = api.event.getMap.useQuery({center, maxDistance});
-  // TODO pusher
+  const eventsQuery = api.event.getMap.useQuery({center, maxDistance: debouncedMaxDistance});
+  usePusher({event: InvalidateEvent.EventGetMap}, () => void eventsQuery.refetch());
 
   useEffect(() => {
     if (eventsQuery.data) {
@@ -30,53 +38,34 @@ export default function MapPage() {
   return (
     <Stack h="100%">
       <LocationPicker
-        required={false}
-        placeholder={t('profileForm.location.placeholder')}
         location={center}
         setLocation={setCenter}
       />
-      <NumberInput
-        label={t('feedPage.maxDistance')}
-        value={maxDistance ?? undefined}
-        onChange={newValue => setMaxDistance(newValue ?? null)}
-        min={0}
-        max={20000}
-      />
       {center && (
         <Map
-          zoom={maxDistance ? Math.log(40000 / (maxDistance / 5)) : 12}
+          zoom={zoom}
+          onZoom={setZoom}
           mapContainerStyle={{width: '100%', height: '100%'}}
           center={{
             lat: center.latitude,
             lng: center.longitude,
           }}
         >
-          {maxDistance && (
-            <CircleF
-              radius={maxDistance * 1000}
-              center={{
-                lat: center.latitude,
-                lng: center.longitude,
-              }}
-              options={{
-                fillColor: theme.fn.themeColor(theme.primaryColor),
-                strokeColor: theme.fn.themeColor(theme.primaryColor),
-              }}
-              /* TODO editable={true}
-                  onCenterChanged={}
-                  onRadiusChanged={} */
-            />
-          )}
-          {eventsQuery.data?.events.map(({location}) => (
+          <CircleF
+            radius={maxDistance * 1000}
+            center={{lat: center.latitude, lng: center.longitude}}
+            options={{
+              fillColor: theme.fn.themeColor(theme.primaryColor),
+              strokeColor: theme.fn.themeColor(theme.primaryColor),
+            }}
+          />
+          {eventsQuery.data?.events.map(event => (
             <MarkerF
-              key={location.id}
-              title={location.address}
-              position={{
-                lat: location.latitude,
-                lng: location.longitude,
-              }}
-              /* TODO onClick
-                  more info */
+              key={event.id}
+              label={event.name}
+              title={`${event.description}\n${shortDateFormatter.format(event.start)}`}
+              position={{lat: event.location.latitude, lng: event.location.longitude}}
+              onClick={() => void pushRoute(`/events/${event.id}`, undefined, {locale})}
             />
           ))}
         </Map>

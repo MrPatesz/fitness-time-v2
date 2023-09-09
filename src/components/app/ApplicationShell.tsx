@@ -107,7 +107,12 @@ export const ApplicationShell: FunctionComponent<{
                   color={theme.colors.gray[6]}
                 />
               </MediaQuery>
-              <Link href="/" locale={locale} passHref>
+              <Link
+                href="/"
+                locale={locale}
+                passHref
+                onClick={closeNavbar}
+              >
                 <Title order={2}>{t(xs ? 'application.name' : 'application.shortName')}</Title>
               </Link>
             </Group>
