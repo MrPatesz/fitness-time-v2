@@ -62,8 +62,7 @@ export default function MapPage() {
           {eventsQuery.data?.events.map(event => (
             <MarkerF
               key={event.id}
-              label={event.name}
-              title={`${event.description}\n${shortDateFormatter.format(event.start)}`}
+              title={`${event.name}\n${event.creator.name}\n${shortDateFormatter.format(event.start)}\n${event.description}`}
               position={{lat: event.location.latitude, lng: event.location.longitude}}
               onClick={() => void pushRoute(`/events/${event.id}`, undefined, {locale})}
             />
