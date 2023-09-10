@@ -3,7 +3,7 @@ import i18nConfig from '../../next-i18next.config.mjs';
 import {api} from '../utils/api';
 import {Stack, useMantineTheme} from '@mantine/core';
 import {Map} from '../components/location/Map';
-import {useEffect, useMemo, useState} from 'react';
+import {useEffect, useMemo} from 'react';
 import {CreateLocationType} from '../models/Location';
 import {LocationPicker} from '../components/location/LocationPicker';
 import {CircleF, MarkerF} from '@react-google-maps/api';
@@ -12,6 +12,8 @@ import {useShortDateFormatter} from '../utils/formatters';
 import {useDebouncedValue, useLocalStorage, useMediaQuery} from '@mantine/hooks';
 import {usePusher} from '../hooks/usePusher';
 import {InvalidateEvent} from '../utils/enums';
+import {CenteredLoader} from '../components/CenteredLoader';
+import {useTranslation} from 'next-i18next';
 
 export default function MapPage() {
   const theme = useMantineTheme();
@@ -19,8 +21,12 @@ export default function MapPage() {
   const md = useMediaQuery(`(min-width: ${theme.breakpoints.md}px)`);
   const {locale = 'en', push: pushRoute} = useRouter();
   const shortDateFormatter = useShortDateFormatter();
+  const {t} = useTranslation('common');
 
-  const [center, setCenter] = useState<CreateLocationType | null>(null);
+  const [center, setCenter] = useLocalStorage<CreateLocationType | null>({
+    key: 'google-map-center',
+    defaultValue: null,
+  });
   const [zoom, setZoom] = useLocalStorage({
     key: 'google-map-zoom',
     defaultValue: 12,
@@ -43,10 +49,11 @@ export default function MapPage() {
   return (
     <Stack h="100%">
       <LocationPicker
+        label={t('common.location')}
         location={center}
         setLocation={setCenter}
       />
-      {center && (
+      {center ? (
         <Map
           zoom={zoom}
           onZoom={setZoom}
@@ -64,6 +71,10 @@ export default function MapPage() {
               strokeColor: theme.fn.themeColor(theme.primaryColor),
             }}
           />
+          <CircleF
+            radius={maxDistance * 10}
+            center={{lat: center.latitude, lng: center.longitude}}
+          />
           {eventsQuery.data?.events.map(event => (
             <MarkerF
               key={event.id}
@@ -73,6 +84,8 @@ export default function MapPage() {
             />
           ))}
         </Map>
+      ) : (
+        <CenteredLoader/>
       )}
     </Stack>
   );

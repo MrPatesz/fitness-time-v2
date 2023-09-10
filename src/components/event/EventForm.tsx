@@ -67,6 +67,7 @@ export const EventForm: FunctionComponent<{
           />
           <LocationPicker
             required={true}
+            label={t('locationPicker.place')}
             placeholder={t('eventForm.location.placeholder')}
             location={getFormLocationValue(form)}
             setLocation={getFormLocationOnChange(form)}

@@ -86,6 +86,7 @@ export const ProfileForm: FunctionComponent<{
             onChange={form.getInputProps('themeColor').onChange as (newValue: ThemeColor) => void}
           />
           <LocationPicker
+            label={t('locationPicker.residence')}
             placeholder={t('profileForm.location.placeholder')}
             description={t('profileForm.location.description')}
             location={getFormLocationValue(form)}

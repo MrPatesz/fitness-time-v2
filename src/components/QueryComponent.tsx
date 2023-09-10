@@ -32,6 +32,7 @@ export const QueryComponent: FunctionComponent<PropsWithChildren<{
       ) : query.isLoading ? (
         <CenteredLoader/> // TODO skeleton instead of this
       ) : (
+        // TODO FetchingComponent
         <OverlayLoader loading={Boolean(loading)} fillHeight>
           {query.isFetching && (
             <Progress

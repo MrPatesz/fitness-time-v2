@@ -8,13 +8,14 @@ import {CenteredLoader} from '../CenteredLoader';
 import {useGoogleMaps} from '../../hooks/useGoogleMaps';
 
 export const LocationPicker: FunctionComponent<{
+  label: string;
   location: CreateLocationType | null;
   setLocation: (location: CreateLocationType | null) => void;
-  error?: string | undefined;
-  required?: boolean;
   placeholder?: string;
   description?: string;
-}> = ({location, setLocation, error, required = false, placeholder, description}) => {
+  required?: boolean;
+  error?: string | undefined;
+}> = ({location, setLocation, error, required = false, placeholder, description, label}) => {
   const {loading, error: mapsError} = useGoogleMaps();
   const {t} = useTranslation('common');
 
@@ -32,7 +33,7 @@ export const LocationPicker: FunctionComponent<{
       ) : loading ? (
         <Stack spacing={2} mt={2} mb={-1}>
           <Group spacing={4}>
-            <Text weight={500} size="sm">{t('common.location')}</Text>
+            <Text weight={500} size="sm">{label}</Text>
             <Text weight={500} size="sm" color="red">*</Text>
           </Group>
           <Card withBorder p={'sm'}>
@@ -59,7 +60,7 @@ export const LocationPicker: FunctionComponent<{
         >
           <TextInput
             withAsterisk={required}
-            label={t('common.location')}
+            label={label}
             placeholder={placeholder}
             description={description}
             value={address}
