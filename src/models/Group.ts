@@ -15,7 +15,7 @@ export const BasicGroupSchema = MutateGroupSchema.extend({
 });
 
 export const DetailedGroupSchema = BasicGroupSchema.extend({
-  members: BasicUserSchema.array(),
+  members: z.lazy(() => BasicUserSchema.array()),
 });
 
 export type CreateGroupType = z.infer<typeof MutateGroupSchema>;

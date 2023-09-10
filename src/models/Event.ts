@@ -48,7 +48,7 @@ export const EventWithLocationSchema = BasicEventSchema
   .omit({creator: true, group: true});
 
 export const DetailedEventSchema = BasicEventSchema.and(z.object({
-  participants: BasicUserSchema.array(),
+  participants: z.lazy(() => BasicUserSchema.array()),
 }));
 
 export type CreateEventType = z.infer<typeof MutateEventSchema>;

@@ -53,10 +53,10 @@ describe('userRouter', () => {
     it('updates the given user record\'s data', async () => {
       // Arrange
       const expected = UpdateProfileSchema.parse({
-        ...user2,
-        name: 'user2_update_test',
-        introduction: 'user2_introduction',
-        image: 'user2_image',
+        ...user1,
+        name: 'user1_update_test',
+        introduction: 'user1_introduction',
+        image: 'https://www.user1-image.com',
         themeColor: ThemeColor.ORANGE,
         location: null,
       });
@@ -67,7 +67,20 @@ describe('userRouter', () => {
       // Assert
       expect(result).toEqual(expected);
     });
-  });
+    it('cannot update other user\'s profile', async () => {
+      // Arrange
+      const expected = UpdateProfileSchema.parse({
+        ...user2,
+        name: 'user2_update_test',
+        location: null,
+      });
 
+      // Act
+      const updateCall = async () => await caller.user.update(expected);
+
+      // Assert
+      await expect(updateCall()).rejects.toThrow();
+    });
+  });
   // TODO describe("getPaginatedUsers", () => {});
 });
