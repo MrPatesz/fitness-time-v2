@@ -1,11 +1,11 @@
 import {describe, expect, it} from '@jest/globals';
-import {DetailedUserSchema, ProfileSchema, UpdateProfileSchema} from '../../../../models/User';
-import {ThemeColor} from '../../../../utils/enums';
+import {DetailedUserSchema, ProfileSchema, UpdateProfileSchema} from '../../../../src/models/User';
+import {ThemeColor} from '../../../../src/utils/enums';
 import {user1, user2, users} from './utils/mockData';
-import {getTestCaller, TestCaller, testPrismaClient} from './utils/testUtils';
+import {getTestCaller, testPrismaClient} from './utils/testUtils';
 
 describe('userRouter', () => {
-  let caller: TestCaller;
+  let caller: ReturnType<typeof getTestCaller>;
 
   beforeEach(async () => {
     caller = getTestCaller({...user1, hasLocation: false});

@@ -4,8 +4,8 @@ import {
   BasicCommentType,
   DetailedCommentSchema,
   MutateCommentType
-} from '../../../../models/Comment';
-import {SortCommentByProperty, SortDirection} from '../../../../utils/enums';
+} from '../../../../src/models/Comment';
+import {SortCommentByProperty, SortDirection} from '../../../../src/utils/enums';
 import {
   comment1,
   comment2,
@@ -21,10 +21,10 @@ import {
   user2,
   users
 } from './utils/mockData';
-import {getTestCaller, TestCaller, testPrismaClient} from './utils/testUtils';
+import {getTestCaller, testPrismaClient} from './utils/testUtils';
 
 describe('commentRouter', () => {
-  let caller: TestCaller;
+  let caller: ReturnType<typeof getTestCaller>;
 
   beforeEach(async () => {
     caller = getTestCaller({...user2, hasLocation: false});
