@@ -99,22 +99,24 @@ export const ApplicationShell: FunctionComponent<{
         <Header height={56} py="xs" px="md">
           <Group align="center" position="apart">
             <Group spacing="xs">
-              <MediaQuery largerThan="sm" styles={{display: 'none'}}>
-                <Burger
-                  title={t('application.menu')}
-                  opened={showNavbar}
-                  onClick={toggleNavbar}
-                  size="sm"
-                  color={theme.colors.gray[6]}
-                />
-              </MediaQuery>
+              {session && (
+                <MediaQuery largerThan="sm" styles={{display: 'none'}}>
+                  <Burger
+                    title={t('application.menu')}
+                    opened={showNavbar}
+                    onClick={toggleNavbar}
+                    size="sm"
+                    color={theme.colors.gray[6]}
+                  />
+                </MediaQuery>
+              )}
               <Link
                 href="/"
                 locale={locale}
                 passHref
                 onClick={closeNavbar}
               >
-                <Title order={2}>{t(xs ? 'application.name' : 'application.shortName')}</Title>
+                <Title order={2}>{t((!session || xs) ? 'application.name' : 'application.shortName')}</Title>
               </Link>
             </Group>
 

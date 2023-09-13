@@ -1,4 +1,4 @@
-import {Button, Card, Group, Stack,} from '@mantine/core';
+import {Button, Card, Group, Stack, Title} from '@mantine/core';
 import {signIn, useSession} from 'next-auth/react';
 import {useTranslation} from 'next-i18next';
 import {serverSideTranslations} from 'next-i18next/serverSideTranslations';
@@ -24,9 +24,9 @@ export default function WelcomePage() {
   return (
     <Stack align="center" justify="center" sx={{height: '100vh'}}>
       <Card withBorder>
-        <h1 style={{marginTop: 0}}>
+        <Title order={1} pb="xl">
           {t('application.welcome')}
-        </h1>
+        </Title>
         <Group position="center">
           <Button
             onClick={() => void signIn(undefined, {callbackUrl: locale !== defaultLocale ? `/${locale}/` : '/'})}
