@@ -9,12 +9,33 @@
     "menu": "Menu"
   },
   "navbar": {
-    "calendar": "Calendar",
-    "events": "Events",
-    "controlPanel": "Control Panel",
-    "users": "Users",
-    "groups": "Groups",
-    "map": "Map"
+    "calendar": {
+      "label": "Calendar",
+      "title": "Here you can view your participated events in the calendar."
+    },
+    "map": {
+      "label": "Map",
+      "title": "Here you can view nearby events on the map."
+    },
+    "events": {
+      "label": "Events",
+      "title": "Here you can sort, filter, search events."
+    },
+    "groups": {
+      "label": "Groups",
+      "title": "Here you can sort, filter, search groups."
+    },
+    "users": {
+      "label": "Users",
+      "title": "Here you can sort, filter, search users."
+    },
+    "controlPanel": {
+      "label": "Control Panel",
+      "title": "Here you can manage your events, groups and comments."
+    },
+    "profile": {
+      "title": "Here you can modify your user data."
+    }
   },
   "button": {
     "login": "Login",

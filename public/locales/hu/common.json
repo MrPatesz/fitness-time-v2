@@ -9,12 +9,33 @@
     "menu": "Menü"
   },
   "navbar": {
-    "calendar": "Naptár",
-    "events": "Események",
-    "controlPanel": "Vezérlőpult",
-    "users": "Felhasználók",
-    "groups": "Csoportok",
-    "map": "Térkép"
+    "calendar": {
+      "label": "Naptár",
+      "title": "Itt láthatod a részt vett eseményeidet a naptárban."
+    },
+    "map": {
+      "label": "Térkép",
+      "title": "Itt láthatod a közeli eseményeket a térképen."
+    },
+    "events": {
+      "label": "Események",
+      "title": "Itt rendezhetsz, szűrhetsz, kereshetsz eseményeket."
+    },
+    "groups": {
+      "label": "Csoportok",
+      "title": "Itt rendezhetsz, szűrhetsz, kereshetsz csoportokat."
+    },
+    "users": {
+      "label": "Felhasználók",
+      "title": "Itt rendezhetsz, szűrhetsz, kereshetsz felhasználókat."
+    },
+    "controlPanel": {
+      "label": "Vezérlőpult",
+      "title": "Itt kezelheted az eseményeidet, csoportjaidat és kommentjeidet."
+    },
+    "profile": {
+      "title": "Itt módosíthatod a felhasználói adataidat."
+    }
   },
   "button": {
     "login": "Bejelentkezés",

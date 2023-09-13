@@ -27,6 +27,7 @@ const NavBarLink: FunctionComponent<{
   link: {
     icon: FunctionComponent<IconProps>;
     label: string;
+    title: string;
     route: string;
     onClick: () => void;
     active: boolean;
@@ -41,8 +42,9 @@ const NavBarLink: FunctionComponent<{
   >
     <NavLink
       label={link.label}
-      icon={<link.icon size={20}/>}
+      title={link.title}
       active={link.active}
+      icon={<link.icon size={20}/>}
     />
   </Link>
 );
@@ -137,11 +139,16 @@ export const ApplicationShell: FunctionComponent<{
         <Navbar width={{base: 211}} p="xs" hiddenBreakpoint="sm" hidden={!showNavbar} zIndex={401}>
           <Navbar.Section grow>
             {[
-              {label: t('navbar.calendar'), route: calendarRoute, icon: CalendarEvent},
-              {label: t('navbar.map'), route: mapRoute, icon: Map},
-              {label: t('navbar.events'), route: eventsRoute, icon: Ticket},
-              {label: t('navbar.groups'), route: groupsRoute, icon: Share},
-              {label: t('navbar.users'), route: usersRoute, icon: Users},
+              {
+                label: t('navbar.calendar.label'),
+                title: t('navbar.calendar.title'),
+                route: calendarRoute,
+                icon: CalendarEvent
+              },
+              {label: t('navbar.map.label'), title: t('navbar.map.title'), route: mapRoute, icon: Map},
+              {label: t('navbar.events.label'), title: t('navbar.events.title'), route: eventsRoute, icon: Ticket},
+              {label: t('navbar.groups.label'), title: t('navbar.groups.title'), route: groupsRoute, icon: Share},
+              {label: t('navbar.users.label'), title: t('navbar.users.title'), route: usersRoute, icon: Users},
             ].map((link) => (
               <NavBarLink
                 key={link.label}
@@ -158,7 +165,8 @@ export const ApplicationShell: FunctionComponent<{
             <NavBarLink
               locale={locale}
               link={{
-                label: t('navbar.controlPanel'),
+                label: t('navbar.controlPanel.label'),
+                title: t('navbar.controlPanel.title'),
                 route: controlPanelRoute,
                 icon: Adjustments,
                 active: isRouteActive(controlPanelRoute),
@@ -169,6 +177,7 @@ export const ApplicationShell: FunctionComponent<{
               locale={locale}
               link={{
                 label: session?.user?.name as string,
+                title: t('navbar.profile.title'),
                 route: profileRoute,
                 icon: UserCircle,
                 active: isRouteActive(profileRoute),
