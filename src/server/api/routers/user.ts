@@ -47,6 +47,32 @@ export const userRouter = createTRPCRouter({
 
       return ProfileSchema.parse(user);
     }),
+  deleteProfile: protectedProcedure
+    .output(z.void())
+    .mutation(async ({ctx: {prisma, session: {user: {id: userId}}, pusher}}) => {
+      const deletedUser = await prisma.user.delete({
+        where: {id: userId},
+        include: {createdEvents: true, createdGroups: true},
+      });
+
+      await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.UserGetById, userId);
+      await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.UserGetPaginatedUsers, null);
+
+      if (deletedUser.createdEvents.length) {
+        await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetById, null);
+        await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetFeed, null);
+        await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetCalendar, null);
+        await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetMap, null);
+        await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetPaginatedEvents, null);
+        await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.CommentGetAllByEventId, null);
+      }
+
+      if (deletedUser.createdGroups.length) {
+        await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.GroupGetById, null);
+        await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.GroupGetPaginatedGroups, null);
+        await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.GroupChatGetMessages, null);
+      }
+    }),
   getById: protectedProcedure
     .input(z.string())
     .output(DetailedUserSchema)

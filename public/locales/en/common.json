@@ -254,6 +254,11 @@
       "label": "Profile Image URL",
       "placeholder": "You can set your profile image here.",
       "error": "Invalid image URL!"
+    },
+    "delete": {
+      "title": "Delete Profile",
+      "message": "This will permanently remove your profile with all of its associated data from our database.",
+      "warning": "None of this data can be recovered after deletion!"
     }
   },
   "mapComponent": {

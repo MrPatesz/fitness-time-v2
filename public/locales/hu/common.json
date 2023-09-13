@@ -254,6 +254,11 @@
       "label": "Profilkép URL",
       "placeholder": "Itt állíthatod be a profilképedet.",
       "error": "Hibás kép URL!"
+    },
+    "delete": {
+      "title": "Profil törlése",
+      "message": "Ez véglegesen eltávolítja adatbázisunkból a profilod és az összes ahhoz kapcsolódó adatot.",
+      "warning": "Törlés után az adatok már nem állíthatók vissza!"
     }
   },
   "mapComponent": {

@@ -1,4 +1,4 @@
-import {Button, Group, Stack, TextInput, Title} from '@mantine/core';
+import {Button, Group, Stack, Text, TextInput, Title} from '@mantine/core';
 import {useForm} from '@mantine/form';
 import {showNotification} from '@mantine/notifications';
 import {useTranslation} from 'next-i18next';
@@ -11,18 +11,24 @@ import {ThemeColorPicker} from './ThemeColorPicker';
 import UserImage from './UserImage';
 import {ThemeColor} from '../../utils/enums';
 import {getFormLocationOnChange, getFormLocationValue} from '../../utils/mantineFormUtils';
-import {useSession} from 'next-auth/react';
+import {signOut, useSession} from 'next-auth/react';
 import {Session} from 'next-auth';
 import {UseTRPCQueryResult} from '@trpc/react-query/dist/shared';
 import {z} from 'zod';
 import {OverlayLoader} from '../OverlayLoader';
+import {openConfirmModal} from '@mantine/modals';
+import {useRouter} from 'next/router';
 
 export const ProfileForm: FunctionComponent<{
   profileQuery: UseTRPCQueryResult<ProfileType, unknown>;
 }> = ({profileQuery}) => {
   const {data: session, update} = useSession();
   const {t} = useTranslation('common');
+  const {locale = 'en', defaultLocale} = useRouter();
 
+  const deleteProfile = api.user.deleteProfile.useMutation({
+    onSuccess: () => void signOut({callbackUrl: `${locale === defaultLocale ? '' : `/${locale}`}/welcome`}),
+  });
   const updateProfile = api.user.update.useMutation({
     onSuccess: (profile) => {
       void profileQuery.refetch();
@@ -56,13 +62,39 @@ export const ProfileForm: FunctionComponent<{
     },
   });
 
+  const onDeleteClick = () => openConfirmModal({
+    title: t('profileForm.delete.title'),
+    children: (
+      <Stack spacing="xs">
+        <Text>
+          {t('profileForm.delete.message')}
+        </Text>
+        <Text weight="bold" color="red">
+          {t('profileForm.delete.warning')}
+        </Text>
+      </Stack>
+    ),
+    labels: {confirm: t('button.confirm'), cancel: t('button.cancel')},
+    confirmProps: {color: 'red'},
+    onConfirm: () => deleteProfile.mutate(),
+  });
+
   // TODO public/private information sections: edit button to open form
 
   return (
     <OverlayLoader loading={updateProfile.isLoading}>
       <form onSubmit={form.onSubmit((data) => updateProfile.mutate(data))}>
         <Stack>
-          <Title order={2}>{profileQuery.data?.name}</Title>
+          <Group position="apart">
+            <Title order={2}>{profileQuery.data?.name}</Title>
+            <Button
+              color="red"
+              variant="outline"
+              onClick={onDeleteClick}
+            >
+              {t('profileForm.delete.title')}
+            </Button>
+          </Group>
           <TextInput
             withAsterisk
             data-autofocus
