@@ -95,7 +95,6 @@ export const ApplicationShell: FunctionComponent<{
 
   return (
     <AppShell
-      hidden={!session}
       header={
         <Header height={56} py="xs" px="md">
           <Group align="center" position="apart">
@@ -122,78 +121,81 @@ export const ApplicationShell: FunctionComponent<{
             <Group spacing="xs">
               <LanguageToggle/>
               <ColorSchemeToggle/>
-              <ActionIcon
-                title={t('application.logout')}
-                size="lg"
-                variant={theme.colorScheme === 'dark' ? 'outline' : 'default'}
-                onClick={() => void signOut({callbackUrl: welcomeRoute})}
-              >
-                <Logout/>
-              </ActionIcon>
+              {session && (
+                <ActionIcon
+                  title={t('application.logout')}
+                  size="lg"
+                  variant={theme.colorScheme === 'dark' ? 'outline' : 'default'}
+                  onClick={() => void signOut({callbackUrl: welcomeRoute})}
+                >
+                  <Logout/>
+                </ActionIcon>
+              )}
             </Group>
           </Group>
         </Header>
       }
       navbarOffsetBreakpoint="sm"
       navbar={
-        <Navbar width={{base: 211}} p="xs" hiddenBreakpoint="sm" hidden={!showNavbar} zIndex={401}>
-          <Navbar.Section grow>
-            {[
-              {
-                label: t('navbar.calendar.label'),
-                title: t('navbar.calendar.title'),
-                route: calendarRoute,
-                icon: CalendarEvent
-              },
-              {label: t('navbar.map.label'), title: t('navbar.map.title'), route: mapRoute, icon: Map},
-              {label: t('navbar.events.label'), title: t('navbar.events.title'), route: eventsRoute, icon: Ticket},
-              {label: t('navbar.groups.label'), title: t('navbar.groups.title'), route: groupsRoute, icon: Share},
-              {label: t('navbar.users.label'), title: t('navbar.users.title'), route: usersRoute, icon: Users},
-            ].map((link) => (
+        session ? (
+          <Navbar width={{base: 211}} p="xs" hiddenBreakpoint="sm" hidden={!showNavbar} zIndex={401}>
+            <Navbar.Section grow>
+              {[
+                {
+                  label: t('navbar.calendar.label'),
+                  title: t('navbar.calendar.title'),
+                  route: calendarRoute,
+                  icon: CalendarEvent
+                },
+                {label: t('navbar.map.label'), title: t('navbar.map.title'), route: mapRoute, icon: Map},
+                {label: t('navbar.events.label'), title: t('navbar.events.title'), route: eventsRoute, icon: Ticket},
+                {label: t('navbar.groups.label'), title: t('navbar.groups.title'), route: groupsRoute, icon: Share},
+                {label: t('navbar.users.label'), title: t('navbar.users.title'), route: usersRoute, icon: Users},
+              ].map((link) => (
+                <NavBarLink
+                  key={link.label}
+                  locale={locale}
+                  link={{
+                    ...link,
+                    active: isRouteActive(link.route),
+                    onClick: closeNavbar,
+                  }}
+                />
+              ))}
+            </Navbar.Section>
+            <Navbar.Section>
               <NavBarLink
-                key={link.label}
                 locale={locale}
                 link={{
-                  ...link,
-                  active: isRouteActive(link.route),
+                  label: t('navbar.controlPanel.label'),
+                  title: t('navbar.controlPanel.title'),
+                  route: controlPanelRoute,
+                  icon: Adjustments,
+                  active: isRouteActive(controlPanelRoute),
                   onClick: closeNavbar,
                 }}
               />
-            ))}
-          </Navbar.Section>
-          <Navbar.Section>
-            <NavBarLink
-              locale={locale}
-              link={{
-                label: t('navbar.controlPanel.label'),
-                title: t('navbar.controlPanel.title'),
-                route: controlPanelRoute,
-                icon: Adjustments,
-                active: isRouteActive(controlPanelRoute),
-                onClick: closeNavbar,
-              }}
-            />
-            <NavBarLink
-              locale={locale}
-              link={{
-                label: session?.user?.name as string,
-                title: t('navbar.profile.title'),
-                route: profileRoute,
-                icon: UserCircle,
-                active: isRouteActive(profileRoute),
-                onClick: closeNavbar,
-              }}
-            />
-          </Navbar.Section>
-        </Navbar>
-      }
+              <NavBarLink
+                locale={locale}
+                link={{
+                  label: session?.user?.name as string,
+                  title: t('navbar.profile.title'),
+                  route: profileRoute,
+                  icon: UserCircle,
+                  active: isRouteActive(profileRoute),
+                  onClick: closeNavbar,
+                }}
+              />
+            </Navbar.Section>
+          </Navbar>
+        ) : undefined}
       styles={{
         main: {
           backgroundColor: getBackgroundColor(theme),
         }
       }}
     >
-      {children}
+      {(session || route.includes(welcome)) && children}
     </AppShell>
   );
 };
