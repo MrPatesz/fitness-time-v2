@@ -1,12 +1,15 @@
-import {Button, Card, Group, Stack, Title} from '@mantine/core';
+import {Button, Card, Group, Stack, Title, useMantineTheme} from '@mantine/core';
 import {signIn, useSession} from 'next-auth/react';
 import {useTranslation} from 'next-i18next';
 import {serverSideTranslations} from 'next-i18next/serverSideTranslations';
 import {useRouter} from 'next/router';
 import {useEffect} from 'react';
 import i18nConfig from '../../next-i18next.config.mjs';
+import {useMediaQuery} from '@mantine/hooks';
 
 export default function WelcomePage() {
+  const theme = useMantineTheme();
+  const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
   const {replace: replaceRoute, locale = 'en', defaultLocale} = useRouter();
   const {status} = useSession();
   const {t} = useTranslation('common');
@@ -17,14 +20,10 @@ export default function WelcomePage() {
     }
   }, [status, locale, replaceRoute]);
 
-  if (status !== 'unauthenticated') {
-    return <></>;
-  }
-
-  return (
-    <Stack align="center" justify="center" sx={{height: '100vh'}}>
-      <Card withBorder>
-        <Title order={1} pb="xl">
+  return (status === 'unauthenticated') && (
+    <Stack h="100%" align="center" justify="center">
+      <Card withBorder w={xs ? undefined : 245}>
+        <Title order={1} align="center" pb="xl">
           {t('application.welcome')}
         </Title>
         <Group position="center">

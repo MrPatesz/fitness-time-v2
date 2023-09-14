@@ -4,6 +4,7 @@ import {
   Burger,
   Group,
   Header,
+  MantineNumberSize,
   MediaQuery,
   Navbar,
   NavLink,
@@ -20,13 +21,14 @@ import {Adjustments, CalendarEvent, IconProps, Logout, Map, Share, Ticket, UserC
 import {getBackgroundColor} from '../../utils/utilFunctions';
 import {ColorSchemeToggle} from './ColorSchemeToggle';
 import {LanguageToggle} from './LanguageToggle';
+import {CenteredLoader} from '../CenteredLoader';
 
 const welcome = 'welcome';
 
 const NavBarLink: FunctionComponent<{
   link: {
     icon: FunctionComponent<IconProps>;
-    label: string;
+    label: string | null | undefined;
     title: string;
     route: string;
     onClick: () => void;
@@ -57,11 +59,15 @@ export const ApplicationShell: FunctionComponent<{
   const theme = useMantineTheme();
   const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
   const {route, locale = 'en', defaultLocale, push: pushRoute} = useRouter();
-  const {data: session} = useSession({
+  const {data: session, status} = useSession({
     required: !route.includes(welcome),
     onUnauthenticated: () => void pushRoute(`/${welcome}`, undefined, {locale}),
   });
   const {t} = useTranslation('common');
+
+  const sessionLoading = status === 'loading';
+  const authenticated = status === 'authenticated';
+  const unauthenticated = status === 'unauthenticated';
 
   const isDefaultLocale = locale === defaultLocale;
   const localePrefix = isDefaultLocale ? '' : `/${locale}`;
@@ -93,54 +99,57 @@ export const ApplicationShell: FunctionComponent<{
     return route.includes(actualRoute);
   };
 
+  const breakpoint: MantineNumberSize = 'sm';
+
   return (
     <AppShell
       header={
-        <Header height={56} py="xs" px="md">
-          <Group align="center" position="apart">
-            <Group spacing="xs">
-              {session && (
-                <MediaQuery largerThan="sm" styles={{display: 'none'}}>
-                  <Burger
-                    title={t('application.menu')}
-                    opened={showNavbar}
-                    onClick={toggleNavbar}
-                    size="sm"
-                    color={theme.colors.gray[6]}
-                  />
-                </MediaQuery>
-              )}
-              <Link
-                href="/"
-                locale={locale}
-                passHref
-                onClick={closeNavbar}
-              >
-                <Title order={2}>{t((!session || xs) ? 'application.name' : 'application.shortName')}</Title>
-              </Link>
-            </Group>
-
-            <Group spacing="xs">
-              <LanguageToggle/>
-              <ColorSchemeToggle/>
-              {session && (
-                <ActionIcon
-                  title={t('application.logout')}
-                  size="lg"
-                  variant={theme.colorScheme === 'dark' ? 'outline' : 'default'}
-                  onClick={() => void signOut({callbackUrl: welcomeRoute})}
+        !sessionLoading ? (
+          <Header height={56} py="xs" px="md">
+            <Group align="center" position="apart">
+              <Group spacing="xs">
+                {authenticated && (
+                  <MediaQuery largerThan={breakpoint} styles={{display: 'none'}}>
+                    <Burger
+                      title={t('application.menu')}
+                      opened={showNavbar}
+                      onClick={toggleNavbar}
+                      size="sm"
+                      color={theme.colors.gray[6]}
+                    />
+                  </MediaQuery>
+                )}
+                <Link
+                  href="/"
+                  locale={locale}
+                  passHref
+                  onClick={closeNavbar}
                 >
-                  <Logout/>
-                </ActionIcon>
-              )}
+                  <Title order={2}>{t((unauthenticated || xs) ? 'application.name' : 'application.shortName')}</Title>
+                </Link>
+              </Group>
+              <Group spacing="xs">
+                <LanguageToggle/>
+                <ColorSchemeToggle/>
+                {authenticated && (
+                  <ActionIcon
+                    title={t('application.logout')}
+                    size="lg"
+                    variant={theme.colorScheme === 'dark' ? 'outline' : 'default'}
+                    onClick={() => void signOut({callbackUrl: welcomeRoute})}
+                  >
+                    <Logout/>
+                  </ActionIcon>
+                )}
+              </Group>
             </Group>
-          </Group>
-        </Header>
+          </Header>
+        ) : undefined
       }
-      navbarOffsetBreakpoint="sm"
+      navbarOffsetBreakpoint={breakpoint}
       navbar={
-        session ? (
-          <Navbar width={{base: 211}} p="xs" hiddenBreakpoint="sm" hidden={!showNavbar} zIndex={401}>
+        authenticated ? (
+          <Navbar width={{base: 211}} p="xs" hiddenBreakpoint={breakpoint} hidden={!showNavbar} zIndex={401}>
             <Navbar.Section grow>
               {[
                 {
@@ -180,7 +189,7 @@ export const ApplicationShell: FunctionComponent<{
               <NavBarLink
                 locale={locale}
                 link={{
-                  label: session?.user?.name as string,
+                  label: session?.user?.name,
                   title: t('navbar.profile.title'),
                   route: profileRoute,
                   icon: UserCircle,
@@ -197,7 +206,7 @@ export const ApplicationShell: FunctionComponent<{
         }
       }}
     >
-      {(session || route.includes(welcome)) && children}
+      {sessionLoading ? (<CenteredLoader/>) : children}
     </AppShell>
   );
 };
