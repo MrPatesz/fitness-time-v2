@@ -271,13 +271,9 @@
     "place": "Hely"
   },
   "intervalPicker": {
-    "on": "Dátum",
-    "start": {
-      "label": "Kezdés"
-    },
-    "end": {
-      "label": "Vége"
-    }
+    "start": "Kezdő dátum",
+    "end": "Vég dátum",
+    "time": "Időpont"
   },
   "groupForm": {
     "name": {
@@ -310,7 +306,7 @@
     },
     "price": {
       "label": "Ár",
-      "placeholder": "A részvevőknek fizetniük kell érte?"
+      "placeholder": "Fizetniük kell érte a részvevőknek?"
     },
     "limit": {
       "label": "Limit",

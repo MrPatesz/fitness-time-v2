@@ -271,13 +271,9 @@
     "place": "Place"
   },
   "intervalPicker": {
-    "on": "On",
-    "start": {
-      "label": "Start"
-    },
-    "end": {
-      "label": "End"
-    }
+    "start": "Start Date",
+    "end": "End Date",
+    "time": "Time"
   },
   "groupForm": {
     "name": {

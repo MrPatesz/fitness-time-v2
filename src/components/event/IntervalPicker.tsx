@@ -1,4 +1,4 @@
-import {Group} from '@mantine/core';
+import {Group, Stack} from '@mantine/core';
 import {DatePicker, TimeInput} from '@mantine/dates';
 import {useTranslation} from 'next-i18next';
 import {useRouter} from 'next/router';
@@ -18,53 +18,77 @@ const calculateDateTime = (date: Date, time: Date): Date => {
   return dateAndTime.toDate();
 };
 
+interface DateInfo {
+  value: Date;
+  onChange: (newDate: Date) => void;
+  error: string | undefined;
+}
+
 export const IntervalPicker: FunctionComponent<{
-  start: Date;
-  end: Date;
-  onChange: (newStart: Date, newEnd: Date) => void;
-  startError: string | undefined;
-  endError: string | undefined;
-}> = ({start, end, onChange, startError, endError}) => {
+  startInfo: DateInfo;
+  endInfo: DateInfo;
+}> = ({
+        startInfo: {value: start, onChange: onStartChange, error: startError},
+        endInfo: {value: end, onChange: onEndChange, error: endError},
+      }) => {
   const {t} = useTranslation('common');
   const {locale = 'en'} = useRouter();
 
   return (
-    <Group spacing="xs">
-      <DatePicker
-        locale={locale}
-        withAsterisk
-        sx={{width: '229px', marginBottom: 'auto'}}
-        label={t('intervalPicker.on')}
-        value={start}
-        onChange={(newDate) => {
-          if (newDate) {
-            onChange(
-              calculateDateTime(newDate, start),
-              calculateDateTime(newDate, end)
-            );
-          }
-        }}
-        clearable={false}
-        minDate={new Date()}
-        firstDayOfWeek={getFirstDayOfWeek(locale)}
-        error={Boolean(startError || endError)}
-      />
-      <TimeInput
-        withAsterisk
-        sx={{marginBottom: 'auto'}}
-        label={t('intervalPicker.start.label')}
-        value={start}
-        onChange={(event) => onChange(calculateDateTime(start, event), end)}
-        error={startError}
-      />
-      <TimeInput
-        withAsterisk
-        sx={{marginBottom: 'auto'}}
-        label={t('intervalPicker.end.label')}
-        value={end}
-        onChange={(event) => onChange(start, calculateDateTime(end, event))}
-        error={endError}
-      />
-    </Group>
+    <Stack>
+      <Group spacing="xs">
+        <DatePicker
+          locale={locale}
+          withAsterisk
+          sx={{flexGrow: 1, marginBottom: 'auto'}}
+          label={t('intervalPicker.start')}
+          value={start}
+          onChange={(newStartDate) => {
+            if (newStartDate) {
+              onStartChange(calculateDateTime(newStartDate, start));
+              onEndChange(calculateDateTime(newStartDate, end));
+            }
+          }}
+          clearable={false}
+          minDate={new Date()}
+          firstDayOfWeek={getFirstDayOfWeek(locale)}
+          error={Boolean(startError)}
+        />
+        <TimeInput
+          withAsterisk
+          sx={{marginBottom: 'auto'}}
+          label={t('intervalPicker.time')}
+          value={start}
+          onChange={(newStartTime) => onStartChange(calculateDateTime(start, newStartTime))}
+          error={startError}
+        />
+      </Group>
+      <Group spacing="xs">
+        <DatePicker
+          locale={locale}
+          withAsterisk
+          sx={{flexGrow: 1, marginBottom: 'auto'}}
+          label={t('intervalPicker.end')}
+          value={end}
+          onChange={(newEndDate) => {
+            if (newEndDate) {
+              onEndChange(calculateDateTime(newEndDate, end));
+            }
+          }}
+          clearable={false}
+          minDate={start}
+          firstDayOfWeek={getFirstDayOfWeek(locale)}
+          error={Boolean(endError)}
+        />
+        <TimeInput
+          withAsterisk
+          sx={{marginBottom: 'auto'}}
+          label={t('intervalPicker.time')}
+          value={end}
+          onChange={(newEndTime) => onEndChange(calculateDateTime(end, newEndTime))}
+          error={endError}
+        />
+      </Group>
+    </Stack>
   );
 };

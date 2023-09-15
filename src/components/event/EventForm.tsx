@@ -54,16 +54,16 @@ export const EventForm: FunctionComponent<{
             {...form.getInputProps('name')}
           />
           <IntervalPicker
-            start={getFormDateValue(form, 'start')}
-            end={getFormDateValue(form, 'end')}
-            onChange={(newStart, newEnd) => {
-              const startOnChange = getFormDateOnChange(form, 'start');
-              startOnChange(newStart);
-              const endOnChange = getFormDateOnChange(form, 'end');
-              endOnChange(newEnd);
+            startInfo={{
+              value: getFormDateValue(form, 'start'),
+              onChange: getFormDateOnChange(form, 'start'),
+              error: getFormError(form, 'start'),
             }}
-            startError={getFormError(form, 'start')}
-            endError={getFormError(form, 'end')}
+            endInfo={{
+              value: getFormDateValue(form, 'end'),
+              onChange: getFormDateOnChange(form, 'end'),
+              error: getFormError(form, 'end'),
+            }}
           />
           <LocationPicker
             required={true}
