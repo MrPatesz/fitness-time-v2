@@ -116,14 +116,19 @@ export const ApplicationShell: FunctionComponent<{
                     />
                   </MediaQuery>
                 )}
-                <Link
-                  href="/"
-                  locale={locale}
-                  passHref
-                  onClick={closeNavbar}
-                >
-                  <Title order={2}>{t((!authenticated || xs) ? 'application.name' : 'application.shortName')}</Title>
-                </Link>
+                {authenticated ? (
+                  <Link
+                    href="/"
+                    locale={locale}
+                    passHref
+                    onClick={closeNavbar}
+                    // title={t('')} // TODO
+                  >
+                    <Title order={2}>{t(xs ? 'application.name' : 'application.shortName')}</Title>
+                  </Link>
+                ) : (
+                  <Title order={2}>{t('application.name')}</Title>
+                )}
               </Group>
               <Group spacing="xs">
                 <LanguageToggle/>

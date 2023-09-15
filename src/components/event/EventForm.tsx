@@ -82,13 +82,8 @@ export const EventForm: FunctionComponent<{
             min={1}
             label={t('eventForm.price.label')}
             placeholder={t('eventForm.price.placeholder')}
+            rightSection="€"
             {...form.getInputProps('price')}
-            parser={(value: string | undefined) => value?.replace(/\$\s?|(,*)/g, '')}
-            formatter={(value: string | undefined) =>
-              value && !Number.isNaN(parseFloat(value))
-                ? `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                : '$ '
-            }
           />
           <NumberInput
             min={2}

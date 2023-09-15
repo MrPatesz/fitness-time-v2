@@ -5,7 +5,7 @@ export const usePriceFormatter = () => {
   const {locale = 'en'} = useRouter();
   return useMemo(() => new Intl.NumberFormat(locale, {
     style: 'currency',
-    currency: 'USD',
+    currency: 'EUR',
     maximumFractionDigits: 0,
   }), [locale]);
 };
