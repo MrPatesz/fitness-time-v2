@@ -73,10 +73,10 @@ export type Session = {
 };
 export type User = {
   id: string;
-  name: string | null;
-  email: string | null;
+  name: string;
+  email: string;
   emailVerified: Timestamp | null;
-  image: string | null;
+  image: string;
   introduction: Generated<string>;
   themeColor: Generated<string>;
   locationId: number | null;

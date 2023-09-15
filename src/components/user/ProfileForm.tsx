@@ -14,10 +14,10 @@ import {getFormLocationOnChange, getFormLocationValue} from '../../utils/mantine
 import {signOut, useSession} from 'next-auth/react';
 import {Session} from 'next-auth';
 import {UseTRPCQueryResult} from '@trpc/react-query/dist/shared';
-import {z} from 'zod';
 import {OverlayLoader} from '../OverlayLoader';
 import {openConfirmModal} from '@mantine/modals';
 import {useRouter} from 'next/router';
+import {ImageSchema} from '../../models/Utils';
 
 export const ProfileForm: FunctionComponent<{
   profileQuery: UseTRPCQueryResult<ProfileType, unknown>;
@@ -58,7 +58,7 @@ export const ProfileForm: FunctionComponent<{
     validateInputOnChange: true,
     validate: {
       name: (value) => value.trim() ? null : t('profileForm.displayName.error'),
-      image: (value) => !value || z.string().url().safeParse(value).success ? null : t('profileForm.image.error'),
+      image: (value) => !value || ImageSchema.safeParse(value).success ? null : t('profileForm.image.error'),
     },
   });
 

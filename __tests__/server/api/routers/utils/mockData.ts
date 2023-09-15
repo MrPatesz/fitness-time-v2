@@ -4,9 +4,9 @@ import {ThemeColor} from '../../../../../src/utils/enums';
 export const user1: User = {
   id: '101',
   name: 'user1',
-  email: null,
+  email: 'user1@email.com',
   emailVerified: null,
-  image: null,
+  image: '',
   locationId: null,
   themeColor: ThemeColor.VIOLET,
   introduction: '',
@@ -15,6 +15,7 @@ export const user2: User = {
   ...user1,
   id: '102',
   name: 'user2',
+  email: 'user2@email.com',
 };
 export const users: User[] = [user2, user1];
 

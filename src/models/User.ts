@@ -2,14 +2,14 @@ import {z} from 'zod';
 import {ThemeColor} from '../utils/enums';
 import {BasicEventSchema} from './Event';
 import {LocationSchema, MutateLocationSchema} from './Location';
-import {DescriptionSchema, NameSchema} from './Utils';
+import {DescriptionSchema, ImageSchema, NameSchema} from './Utils';
 
 export const BasicUserSchema = z.object({
   id: z.string(),
   name: NameSchema,
   introduction: DescriptionSchema,
   themeColor: z.nativeEnum(ThemeColor),
-  image: z.string().url().nullable(),
+  image: ImageSchema,
 });
 
 export const DetailedUserSchema = BasicUserSchema.extend({
@@ -25,7 +25,7 @@ export const UpdateProfileSchema = BasicUserSchema.extend({
 
 export const ProfileSchema = BasicUserSchema.extend({
   location: LocationSchema.nullable(),
-  // email: z.string().nullable(),
+  // email: z.string(),
 });
 
 export type BasicUserType = z.infer<typeof BasicUserSchema>;

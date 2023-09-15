@@ -15,20 +15,28 @@ import {prisma} from './db';
  * @see https://next-auth.js.org/getting-started/typescript#module-augmentation
  **/
 declare module 'next-auth' {
+  // this is available on useSession's data
   interface Session extends DefaultSession {
     user: {
       id: string;
-      name: string | null | undefined;
+      name: string;
       themeColor: DefaultMantineColor;
       hasLocation: boolean;
       // role: UserRole;
-    } & DefaultSession['user'];
+      // image: string;
+      // email: string;
+    };
   }
 
+  // this is returned in authOptions' callback
   interface User {
+    id: string;
+    name: string;
     themeColor: DefaultMantineColor;
     locationId: number | null;
     // role: UserRole;
+    // image: string;
+    // email: string;
   }
 }
 
@@ -40,13 +48,15 @@ declare module 'next-auth' {
  **/
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    session({session, user}) {
+    session: ({session, user}) => {
       if (session.user) {
         session.user.id = user.id;
         session.user.name = user.name;
         session.user.themeColor = user.themeColor;
         session.user.hasLocation = Boolean(user.locationId);
         // session.user.role = user.role;
+        // session.user.image = user.image;
+        // session.user.email = user.email;
       }
       return session;
     },
