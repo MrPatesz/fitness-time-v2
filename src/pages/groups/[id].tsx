@@ -5,7 +5,6 @@ import {showNotification} from '@mantine/notifications';
 import {useSession} from 'next-auth/react';
 import {useTranslation} from 'next-i18next';
 import {serverSideTranslations} from 'next-i18next/serverSideTranslations';
-import Link from 'next/link';
 import {useRouter} from 'next/router';
 import {useMemo} from 'react';
 import {Pencil} from 'tabler-icons-react';
@@ -20,11 +19,12 @@ import {api} from '../../utils/api';
 import {useLongDateFormatter} from '../../utils/formatters';
 import {EditGroupForm} from '../../components/group/EditGroupForm';
 import {InvalidateEvent} from '../../utils/enums';
+import {UserBadge} from '../../components/user/UserBadge';
 
 export default function GroupDetailsPage() {
   const theme = useMantineTheme();
   const md = useMediaQuery(`(min-width: ${theme.breakpoints.md}px)`);
-  const {query: {id}, isReady, locale = 'en'} = useRouter();
+  const {query: {id}, isReady} = useRouter();
   const {data: session} = useSession();
   const {t} = useTranslation('common');
   const longDateFormatter = useLongDateFormatter();
@@ -68,15 +68,7 @@ export default function GroupDetailsPage() {
                 <Text weight="bold" size="xl">
                   {groupQuery.data.name}
                 </Text>
-                <Link
-                  href={`/users/${groupQuery.data.creator.id}`}
-                  locale={locale}
-                  passHref
-                >
-                  <Text color="dimmed">
-                    {groupQuery.data.creator.name}
-                  </Text>
-                </Link>
+                <UserBadge user={groupQuery.data.creator}/>
               </Group>
               <Text>
                 {t('groupTable.createdAt')}: {longDateFormatter.format(groupQuery.data.createdAt)}

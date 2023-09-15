@@ -160,7 +160,7 @@ const CommentTable: FunctionComponent = () => {
                         e.stopPropagation();
                         openModal({
                           title: t('modal.comment.edit'),
-                          children: <CommentForm eventId={comment.event.id} editedComment={comment}/>,
+                          children: <CommentForm eventId={comment.eventId} editedComment={comment}/>,
                         });
                       }}
                       sx={theme => ({

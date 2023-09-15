@@ -1,37 +1,21 @@
-import {Badge, Card, Divider, Group, Stack, Text} from '@mantine/core';
-import {IconStar} from '@tabler/icons';
+import {Badge, Card, Group, Stack, Text} from '@mantine/core';
 import {useTranslation} from 'next-i18next';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
 import {FunctionComponent} from 'react';
 import {BasicEventType} from '../../models/Event';
-import {api} from '../../utils/api';
-import {EventStatus, InvalidateEvent, ThemeColor} from '../../utils/enums';
+import {EventStatus, ThemeColor} from '../../utils/enums';
 import {useShortDateFormatter} from '../../utils/formatters';
 import {formatDistance, getBackgroundColor} from '../../utils/utilFunctions';
-import {usePusher} from '../../hooks/usePusher';
+import {UserBadge} from '../user/UserBadge';
+import {GroupBadge} from '../group/GroupBadge';
 
 export const EventCard: FunctionComponent<{
   event: BasicEventType;
 }> = ({event}) => {
-  const {locale = 'en', push: pushRoute} = useRouter();
+  const {locale = 'en'} = useRouter();
   const {t} = useTranslation('common');
   const shortDateFormatter = useShortDateFormatter();
-
-  // TODO don't do this for all events
-  const userRatingQuery = api.rating.getAverageRatingForUser.useQuery(event.creatorId);
-  const groupRatingQuery = api.rating.getAverageRatingForGroup.useQuery(event.groupId as number, {
-    enabled: Boolean(event.groupId),
-  });
-
-  usePusher({
-    event: InvalidateEvent.RatingGetAverageRatingForUser,
-    id: event.creatorId
-  }, () => void userRatingQuery.refetch());
-  usePusher(event.groupId ? {
-    event: InvalidateEvent.RatingGetAverageRatingForGroup,
-    id: event.groupId
-  } : undefined, () => void groupRatingQuery.refetch());
 
   return (
     <Link href={`/events/${event.id}`} locale={locale} passHref>
@@ -76,62 +60,8 @@ export const EventCard: FunctionComponent<{
             </Group>
           </Stack>
           <Group position={event.group ? 'apart' : 'right'} spacing="xs">
-            {event.group && (
-              <Badge
-                color={event.group.creator.themeColor}
-                variant="outline"
-                onClick={(e) => {
-                  e.preventDefault();
-                  void pushRoute(`/groups/${event.group!.id}`, undefined, {locale});
-                }}
-                sx={theme => ({
-                  ':hover': {
-                    backgroundColor: theme.fn.themeColor(event.group!.creator.themeColor),
-                    color: theme.white,
-                  },
-                })}
-              >
-                <Group spacing={4}>
-                  <Text>{event.group.name}</Text>
-                  {groupRatingQuery.data?.count && (
-                    <>
-                      <Divider orientation="vertical" color={event.group.creator.themeColor}/>
-                      <Group spacing={2}>
-                        <Text>{groupRatingQuery.data.averageStars?.toFixed(1)}</Text>
-                        <IconStar size={10}/>
-                      </Group>
-                    </>
-                  )}
-                </Group>
-              </Badge>
-            )}
-            <Badge
-              color={event.creator.themeColor}
-              variant="outline"
-              onClick={(e) => {
-                e.preventDefault();
-                void pushRoute(`/users/${event.creatorId}`, undefined, {locale});
-              }}
-              sx={theme => ({
-                ':hover': {
-                  backgroundColor: theme.fn.themeColor(event.creator.themeColor),
-                  color: theme.white,
-                },
-              })}
-            >
-              <Group spacing={4}>
-                <Text>{event.creator.name}</Text>
-                {userRatingQuery.data?.count && (
-                  <>
-                    <Divider orientation="vertical" color={event.creator.themeColor}/>
-                    <Group spacing={2}>
-                      <Text>{userRatingQuery.data.averageStars?.toFixed(1)}</Text>
-                      <IconStar size={10}/>
-                    </Group>
-                  </>
-                )}
-              </Group>
-            </Badge>
+            {event.group && (<GroupBadge group={event.group}/>)}
+            <UserBadge user={event.creator}/>
           </Group>
         </Stack>
       </Card>

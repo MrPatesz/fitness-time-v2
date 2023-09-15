@@ -7,12 +7,12 @@ import {MarkerF} from '@react-google-maps/api';
 
 const MapComponent: FunctionComponent<{
   location: LocationType;
-  size?: {
-    width: number,
-    height: number
-  }
   distance: number | undefined;
-}> = ({distance, location, size = {width: 400, height: 400}}) => {
+  size: {
+    width: number | string;
+    height: number | string;
+  }
+}> = ({distance, location, size}) => {
   return (
     <Card withBorder p={0} sx={{...size, position: 'relative'}}>
       <Card
