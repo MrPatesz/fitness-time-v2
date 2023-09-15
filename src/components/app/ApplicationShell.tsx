@@ -12,7 +12,7 @@ import {
   useMantineTheme
 } from '@mantine/core';
 import {useDisclosure, useMediaQuery} from '@mantine/hooks';
-import {signOut, useSession} from 'next-auth/react';
+import {signOut} from 'next-auth/react';
 import {useTranslation} from 'next-i18next';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
@@ -22,13 +22,14 @@ import {getBackgroundColor} from '../../utils/utilFunctions';
 import {ColorSchemeToggle} from './ColorSchemeToggle';
 import {LanguageToggle} from './LanguageToggle';
 import {CenteredLoader} from '../CenteredLoader';
+import {useAuthenticated} from '../../hooks/useAuthenticated';
 
 const welcome = 'welcome';
 
 const NavBarLink: FunctionComponent<{
   link: {
     icon: FunctionComponent<IconProps>;
-    label: string | null | undefined;
+    label: string;
     title: string;
     route: string;
     onClick: () => void;
@@ -59,15 +60,11 @@ export const ApplicationShell: FunctionComponent<{
   const theme = useMantineTheme();
   const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
   const {route, locale = 'en', defaultLocale, push: pushRoute} = useRouter();
-  const {data: session, status} = useSession({
+  const {loading, authenticated, user} = useAuthenticated({
     required: !route.includes(welcome),
     onUnauthenticated: () => void pushRoute(`/${welcome}`, undefined, {locale}),
   });
   const {t} = useTranslation('common');
-
-  const sessionLoading = status === 'loading';
-  const authenticated = status === 'authenticated';
-  const unauthenticated = status === 'unauthenticated';
 
   const isDefaultLocale = locale === defaultLocale;
   const localePrefix = isDefaultLocale ? '' : `/${locale}`;
@@ -104,7 +101,7 @@ export const ApplicationShell: FunctionComponent<{
   return (
     <AppShell
       header={
-        !sessionLoading ? (
+        !loading ? (
           <Header height={56} py="xs" px="md">
             <Group align="center" position="apart">
               <Group spacing="xs">
@@ -125,7 +122,7 @@ export const ApplicationShell: FunctionComponent<{
                   passHref
                   onClick={closeNavbar}
                 >
-                  <Title order={2}>{t((unauthenticated || xs) ? 'application.name' : 'application.shortName')}</Title>
+                  <Title order={2}>{t((!authenticated || xs) ? 'application.name' : 'application.shortName')}</Title>
                 </Link>
               </Group>
               <Group spacing="xs">
@@ -189,7 +186,7 @@ export const ApplicationShell: FunctionComponent<{
               <NavBarLink
                 locale={locale}
                 link={{
-                  label: session?.user?.name,
+                  label: user.name,
                   title: t('navbar.profile.title'),
                   route: profileRoute,
                   icon: UserCircle,
@@ -206,7 +203,7 @@ export const ApplicationShell: FunctionComponent<{
         }
       }}
     >
-      {sessionLoading ? (<CenteredLoader/>) : children}
+      {loading ? (<CenteredLoader/>) : children}
     </AppShell>
   );
 };
