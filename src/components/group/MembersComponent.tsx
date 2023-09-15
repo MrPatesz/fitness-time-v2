@@ -1,4 +1,4 @@
-import {ActionIcon, Avatar, Card, Group, ScrollArea, Stack, Text, Tooltip, useMantineTheme} from '@mantine/core';
+import {ActionIcon, Avatar, Card, Group, Stack, Text, Tooltip, useMantineTheme} from '@mantine/core';
 import {closeAllModals, openModal} from '@mantine/modals';
 import {useSession} from 'next-auth/react';
 import {useTranslation} from 'next-i18next';
@@ -10,6 +10,7 @@ import {BasicUserType} from '../../models/User';
 import {useSignedNumberFormatter} from '../../utils/formatters';
 import {getInitials} from '../../utils/utilFunctions';
 import UserImage from '../user/UserImage';
+import {useMediaQuery} from '@mantine/hooks';
 
 export const MembersComponent: FunctionComponent<{
   members: BasicUserType[];
@@ -17,6 +18,7 @@ export const MembersComponent: FunctionComponent<{
   onJoin: (join: boolean) => void;
 }> = ({members, isCreator, onJoin}) => {
   const theme = useMantineTheme();
+  const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
   const {locale = 'en'} = useRouter();
   const {data: session} = useSession();
   const signedNumberFormatter = useSignedNumberFormatter();
@@ -29,8 +31,9 @@ export const MembersComponent: FunctionComponent<{
   return (
     <Avatar.Group
       sx={{cursor: 'pointer'}}
-      onClick={() => {
-        const content = (
+      onClick={() => openModal({
+        title: t('modal.members.title'),
+        children: (
           <Stack spacing="xs">
             {members.map(member => (
               <Link key={member.id} href={`/users/${member.id}`} locale={locale} passHref>
@@ -47,16 +50,9 @@ export const MembersComponent: FunctionComponent<{
               </Link>
             ))}
           </Stack>
-        );
-        openModal({
-          title: t('modal.members.title'),
-          children: members.length >= limit ? (
-            <ScrollArea offsetScrollbars h={300}>
-              {content}
-            </ScrollArea>
-          ) : (content),
-        });
-      }}
+        ),
+        fullScreen: !xs && members.length >= limit * 1.5,
+      })}
     >
       {members.slice(0, limit).map(user => (
         <Tooltip

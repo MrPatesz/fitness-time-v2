@@ -101,8 +101,9 @@ export default function CalendarPage() {
         eventClick={({event}) => void pushRoute(`/events/${event.id}`, undefined, {locale})}
         select={({start, end}) => openModal({
           title: t('modal.event.create'),
-          zIndex: 402,
           children: <CreateEventForm initialInterval={{start, end}}/>,
+          fullScreen: !xs,
+          zIndex: 402,
         })}
         eventChange={({event: {start, end, extendedProps}, revert}) => {
           if (!start || !end) {

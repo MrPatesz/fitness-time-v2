@@ -19,9 +19,11 @@ import {useLongDateFormatter, usePriceFormatter} from '../../utils/formatters';
 import {EditEventForm} from '../../components/event/EditEventForm';
 import {CommentsComponent} from '../../components/event/CommentsComponent';
 import {BorderComponent} from '../../components/BorderComponent';
+import {useMediaQuery} from '@mantine/hooks';
 
 export default function EventDetailsPage() {
   const theme = useMantineTheme();
+  const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
   const {query: {id}, isReady, locale = 'en'} = useRouter();
   const {data: session} = useSession();
   const {t} = useTranslation('common');
@@ -140,6 +142,7 @@ export default function EventDetailsPage() {
                       onClick={() => openModal({
                         title: t('modal.event.edit'),
                         children: <EditEventForm eventId={eventId}/>,
+                        fullScreen: !xs,
                       })}
                     >
                       <Pencil/>

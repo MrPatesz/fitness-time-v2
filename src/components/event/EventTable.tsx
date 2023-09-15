@@ -9,7 +9,7 @@ import {
   TextInput,
   useMantineTheme
 } from '@mantine/core';
-import {useDebouncedValue} from '@mantine/hooks';
+import {useDebouncedValue, useMediaQuery} from '@mantine/hooks';
 import {openConfirmModal, openModal} from '@mantine/modals';
 import {showNotification} from '@mantine/notifications';
 import {IconSearch} from '@tabler/icons';
@@ -40,6 +40,7 @@ const EventTable: FunctionComponent<{
   const [debouncedSearchQuery] = useDebouncedValue(searchQuery, 500);
 
   const theme = useMantineTheme();
+  const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
   const {push: pushRoute, locale = 'en'} = useRouter();
   const {t} = useTranslation('common');
   const longDateFormatter = useLongDateFormatter();
@@ -109,6 +110,7 @@ const EventTable: FunctionComponent<{
           onClick={() => openModal({
             title: t('modal.event.create'),
             children: <CreateEventForm/>,
+            fullScreen: !xs,
           })}
         >
           <Plus/>
@@ -210,6 +212,7 @@ const EventTable: FunctionComponent<{
                         openModal({
                           title: t('modal.event.edit'),
                           children: <EditEventForm eventId={event.id}/>,
+                          fullScreen: !xs,
                         });
                       }}
                       sx={theme => ({

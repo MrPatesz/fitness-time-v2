@@ -1,5 +1,5 @@
 import {ActionIcon, Box, Card, Group, ScrollArea, Stack, Text, useMantineTheme} from '@mantine/core';
-import {useIntersection} from '@mantine/hooks';
+import {useIntersection, useMediaQuery} from '@mantine/hooks';
 import {openModal} from '@mantine/modals';
 import {useTranslation} from 'next-i18next';
 import {FunctionComponent, useEffect, useMemo} from 'react';
@@ -17,6 +17,7 @@ export const GroupFeed: FunctionComponent<{
   groupId: number;
 }> = ({groupId}) => {
   const theme = useMantineTheme();
+  const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
   const {t} = useTranslation('common');
   const {ref, entry} = useIntersection({threshold: 0.1});
 
@@ -63,6 +64,7 @@ export const GroupFeed: FunctionComponent<{
             onClick={() => openModal({
               title: t('modal.event.create'),
               children: <CreateEventForm groupId={groupId}/>,
+              fullScreen: !xs,
             })}
           >
             <Plus/>
