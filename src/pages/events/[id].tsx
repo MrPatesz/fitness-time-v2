@@ -20,6 +20,7 @@ import {useMediaQuery} from '@mantine/hooks';
 import {MembersComponent} from '../../components/group/MembersComponent';
 import {GroupBadge} from '../../components/group/GroupBadge';
 import {UserBadge} from '../../components/user/UserBadge';
+import {useEffect} from 'react';
 
 export default function EventDetailsPage() {
   const theme = useMantineTheme();
@@ -30,16 +31,17 @@ export default function EventDetailsPage() {
   const {t} = useTranslation('common');
   const longDateFormatter = useLongDateFormatter();
   const priceFormatter = usePriceFormatter();
+  const queryContext = api.useContext();
 
   const eventId = parseInt(id as string);
   const eventQuery = api.event.getById.useQuery(eventId, {
     enabled: isReady,
   });
   const averageRatingQuery = api.rating.getAverageRatingForEvent.useQuery(eventId, {
-    enabled: isReady,
+    enabled: isReady && eventQuery.data?.status === EventStatus.ARCHIVE,
   });
   const userRatingQuery = api.rating.getCallerRating.useQuery(eventId, {
-    enabled: isReady,
+    enabled: isReady && eventQuery.data?.status === EventStatus.ARCHIVE,
   });
   const rateEvent = api.rating.rate.useMutation({
     onSuccess: () => void userRatingQuery.refetch(),
@@ -53,6 +55,12 @@ export default function EventDetailsPage() {
   });
 
   const editable = eventQuery.data?.status === EventStatus.PLANNED && eventQuery.data?.creatorId === session?.user.id;
+
+  useEffect(() => {
+    if (isReady) {
+      void queryContext.comment.getAllByEventId.prefetch(eventId);
+    }
+  }, [isReady, eventId, queryContext]);
 
   return (
     <QueryComponent

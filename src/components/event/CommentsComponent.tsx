@@ -15,6 +15,7 @@ export const CommentsComponent = () => {
   const eventId = parseInt(id as string);
   const commentsQuery = api.comment.getAllByEventId.useQuery(eventId, {
     enabled: isReady,
+    refetchOnMount: false,
   });
 
   return (
