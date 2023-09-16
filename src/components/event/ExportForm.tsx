@@ -80,9 +80,7 @@ export const ExportForm: FunctionComponent = () => {
       <Stack>
         <DateRangePicker
           label={t('calendarPage.interval.label')}
-          // TODO description?
           clearable={false}
-          locale={locale}
           firstDayOfWeek={getFirstDayOfWeek(locale)}
           {...getInputProps('interval')}
         />

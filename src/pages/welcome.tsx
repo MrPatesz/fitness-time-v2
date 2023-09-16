@@ -29,6 +29,7 @@ export default function WelcomePage() {
         </Title>
         <Group position="center">
           <Button
+            variant={theme.primaryColor === 'dark' ? 'gradient' : undefined}
             onClick={() => void signIn(undefined, {callbackUrl: locale !== defaultLocale ? `/${locale}/` : '/'})}
           >
             {t('button.login')}

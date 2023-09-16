@@ -1,12 +1,17 @@
-import {ColorScheme, ColorSchemeProvider, MantineProvider, MantineThemeOverride} from '@mantine/core';
+import {
+  ColorScheme,
+  ColorSchemeProvider,
+  DefaultMantineColor,
+  MantineProvider,
+  MantineThemeOverride
+} from '@mantine/core';
 import {useLocalStorage} from '@mantine/hooks';
 import {ModalsProvider} from '@mantine/modals';
 import {NotificationsProvider} from '@mantine/notifications';
 import {useSession} from 'next-auth/react';
 import {useRouter} from 'next/router';
-import {FunctionComponent, useMemo} from 'react';
+import {FunctionComponent, useEffect, useMemo} from 'react';
 import dayjs from '../../utils/dayjs';
-import {ThemeColor} from '../../utils/enums';
 
 export const ThemeProvider: FunctionComponent<{
   children: JSX.Element;
@@ -14,23 +19,35 @@ export const ThemeProvider: FunctionComponent<{
   const {locale = 'en'} = useRouter();
   const {data: session} = useSession();
 
+  const [themeColor, setThemeColor] = useLocalStorage<DefaultMantineColor>({
+    key: 'mantine-theme-color',
+    defaultValue: 'dark',
+  });
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
     key: 'mantine-color-scheme',
     defaultValue: 'dark',
   });
   const toggleColorScheme = (value?: ColorScheme) => setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'));
 
-  dayjs.locale(locale);
-
   const myTheme = useMemo((): MantineThemeOverride => ({
     colorScheme,
-    primaryColor: session?.user.themeColor ?? ThemeColor.VIOLET,
+    primaryColor: themeColor,
     loader: 'dots',
     cursorType: 'pointer',
     dateFormat: 'MMMM DD, YYYY',
     defaultRadius: 'md',
     datesLocale: locale,
-  }), [colorScheme, session?.user.themeColor]);
+  }), [colorScheme, themeColor, locale]);
+
+  useEffect(() => {
+    if (session?.user.themeColor) {
+      setThemeColor(session.user.themeColor);
+    }
+  }, [session?.user.themeColor]);
+
+  useEffect(() => {
+    dayjs.locale(locale);
+  }, [locale, dayjs]);
 
   return (
     <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>

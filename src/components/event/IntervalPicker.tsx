@@ -38,7 +38,6 @@ export const IntervalPicker: FunctionComponent<{
     <Stack>
       <Group spacing="xs">
         <DatePicker
-          locale={locale}
           withAsterisk
           sx={{flexGrow: 1, marginBottom: 'auto'}}
           label={t('intervalPicker.start')}
@@ -65,7 +64,6 @@ export const IntervalPicker: FunctionComponent<{
       </Group>
       <Group spacing="xs">
         <DatePicker
-          locale={locale}
           withAsterisk
           sx={{flexGrow: 1, marginBottom: 'auto'}}
           label={t('intervalPicker.end')}

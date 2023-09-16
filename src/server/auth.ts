@@ -1,4 +1,3 @@
-import {DefaultMantineColor} from '@mantine/core';
 import {PrismaAdapter} from '@next-auth/prisma-adapter';
 import type {GetServerSidePropsContext} from 'next';
 import {type DefaultSession, getServerSession, type NextAuthOptions} from 'next-auth';
@@ -6,6 +5,7 @@ import DiscordProvider from 'next-auth/providers/discord';
 import GoogleProvider from 'next-auth/providers/google';
 import {env} from '../env.mjs';
 import {prisma} from './db';
+import {ThemeColor} from '../utils/enums';
 
 /**
  * Module augmentation for `next-auth` types.
@@ -20,7 +20,7 @@ declare module 'next-auth' {
     user: {
       id: string;
       name: string;
-      themeColor: DefaultMantineColor;
+      themeColor: ThemeColor;
       hasLocation: boolean;
       // role: UserRole;
       // image: string;
@@ -32,7 +32,7 @@ declare module 'next-auth' {
   interface User {
     id: string;
     name: string;
-    themeColor: DefaultMantineColor;
+    themeColor: ThemeColor;
     locationId: number | null;
     // role: UserRole;
     // image: string;
