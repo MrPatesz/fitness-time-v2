@@ -1,4 +1,4 @@
-import {ActionIcon, Group, TextInput, useMantineTheme} from '@mantine/core';
+import {ActionIcon, Flex, TextInput, useMantineTheme} from '@mantine/core';
 import {useForm} from '@mantine/form';
 import {useTranslation} from 'next-i18next';
 import {FunctionComponent} from 'react';
@@ -25,7 +25,7 @@ export const AddMessage: FunctionComponent<{
   return (
     <OverlayLoader loading={createMessage.isLoading}>
       <form onSubmit={form.onSubmit((data) => createMessage.mutate({createMessage: data, groupId}))}>
-        <Group>
+        <Flex gap="xs">
           <TextInput
             sx={{flexGrow: 1}}
             placeholder={t('messageForm.addMessage')}
@@ -33,15 +33,15 @@ export const AddMessage: FunctionComponent<{
           />
           <ActionIcon
             title={t('messageForm.addMessage')}
+            size={36}
+            variant="filled"
+            color={theme.primaryColor}
             type="submit"
             disabled={!form.isValid() || !form.isDirty()}
-            size={36}
-            color={theme.primaryColor}
-            variant="filled"
           >
             <Send/>
           </ActionIcon>
-        </Group>
+        </Flex>
       </form>
     </OverlayLoader>
   );

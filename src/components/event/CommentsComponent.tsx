@@ -26,30 +26,19 @@ export const CommentsComponent = () => {
     >
       <Card
         withBorder
-        sx={theme => ({
-          backgroundColor: getBackgroundColor(theme),
-          height: '100%',
-          minHeight: 300,
-          position: 'relative',
-        })}
+        sx={theme => ({backgroundColor: getBackgroundColor(theme)})}
       >
-        <Stack
-          sx={{
-            position: 'absolute',
-            top: 16,
-            bottom: 16,
-            left: 16,
-            right: 16,
-          }}
-        >
+        <Stack>
           <AddComment eventId={eventId}/>
-          <ScrollArea>
-            <Stack>
-              {commentsQuery.data?.map(comment => (
-                <CommentCard key={comment.id} comment={comment}/>
-              ))}
-            </Stack>
-          </ScrollArea>
+          {!!commentsQuery.data?.length && (
+            <ScrollArea>
+              <Stack sx={{maxHeight: 300}}>
+                {commentsQuery.data.map(comment => (
+                  <CommentCard key={comment.id} comment={comment}/>
+                ))}
+              </Stack>
+            </ScrollArea>
+          )}
         </Stack>
       </Card>
     </QueryComponent>

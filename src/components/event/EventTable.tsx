@@ -2,6 +2,7 @@ import {
   ActionIcon,
   Box,
   Checkbox,
+  Flex,
   Group,
   MantineNumberSize,
   Stack,
@@ -89,7 +90,7 @@ const EventTable: FunctionComponent<{
 
   return (
     <Stack h="100%">
-      <Group>
+      <Flex gap="xs" align="center">
         <TextInput
           sx={{flexGrow: 1}}
           icon={<IconSearch/>}
@@ -104,7 +105,7 @@ const EventTable: FunctionComponent<{
         />
         <ActionIcon
           title={t('modal.event.create')}
-          size="lg"
+          size={36}
           variant="filled"
           color={theme.fn.themeColor(theme.primaryColor)}
           onClick={() => openModal({
@@ -115,7 +116,7 @@ const EventTable: FunctionComponent<{
         >
           <Plus/>
         </ActionIcon>
-      </Group>
+      </Flex>
       <QueryComponent
         resourceName={t('resource.events')}
         query={eventsQuery}

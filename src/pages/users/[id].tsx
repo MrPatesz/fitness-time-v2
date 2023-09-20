@@ -1,4 +1,4 @@
-import {Group, Stack, Text} from '@mantine/core';
+import {Box, Group, ScrollArea, Stack, Text} from '@mantine/core';
 import {useTranslation} from 'next-i18next';
 import {serverSideTranslations} from 'next-i18next/serverSideTranslations';
 import {useRouter} from 'next/router';
@@ -54,7 +54,11 @@ export default function UserDetailsPage() {
               <Text size="lg">
                 {t('userDetails.createdEvents')}
               </Text>
-              <EventGrid events={userDetailsQuery.data.createdEvents}/>
+              <ScrollArea>
+                <Box sx={{maxHeight: 300}}>
+                  <EventGrid events={userDetailsQuery.data.createdEvents}/>
+                </Box>
+              </ScrollArea>
             </>
           )}
           {Boolean(userDetailsQuery.data.participatedEvents.length) && (
@@ -62,7 +66,11 @@ export default function UserDetailsPage() {
               <Text size="lg">
                 {t('userDetails.participatedEvents')}
               </Text>
-              <EventGrid events={userDetailsQuery.data.participatedEvents}/>
+              <ScrollArea>
+                <Box sx={{maxHeight: 300}}>
+                  <EventGrid events={userDetailsQuery.data.participatedEvents}/>
+                </Box>
+              </ScrollArea>
             </>
           )}
         </Stack>

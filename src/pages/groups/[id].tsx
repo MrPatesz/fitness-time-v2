@@ -1,4 +1,4 @@
-import {ActionIcon, Box, Group, SimpleGrid, Stack, Text, useMantineTheme} from '@mantine/core';
+import {ActionIcon, Group, SimpleGrid, Stack, Text, useMantineTheme} from '@mantine/core';
 import {useMediaQuery} from '@mantine/hooks';
 import {openModal} from '@mantine/modals';
 import {showNotification} from '@mantine/notifications';
@@ -64,7 +64,7 @@ export default function GroupDetailsPage() {
         <Stack h="100%">
           <Group position="apart" align="start">
             <Stack>
-              <Group align="end">
+              <Group>
                 <Text weight="bold" size="xl">
                   {groupQuery.data.name}
                 </Text>
@@ -104,20 +104,22 @@ export default function GroupDetailsPage() {
             </Stack>
           </Group>
           {isMember ? (
-            <SimpleGrid
-              cols={md ? 2 : 1}
-              sx={{flexGrow: 1}}
-            >
-              <GroupFeed groupId={groupId}/>
-              <Stack>
-                <RichTextDisplay bordered richText={groupQuery.data.description} maxHeight={300} scroll/>
-                <Box sx={{flexGrow: 1}}>
-                  <GroupChat groupId={groupId}/>
-                </Box>
-              </Stack>
-            </SimpleGrid>
+            <>
+              <RichTextDisplay
+                bordered
+                richText={groupQuery.data.description}
+                maxHeight={100}
+              />
+              <SimpleGrid cols={md ? 2 : 1}>
+                <GroupFeed groupId={groupId}/>
+                <GroupChat groupId={groupId}/>
+              </SimpleGrid>
+            </>
           ) : (
-            <RichTextDisplay bordered richText={groupQuery.data.description}/>
+            <RichTextDisplay
+              bordered
+              richText={groupQuery.data.description}
+            />
           )}
         </Stack>
       )}

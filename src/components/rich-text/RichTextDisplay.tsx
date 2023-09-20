@@ -1,6 +1,6 @@
 import {ScrollArea, Spoiler, TypographyStylesProvider} from '@mantine/core';
 import {useTranslation} from 'next-i18next';
-import {FunctionComponent, useMemo, useRef} from 'react';
+import {FunctionComponent} from 'react';
 import {BorderComponent} from '../BorderComponent';
 
 export const RichTextDisplay: FunctionComponent<{
@@ -10,47 +10,33 @@ export const RichTextDisplay: FunctionComponent<{
   bordered?: boolean;
 }> = ({richText, maxHeight, scroll = false, bordered = false}) => {
   const {t} = useTranslation('common');
-  const ref = useRef<HTMLDivElement>(null);
-
-  const height = useMemo(() => {
-    const clientHeight = ref.current?.clientHeight;
-    if (maxHeight && (!clientHeight || maxHeight < clientHeight)) {
-      return maxHeight;
-    }
-    if (!ref.current) {
-      return 0;
-    }
-    return ref.current.clientHeight;
-  }, [ref.current?.clientHeight, maxHeight]);
 
   if (!richText) {
     return <></>;
   }
 
-  const richTextComponent = (
-    <TypographyStylesProvider ref={ref}>
+  const getRichTextContent = (mh?: number) => (
+    <TypographyStylesProvider sx={{maxHeight: mh}}>
       <div dangerouslySetInnerHTML={{__html: richText}} style={{overflowWrap: 'break-word'}}/>
     </TypographyStylesProvider>
   );
 
   return (
     <ConditionalBorderComponent bordered={bordered}>
-      {maxHeight !== height ? (
-        richTextComponent
+      {!maxHeight ? (
+        getRichTextContent()
+      ) : scroll ? (
+        <ScrollArea>
+          {getRichTextContent(maxHeight)}
+        </ScrollArea>
       ) : (
-        scroll ? (
-          <ScrollArea offsetScrollbars h={height}>
-            {richTextComponent}
-          </ScrollArea>
-        ) : (
-          <Spoiler
-            maxHeight={height}
-            showLabel={t('richTextDisplay.showLabel')}
-            hideLabel={t('richTextDisplay.hideLabel')}
-          >
-            {richTextComponent}
-          </Spoiler>
-        )
+        <Spoiler
+          maxHeight={maxHeight}
+          showLabel={t('richTextDisplay.showLabel')}
+          hideLabel={t('richTextDisplay.hideLabel')}
+        >
+          {getRichTextContent()}
+        </Spoiler>
       )}
     </ConditionalBorderComponent>
   );

@@ -73,7 +73,7 @@ export default function EventDetailsPage() {
         <Stack h="100%">
           <Group position="apart" align="start">
             <Stack>
-              <Group align="end">
+              <Group>
                 <Text weight="bold" size="xl">
                   {eventQuery.data.name}
                 </Text>
@@ -148,20 +148,17 @@ export default function EventDetailsPage() {
               )}
             </Stack>
           </Group>
-          <SimpleGrid
-            cols={md ? 2 : 1}
-            sx={{flexGrow: 1}}
-          >
-            <RichTextDisplay // TODO maxHeight is wrong
+          <SimpleGrid cols={(md && eventQuery.data.description) ? 2 : 1}>
+            <RichTextDisplay
               bordered
               scroll
               richText={eventQuery.data.description}
-              maxHeight={300}
+              maxHeight={336}
             />
             <CommentsComponent/>
           </SimpleGrid>
           <MapComponent
-            size={{width: '100%', height: 375}}
+            size={{width: '100%', height: '100%', minHeight: 375}}
             location={eventQuery.data.location}
             distance={eventQuery.data.distance}
           />

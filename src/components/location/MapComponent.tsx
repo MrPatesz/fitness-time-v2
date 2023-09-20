@@ -11,6 +11,7 @@ const MapComponent: FunctionComponent<{
   size: {
     width: number | string;
     height: number | string;
+    minHeight?: number;
   }
 }> = ({distance, location, size}) => {
   return (

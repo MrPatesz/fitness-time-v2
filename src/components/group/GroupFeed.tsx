@@ -36,57 +36,46 @@ export const GroupFeed: FunctionComponent<{
   }, [eventsQuery.data?.pages]);
 
   return (
-    <Card
-      withBorder
-      sx={theme => ({
-        backgroundColor: getBackgroundColor(theme),
-        height: '100%',
-        minHeight: 300,
-        position: 'relative',
-      })}
+    <QueryComponent
+      resourceName={t('resource.feed')}
+      query={eventsQuery}
+      eventInfo={{event: InvalidateEvent.EventGetFeed, id: groupId}}
     >
-      <Stack
-        sx={{
-          position: 'absolute',
-          top: 16,
-          bottom: 16,
-          left: 16,
-          right: 16,
-        }}
+      <Card
+        withBorder
+        sx={theme => ({backgroundColor: getBackgroundColor(theme)})}
       >
-        <Group position="apart">
-          <Text color="dimmed">{t('resource.events')}</Text>
-          <ActionIcon
-            title={t('modal.event.create')}
-            size="lg"
-            variant="filled"
-            color={theme.fn.themeColor(theme.primaryColor)}
-            onClick={() => openModal({
-              title: t('modal.event.create'),
-              children: <CreateEventForm groupId={groupId}/>,
-              fullScreen: !xs,
-            })}
-          >
-            <Plus/>
-          </ActionIcon>
-        </Group>
-        <ScrollArea>
-          <QueryComponent
-            resourceName={t('resource.feed')}
-            query={eventsQuery}
-            eventInfo={{event: InvalidateEvent.EventGetFeed, id: groupId}}
-          >
-            <Stack>
-              {events.map((event, index) => (
-                <Box ref={(index === events.length - 1) ? ref : undefined} key={event.id}>
-                  <EventCard event={event}/>
-                </Box>
-              ))}
-              {eventsQuery.isFetching && <CenteredLoader/>}
-            </Stack>
-          </QueryComponent>
-        </ScrollArea>
-      </Stack>
-    </Card>
+        <Stack>
+          <Group position="apart">
+            <Text color="dimmed">{t('resource.events')}</Text>
+            <ActionIcon
+              title={t('modal.event.create')}
+              size={36}
+              variant="filled"
+              color={theme.fn.themeColor(theme.primaryColor)}
+              onClick={() => openModal({
+                title: t('modal.event.create'),
+                children: <CreateEventForm groupId={groupId}/>,
+                fullScreen: !xs,
+              })}
+            >
+              <Plus/>
+            </ActionIcon>
+          </Group>
+          {!!events.length && (
+            <ScrollArea>
+              <Stack sx={{maxHeight: 400}}>
+                {events.map((event, index) => (
+                  <Box ref={(index === events.length - 1) ? ref : undefined} key={event.id}>
+                    <EventCard event={event}/>
+                  </Box>
+                ))}
+                {eventsQuery.isFetching && <CenteredLoader/>}
+              </Stack>
+            </ScrollArea>
+          )}
+        </Stack>
+      </Card>
+    </QueryComponent>
   );
 };

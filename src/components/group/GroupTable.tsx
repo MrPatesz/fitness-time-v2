@@ -1,4 +1,4 @@
-import {ActionIcon, Box, Group, MantineNumberSize, Stack, Text, TextInput, useMantineTheme} from '@mantine/core';
+import {ActionIcon, Box, Flex, Group, MantineNumberSize, Stack, Text, TextInput, useMantineTheme} from '@mantine/core';
 import {useDebouncedValue} from '@mantine/hooks';
 import {openConfirmModal, openModal} from '@mantine/modals';
 import {showNotification} from '@mantine/notifications';
@@ -73,7 +73,7 @@ const GroupTable: FunctionComponent<{
 
   return (
     <Stack h="100%">
-      <Group>
+      <Flex gap="xs">
         <TextInput
           sx={{flexGrow: 1}}
           icon={<IconSearch/>}
@@ -83,7 +83,7 @@ const GroupTable: FunctionComponent<{
         />
         <ActionIcon
           title={t('modal.group.create')}
-          size="lg"
+          size={36}
           variant="filled"
           color={theme.fn.themeColor(theme.primaryColor)}
           onClick={() => openModal({
@@ -93,7 +93,7 @@ const GroupTable: FunctionComponent<{
         >
           <Plus/>
         </ActionIcon>
-      </Group>
+      </Flex>
       <QueryComponent
         resourceName={t('resource.groups')}
         query={groupsQuery}

@@ -8,6 +8,7 @@ import {CommentCard} from '../comment/CommentCard';
 import {AddMessage} from './AddMessage';
 import {QueryComponent} from '../QueryComponent';
 import {InvalidateEvent} from '../../utils/enums';
+import {BasicMessageType} from '../../models/Message';
 
 export const GroupChat: FunctionComponent<{
   groupId: number;
@@ -26,7 +27,7 @@ export const GroupChat: FunctionComponent<{
     behavior: smooth ? 'smooth' : undefined,
   });
 
-  const messages = useMemo(() => {
+  const messages: BasicMessageType[] = useMemo(() => {
     if (!messagesQuery.data) return [];
 
     return [...messagesQuery.data.pages]
@@ -53,42 +54,30 @@ export const GroupChat: FunctionComponent<{
   }, [entry]);
 
   return (
-    <Card
-      withBorder
-      sx={theme => ({
-        backgroundColor: getBackgroundColor(theme),
-        height: '100%',
-        minHeight: 300,
-        position: 'relative',
-      })}
+    <QueryComponent
+      resourceName={t('resource.chat')}
+      query={messagesQuery}
+      eventInfo={{event: InvalidateEvent.GroupChatGetMessages, id: groupId}}
     >
-      <Stack
-        justify="end"
-        sx={{
-          position: 'absolute',
-          top: 16,
-          bottom: 16,
-          left: 16,
-          right: 16,
-        }}
+      <Card
+        withBorder
+        sx={theme => ({backgroundColor: getBackgroundColor(theme)})}
       >
-        <ScrollArea viewportRef={viewport}>
-          <QueryComponent
-            resourceName={t('resource.chat')}
-            query={messagesQuery}
-            eventInfo={{event: InvalidateEvent.GroupChatGetMessages, id: groupId}}
-          >
-            <Stack>
-              {messages.map((message, index) => (
-                <Box ref={(index === 0) ? ref : undefined} key={message.id}>
-                  <CommentCard comment={message}/>
-                </Box>
-              ))}
-            </Stack>
-          </QueryComponent>
-        </ScrollArea>
-        <AddMessage groupId={groupId}/>
-      </Stack>
-    </Card>
+        <Stack>
+          {!!messages.length && (
+            <ScrollArea viewportRef={viewport}>
+              <Stack sx={{maxHeight: 400}}>
+                {messages.map((message, index) => (
+                  <Box ref={(index === 0) ? ref : undefined} key={message.id}>
+                    <CommentCard comment={message}/>
+                  </Box>
+                ))}
+              </Stack>
+            </ScrollArea>
+          )}
+          <AddMessage groupId={groupId}/>
+        </Stack>
+      </Card>
+    </QueryComponent>
   );
 };

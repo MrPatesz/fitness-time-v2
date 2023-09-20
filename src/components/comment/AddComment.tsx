@@ -1,4 +1,4 @@
-import {ActionIcon, Group, useMantineTheme} from '@mantine/core';
+import {ActionIcon, Flex, useMantineTheme} from '@mantine/core';
 import {useForm} from '@mantine/form';
 import {showNotification} from '@mantine/notifications';
 import {useTranslation} from 'next-i18next';
@@ -34,7 +34,7 @@ export const AddComment: FunctionComponent<{
   return (
     <OverlayLoader loading={createComment.isLoading}>
       <form onSubmit={form.onSubmit((data) => createComment.mutate({createComment: data, eventId}))}>
-        <Group>
+        <Flex gap="xs">
           <RichTextField
             maxLength={512}
             placeholder={t('commentForm.addComment')}
@@ -50,7 +50,7 @@ export const AddComment: FunctionComponent<{
           >
             <Send/>
           </ActionIcon>
-        </Group>
+        </Flex>
       </form>
     </OverlayLoader>
   );
