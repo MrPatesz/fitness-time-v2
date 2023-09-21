@@ -7,10 +7,12 @@ import {api} from '../../utils/api';
 import {usePusher} from '../../hooks/usePusher';
 import {InvalidateEvent} from '../../utils/enums';
 import {BasicGroupType} from '../../models/Group';
+import Link from 'next/link';
 
 export const GroupBadge: FunctionComponent<{
   group: BasicGroupType;
-}> = ({group}) => {
+  useLink?: boolean;
+}> = ({group, useLink = false}) => {
   const {locale = 'en', push: pushRoute} = useRouter();
   const {t} = useTranslation('common');
 
@@ -23,14 +25,43 @@ export const GroupBadge: FunctionComponent<{
     id: group.id
   }, () => void groupRatingQuery.refetch());
 
-  // TODO Link or onClick as input prop!
-  //  <Link
-  //    href={`/groups/${group.id}`}
-  //    locale={locale}
-  //    passHref
-  //  >
+  const content = (
+    <Group spacing={4}>
+      <Text>{group.name}</Text>
+      {groupRatingQuery.data?.count && (
+        <>
+          <Divider orientation="vertical" color={group.creator.themeColor}/>
+          <Group spacing={2}>
+            <Text>{groupRatingQuery.data.averageStars?.toFixed(1)}</Text>
+            <IconStar size={10}/>
+          </Group>
+        </>
+      )}
+    </Group>
+  );
 
-  return (
+  return useLink ? (
+    <Link
+      href={`/groups/${group.id}`}
+      locale={locale}
+      passHref
+      title={t('myEvents.group')}
+    >
+      <Badge
+        color={group.creator.themeColor}
+        variant="outline"
+        sx={theme => ({
+          display: 'flex',
+          ':hover': {
+            backgroundColor: theme.fn.themeColor(group.creator.themeColor),
+            color: theme.white,
+          },
+        })}
+      >
+        {content}
+      </Badge>
+    </Link>
+  ) : (
     <Badge
       color={group.creator.themeColor}
       variant="outline"
@@ -43,22 +74,11 @@ export const GroupBadge: FunctionComponent<{
         cursor: 'pointer',
         ':hover': {
           backgroundColor: theme.fn.themeColor(group.creator.themeColor),
-          color: theme.white, // TODO black/white according to ColorScheme
+          color: theme.white,
         },
       })}
     >
-      <Group spacing={4}>
-        <Text>{group.name}</Text>
-        {groupRatingQuery.data?.count && (
-          <>
-            <Divider orientation="vertical" color={group.creator.themeColor}/>
-            <Group spacing={2}>
-              <Text>{groupRatingQuery.data.averageStars?.toFixed(1)}</Text>
-              <IconStar size={10}/>
-            </Group>
-          </>
-        )}
-      </Group>
+      {content}
     </Badge>
   );
 };

@@ -7,10 +7,12 @@ import {api} from '../../utils/api';
 import {usePusher} from '../../hooks/usePusher';
 import {InvalidateEvent} from '../../utils/enums';
 import {BasicUserType} from '../../models/User';
+import Link from 'next/link';
 
 export const UserBadge: FunctionComponent<{
   user: BasicUserType;
-}> = ({user}) => {
+  useLink?: boolean;
+}> = ({user, useLink = false}) => {
   const {locale = 'en', push: pushRoute} = useRouter();
   const {t} = useTranslation('common');
 
@@ -21,14 +23,43 @@ export const UserBadge: FunctionComponent<{
     id: user.id
   }, () => void userRatingQuery.refetch());
 
-  // TODO Link or onClick as input prop!
-  //  <Link
-  //    href={`/users/${user.id}`}
-  //    locale={locale}
-  //    passHref
-  //  >
+  const content = (
+    <Group spacing={4}>
+      <Text>{user.name}</Text>
+      {userRatingQuery.data?.count && (
+        <>
+          <Divider orientation="vertical" color={user.themeColor}/>
+          <Group spacing={2}>
+            <Text>{userRatingQuery.data.averageStars?.toFixed(1)}</Text>
+            <IconStar size={10}/>
+          </Group>
+        </>
+      )}
+    </Group>
+  );
 
-  return (
+  return useLink ? (
+    <Link
+      href={`/users/${user.id}`}
+      locale={locale}
+      passHref
+      title={t('myEvents.creator')}
+    >
+      <Badge
+        color={user.themeColor}
+        variant="outline"
+        sx={theme => ({
+          display: 'flex',
+          ':hover': {
+            backgroundColor: theme.fn.themeColor(user.themeColor),
+            color: theme.white,
+          },
+        })}
+      >
+        {content}
+      </Badge>
+    </Link>
+  ) : (
     <Badge
       color={user.themeColor}
       variant="outline"
@@ -41,22 +72,11 @@ export const UserBadge: FunctionComponent<{
         cursor: 'pointer',
         ':hover': {
           backgroundColor: theme.fn.themeColor(user.themeColor),
-          color: theme.white, // TODO black/white according to ColorScheme
+          color: theme.white,
         },
       })}
     >
-      <Group spacing={4}>
-        <Text>{user.name}</Text>
-        {userRatingQuery.data?.count && (
-          <>
-            <Divider orientation="vertical" color={user.themeColor}/>
-            <Group spacing={2}>
-              <Text>{userRatingQuery.data.averageStars?.toFixed(1)}</Text>
-              <IconStar size={10}/>
-            </Group>
-          </>
-        )}
-      </Group>
+      {content}
     </Badge>
   );
 };

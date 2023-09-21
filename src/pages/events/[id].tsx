@@ -77,9 +77,9 @@ export default function EventDetailsPage() {
                 <Text weight="bold" size="xl">
                   {eventQuery.data.name}
                 </Text>
-                <UserBadge user={eventQuery.data.creator}/>
+                <UserBadge useLink user={eventQuery.data.creator}/>
                 {eventQuery.data.group && ( // TODO GroupBadge and UserBadge component, how to differentiate?
-                  <GroupBadge group={eventQuery.data.group}/>
+                  <GroupBadge useLink group={eventQuery.data.group}/>
                 )}
               </Group>
               <Text>

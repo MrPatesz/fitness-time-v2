@@ -68,7 +68,7 @@ export default function GroupDetailsPage() {
                 <Text weight="bold" size="xl">
                   {groupQuery.data.name}
                 </Text>
-                <UserBadge user={groupQuery.data.creator}/>
+                <UserBadge useLink user={groupQuery.data.creator}/>
               </Group>
               <Text>
                 {t('groupTable.createdAt')}: {longDateFormatter.format(groupQuery.data.createdAt)}
