@@ -326,7 +326,9 @@
   "feedPage": {
     "maxDistance": "Maximum Distance:",
     "useMaxDistance": "Use Maximum Distance",
-    "slider": "Maximum Distance"
+    "slider": "Maximum Distance",
+    "includeArchive": "Include Archive",
+    "myGroupsOnly": "My Groups Only"
   },
   "calendarPage": {
     "today": "Today",

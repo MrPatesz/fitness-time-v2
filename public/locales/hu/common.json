@@ -326,7 +326,9 @@
   "feedPage": {
     "maxDistance": "Maximum távolság:",
     "useMaxDistance": "Maximum távolság használata",
-    "slider": "Maximum távolság"
+    "slider": "Maximum távolság",
+    "includeArchive": "Archívum mutatása",
+    "myGroupsOnly": "Csak a csoportjaim"
   },
   "calendarPage": {
     "today": "Ma",

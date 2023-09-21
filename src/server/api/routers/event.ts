@@ -138,21 +138,33 @@ export const eventRouter = createTRPCRouter({
       cursor: z.date().nullish(),
       groupId: IdSchema.nullish(),
       maxDistance: z.number().nonnegative().optional(),
+      includeArchive: z.boolean().optional(),
+      myGroupsOnly: z.boolean().optional(),
     }))
     .output(z.object({
       events: BasicEventSchema.array(),
       nextCursor: z.date().nullish(),
     }))
-    .query(async ({input: {cursor, groupId, maxDistance}, ctx: {session: {user: {id: callerId}}, prisma}}) => {
+    .query(async ({
+                    input: {cursor, groupId, maxDistance, includeArchive, myGroupsOnly},
+                    ctx: {session: {user: {id: callerId}}, prisma}
+                  }) => {
       const limit = 10;
 
       const events = await prisma.event.findMany({
         where: groupId ? {groupId} : {
           creatorId: {not: callerId},
-          OR: [
-            {groupId: null},
-            {group: {members: {some: {id: callerId}}}},
-          ]
+          ...(includeArchive ? undefined : ({
+            start: {gt: new Date()},
+          })),
+          ...(myGroupsOnly ? ({
+            group: {members: {some: {id: callerId}}},
+          }) : ({
+            OR: [
+              {groupId: null},
+              {group: {members: {some: {id: callerId}}}},
+            ],
+          })),
         },
         take: limit + 1,
         cursor: cursor ? {createdAt: cursor} : undefined,
