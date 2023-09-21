@@ -59,7 +59,8 @@
     "groups": "Csoportok",
     "groupDetails": "Csoport részletek",
     "chat": "Csoport csevegés",
-    "rating": "Értékelés"
+    "rating": "Értékelés",
+    "freeIntervals": "Szabad intervallumok"
   },
   "notification": {
     "message": {
@@ -337,9 +338,13 @@
     "export": "Exportálás",
     "iCalExport": "iCal exportálás",
     "interval": {
-      "label": "Időintervallum",
+      "label": "Intervallum",
       "error": "Hibás intervallum!"
     },
     "eventCount": "{{count}} esemény"
+  },
+  "intervalRecommender": {
+    "label": "Intervallum ajánló",
+    "searchInterval": "Keresési intervallum"
   }
 }

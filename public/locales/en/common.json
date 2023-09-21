@@ -59,7 +59,8 @@
     "groups": "Groups",
     "groupDetails": "Group Details",
     "chat": "Group Chat",
-    "rating": "Rating"
+    "rating": "Rating",
+    "freeIntervals": "Free Intervals"
   },
   "notification": {
     "message": {
@@ -337,9 +338,13 @@
     "export": "Export",
     "iCalExport": "Export to iCal",
     "interval": {
-      "label": "Time Interval",
+      "label": "Interval",
       "error": "Invalid interval!"
     },
     "eventCount": "{{count}} Events"
+  },
+  "intervalRecommender": {
+    "label": "Interval Recommender",
+    "searchInterval": "Search Interval"
   }
 }

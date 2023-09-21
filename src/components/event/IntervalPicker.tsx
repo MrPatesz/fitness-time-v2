@@ -75,6 +75,7 @@ export const IntervalPicker: FunctionComponent<{
           }}
           clearable={false}
           minDate={start}
+          maxDate={dayjs(start).add(2, 'weeks').toDate()}
           firstDayOfWeek={getFirstDayOfWeek(locale)}
           error={Boolean(endError)}
         />

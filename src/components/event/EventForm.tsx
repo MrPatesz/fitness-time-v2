@@ -15,6 +15,7 @@ import {
   getFormLocationValue
 } from '../../utils/mantineFormUtils';
 import {OverlayLoader} from '../OverlayLoader';
+import dayjs from '../../utils/dayjs';
 
 export const EventForm: FunctionComponent<{
   originalEvent: CreateEventType | BasicEventType;
@@ -24,7 +25,14 @@ export const EventForm: FunctionComponent<{
   const {t} = useTranslation('common');
 
   const getStartError = (start: Date) => start > new Date() ? null : t('eventForm.start.error');
-  const getEndError = (end: Date, start: Date) => (end > new Date() && end > start) ? null : t('eventForm.end.error');
+  const getEndError = (end: Date, start: Date) =>
+    (
+      end > new Date() &&
+      end > start &&
+      dayjs(start).add(2, 'weeks').toDate() > end
+    ) ?
+      null
+      : t('eventForm.end.error');
 
   const form = useForm<CreateEventType | BasicEventType>({
     initialValues: originalEvent,

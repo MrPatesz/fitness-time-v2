@@ -5,6 +5,32 @@ import {createTRPCRouter, protectedProcedure} from '../trpc';
 import {Prisma} from '.prisma/client';
 import {IdSchema} from '../../../models/Utils';
 import {InvalidateEvent, PusherChannel} from '../../../utils/enums';
+import {TRPCError} from '@trpc/server';
+
+type Range = { start: number, end: number };
+type DateRange = { start: Date, end: Date };
+
+const calculateFreeIntervals = (events: Array<DateRange>, intervalStart: Date, intervalEnd: Date) => {
+  const ranges: Array<Range> = [
+    {start: intervalStart.getTime(), end: intervalStart.getTime()},
+    ...events.map(e => ({start: e.start.getTime(), end: e.end.getTime()})),
+    {start: intervalEnd.getTime(), end: intervalEnd.getTime()},
+  ];
+  let previousRange: Range;
+  const gaps: Array<DateRange> = [];
+
+  ranges.forEach(({start, end}) => {
+    if (previousRange && previousRange.end < start) {
+      gaps.push({
+        start: new Date(previousRange.end),
+        end: new Date(start),
+      });
+    }
+    previousRange = {start, end};
+  });
+
+  return gaps;
+};
 
 export const groupRouter = createTRPCRouter({
   getPaginatedGroups: protectedProcedure
@@ -57,6 +83,45 @@ export const groupRouter = createTRPCRouter({
       });
 
       return DetailedGroupSchema.parse(group);
+    }),
+  getFreeIntervals: protectedProcedure
+    .input(z.object({
+      groupId: IdSchema,
+      from: z.date(),
+      until: z.date(),
+    }))
+    .output(z.object({
+        start: z.date(),
+        end: z.date()
+      }).array()
+    )
+    .query(async ({input: {groupId, from, until}, ctx: {prisma}}) => {
+      const group = await prisma.group.findUnique({
+        where: {id: groupId},
+        include: {
+          members: {
+            include: {
+              participatedEvents: {
+                where: {start: {gte: from}, end: {lte: until}},
+              }
+            }
+          }
+        }
+      });
+
+      if (!group) {
+        throw new TRPCError({code: 'BAD_REQUEST', message: `There is no group with this id: ${groupId}!`});
+      }
+
+      const allEvents = group.members
+        .flatMap(member => member.participatedEvents);
+
+      const events = [...new Map(allEvents.map(item => [item.id, item])).values()]
+        .sort((e1, e2) => e1.start.getTime() - e2.start.getTime());
+
+      return calculateFreeIntervals(events, from, until).map(({start, end}) =>
+        ({start: new Date(start), end: new Date(end)})
+      );
     }),
   create: protectedProcedure
     .input(MutateGroupSchema)

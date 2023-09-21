@@ -12,6 +12,7 @@ import {EventCard} from '../event/EventCard';
 import {CreateEventForm} from '../event/CreateEventForm';
 import {QueryComponent} from '../QueryComponent';
 import {InvalidateEvent} from '../../utils/enums';
+import {IntervalRecommender} from './IntervalRecommender';
 
 export const GroupFeed: FunctionComponent<{
   groupId: number;
@@ -48,19 +49,22 @@ export const GroupFeed: FunctionComponent<{
         <Stack>
           <Group position="apart">
             <Text color="dimmed">{t('resource.events')}</Text>
-            <ActionIcon
-              title={t('modal.event.create')}
-              size={36}
-              variant="filled"
-              color={theme.fn.themeColor(theme.primaryColor)}
-              onClick={() => openModal({
-                title: t('modal.event.create'),
-                children: <CreateEventForm groupId={groupId}/>,
-                fullScreen: !xs,
-              })}
-            >
-              <Plus/>
-            </ActionIcon>
+            <Group spacing="xs">
+              <IntervalRecommender groupId={groupId}/>
+              <ActionIcon
+                title={t('modal.event.create')}
+                size={36}
+                variant="filled"
+                color={theme.fn.themeColor(theme.primaryColor)}
+                onClick={() => openModal({
+                  title: t('modal.event.create'),
+                  children: <CreateEventForm groupId={groupId}/>,
+                  fullScreen: !xs,
+                })}
+              >
+                <Plus/>
+              </ActionIcon>
+            </Group>
           </Group>
           {!!events.length && (
             <ScrollArea>

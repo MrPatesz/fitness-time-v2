@@ -4,6 +4,7 @@ import {BasicGroupSchema} from './Group';
 import {LocationSchema, MutateLocationSchema} from './Location';
 import {BasicUserSchema} from './User';
 import {DescriptionSchema, IdSchema, NameSchema} from './Utils';
+import dayjs from '../utils/dayjs';
 
 export const IntervalSchema = z.object({
   start: z.date(),
@@ -26,9 +27,11 @@ export const MutateEventSchema = z.object({
   message: 'Event must not start in the past',
 }).refine(event => event.start < event.end, {
   message: 'Event must start before it ends',
+}).refine(event => dayjs(event.start).add(2, 'weeks').toDate() > event.end, {
+  message: 'Event must not last more than 2 weeks'
 });
 
-export const BasicEventSchema = MutateEventSchema.innerType().innerType().extend({
+export const BasicEventSchema = MutateEventSchema.innerType().innerType().innerType().extend({
   id: IdSchema,
   creatorId: z.string(),
   creator: BasicUserSchema,

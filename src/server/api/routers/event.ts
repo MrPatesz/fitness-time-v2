@@ -146,7 +146,13 @@ export const eventRouter = createTRPCRouter({
       nextCursor: z.date().nullish(),
     }))
     .query(async ({
-                    input: {cursor, groupId, maxDistance, includeArchive, myGroupsOnly},
+                    input: {
+                      cursor,
+                      groupId,
+                      maxDistance,
+                      includeArchive = true,
+                      myGroupsOnly = false,
+                    },
                     ctx: {session: {user: {id: callerId}}, prisma}
                   }) => {
       const limit = 10;
