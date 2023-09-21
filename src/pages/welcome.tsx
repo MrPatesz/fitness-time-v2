@@ -2,16 +2,16 @@ import {Button, Card, Group, Stack, Title, useMantineTheme} from '@mantine/core'
 import {signIn} from 'next-auth/react';
 import {useTranslation} from 'next-i18next';
 import {serverSideTranslations} from 'next-i18next/serverSideTranslations';
-import {useRouter} from 'next/router';
 import {useEffect} from 'react';
 import i18nConfig from '../../next-i18next.config.mjs';
 import {useMediaQuery} from '@mantine/hooks';
 import {useAuthenticated} from '../hooks/useAuthenticated';
+import {useMyRouter} from '../hooks/useMyRouter';
 
 export default function WelcomePage() {
   const theme = useMantineTheme();
   const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
-  const {replace: replaceRoute, locale = 'en', defaultLocale} = useRouter();
+  const {replaceRoute, locale, localePrefix} = useMyRouter();
   const {authenticated} = useAuthenticated();
   const {t} = useTranslation('common');
 
@@ -30,7 +30,7 @@ export default function WelcomePage() {
         <Group position="center">
           <Button
             variant={theme.primaryColor === 'dark' ? 'gradient' : undefined}
-            onClick={() => void signIn(undefined, {callbackUrl: locale !== defaultLocale ? `/${locale}/` : '/'})}
+            onClick={() => void signIn(undefined, {callbackUrl: `${localePrefix}/`})}
           >
             {t('button.login')}
           </Button>

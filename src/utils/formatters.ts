@@ -1,8 +1,8 @@
-import {useRouter} from 'next/router';
 import {useMemo} from 'react';
+import {useMyRouter} from '../hooks/useMyRouter';
 
 export const usePriceFormatter = () => {
-  const {locale = 'en'} = useRouter();
+  const {locale} = useMyRouter();
   return useMemo(() => new Intl.NumberFormat(locale, {
     style: 'currency',
     currency: 'EUR',
@@ -11,7 +11,7 @@ export const usePriceFormatter = () => {
 };
 
 export const useLongDateFormatter = () => {
-  const {locale = 'en'} = useRouter();
+  const {locale} = useMyRouter();
   return useMemo(() => new Intl.DateTimeFormat(locale, {
     year: 'numeric',
     month: 'long',
@@ -23,7 +23,7 @@ export const useLongDateFormatter = () => {
 };
 
 export const useShortDateFormatter = () => {
-  const {locale = 'en'} = useRouter();
+  const {locale} = useMyRouter();
   return useMemo(() => new Intl.DateTimeFormat(locale, {
     year: 'numeric',
     month: '2-digit',
@@ -32,7 +32,7 @@ export const useShortDateFormatter = () => {
 };
 
 export const useSignedNumberFormatter = () => {
-  const {locale = 'en'} = useRouter();
+  const {locale} = useMyRouter();
   return useMemo(() => new Intl.NumberFormat(locale, {
     signDisplay: 'exceptZero',
   }), [locale]);

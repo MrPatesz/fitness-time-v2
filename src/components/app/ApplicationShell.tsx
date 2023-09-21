@@ -15,7 +15,6 @@ import {useDisclosure, useMediaQuery} from '@mantine/hooks';
 import {signOut} from 'next-auth/react';
 import {useTranslation} from 'next-i18next';
 import Link from 'next/link';
-import {useRouter} from 'next/router';
 import {FunctionComponent} from 'react';
 import {Adjustments, CalendarEvent, IconProps, Logout, Map, Share, Ticket, UserCircle, Users} from 'tabler-icons-react';
 import {getBackgroundColor} from '../../utils/utilFunctions';
@@ -23,6 +22,7 @@ import {ColorSchemeToggle} from './ColorSchemeToggle';
 import {LanguageToggle} from './LanguageToggle';
 import {CenteredLoader} from '../CenteredLoader';
 import {useAuthenticated} from '../../hooks/useAuthenticated';
+import {useMyRouter} from '../../hooks/useMyRouter';
 
 const welcome = 'welcome';
 
@@ -59,15 +59,13 @@ export const ApplicationShell: FunctionComponent<{
 
   const theme = useMantineTheme();
   const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
-  const {route, locale = 'en', defaultLocale, push: pushRoute} = useRouter();
+  const {route, locale, isDefaultLocale, pushRoute} = useMyRouter();
   const {loading, authenticated, user} = useAuthenticated({
     required: !route.includes(welcome),
     onUnauthenticated: () => void pushRoute(`/${welcome}`, undefined, {locale}),
   });
   const {t} = useTranslation('common');
 
-  const isDefaultLocale = locale === defaultLocale;
-  const localePrefix = isDefaultLocale ? '' : `/${locale}`;
   const [
     calendarRoute,
     groupsRoute,
@@ -77,16 +75,7 @@ export const ApplicationShell: FunctionComponent<{
     controlPanelRoute,
     usersRoute,
     mapRoute,
-  ] = [
-    `${localePrefix}/calendar`,
-    `${localePrefix}/groups`,
-    `${localePrefix}/profile`,
-    `${localePrefix}/${welcome}`,
-    `${localePrefix}/events`,
-    `${localePrefix}/control-panel`,
-    `${localePrefix}/users`,
-    `${localePrefix}/map`,
-  ];
+  ] = ['/calendar', '/groups', '/profile', `/${welcome}`, '/events', '/control-panel', '/users', '/map'];
 
   const isRouteActive = (givenRoute: string) => {
     if (route === '/') {

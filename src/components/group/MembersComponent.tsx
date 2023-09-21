@@ -3,7 +3,6 @@ import {closeAllModals, openModal} from '@mantine/modals';
 import {useSession} from 'next-auth/react';
 import {useTranslation} from 'next-i18next';
 import Link from 'next/link';
-import {useRouter} from 'next/router';
 import {FunctionComponent} from 'react';
 import {Minus, Plus} from 'tabler-icons-react';
 import {BasicUserType} from '../../models/User';
@@ -11,6 +10,7 @@ import {useSignedNumberFormatter} from '../../utils/formatters';
 import {getInitials} from '../../utils/utilFunctions';
 import UserImage from '../user/UserImage';
 import {useMediaQuery} from '@mantine/hooks';
+import {useMyRouter} from '../../hooks/useMyRouter';
 
 export const MembersComponent: FunctionComponent<{
   members: BasicUserType[];
@@ -19,7 +19,7 @@ export const MembersComponent: FunctionComponent<{
 }> = ({members, isCreator, onJoin}) => {
   const theme = useMantineTheme();
   const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
-  const {locale = 'en'} = useRouter();
+  const {locale} = useMyRouter();
   const {data: session} = useSession();
   const signedNumberFormatter = useSignedNumberFormatter();
   const {t} = useTranslation('common');

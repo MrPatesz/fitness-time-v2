@@ -3,7 +3,6 @@ import {useDebouncedValue} from '@mantine/hooks';
 import {IconSearch} from '@tabler/icons';
 import {DataTable, DataTableSortStatus} from 'mantine-datatable';
 import {useTranslation} from 'next-i18next';
-import {useRouter} from 'next/router';
 import {FunctionComponent, useEffect, useState} from 'react';
 import {api} from '../../utils/api';
 import {InvalidateEvent, SortDirection} from '../../utils/enums';
@@ -11,6 +10,7 @@ import {PAGE_SIZES} from '../event/EventTable';
 import {QueryComponent} from '../QueryComponent';
 import {RichTextDisplay} from '../rich-text/RichTextDisplay';
 import UserImage from './UserImage';
+import {useMyRouter} from '../../hooks/useMyRouter';
 
 const UserTable: FunctionComponent = () => {
   const [page, setPage] = useState<number>(1);
@@ -20,7 +20,7 @@ const UserTable: FunctionComponent = () => {
   const [debouncedSearchQuery] = useDebouncedValue(searchQuery, 500);
 
   const theme = useMantineTheme();
-  const {push: pushRoute, locale = 'en'} = useRouter();
+  const {locale, pushRoute} = useMyRouter();
   const {t} = useTranslation('common');
 
   const usersQuery = api.user.getPaginatedUsers.useQuery({

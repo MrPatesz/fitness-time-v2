@@ -9,14 +9,14 @@ import {useLocalStorage} from '@mantine/hooks';
 import {ModalsProvider} from '@mantine/modals';
 import {NotificationsProvider} from '@mantine/notifications';
 import {useSession} from 'next-auth/react';
-import {useRouter} from 'next/router';
 import {FunctionComponent, useEffect, useMemo} from 'react';
 import dayjs from '../../utils/dayjs';
+import {useMyRouter} from '../../hooks/useMyRouter';
 
 export const ThemeProvider: FunctionComponent<{
   children: JSX.Element;
 }> = ({children}) => {
-  const {locale = 'en'} = useRouter();
+  const {locale} = useMyRouter();
   const {data: session} = useSession();
 
   const [themeColor, setThemeColor] = useLocalStorage<DefaultMantineColor>({

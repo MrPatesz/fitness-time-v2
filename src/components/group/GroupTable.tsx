@@ -5,7 +5,6 @@ import {showNotification} from '@mantine/notifications';
 import {IconSearch} from '@tabler/icons';
 import {DataTable, DataTableSortStatus} from 'mantine-datatable';
 import {useTranslation} from 'next-i18next';
-import {useRouter} from 'next/router';
 import {FunctionComponent, useEffect, useState} from 'react';
 import {Pencil, Plus, Trash} from 'tabler-icons-react';
 import {BasicGroupType} from '../../models/Group';
@@ -16,6 +15,7 @@ import {PAGE_SIZES} from '../event/EventTable';
 import {QueryComponent} from '../QueryComponent';
 import {CreateGroupForm} from './CreateGroupForm';
 import {EditGroupForm} from './EditGroupForm';
+import {useMyRouter} from '../../hooks/useMyRouter';
 
 const GroupTable: FunctionComponent<{
   groupTableDisplayPlace: GroupTableDisplayPlace;
@@ -27,7 +27,7 @@ const GroupTable: FunctionComponent<{
   const [debouncedSearchQuery] = useDebouncedValue(searchQuery, 500);
 
   const theme = useMantineTheme();
-  const {push: pushRoute, locale = 'en'} = useRouter();
+  const {locale, pushRoute} = useMyRouter();
   const {t} = useTranslation('common');
   const longDateFormatter = useLongDateFormatter();
 

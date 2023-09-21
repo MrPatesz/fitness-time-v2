@@ -6,7 +6,6 @@ import {IconSearch} from '@tabler/icons';
 import {DataTable, DataTableSortStatus} from 'mantine-datatable';
 import {useTranslation} from 'next-i18next';
 import Link from 'next/link';
-import {useRouter} from 'next/router';
 import {FunctionComponent, useEffect, useState} from 'react';
 import {Pencil, Trash} from 'tabler-icons-react';
 import {DetailedCommentType} from '../../models/Comment';
@@ -17,6 +16,7 @@ import {PAGE_SIZES} from '../event/EventTable';
 import {QueryComponent} from '../QueryComponent';
 import {RichTextDisplay} from '../rich-text/RichTextDisplay';
 import {CommentForm} from './CommentForm';
+import {useMyRouter} from '../../hooks/useMyRouter';
 
 const CommentTable: FunctionComponent = () => {
   const [page, setPage] = useState<number>(1);
@@ -27,7 +27,7 @@ const CommentTable: FunctionComponent = () => {
   const [debouncedSearchQuery] = useDebouncedValue(searchQuery, 500);
 
   const theme = useMantineTheme();
-  const {locale = 'en'} = useRouter();
+  const {locale} = useMyRouter();
   const {t} = useTranslation('common');
   const longDateFormatter = useLongDateFormatter();
 

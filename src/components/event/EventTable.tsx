@@ -16,7 +16,6 @@ import {showNotification} from '@mantine/notifications';
 import {IconSearch} from '@tabler/icons';
 import {DataTable, DataTableSortStatus} from 'mantine-datatable';
 import {useTranslation} from 'next-i18next';
-import {useRouter} from 'next/router';
 import {FunctionComponent, useEffect, useState} from 'react';
 import {Pencil, Plus, Trash} from 'tabler-icons-react';
 import {BasicEventType} from '../../models/Event';
@@ -26,6 +25,7 @@ import {useLongDateFormatter, usePriceFormatter} from '../../utils/formatters';
 import {QueryComponent} from '../QueryComponent';
 import {EditEventForm} from './EditEventForm';
 import {CreateEventForm} from './CreateEventForm';
+import {useMyRouter} from '../../hooks/useMyRouter';
 
 const DATE_TIME = 'dateTime';
 export const PAGE_SIZES: number[] = [10, 25, 50];
@@ -42,7 +42,7 @@ const EventTable: FunctionComponent<{
 
   const theme = useMantineTheme();
   const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
-  const {push: pushRoute, locale = 'en'} = useRouter();
+  const {locale, pushRoute} = useMyRouter();
   const {t} = useTranslation('common');
   const longDateFormatter = useLongDateFormatter();
   const priceFormatter = usePriceFormatter();

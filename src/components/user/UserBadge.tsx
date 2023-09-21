@@ -1,19 +1,19 @@
 import {FunctionComponent} from 'react';
 import {Badge, Divider, Group, Text} from '@mantine/core';
 import {IconStar} from '@tabler/icons';
-import {useRouter} from 'next/router';
 import {useTranslation} from 'next-i18next';
 import {api} from '../../utils/api';
 import {usePusher} from '../../hooks/usePusher';
 import {InvalidateEvent} from '../../utils/enums';
 import {BasicUserType} from '../../models/User';
 import Link from 'next/link';
+import {useMyRouter} from '../../hooks/useMyRouter';
 
 export const UserBadge: FunctionComponent<{
   user: BasicUserType;
   useLink?: boolean;
 }> = ({user, useLink = false}) => {
-  const {locale = 'en', push: pushRoute} = useRouter();
+  const {locale, pushRoute, localePrefix} = useMyRouter();
   const {t} = useTranslation('common');
 
   // TODO don't do this for all events on FeedPage
@@ -38,9 +38,11 @@ export const UserBadge: FunctionComponent<{
     </Group>
   );
 
+  const href = `/users/${user.id}`;
+
   return useLink ? (
     <Link
-      href={`/users/${user.id}`}
+      href={href}
       locale={locale}
       passHref
       title={t('myEvents.creator')}
@@ -66,7 +68,11 @@ export const UserBadge: FunctionComponent<{
       title={t('myEvents.creator')}
       onClick={(e) => {
         e.preventDefault();
-        void pushRoute(`/users/${user.id}`, undefined, {locale});
+        void pushRoute(href, undefined, {locale});
+      }}
+      onAuxClick={(e) => {
+        e.preventDefault();
+        window.open(`${localePrefix}${href}`);
       }}
       sx={theme => ({
         cursor: 'pointer',

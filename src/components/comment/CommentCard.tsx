@@ -4,7 +4,6 @@ import {showNotification} from '@mantine/notifications';
 import {useSession} from 'next-auth/react';
 import {useTranslation} from 'next-i18next';
 import Link from 'next/link';
-import {useRouter} from 'next/router';
 import {FunctionComponent} from 'react';
 import {Pencil, Trash} from 'tabler-icons-react';
 import {BasicCommentType} from '../../models/Comment';
@@ -16,13 +15,14 @@ import {RichTextDisplay} from '../rich-text/RichTextDisplay';
 import UserImage from '../user/UserImage';
 import {CommentForm} from './CommentForm';
 import {OverlayLoader} from '../OverlayLoader';
+import {useMyRouter} from '../../hooks/useMyRouter';
 
 export const CommentCard: FunctionComponent<{
   comment: BasicCommentType | BasicMessageType;
 }> = ({comment}) => {
   const longDateFormatter = useLongDateFormatter();
   const theme = useMantineTheme();
-  const {locale = 'en'} = useRouter();
+  const {locale} = useMyRouter();
   const {data: session} = useSession();
   const {t} = useTranslation('common');
 

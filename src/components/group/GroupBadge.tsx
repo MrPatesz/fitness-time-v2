@@ -1,19 +1,19 @@
 import {FunctionComponent} from 'react';
 import {Badge, Divider, Group, Text} from '@mantine/core';
 import {IconStar} from '@tabler/icons';
-import {useRouter} from 'next/router';
 import {useTranslation} from 'next-i18next';
 import {api} from '../../utils/api';
 import {usePusher} from '../../hooks/usePusher';
 import {InvalidateEvent} from '../../utils/enums';
 import {BasicGroupType} from '../../models/Group';
 import Link from 'next/link';
+import {useMyRouter} from '../../hooks/useMyRouter';
 
 export const GroupBadge: FunctionComponent<{
   group: BasicGroupType;
   useLink?: boolean;
 }> = ({group, useLink = false}) => {
-  const {locale = 'en', push: pushRoute} = useRouter();
+  const {locale, pushRoute, localePrefix} = useMyRouter();
   const {t} = useTranslation('common');
 
   // TODO don't do this for all events on FeedPage
@@ -40,9 +40,11 @@ export const GroupBadge: FunctionComponent<{
     </Group>
   );
 
+  const href = `/groups/${group.id}`;
+
   return useLink ? (
     <Link
-      href={`/groups/${group.id}`}
+      href={href}
       locale={locale}
       passHref
       title={t('myEvents.group')}
@@ -68,7 +70,11 @@ export const GroupBadge: FunctionComponent<{
       title={t('myEvents.group')}
       onClick={(e) => {
         e.preventDefault();
-        void pushRoute(`/groups/${group.id}`, undefined, {locale});
+        void pushRoute(href, undefined, {locale});
+      }}
+      onAuxClick={(e) => {
+        e.preventDefault();
+        window.open(`${localePrefix}${href}`);
       }}
       sx={theme => ({
         cursor: 'pointer',

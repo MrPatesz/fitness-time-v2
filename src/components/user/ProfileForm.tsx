@@ -16,18 +16,18 @@ import {Session} from 'next-auth';
 import {UseTRPCQueryResult} from '@trpc/react-query/dist/shared';
 import {OverlayLoader} from '../OverlayLoader';
 import {openConfirmModal} from '@mantine/modals';
-import {useRouter} from 'next/router';
 import {ImageSchema} from '../../models/Utils';
+import {useMyRouter} from '../../hooks/useMyRouter';
 
 export const ProfileForm: FunctionComponent<{
   profileQuery: UseTRPCQueryResult<ProfileType, unknown>;
 }> = ({profileQuery}) => {
   const {data: session, update} = useSession();
   const {t} = useTranslation('common');
-  const {locale = 'en', defaultLocale} = useRouter();
+  const {localePrefix} = useMyRouter();
 
   const deleteProfile = api.user.deleteProfile.useMutation({
-    onSuccess: () => void signOut({callbackUrl: `${locale === defaultLocale ? '' : `/${locale}`}/welcome`}),
+    onSuccess: () => void signOut({callbackUrl: `${localePrefix}/welcome`}),
   });
   const updateProfile = api.user.update.useMutation({
     onSuccess: (profile) => {

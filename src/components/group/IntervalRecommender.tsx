@@ -3,7 +3,6 @@ import {api} from '../../utils/api';
 import {QueryComponent} from '../QueryComponent';
 import {getFirstDayOfWeek} from '../../utils/utilFunctions';
 import dayjs from '../../utils/dayjs';
-import {useRouter} from 'next/router';
 import {ActionIcon, Stack, useMantineTheme} from '@mantine/core';
 import {DateRangePicker, DateRangePickerValue} from '@mantine/dates';
 import {useTranslation} from 'next-i18next';
@@ -15,6 +14,7 @@ import {useLongDateFormatter} from '../../utils/formatters';
 import interactionPlugin from '@fullcalendar/interaction';
 import {CreateEventForm} from '../event/CreateEventForm';
 import {useMediaQuery} from '@mantine/hooks';
+import {useMyRouter} from '../../hooks/useMyRouter';
 
 const IntervalRecommenderContent: FunctionComponent<{
   groupId: number;
@@ -24,7 +24,7 @@ const IntervalRecommenderContent: FunctionComponent<{
   const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
   const md = useMediaQuery(`(min-width: ${theme.breakpoints.md}px)`);
   const xl = useMediaQuery(`(min-width: ${theme.breakpoints.xl}px)`);
-  const {locale = 'en'} = useRouter();
+  const {locale} = useMyRouter();
   const {t} = useTranslation('common');
 
   const [interval, setInterval] = useState<DateRangePickerValue>([

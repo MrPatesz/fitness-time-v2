@@ -3,7 +3,6 @@ import {showNotification} from '@mantine/notifications';
 import {useSession} from 'next-auth/react';
 import {useTranslation} from 'next-i18next';
 import {serverSideTranslations} from 'next-i18next/serverSideTranslations';
-import {useRouter} from 'next/router';
 import i18nConfig from '../../next-i18next.config.mjs';
 import {api} from '../utils/api';
 import {getFirstDayOfWeek} from '../utils/utilFunctions';
@@ -18,10 +17,11 @@ import {BasicEventType} from '../models/Event';
 import {useMediaQuery} from '@mantine/hooks';
 import {InvalidateEvent} from '../utils/enums';
 import {ExportForm} from '../components/event/ExportForm';
+import {useMyRouter} from '../hooks/useMyRouter';
 
 export default function CalendarPage() {
   const theme = useMantineTheme();
-  const {push: pushRoute, locale = 'en'} = useRouter();
+  const {locale, pushRoute} = useMyRouter();
   const {data: session} = useSession();
   const {t} = useTranslation('common');
   const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);

@@ -1,7 +1,6 @@
 import {Badge, Card, Group, Stack, Text} from '@mantine/core';
 import {useTranslation} from 'next-i18next';
 import Link from 'next/link';
-import {useRouter} from 'next/router';
 import {FunctionComponent} from 'react';
 import {BasicEventType} from '../../models/Event';
 import {EventStatus, ThemeColor} from '../../utils/enums';
@@ -9,11 +8,12 @@ import {useShortDateFormatter} from '../../utils/formatters';
 import {formatDistance, getBackgroundColor} from '../../utils/utilFunctions';
 import {UserBadge} from '../user/UserBadge';
 import {GroupBadge} from '../group/GroupBadge';
+import {useMyRouter} from '../../hooks/useMyRouter';
 
 export const EventCard: FunctionComponent<{
   event: BasicEventType;
 }> = ({event}) => {
-  const {locale = 'en'} = useRouter();
+  const {locale} = useMyRouter();
   const {t} = useTranslation('common');
   const shortDateFormatter = useShortDateFormatter();
 

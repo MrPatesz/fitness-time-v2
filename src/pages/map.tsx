@@ -7,19 +7,19 @@ import {useEffect, useMemo} from 'react';
 import {CreateLocationType} from '../models/Location';
 import {LocationPicker} from '../components/location/LocationPicker';
 import {CircleF, MarkerF} from '@react-google-maps/api';
-import {useRouter} from 'next/router';
 import {useShortDateFormatter} from '../utils/formatters';
 import {useDebouncedValue, useLocalStorage, useMediaQuery} from '@mantine/hooks';
 import {usePusher} from '../hooks/usePusher';
 import {InvalidateEvent} from '../utils/enums';
 import {CenteredLoader} from '../components/CenteredLoader';
 import {useTranslation} from 'next-i18next';
+import {useMyRouter} from '../hooks/useMyRouter';
 
 export default function MapPage() {
   const theme = useMantineTheme();
   const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
   const md = useMediaQuery(`(min-width: ${theme.breakpoints.md}px)`);
-  const {locale = 'en', push: pushRoute} = useRouter();
+  const {locale, pushRoute} = useMyRouter();
   const shortDateFormatter = useShortDateFormatter();
   const {t} = useTranslation('common');
 

@@ -8,12 +8,12 @@ import {closeAllModals} from '@mantine/modals';
 import {useForm} from '@mantine/form';
 import {getFirstDayOfWeek} from '../../utils/utilFunctions';
 import {DateRangePicker, DateRangePickerValue} from '@mantine/dates';
-import {useRouter} from 'next/router';
 import {EventWithLocationType} from '../../models/Event';
+import {useMyRouter} from '../../hooks/useMyRouter';
 
 export const ExportForm: FunctionComponent = () => {
   const {t} = useTranslation('common');
-  const {locale = 'en'} = useRouter();
+  const {locale} = useMyRouter();
 
   const {values, onSubmit, getInputProps, isValid} = useForm<{ interval: DateRangePickerValue }>({
     initialValues: {
