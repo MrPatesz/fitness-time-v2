@@ -1,4 +1,4 @@
-import {ActionIcon, Avatar, Badge, Card, Group, Stack, Text, Tooltip, useMantineTheme} from '@mantine/core';
+import {ActionIcon, Avatar, Badge, Card, Group, SimpleGrid, Stack, Text, Tooltip, useMantineTheme} from '@mantine/core';
 import {closeAllModals, openModal} from '@mantine/modals';
 import {useSession} from 'next-auth/react';
 import {useTranslation} from 'next-i18next';
@@ -20,6 +20,7 @@ export const UsersComponent: FunctionComponent<{
 }> = ({users, hideJoin, onJoin, eventLimit}) => {
   const theme = useMantineTheme();
   const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
+  const isMobile = useMediaQuery('(max-width: 350px)');
   const {locale} = useMyRouter();
   const {data: session} = useSession();
   const signedNumberFormatter = useSignedNumberFormatter();
@@ -30,8 +31,15 @@ export const UsersComponent: FunctionComponent<{
   const isJoined = Boolean(users.find(u => u.id === session?.user.id));
   const disableJoin = Boolean(!isJoined && eventLimit && users.length >= eventLimit);
 
+  // TODO separate tooltips and modalTitle for event and group
+  //  t(isParticipated ? 'eventDetails.removeParticipation' : 'eventDetails.participate')
+
   return (
-    <Stack spacing="xs">
+    <SimpleGrid
+      spacing="xs"
+      cols={isMobile ? 2 : 1}
+      sx={{alignItems: 'center'}}
+    >
       <Avatar.Group
         sx={{cursor: 'pointer'}}
         onClick={() => openModal({
@@ -117,6 +125,6 @@ export const UsersComponent: FunctionComponent<{
           {users.length}/{eventLimit}
         </Badge>
       )}
-    </Stack>
+    </SimpleGrid>
   );
 };

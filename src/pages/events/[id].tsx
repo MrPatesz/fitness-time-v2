@@ -114,8 +114,6 @@ export default function EventDetailsPage() {
             </Stack>
             <Stack align="end">
               <UsersComponent
-                // TODO tooltips for event join!
-                //  t(isParticipated ? 'eventDetails.removeParticipation' : 'eventDetails.participate')
                 users={eventQuery.data.participants}
                 hideJoin={eventQuery.data.creatorId === session?.user.id || eventQuery.data.status === EventStatus.ARCHIVE}
                 onJoin={(join) => participate.mutate({
