@@ -100,7 +100,7 @@ export default function FeedPage() {
             </BorderComponent>
           </Box>
         )}
-        <SimpleGrid cols={md ? 1 : 2} sx={{minWidth: 155}}>
+        <SimpleGrid cols={(md && session?.user.hasLocation) ? 1 : 2} sx={{minWidth: 155}}>
           <Checkbox
             label={t('feedPage.includeArchive')}
             checked={includeArchive}
