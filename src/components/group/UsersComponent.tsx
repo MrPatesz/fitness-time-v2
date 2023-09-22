@@ -20,7 +20,7 @@ export const UsersComponent: FunctionComponent<{
 }> = ({users, hideJoin, onJoin, eventLimit}) => {
   const theme = useMantineTheme();
   const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
-  const isMobile = useMediaQuery('(max-width: 350px)');
+  const isMobile = useMediaQuery('(max-width: 375px)');
   const {locale} = useMyRouter();
   const {data: session} = useSession();
   const signedNumberFormatter = useSignedNumberFormatter();
