@@ -20,7 +20,8 @@ const calculateFreeIntervals = (events: Array<DateRange>, intervalStart: Date, i
   const gaps: Array<DateRange> = [];
 
   ranges.forEach(({start, end}) => {
-    if (previousRange && previousRange.end < start) {
+    // gap must be at least 30 minutes long
+    if (previousRange && (start - previousRange.end > 30 * 60 * 1000)) {
       gaps.push({
         start: new Date(previousRange.end),
         end: new Date(start),
