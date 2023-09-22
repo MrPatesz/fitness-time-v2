@@ -1,6 +1,6 @@
 import {FunctionComponent} from 'react';
-import {Badge, Divider, Group, Text} from '@mantine/core';
-import {IconStar} from '@tabler/icons';
+import {Badge, Group, Text} from '@mantine/core';
+import {IconStarFilled} from '@tabler/icons-react';
 import {useTranslation} from 'next-i18next';
 import {api} from '../../utils/api';
 import {usePusher} from '../../hooks/usePusher';
@@ -25,22 +25,14 @@ export const GroupBadge: FunctionComponent<{
     id: group.id
   }, () => void groupRatingQuery.refetch());
 
-  const content = (
-    <Group spacing={4}>
-      <Text>{group.name}</Text>
-      {groupRatingQuery.data?.count && (
-        <>
-          <Divider orientation="vertical" color={group.creator.themeColor}/>
-          <Group spacing={2}>
-            <Text>{groupRatingQuery.data.averageStars?.toFixed(1)}</Text>
-            <IconStar size={10}/>
-          </Group>
-        </>
-      )}
+  const href = `/groups/${group.id}`;
+
+  const rightSection = !!groupRatingQuery.data?.count && (
+    <Group spacing={2}>
+      <Text>{groupRatingQuery.data.averageStars?.toFixed(1)}</Text>
+      <IconStarFilled size={10}/>
     </Group>
   );
-
-  const href = `/groups/${group.id}`;
 
   return useLink ? (
     <Link
@@ -59,8 +51,9 @@ export const GroupBadge: FunctionComponent<{
             color: theme.white,
           },
         })}
+        rightSection={rightSection}
       >
-        {content}
+        {group.name}
       </Badge>
     </Link>
   ) : (
@@ -83,8 +76,9 @@ export const GroupBadge: FunctionComponent<{
           color: theme.white,
         },
       })}
+      rightSection={rightSection}
     >
-      {content}
+      {group.name}
     </Badge>
   );
 };

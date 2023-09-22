@@ -1,6 +1,6 @@
 import {FunctionComponent} from 'react';
-import {Badge, Divider, Group, Text} from '@mantine/core';
-import {IconStar} from '@tabler/icons';
+import {Badge, Group, Text} from '@mantine/core';
+import {IconStarFilled} from '@tabler/icons-react';
 import {useTranslation} from 'next-i18next';
 import {api} from '../../utils/api';
 import {usePusher} from '../../hooks/usePusher';
@@ -23,22 +23,14 @@ export const UserBadge: FunctionComponent<{
     id: user.id
   }, () => void userRatingQuery.refetch());
 
-  const content = (
-    <Group spacing={4}>
-      <Text>{user.name}</Text>
-      {userRatingQuery.data?.count && (
-        <>
-          <Divider orientation="vertical" color={user.themeColor}/>
-          <Group spacing={2}>
-            <Text>{userRatingQuery.data.averageStars?.toFixed(1)}</Text>
-            <IconStar size={10}/>
-          </Group>
-        </>
-      )}
+  const href = `/users/${user.id}`;
+
+  const rightSection = !!userRatingQuery.data?.count && (
+    <Group spacing={2}>
+      <Text>{userRatingQuery.data.averageStars?.toFixed(1)}</Text>
+      <IconStarFilled size={10}/>
     </Group>
   );
-
-  const href = `/users/${user.id}`;
 
   return useLink ? (
     <Link
@@ -57,8 +49,9 @@ export const UserBadge: FunctionComponent<{
             color: theme.white,
           },
         })}
+        rightSection={rightSection}
       >
-        {content}
+        {user.name}
       </Badge>
     </Link>
   ) : (
@@ -81,8 +74,9 @@ export const UserBadge: FunctionComponent<{
           color: theme.white,
         },
       })}
+      rightSection={rightSection}
     >
-      {content}
+      {user.name}
     </Badge>
   );
 };
