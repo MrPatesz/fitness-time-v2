@@ -5,7 +5,7 @@ import {LocationSchema, MutateLocationSchema} from './Location';
 import {DescriptionSchema, ImageSchema, NameSchema} from './Utils';
 
 export const BasicUserSchema = z.object({
-  id: z.string(),
+  id: z.string().min(1),
   name: NameSchema,
   introduction: DescriptionSchema,
   themeColor: z.nativeEnum(ThemeColor),

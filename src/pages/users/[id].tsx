@@ -1,7 +1,6 @@
 import {Box, Group, ScrollArea, Stack, Text} from '@mantine/core';
 import {useTranslation} from 'next-i18next';
 import {serverSideTranslations} from 'next-i18next/serverSideTranslations';
-import {useRouter} from 'next/router';
 import i18nConfig from '../../../next-i18next.config.mjs';
 import {EventGrid} from '../../components/event/EventGrid';
 import {QueryComponent} from '../../components/QueryComponent';
@@ -10,20 +9,23 @@ import {RichTextDisplay} from '../../components/rich-text/RichTextDisplay';
 import UserImage from '../../components/user/UserImage';
 import {api} from '../../utils/api';
 import {InvalidateEvent} from '../../utils/enums';
+import {usePathId} from '../../hooks/usePathId';
+import {CenteredLoader} from '../../components/CenteredLoader';
 
 export default function UserDetailsPage() {
-  const {query: {id}, isReady} = useRouter();
+  const {id: userId, isReady} = usePathId<string>();
   const {t} = useTranslation('common');
 
-  const userId = id as string;
-  const userDetailsQuery = api.user.getById.useQuery(userId, {
+  const userDetailsQuery = api.user.getById.useQuery(userId!, {
     enabled: isReady,
   });
-  const userRatingQuery = api.rating.getAverageRatingForUser.useQuery(userId, {
+  const userRatingQuery = api.rating.getAverageRatingForUser.useQuery(userId!, {
     enabled: isReady,
   });
 
-  return (
+  return !isReady ? (
+    <CenteredLoader/>
+  ) : (
     <QueryComponent
       resourceName={t('resource.userDetails')}
       query={userDetailsQuery}

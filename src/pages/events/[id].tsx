@@ -4,7 +4,6 @@ import {showNotification} from '@mantine/notifications';
 import {useSession} from 'next-auth/react';
 import {useTranslation} from 'next-i18next';
 import {serverSideTranslations} from 'next-i18next/serverSideTranslations';
-import {useRouter} from 'next/router';
 import {Pencil} from 'tabler-icons-react';
 import i18nConfig from '../../../next-i18next.config.mjs';
 import MapComponent from '../../components/location/MapComponent';
@@ -21,29 +20,30 @@ import {MembersComponent} from '../../components/group/MembersComponent';
 import {GroupBadge} from '../../components/group/GroupBadge';
 import {UserBadge} from '../../components/user/UserBadge';
 import {useEffect} from 'react';
+import {usePathId} from '../../hooks/usePathId';
+import {CenteredLoader} from '../../components/CenteredLoader';
 
 export default function EventDetailsPage() {
+  const longDateFormatter = useLongDateFormatter();
+  const priceFormatter = usePriceFormatter();
   const theme = useMantineTheme();
   const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
   const md = useMediaQuery(`(min-width: ${theme.breakpoints.md}px)`);
-  const {query: {id}, isReady} = useRouter();
+  const {id: eventId, isReady} = usePathId<number>();
   const {data: session} = useSession();
   const {t} = useTranslation('common');
-  const longDateFormatter = useLongDateFormatter();
-  const priceFormatter = usePriceFormatter();
-  const queryContext = api.useContext();
 
-  const eventId = parseInt(id as string);
-  const eventQuery = api.event.getById.useQuery(eventId, {
+  const queryContext = api.useContext();
+  const eventQuery = api.event.getById.useQuery(eventId!, {
     enabled: isReady,
   });
-  const averageRatingQuery = api.rating.getAverageRatingForEvent.useQuery(eventId, {
+  const averageRatingQuery = api.rating.getAverageRatingForEvent.useQuery(eventId!, {
     enabled: isReady && eventQuery.data?.status === EventStatus.ARCHIVE,
   });
-  const userRatingQuery = api.rating.getCallerRating.useQuery(eventId, {
+  const userRatingQuery = api.rating.getCallerRating.useQuery(eventId!, {
     enabled: isReady && eventQuery.data?.status === EventStatus.ARCHIVE,
   });
-  const rateEvent = api.rating.rate.useMutation({
+  const rate = api.rating.rate.useMutation({
     onSuccess: () => void userRatingQuery.refetch(),
   });
   const participate = api.event.participate.useMutation({
@@ -54,15 +54,15 @@ export default function EventDetailsPage() {
     }),
   });
 
-  const editable = eventQuery.data?.status === EventStatus.PLANNED && eventQuery.data?.creatorId === session?.user.id;
-
   useEffect(() => {
     if (isReady) {
       void queryContext.comment.getAllByEventId.prefetch(eventId);
     }
   }, [isReady, eventId, queryContext]);
 
-  return (
+  return !isReady ? (
+    <CenteredLoader/>
+  ) : (
     <QueryComponent
       resourceName={t('resource.eventDetails')}
       query={eventQuery}
@@ -98,13 +98,13 @@ export default function EventDetailsPage() {
                   resourceName={t('resource.rating')}
                   query={averageRatingQuery}
                   eventInfo={{event: InvalidateEvent.RatingGetAverageRatingForEvent, id: eventId}}
-                  loading={rateEvent.isLoading}
+                  loading={rate.isLoading}
                 >
                   <RatingComponent
                     averageRating={averageRatingQuery.data}
                     previousRating={userRatingQuery.data}
                     canRate={!(eventQuery.data.creatorId === session?.user.id || !eventQuery.data.participants.find(p => p.id === session?.user.id))}
-                    onChange={(value) => rateEvent.mutate({
+                    onChange={(value) => rate.mutate({
                       createRating: {stars: value},
                       eventId,
                     })}
@@ -131,7 +131,7 @@ export default function EventDetailsPage() {
                   participate: join,
                 })}
               />
-              {editable && (
+              {eventQuery.data.status === EventStatus.PLANNED && eventQuery.data.creatorId === session?.user.id && (
                 <ActionIcon
                   title={t('modal.event.edit')}
                   size="lg"

@@ -5,7 +5,6 @@ import {showNotification} from '@mantine/notifications';
 import {useSession} from 'next-auth/react';
 import {useTranslation} from 'next-i18next';
 import {serverSideTranslations} from 'next-i18next/serverSideTranslations';
-import {useRouter} from 'next/router';
 import {useMemo} from 'react';
 import {Pencil} from 'tabler-icons-react';
 import i18nConfig from '../../../next-i18next.config.mjs';
@@ -20,20 +19,21 @@ import {useLongDateFormatter} from '../../utils/formatters';
 import {EditGroupForm} from '../../components/group/EditGroupForm';
 import {InvalidateEvent} from '../../utils/enums';
 import {UserBadge} from '../../components/user/UserBadge';
+import {usePathId} from '../../hooks/usePathId';
+import {CenteredLoader} from '../../components/CenteredLoader';
 
 export default function GroupDetailsPage() {
+  const longDateFormatter = useLongDateFormatter();
   const theme = useMantineTheme();
   const md = useMediaQuery(`(min-width: ${theme.breakpoints.md}px)`);
-  const {query: {id}, isReady} = useRouter();
+  const {id: groupId, isReady} = usePathId<number>();
   const {data: session} = useSession();
   const {t} = useTranslation('common');
-  const longDateFormatter = useLongDateFormatter();
 
-  const groupId = parseInt(id as string);
-  const groupQuery = api.group.getById.useQuery(groupId, {
+  const groupQuery = api.group.getById.useQuery(groupId!, {
     enabled: isReady,
   });
-  const groupRatingQuery = api.rating.getAverageRatingForGroup.useQuery(groupId, {
+  const groupRatingQuery = api.rating.getAverageRatingForGroup.useQuery(groupId!, {
     enabled: isReady,
   });
 
@@ -53,7 +53,9 @@ export default function GroupDetailsPage() {
     return Boolean(groupQuery.data?.members.find(m => m.id === session?.user.id));
   }, [groupQuery.data?.members, session?.user.id]);
 
-  return (
+  return !isReady ? (
+    <CenteredLoader/>
+  ) : (
     <QueryComponent
       resourceName={t('resource.groupDetails')}
       query={groupQuery}
