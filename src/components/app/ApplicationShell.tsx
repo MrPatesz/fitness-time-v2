@@ -111,7 +111,7 @@ export const ApplicationShell: FunctionComponent<{
                     locale={locale}
                     passHref
                     onClick={closeNavbar}
-                    // title={t('')} // TODO
+                    title={t('application.feed')}
                   >
                     <Title order={2}>{t(xs ? 'application.name' : 'application.shortName')}</Title>
                   </Link>

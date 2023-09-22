@@ -10,7 +10,7 @@ import {Pencil} from 'tabler-icons-react';
 import i18nConfig from '../../../next-i18next.config.mjs';
 import {GroupChat} from '../../components/group/GroupChat';
 import {GroupFeed} from '../../components/group/GroupFeed';
-import {MembersComponent} from '../../components/group/MembersComponent';
+import {UsersComponent} from '../../components/group/UsersComponent';
 import {QueryComponent} from '../../components/QueryComponent';
 import {RatingComponent} from '../../components/RatingComponent';
 import {RichTextDisplay} from '../../components/rich-text/RichTextDisplay';
@@ -84,9 +84,9 @@ export default function GroupDetailsPage() {
               </QueryComponent>
             </Stack>
             <Stack align="end">
-              <MembersComponent
-                members={groupQuery.data.members}
-                isCreator={isCreator}
+              <UsersComponent
+                users={groupQuery.data.members}
+                hideJoin={isCreator}
                 onJoin={(join) => joinGroup.mutate({id: groupId, join})}
               />
               {isCreator && (

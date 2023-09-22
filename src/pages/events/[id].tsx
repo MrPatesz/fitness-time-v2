@@ -16,7 +16,7 @@ import {useLongDateFormatter, usePriceFormatter} from '../../utils/formatters';
 import {EditEventForm} from '../../components/event/EditEventForm';
 import {CommentsComponent} from '../../components/event/CommentsComponent';
 import {useMediaQuery} from '@mantine/hooks';
-import {MembersComponent} from '../../components/group/MembersComponent';
+import {UsersComponent} from '../../components/group/UsersComponent';
 import {GroupBadge} from '../../components/group/GroupBadge';
 import {UserBadge} from '../../components/user/UserBadge';
 import {useEffect} from 'react';
@@ -113,23 +113,16 @@ export default function EventDetailsPage() {
               )}
             </Stack>
             <Stack align="end">
-              <MembersComponent
-                // TODO show limit!
-                //  {eventQuery.data.limit && (
-                //    <Badge color="red">
-                //      {eventQuery.data.participants.length}/{eventQuery.data.limit}
-                //    </Badge>
-                //  )}
+              <UsersComponent
                 // TODO tooltips for event join!
                 //  t(isParticipated ? 'eventDetails.removeParticipation' : 'eventDetails.participate')
-                // TODO disable join button when event if full!
-                //  !isParticipated && event.limit && (event.participants.length >= event.limit)
-                members={eventQuery.data.participants}
-                isCreator={eventQuery.data.creatorId === session?.user.id || eventQuery.data.status === EventStatus.ARCHIVE}
+                users={eventQuery.data.participants}
+                hideJoin={eventQuery.data.creatorId === session?.user.id || eventQuery.data.status === EventStatus.ARCHIVE}
                 onJoin={(join) => participate.mutate({
                   id: eventId,
                   participate: join,
                 })}
+                eventLimit={eventQuery.data.limit}
               />
               {eventQuery.data.status === EventStatus.PLANNED && eventQuery.data.creatorId === session?.user.id && (
                 <ActionIcon

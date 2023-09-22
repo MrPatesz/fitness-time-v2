@@ -6,7 +6,8 @@
     "logout": "Logout",
     "colorScheme": "Change Color Scheme",
     "language": "Change Language",
-    "menu": "Menu"
+    "menu": "Menu",
+    "feed": "Feed"
   },
   "navbar": {
     "calendar": {
@@ -339,12 +340,15 @@
     "iCalExport": "Export to iCal",
     "interval": {
       "label": "Interval",
-      "error": "Invalid interval!"
+      "error": "Invalid Interval!"
     },
     "eventCount": "{{count}} Events"
   },
   "intervalRecommender": {
     "label": "Interval Recommender",
     "searchInterval": "Search Interval"
+  },
+  "usersComponent": {
+    "full": "Event is full!"
   }
 }

@@ -6,7 +6,8 @@
     "logout": "Kijelentkezés",
     "colorScheme": "Színséma váltása",
     "language": "Nyelv váltása",
-    "menu": "Menü"
+    "menu": "Menü",
+    "feed": "Folyam"
   },
   "navbar": {
     "calendar": {
@@ -346,5 +347,8 @@
   "intervalRecommender": {
     "label": "Intervallum ajánló",
     "searchInterval": "Keresési intervallum"
+  },
+  "usersComponent": {
+    "full": "Az esemény betelt!"
   }
 }
