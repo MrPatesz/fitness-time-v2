@@ -114,6 +114,7 @@ export const ProfileForm: FunctionComponent<{
             {...form.getInputProps('image')}
           />
           <ThemeColorPicker
+            label={t('themeColorPicker.label')}
             value={form.getInputProps('themeColor').value as ThemeColor}
             onChange={form.getInputProps('themeColor').onChange as (newValue: ThemeColor) => void}
           />

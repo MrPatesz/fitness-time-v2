@@ -3,7 +3,7 @@
 }
 
 .mantine-Modal-body {
-    height: 100%;
+    height: calc(100% - 44px);
 }
 
 .fc-event-main {

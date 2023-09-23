@@ -1,4 +1,4 @@
-import {FunctionComponent} from 'react';
+import {FunctionComponent, MouseEventHandler} from 'react';
 import {Badge, Group, Text} from '@mantine/core';
 import {IconStarFilled} from '@tabler/icons-react';
 import {useTranslation} from 'next-i18next';
@@ -23,60 +23,48 @@ export const UserBadge: FunctionComponent<{
     id: user.id
   }, () => void userRatingQuery.refetch());
 
-  const href = `/users/${user.id}`;
-
-  const rightSection = !!userRatingQuery.data?.count && (
-    <Group spacing={2}>
-      <Text>{userRatingQuery.data.averageStars?.toFixed(1)}</Text>
-      <IconStarFilled size={10}/>
-    </Group>
+  const getBadge = (onClicks?: {
+    onClick: MouseEventHandler<HTMLDivElement>;
+    onAuxClick: MouseEventHandler<HTMLDivElement>;
+  }) => (
+    <Badge
+      onClick={onClicks?.onClick}
+      onAuxClick={onClicks?.onAuxClick}
+      title={t('myEvents.creator')}
+      variant="filled"
+      color={user.themeColor}
+      sx={{display: 'flex'}}
+      rightSection={!!userRatingQuery.data?.count && (
+        <Group spacing={2}>
+          <Text>{userRatingQuery.data.averageStars?.toFixed(1)}</Text>
+          <IconStarFilled size={10}/>
+        </Group>
+      )}
+    >
+      {user.name}
+    </Badge>
   );
+
+  const href = `/users/${user.id}`;
 
   return useLink ? (
     <Link
       href={href}
       locale={locale}
       passHref
-      title={t('myEvents.creator')}
     >
-      <Badge
-        color={user.themeColor}
-        variant="outline"
-        sx={theme => ({
-          display: 'flex',
-          ':hover': {
-            backgroundColor: theme.fn.themeColor(user.themeColor),
-            color: theme.white,
-          },
-        })}
-        rightSection={rightSection}
-      >
-        {user.name}
-      </Badge>
+      {getBadge()}
     </Link>
   ) : (
-    <Badge
-      color={user.themeColor}
-      variant="outline"
-      title={t('myEvents.creator')}
-      onClick={(e) => {
+    getBadge({
+      onClick: e => {
         e.preventDefault();
         void pushRoute(href, undefined, {locale});
-      }}
-      onAuxClick={(e) => {
+      },
+      onAuxClick: e => {
         e.preventDefault();
         window.open(`${localePrefix}${href}`);
-      }}
-      sx={theme => ({
-        cursor: 'pointer',
-        ':hover': {
-          backgroundColor: theme.fn.themeColor(user.themeColor),
-          color: theme.white,
-        },
-      })}
-      rightSection={rightSection}
-    >
-      {user.name}
-    </Badge>
+      },
+    })
   );
 };

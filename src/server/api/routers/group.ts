@@ -152,6 +152,9 @@ export const groupRouter = createTRPCRouter({
 
       await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.GroupGetById, input.id);
       await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.GroupGetPaginatedGroups, null);
+      await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetById, null);
+      await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetFeed, null);
+      await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetPaginatedEvents, null);
       // TODO await pusher.trigger(PusherChannel.INVALIDATE, PusherEvent.UserGetById, null);
     }),
   delete: protectedProcedure

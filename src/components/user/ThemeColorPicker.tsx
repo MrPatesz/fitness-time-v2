@@ -23,14 +23,22 @@ const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
 );
 
 export const ThemeColorPicker: FunctionComponent<{
+  label?: string;
   value: ThemeColor;
   onChange: (newValue: ThemeColor) => void;
-}> = ({value, onChange}) => {
+  error?: string | undefined;
+}> = ({label, value, onChange, error}) => {
+  const theme = useMantineTheme();
   const {t} = useTranslation('common');
 
   return (
     <Select
-      label={t('themeColorPicker.label')}
+      withAsterisk
+      label={label}
+      value={value}
+      onChange={onChange}
+      error={error}
+      rightSection={<ColorSwatch color={theme.fn.themeColor(value)}/>}
       itemComponent={SelectItem}
       data={[
         {value: ThemeColor.RED, label: t('color.red')},
@@ -46,8 +54,6 @@ export const ThemeColorPicker: FunctionComponent<{
         {value: ThemeColor.YELLOW, label: t('color.yellow')},
         {value: ThemeColor.ORANGE, label: t('color.orange')},
       ]}
-      value={value}
-      onChange={onChange}
     />
   );
 };
