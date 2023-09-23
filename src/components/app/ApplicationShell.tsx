@@ -16,7 +16,18 @@ import {signOut} from 'next-auth/react';
 import {useTranslation} from 'next-i18next';
 import Link from 'next/link';
 import {FunctionComponent} from 'react';
-import {Adjustments, CalendarEvent, IconProps, Logout, Map, Share, Ticket, UserCircle, Users} from 'tabler-icons-react';
+import {
+  Adjustments,
+  CalendarEvent,
+  IconProps,
+  Logout,
+  Map,
+  News,
+  Share,
+  Ticket,
+  UserCircle,
+  Users
+} from 'tabler-icons-react';
 import {getBackgroundColor} from '../../utils/utilFunctions';
 import {ColorSchemeToggle} from './ColorSchemeToggle';
 import {LanguageToggle} from './LanguageToggle';
@@ -24,9 +35,19 @@ import {CenteredLoader} from '../CenteredLoader';
 import {useAuthenticated} from '../../hooks/useAuthenticated';
 import {useMyRouter} from '../../hooks/useMyRouter';
 
-const welcome = 'welcome';
+const [
+  feedRoute,
+  calendarRoute,
+  groupsRoute,
+  profileRoute,
+  welcomeRoute,
+  eventsRoute,
+  controlPanelRoute,
+  usersRoute,
+  mapRoute,
+] = ['/', '/calendar', '/groups', '/profile', '/welcome', '/events', '/control-panel', '/users', '/map'];
 
-const NavBarLink: FunctionComponent<{
+const NavbarLink: FunctionComponent<{
   link: {
     icon: FunctionComponent<IconProps>;
     label: string;
@@ -59,30 +80,19 @@ export const ApplicationShell: FunctionComponent<{
 
   const theme = useMantineTheme();
   const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
-  const {route, locale, isDefaultLocale, pushRoute} = useMyRouter();
+  const {route, locale, pushRoute} = useMyRouter();
   const {loading, authenticated, user} = useAuthenticated({
-    required: !route.includes(welcome),
-    onUnauthenticated: () => void pushRoute(`/${welcome}`, undefined, {locale}),
+    required: !route.includes(welcomeRoute),
+    onUnauthenticated: () => void pushRoute(welcomeRoute, undefined, {locale}),
   });
   const {t} = useTranslation('common');
 
-  const [
-    calendarRoute,
-    groupsRoute,
-    profileRoute,
-    welcomeRoute,
-    eventsRoute,
-    controlPanelRoute,
-    usersRoute,
-    mapRoute,
-  ] = ['/calendar', '/groups', '/profile', `/${welcome}`, '/events', '/control-panel', '/users', '/map'];
-
-  const isRouteActive = (givenRoute: string) => {
-    if (route === '/') {
-      return false;
+  const isRouteActive = (testedRoute: string) => {
+    if (testedRoute === '/') {
+      return route === testedRoute;
+    } else {
+      return route.includes(testedRoute);
     }
-    const actualRoute = givenRoute.split('/').at(isDefaultLocale ? 1 : 2) as string;
-    return route.includes(actualRoute);
   };
 
   const breakpoint: MantineNumberSize = 'sm';
@@ -143,6 +153,7 @@ export const ApplicationShell: FunctionComponent<{
           <Navbar width={{base: 211}} p="xs" hiddenBreakpoint={breakpoint} hidden={!showNavbar} zIndex={401}>
             <Navbar.Section grow>
               {[
+                {label: t('navbar.feed.label'), title: t('navbar.feed.title'), route: feedRoute, icon: News},
                 {
                   label: t('navbar.calendar.label'),
                   title: t('navbar.calendar.title'),
@@ -154,7 +165,7 @@ export const ApplicationShell: FunctionComponent<{
                 {label: t('navbar.groups.label'), title: t('navbar.groups.title'), route: groupsRoute, icon: Share},
                 {label: t('navbar.users.label'), title: t('navbar.users.title'), route: usersRoute, icon: Users},
               ].map((link) => (
-                <NavBarLink
+                <NavbarLink
                   key={link.label}
                   locale={locale}
                   link={{
@@ -166,7 +177,7 @@ export const ApplicationShell: FunctionComponent<{
               ))}
             </Navbar.Section>
             <Navbar.Section>
-              <NavBarLink
+              <NavbarLink
                 locale={locale}
                 link={{
                   label: t('navbar.controlPanel.label'),
@@ -177,7 +188,7 @@ export const ApplicationShell: FunctionComponent<{
                   onClick: closeNavbar,
                 }}
               />
-              <NavBarLink
+              <NavbarLink
                 locale={locale}
                 link={{
                   label: user.name,

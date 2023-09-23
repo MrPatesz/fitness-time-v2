@@ -3,7 +3,6 @@ import {useRouter} from 'next/router';
 export const useMyRouter = () => {
   const {
     asPath,
-    route,
     push: pushRoute,
     replace: replaceRoute,
     locale = 'en',
@@ -14,8 +13,7 @@ export const useMyRouter = () => {
   const localePrefix = isDefaultLocale ? '' : `/${locale}`;
 
   return {
-    asPath,
-    route,
+    route: asPath,
     pushRoute,
     replaceRoute,
     locale,

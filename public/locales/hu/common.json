@@ -10,6 +10,10 @@
     "feed": "Folyam"
   },
   "navbar": {
+    "feed": {
+      "label": "Folyam",
+      "title": "Itt láthatod a legújabb eseményeket."
+    },
     "calendar": {
       "label": "Naptár",
       "title": "Itt láthatod a részt vett eseményeidet a naptárban."

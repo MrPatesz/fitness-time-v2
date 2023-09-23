@@ -5,7 +5,7 @@ import {useMyRouter} from '../../hooks/useMyRouter';
 
 export const LanguageToggle: FunctionComponent = () => {
   const {colorScheme} = useMantineColorScheme();
-  const {asPath, pushRoute, isDefaultLocale} = useMyRouter();
+  const {route, pushRoute, isDefaultLocale} = useMyRouter();
   const {t} = useTranslation('common');
 
   const dark = colorScheme === 'dark';
@@ -15,7 +15,7 @@ export const LanguageToggle: FunctionComponent = () => {
       title={t('application.language')}
       size="lg"
       variant={dark ? 'outline' : 'default'}
-      onClick={() => void pushRoute(asPath, undefined, {locale: isDefaultLocale ? 'hu' : 'en'})}
+      onClick={() => void pushRoute(route, undefined, {locale: isDefaultLocale ? 'hu' : 'en'})}
     >
       <Text>
         {isDefaultLocale ? '🇭🇺' : '🇺🇸'}

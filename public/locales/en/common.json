@@ -10,6 +10,10 @@
     "feed": "Feed"
   },
   "navbar": {
+    "feed": {
+      "label": "Feed",
+      "title": "Here you can see the latest events."
+    },
     "calendar": {
       "label": "Calendar",
       "title": "Here you can view your participated events in the calendar."
