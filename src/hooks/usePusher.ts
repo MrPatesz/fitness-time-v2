@@ -9,30 +9,30 @@ export interface EventInfo {
   id?: number | string;
 }
 
+export const useInitializePusher = () => {
+  useEffect(() => {
+    pusherClient.subscribe(PusherChannel.INVALIDATE);
+    return () => pusherClient.unsubscribe(PusherChannel.INVALIDATE);
+  }, []);
+};
+
 export const usePusher = (
   eventInfo: EventInfo | undefined,
   onEvent: () => void,
 ) => {
   useEffect(() => {
-    const handleEvent = (rawData: unknown) => {
-      if (eventInfo) {
-        const data = IdSchema.or(z.string().min(1)).optional().parse(rawData);
+    if (eventInfo) {
+      const handleEvent = (rawData: unknown) => {
+        const data = z.union([IdSchema, z.string().min(1)]).optional().parse(rawData);
         if (!data || data === eventInfo.id) {
           onEvent();
         }
-      }
-    };
+      };
 
-    if (eventInfo) {
-      pusherClient.subscribe(PusherChannel.INVALIDATE);
       pusherClient.bind(eventInfo.event, handleEvent);
-    }
-
-    return () => {
-      if (eventInfo) {
+      return () => {
         pusherClient.unbind(eventInfo.event, handleEvent);
-        pusherClient.unsubscribe(PusherChannel.INVALIDATE);
-      }
-    };
-  }, []);
+      };
+    }
+  }, [eventInfo]);
 };

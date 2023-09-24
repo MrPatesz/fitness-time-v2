@@ -34,6 +34,7 @@ import {LanguageToggle} from './LanguageToggle';
 import {CenteredLoader} from '../CenteredLoader';
 import {useAuthenticated} from '../../hooks/useAuthenticated';
 import {useMyRouter} from '../../hooks/useMyRouter';
+import {useInitializePusher} from '../../hooks/usePusher';
 
 const [
   feedRoute,
@@ -76,16 +77,18 @@ const NavbarLink: FunctionComponent<{
 export const ApplicationShell: FunctionComponent<{
   children: JSX.Element;
 }> = ({children}) => {
-  const [showNavbar, {close: closeNavbar, toggle: toggleNavbar}] = useDisclosure(false);
-
   const theme = useMantineTheme();
   const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
   const {route, locale, pushRoute} = useMyRouter();
+  const {t} = useTranslation('common');
   const {loading, authenticated, user} = useAuthenticated({
     required: !route.includes(welcomeRoute),
     onUnauthenticated: () => void pushRoute(welcomeRoute, undefined, {locale}),
   });
-  const {t} = useTranslation('common');
+
+  const [showNavbar, {close: closeNavbar, toggle: toggleNavbar}] = useDisclosure(false);
+
+  useInitializePusher();
 
   const isRouteActive = (testedRoute: string) => {
     if (testedRoute === '/') {
