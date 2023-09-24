@@ -76,16 +76,28 @@ export const userRouter = createTRPCRouter({
   getById: protectedProcedure
     .input(z.string())
     .output(DetailedUserSchema)
-    .query(async ({input: id, ctx}) => {
-      const user = await ctx.prisma.user.findFirst({
+    .query(async ({input: id, ctx: {prisma, session: {user: {id: callerId}}}}) => {
+      const user = await prisma.user.findFirst({
         where: {id},
         include: {
           createdEvents: {
+            where: {
+              OR: [
+                {groupId: null},
+                {group: {members: {some: {id: callerId}}}},
+              ],
+            },
             include: {location: true, creator: true, group: {include: {creator: true}}},
             orderBy: {start: Prisma.SortOrder.desc},
           },
           participatedEvents: {
-            where: {creatorId: {not: id}},
+            where: {
+              creatorId: {not: id},
+              OR: [
+                {groupId: null},
+                {group: {members: {some: {id: callerId}}}},
+              ],
+            },
             include: {location: true, creator: true, group: {include: {creator: true}}},
             orderBy: {start: Prisma.SortOrder.desc},
           },
