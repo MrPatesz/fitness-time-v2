@@ -5,7 +5,7 @@ import {showNotification} from '@mantine/notifications';
 import {useSession} from 'next-auth/react';
 import {useTranslation} from 'next-i18next';
 import {serverSideTranslations} from 'next-i18next/serverSideTranslations';
-import {useMemo} from 'react';
+import {useEffect, useMemo} from 'react';
 import {Lock, LockOpen, Pencil} from 'tabler-icons-react';
 import i18nConfig from '../../../next-i18next.config.mjs';
 import {GroupChat} from '../../components/group/GroupChat';
@@ -33,6 +33,7 @@ export default function GroupDetailsPage() {
   const {data: session} = useSession();
   const {t} = useTranslation('common');
 
+  const queryContext = api.useContext();
   const groupQuery = api.group.getById.useQuery(groupId!, {
     enabled: isReady,
   });
@@ -64,6 +65,15 @@ export default function GroupDetailsPage() {
       });
     },
   });
+
+  useEffect(() => {
+    if (isReady) {
+      void queryContext.groupChat.getMessages.prefetch({groupId});
+      void queryContext.event.getFeed.prefetch({groupId});
+      void queryContext.rating.getAverageRatingForGroup.prefetch(groupId);
+      void queryContext.joinRequest.hasJoinRequest.prefetch({groupId});
+    }
+  }, [isReady, groupId, queryContext]);
 
   const isPrivate = Boolean(groupQuery.data?.isPrivate);
   const isCreator = groupQuery.data?.creatorId === session?.user.id;

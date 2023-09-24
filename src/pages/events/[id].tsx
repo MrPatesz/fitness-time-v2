@@ -57,6 +57,8 @@ export default function EventDetailsPage() {
   useEffect(() => {
     if (isReady) {
       void queryContext.comment.getAllByEventId.prefetch(eventId);
+      void queryContext.rating.getCallerRating.prefetch(eventId);
+      void queryContext.rating.getAverageRatingForEvent.prefetch(eventId);
     }
   }, [isReady, eventId, queryContext]);
 
