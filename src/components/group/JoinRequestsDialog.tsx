@@ -57,6 +57,7 @@ export const JoinRequestsDialog: FunctionComponent<{
                       variant="subtle"
                       color="green"
                       onClick={e => {
+                        e.stopPropagation();
                         e.preventDefault();
                         accept.mutate({
                           groupId,
@@ -72,6 +73,7 @@ export const JoinRequestsDialog: FunctionComponent<{
                       variant="subtle"
                       color="red"
                       onClick={e => {
+                        e.stopPropagation();
                         e.preventDefault();
                         accept.mutate({
                           groupId,
