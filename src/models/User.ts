@@ -30,8 +30,6 @@ export const ProfileSchema = BasicUserSchema.extend({
 
 export type BasicUserType = z.infer<typeof BasicUserSchema>;
 
-export type DetailedUserType = z.infer<typeof DetailedUserSchema>;
-
 export type UpdateProfileType = z.infer<typeof UpdateProfileSchema>;
 
 export type ProfileType = z.infer<typeof ProfileSchema>;

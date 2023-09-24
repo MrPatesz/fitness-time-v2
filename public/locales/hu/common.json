@@ -137,6 +137,24 @@
         "title": "Profil módosítva!",
         "message": "A profilod módosult."
       }
+    },
+    "joinRequest": {
+      "create": {
+        "title": "Sikeres jelentkezés!",
+        "message": "Létrehoztál egy csatlakozási kérelmet."
+      },
+      "delete": {
+        "title": "Jelentkezés eltávolítva!",
+        "message": "Eltávolítottad a csatlakozási belépési kérelmedet."
+      },
+      "accept": {
+        "title": "Felhasználó felvéve!",
+        "message": "A felhasználó már a csoport tagja."
+      },
+      "decline": {
+        "title": "Felhasználó elutasítva!",
+        "message": "A csatlakozási kérelem el lett utasítva."
+      }
     }
   },
   "modal": {
@@ -190,7 +208,9 @@
   "groupTable": {
     "noRecords": "Nem található csoport",
     "recordsPerPage": "Oldalankénti csoportok száma",
-    "createdAt": "Létrehozás dátuma"
+    "createdAt": "Létrehozás dátuma",
+    "colors": "Csoport színek",
+    "visibility": "Láthatóság"
   },
   "commentTable": {
     "noRecords": "Nem található komment",
@@ -218,7 +238,9 @@
   },
   "groupDetails": {
     "join": "Csatlakozás a csoporthoz",
-    "leave": "Kilépés a csoportból"
+    "leave": "Kilépés a csoportból",
+    "private": "Ez a csoport privát",
+    "public": "Ez a csoport publikus"
   },
   "eventDetails": {
     "participate": "Részvétel",
@@ -289,6 +311,13 @@
     "description": {
       "label": "Leírás",
       "placeholder": "Mutasd be a csoportot."
+    },
+    "colors": {
+      "error": "Csoport színeinek különböznie kell!"
+    },
+    "isPrivate": {
+      "label": "Privát",
+      "description": "A létrehozónak el kell fogadnia minden felhasználó belépési kérelmét amikor a csoport privát."
     }
   },
   "eventForm": {
@@ -354,5 +383,11 @@
   },
   "usersComponent": {
     "full": "Az esemény betelt!"
+  },
+  "joinRequestsDialog": {
+    "resourceName": "Csatlakozási kérelmek",
+    "accept": "Felvesz",
+    "decline": "Elutasít",
+    "review": "Csatlakozási kérelmek bírálása"
   }
 }

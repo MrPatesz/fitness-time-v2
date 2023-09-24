@@ -3,6 +3,7 @@ import {CreateEventType} from '../models/Event';
 import {CreateGroupType} from '../models/Group';
 import {CreateLocationType} from '../models/Location';
 import dayjs from './dayjs';
+import {ThemeColor} from './enums';
 
 export const defaultCreateComment: MutateCommentType = {
   text: '',
@@ -11,6 +12,9 @@ export const defaultCreateComment: MutateCommentType = {
 export const defaultCreateGroup: CreateGroupType = {
   name: '',
   description: '',
+  color1: ThemeColor.RED,
+  color2: ThemeColor.YELLOW,
+  isPrivate: false,
 };
 
 export const defaultCreateLocation: CreateLocationType = {

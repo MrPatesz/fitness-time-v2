@@ -9,5 +9,3 @@ export const PaginateGroupsSchema = PaginateBaseSchema.extend({
   }),
   createdOnly: z.boolean(),
 });
-
-export type PaginateGroupsType = z.infer<typeof PaginateGroupsSchema>;

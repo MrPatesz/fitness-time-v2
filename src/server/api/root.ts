@@ -5,6 +5,7 @@ import {createTRPCRouter} from './trpc';
 import {commentRouter} from './routers/comment';
 import {groupChatRouter} from './routers/groupChat';
 import {ratingRouter} from './routers/rating';
+import {joinRequestRouter} from './routers/joinRequest';
 
 /**
  * This is the primary router for your server.
@@ -18,6 +19,7 @@ export const appRouter = createTRPCRouter({
   user: userRouter,
   groupChat: groupChatRouter,
   rating: ratingRouter,
+  joinRequest: joinRequestRouter,
 });
 
 // export type definition of API

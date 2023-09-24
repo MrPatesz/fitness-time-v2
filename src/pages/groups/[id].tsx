@@ -1,4 +1,4 @@
-import {ActionIcon, Group, SimpleGrid, Stack, Text, useMantineTheme} from '@mantine/core';
+import {ActionIcon, Box, Group, SimpleGrid, Stack, Text, useMantineTheme} from '@mantine/core';
 import {useMediaQuery} from '@mantine/hooks';
 import {openModal} from '@mantine/modals';
 import {showNotification} from '@mantine/notifications';
@@ -6,7 +6,7 @@ import {useSession} from 'next-auth/react';
 import {useTranslation} from 'next-i18next';
 import {serverSideTranslations} from 'next-i18next/serverSideTranslations';
 import {useMemo} from 'react';
-import {Pencil} from 'tabler-icons-react';
+import {Lock, LockOpen, Pencil} from 'tabler-icons-react';
 import i18nConfig from '../../../next-i18next.config.mjs';
 import {GroupChat} from '../../components/group/GroupChat';
 import {GroupFeed} from '../../components/group/GroupFeed';
@@ -21,10 +21,13 @@ import {InvalidateEvent} from '../../utils/enums';
 import {UserBadge} from '../../components/user/UserBadge';
 import {usePathId} from '../../hooks/usePathId';
 import {CenteredLoader} from '../../components/CenteredLoader';
+import {usePusher} from '../../hooks/usePusher';
+import {JoinRequestsDialog} from '../../components/group/JoinRequestsDialog';
 
 export default function GroupDetailsPage() {
   const longDateFormatter = useLongDateFormatter();
   const theme = useMantineTheme();
+  const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
   const md = useMediaQuery(`(min-width: ${theme.breakpoints.md}px)`);
   const {id: groupId, isReady} = usePathId<number>();
   const {data: session} = useSession();
@@ -36,22 +39,39 @@ export default function GroupDetailsPage() {
   const groupRatingQuery = api.rating.getAverageRatingForGroup.useQuery(groupId!, {
     enabled: isReady,
   });
+  const hasJoinRequest = api.joinRequest.hasJoinRequest.useQuery({groupId: groupId!}, {
+    enabled: isReady && groupQuery.data?.isPrivate && groupQuery.data?.creatorId !== session?.user.id,
+  });
+  usePusher({
+    event: InvalidateEvent.JoinRequestHasJoinRequest,
+    id: session?.user.id,
+  }, () => void hasJoinRequest.refetch());
 
   const joinGroup = api.group.join.useMutation({
+    onSuccess: (_, {join}) => showNotification({
+      color: 'green',
+      title: t(join ? 'notification.group.join.title' : 'notification.group.leave.title'),
+      message: t(join ? 'notification.group.join.message' : 'notification.group.leave.message'),
+    }),
+  });
+  const mutateJoinRequest = api.joinRequest.mutate.useMutation({
     onSuccess: (_, {join}) => {
-      void groupQuery.refetch(); // TODO remove: buggy on leave + rejoin
+      void hasJoinRequest.refetch();
       showNotification({
         color: 'green',
-        title: t(join ? 'notification.group.join.title' : 'notification.group.leave.title'),
-        message: t(join ? 'notification.group.join.message' : 'notification.group.leave.message'),
+        title: t(join ? 'notification.joinRequest.create.title' : 'notification.joinRequest.delete.title'),
+        message: t(join ? 'notification.joinRequest.create.message' : 'notification.joinRequest.delete.message'),
       });
     },
   });
 
+  const isPrivate = Boolean(groupQuery.data?.isPrivate);
   const isCreator = groupQuery.data?.creatorId === session?.user.id;
-  const isMember = useMemo(() => {
-    return Boolean(groupQuery.data?.members.find(m => m.id === session?.user.id));
-  }, [groupQuery.data?.members, session?.user.id]);
+  const isMember = useMemo(() => Boolean(
+    groupQuery.data?.members.find(m => m.id === session?.user.id)
+  ), [groupQuery.data?.members, session?.user.id]);
+
+  const lockSize = 28;
 
   return !isReady ? (
     <CenteredLoader/>
@@ -67,6 +87,36 @@ export default function GroupDetailsPage() {
           <Group position="apart" align="start">
             <Stack>
               <Group>
+                {isPrivate ? (
+                  <Box
+                    title={t('groupDetails.private')}
+                    sx={{height: lockSize}}
+                  >
+                    {isCreator ? (
+                      <ActionIcon
+                        title={t('joinRequestsDialog.review')}
+                        size={lockSize}
+                        variant="filled"
+                        color={theme.primaryColor}
+                        onClick={() => openModal({
+                          title: t('joinRequestsDialog.resourceName'),
+                          children: <JoinRequestsDialog groupId={groupId}/>,
+                        })}
+                      >
+                        <Lock size={lockSize}/>
+                      </ActionIcon>
+                    ) : (
+                      <Lock size={lockSize}/>
+                    )}
+                  </Box>
+                ) : (
+                  <Box
+                    title={t('groupDetails.public')}
+                    sx={{height: lockSize}}
+                  >
+                    <LockOpen size={lockSize}/>
+                  </Box>
+                )}
                 <Text weight="bold" size="xl">
                   {groupQuery.data.name}
                 </Text>
@@ -87,7 +137,15 @@ export default function GroupDetailsPage() {
               <UsersComponent
                 users={groupQuery.data.members}
                 hideJoin={isCreator}
-                onJoin={(join) => joinGroup.mutate({id: groupId, join})}
+                overrideJoined={isMember ? undefined : hasJoinRequest.data}
+                loading={joinGroup.isLoading || mutateJoinRequest.isLoading}
+                onJoin={(join) => {
+                  if (isPrivate && !isMember) {
+                    mutateJoinRequest.mutate({groupId, join});
+                  } else {
+                    joinGroup.mutate({id: groupId, join});
+                  }
+                }}
               />
               {isCreator && (
                 <ActionIcon
@@ -98,6 +156,8 @@ export default function GroupDetailsPage() {
                   onClick={() => openModal({
                     title: t('modal.group.edit'),
                     children: <EditGroupForm groupId={groupId}/>,
+                    size: 'lg',
+                    fullScreen: !xs,
                   })}
                 >
                   <Pencil/>

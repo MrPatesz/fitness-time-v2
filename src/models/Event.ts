@@ -58,6 +58,4 @@ export type CreateEventType = z.infer<typeof MutateEventSchema>;
 
 export type BasicEventType = z.infer<typeof BasicEventSchema>;
 
-export type DetailedEventType = z.infer<typeof DetailedEventSchema>;
-
 export type EventWithLocationType = z.infer<typeof EventWithLocationSchema>;

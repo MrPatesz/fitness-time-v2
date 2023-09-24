@@ -96,9 +96,9 @@ export const groupRouter = createTRPCRouter({
         end: z.date()
       }).array()
     )
-    .query(async ({input: {groupId, from, until}, ctx: {prisma}}) => {
+    .query(async ({input: {groupId, from, until}, ctx: {prisma, session: {user: {id: callerId}}}}) => {
       const group = await prisma.group.findUnique({
-        where: {id: groupId},
+        where: {id: groupId, members: {some: {id: callerId}}},
         include: {
           members: {
             include: {
@@ -141,16 +141,36 @@ export const groupRouter = createTRPCRouter({
   update: protectedProcedure
     .input(z.object({group: MutateGroupSchema, id: IdSchema}))
     .output(z.void())
-    .mutation(async ({input, ctx: {session: {user: {id: callerId}}, prisma, pusher}}) => {
-      await prisma.group.update({
-        where: {id: input.id, creatorId: callerId},
-        data: {
-          ...input.group,
-          creator: {connect: {id: callerId}},
-        },
-      });
+    .mutation(async ({input: {group, id: groupId}, ctx: {session: {user: {id: callerId}}, prisma, pusher}}) => {
+      if (group.isPrivate) {
+        await prisma.group.update({
+          where: {id: groupId, creatorId: callerId},
+          data: {
+            ...group,
+            creator: {connect: {id: callerId}},
+          },
+        });
+      } else {
+        // TODO $transaction, at other procedures too!
+        const joinRequests = await prisma.joinRequest.findMany({
+          where: {groupId, group: {creatorId: callerId}},
+        });
 
-      await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.GroupGetById, input.id);
+        await prisma.group.update({
+          where: {id: groupId, creatorId: callerId},
+          data: {
+            ...group,
+            creator: {connect: {id: callerId}},
+            members: {connect: joinRequests.map(({userId}) => ({id: userId}))},
+          },
+        });
+
+        await prisma.joinRequest.deleteMany({
+          where: {groupId, group: {creatorId: callerId}},
+        });
+      }
+
+      await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.GroupGetById, groupId);
       await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.GroupGetPaginatedGroups, null);
       await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetById, null);
       await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.EventGetFeed, null);
@@ -177,7 +197,7 @@ export const groupRouter = createTRPCRouter({
     .output(z.void())
     .mutation(async ({input: {id: groupId, join}, ctx: {session: {user: {id: callerId}}, prisma, pusher}}) => {
       await prisma.group.update({
-        where: {id: groupId},
+        where: join ? {id: groupId, isPrivate: false} : {id: groupId},
         data: {
           members: join ? {
             connect: {id: callerId},

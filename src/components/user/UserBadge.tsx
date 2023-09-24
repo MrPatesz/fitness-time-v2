@@ -20,7 +20,7 @@ export const UserBadge: FunctionComponent<{
   const userRatingQuery = api.rating.getAverageRatingForUser.useQuery(user.id);
   usePusher({
     event: InvalidateEvent.RatingGetAverageRatingForUser,
-    id: user.id
+    id: user.id,
   }, () => void userRatingQuery.refetch());
 
   const getBadge = (onClicks?: {

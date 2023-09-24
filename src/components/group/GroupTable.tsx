@@ -1,12 +1,23 @@
-import {ActionIcon, Box, Flex, Group, MantineNumberSize, Stack, Text, TextInput, useMantineTheme} from '@mantine/core';
-import {useDebouncedValue} from '@mantine/hooks';
+import {
+  ActionIcon,
+  Box,
+  ColorSwatch,
+  Flex,
+  Group,
+  MantineNumberSize,
+  Stack,
+  Text,
+  TextInput,
+  useMantineTheme
+} from '@mantine/core';
+import {useDebouncedValue, useMediaQuery} from '@mantine/hooks';
 import {openConfirmModal, openModal} from '@mantine/modals';
 import {showNotification} from '@mantine/notifications';
 import {IconSearch} from '@tabler/icons';
 import {DataTable, DataTableSortStatus} from 'mantine-datatable';
 import {useTranslation} from 'next-i18next';
 import {FunctionComponent, useEffect, useState} from 'react';
-import {Pencil, Plus, Trash} from 'tabler-icons-react';
+import {Lock, LockOpen, Pencil, Plus, Trash} from 'tabler-icons-react';
 import {BasicGroupType} from '../../models/Group';
 import {api} from '../../utils/api';
 import {GroupTableDisplayPlace, InvalidateEvent, SortDirection, SortGroupByProperty} from '../../utils/enums';
@@ -27,6 +38,7 @@ const GroupTable: FunctionComponent<{
   const [debouncedSearchQuery] = useDebouncedValue(searchQuery, 500);
 
   const theme = useMantineTheme();
+  const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
   const {locale, pushRoute} = useMyRouter();
   const {t} = useTranslation('common');
   const longDateFormatter = useLongDateFormatter();
@@ -89,6 +101,8 @@ const GroupTable: FunctionComponent<{
           onClick={() => openModal({
             title: t('modal.group.create'),
             children: <CreateGroupForm/>,
+            fullScreen: !xs,
+            size: 'lg',
           })}
         >
           <Plus/>
@@ -148,6 +162,21 @@ const GroupTable: FunctionComponent<{
                 render: ({createdAt}) => longDateFormatter.format(createdAt),
               },
               {
+                accessor: 'isPrivate',
+                title: t('groupTable.visibility'),
+                render: ({isPrivate}) => isPrivate ? <Lock/> : <LockOpen/>,
+              },
+              {
+                accessor: 'colors',
+                title: t('groupTable.colors'),
+                render: ({color1, color2}) => (
+                  <Group spacing="xs">
+                    <ColorSwatch color={theme.fn.themeColor(color1)}/>
+                    <ColorSwatch color={theme.fn.themeColor(color2)}/>
+                  </Group>
+                ),
+              },
+              {
                 accessor: 'creatorName',
                 title: t('myEvents.creator'),
                 hidden: groupTableDisplayPlace === GroupTableDisplayPlace.CONTROL_PANEL,
@@ -169,6 +198,8 @@ const GroupTable: FunctionComponent<{
                         openModal({
                           title: t('modal.group.edit'),
                           children: <EditGroupForm groupId={group.id}/>,
+                          fullScreen: !xs,
+                          size: 'lg',
                         });
                       }}
                       sx={theme => ({

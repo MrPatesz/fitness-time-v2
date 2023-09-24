@@ -52,24 +52,25 @@ model VerificationToken {
 }
 
 model User {
-  id                 String    @id @default(cuid())
-  name               String    @db.VarChar(64)
-  email              String    @unique @db.VarChar(128)
+  id                 String        @id @default(cuid())
+  name               String        @db.VarChar(64)
+  email              String        @unique @db.VarChar(128)
   emailVerified      DateTime?
-  image              String    @db.VarChar(256)
+  image              String        @db.VarChar(256)
   accounts           Account[]
   sessions           Session[]
-  introduction       String    @default("") @db.VarChar(1024)
-  themeColor         String    @default("violet") // TODO enum
+  introduction       String        @default("") @db.VarChar(1024)
+  themeColor         Color         @default(violet)
   locationId         Int?
-  location           Location? @relation(fields: [locationId], references: [id], onDelete: Restrict)
-  createdEvents      Event[]   @relation(name: "createdEvents")
-  participatedEvents Event[]   @relation(name: "participatedEvents")
+  location           Location?     @relation(fields: [locationId], references: [id], onDelete: Restrict)
+  createdEvents      Event[]       @relation(name: "createdEvents")
+  participatedEvents Event[]       @relation(name: "participatedEvents")
   comments           Comment[]
   messages           Message[]
   ratings            Rating[]
-  createdGroups      Group[]   @relation(name: "createdGroups")
-  joinedGroups       Group[]   @relation(name: "joinedGroups")
+  createdGroups      Group[]       @relation(name: "createdGroups")
+  joinedGroups       Group[]       @relation(name: "joinedGroups")
+  joinRequests       JoinRequest[]
 }
 
 model Event {
@@ -113,15 +114,19 @@ model Comment {
 }
 
 model Group {
-  id          Int       @id @default(autoincrement())
-  name        String    @unique @db.VarChar(64)
-  description String    @db.VarChar(1024)
-  createdAt   DateTime  @default(now())
-  creatorId   String
-  creator     User      @relation(name: "createdGroups", fields: [creatorId], references: [id], onDelete: Cascade)
-  members     User[]    @relation(name: "joinedGroups")
-  messages    Message[]
-  events      Event[]
+  id           Int           @id @default(autoincrement())
+  name         String        @unique @db.VarChar(64)
+  description  String        @db.VarChar(1024)
+  isPrivate    Boolean       @default(false) // TODO remove default after prisma db push
+  color1       Color         @default(red) // TODO remove default after prisma db push
+  color2       Color         @default(yellow) // TODO remove default after prisma db push
+  createdAt    DateTime      @default(now())
+  creatorId    String
+  creator      User          @relation(name: "createdGroups", fields: [creatorId], references: [id], onDelete: Cascade)
+  members      User[]        @relation(name: "joinedGroups")
+  messages     Message[]
+  events       Event[]
+  joinRequests JoinRequest[]
 }
 
 model Message {
@@ -141,4 +146,29 @@ model Rating {
   event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
   userId  String
   user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model JoinRequest {
+  createdAt DateTime @default(now())
+  groupId   Int
+  group     Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([groupId, userId])
+}
+
+enum Color {
+  red
+  pink
+  grape
+  violet
+  indigo
+  blue
+  cyan
+  teal
+  green
+  lime
+  yellow
+  orange
 }

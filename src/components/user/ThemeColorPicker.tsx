@@ -33,7 +33,6 @@ export const ThemeColorPicker: FunctionComponent<{
 
   return (
     <Select
-      withAsterisk
       label={label}
       value={value}
       onChange={onChange}

@@ -7,5 +7,3 @@ export const PaginateUsersSchema = PaginateBaseSchema.extend({
     direction: z.nativeEnum(SortDirection),
   }),
 });
-
-export type PaginateUsersType = z.infer<typeof PaginateUsersSchema>;

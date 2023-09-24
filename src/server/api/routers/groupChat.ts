@@ -4,6 +4,7 @@ import {createTRPCRouter, protectedProcedure} from '../trpc';
 import {Prisma} from '.prisma/client';
 import {IdSchema} from '../../../models/Utils';
 import {InvalidateEvent, PusherChannel} from '../../../utils/enums';
+import {TRPCError} from '@trpc/server';
 
 export const groupChatRouter = createTRPCRouter({
   getMessages: protectedProcedure
@@ -15,13 +16,12 @@ export const groupChatRouter = createTRPCRouter({
       messages: BasicMessageSchema.array(),
       nextCursor: z.date().nullish(),
     }))
-    .query(async ({input: {cursor, groupId}, ctx}) => {
+    .query(async ({input: {cursor, groupId}, ctx: {prisma, session: {user: {id: callerId}}}}) => {
       const limit = 10;
 
-      // TODO get these in reverse, so FE doesn't have to reverse them
-      // TODO only group members should be able to get this data
-      const messages = await ctx.prisma.message.findMany({
-        where: {groupId},
+      // TODO get these in reverse, so FE doesn't have to reverse them?
+      const messages = await prisma.message.findMany({
+        where: {groupId, group: {members: {some: {id: callerId}}}},
         take: -(limit + 1),
         cursor: cursor ? {postedAt: cursor} : undefined,
         orderBy: {postedAt: Prisma.SortOrder.asc},
@@ -48,6 +48,20 @@ export const groupChatRouter = createTRPCRouter({
         ctx: {session: {user: {id: callerId}}, prisma, pusher}
       }
     ) => {
+      const userInGroup = await prisma.group.findUnique({
+        where: {
+          id: groupId,
+          members: {some: {id: callerId}},
+        },
+      });
+
+      if (!userInGroup) {
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: `User with id: ${callerId} is not in group with id: ${groupId}!`
+        });
+      }
+
       await prisma.message.create({
         data: {
           ...createMessage,

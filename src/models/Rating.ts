@@ -18,8 +18,6 @@ export const AverageRatingSchema = z.object({
   averageStars: StarsSchema.nullable(),
 });
 
-export type CreateRatingType = z.infer<typeof MutateRatingSchema>;
-
 export type BasicRatingType = z.infer<typeof BasicRatingSchema>;
 
 export type AverageRatingType = z.infer<typeof AverageRatingSchema>;

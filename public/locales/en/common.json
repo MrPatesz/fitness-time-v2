@@ -137,6 +137,24 @@
         "title": "Updated profile!",
         "message": "Your profile has been modified."
       }
+    },
+    "joinRequest": {
+      "create": {
+        "title": "Created join request!",
+        "message": "Successfully created join request."
+      },
+      "delete": {
+        "title": "Deleted join request!",
+        "message": "Successfully deleted join request."
+      },
+      "accept": {
+        "title": "User accepted!",
+        "message": "User is now a group member."
+      },
+      "decline": {
+        "title": "User declined!",
+        "message": "Join request was declined."
+      }
     }
   },
   "modal": {
@@ -190,7 +208,9 @@
   "groupTable": {
     "noRecords": "No groups found",
     "recordsPerPage": "Groups per page",
-    "createdAt": "Creation Date"
+    "createdAt": "Creation Date",
+    "colors": "Group Colors",
+    "visibility": "Visibility"
   },
   "commentTable": {
     "noRecords": "No comments found",
@@ -218,7 +238,9 @@
   },
   "groupDetails": {
     "join": "Join Group",
-    "leave": "Leave Group"
+    "leave": "Leave Group",
+    "private": "This group is private",
+    "public": "This group is public"
   },
   "eventDetails": {
     "participate": "Participate",
@@ -289,6 +311,13 @@
     "description": {
       "label": "Description",
       "placeholder": "Tell us about this group."
+    },
+    "colors": {
+      "error": "Group colors must be distinct!"
+    },
+    "isPrivate": {
+      "label": "Private",
+      "description": "Creator must accept each user's join request when the group is private."
     }
   },
   "eventForm": {
@@ -354,5 +383,11 @@
   },
   "usersComponent": {
     "full": "Event is full!"
+  },
+  "joinRequestsDialog": {
+    "resourceName": "Join Requests",
+    "accept": "Accept",
+    "decline": "Decline",
+    "review": "Review Join Requests"
   }
 }

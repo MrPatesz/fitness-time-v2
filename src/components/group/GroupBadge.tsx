@@ -1,4 +1,4 @@
-import {FunctionComponent} from 'react';
+import {FunctionComponent, MouseEventHandler} from 'react';
 import {Badge, Group, Text} from '@mantine/core';
 import {IconStarFilled} from '@tabler/icons-react';
 import {useTranslation} from 'next-i18next';
@@ -22,63 +22,51 @@ export const GroupBadge: FunctionComponent<{
   });
   usePusher({
     event: InvalidateEvent.RatingGetAverageRatingForGroup,
-    id: group.id
+    id: group.id,
   }, () => void groupRatingQuery.refetch());
 
-  const href = `/groups/${group.id}`;
-
-  const rightSection = !!groupRatingQuery.data?.count && (
-    <Group spacing={2}>
-      <Text>{groupRatingQuery.data.averageStars?.toFixed(1)}</Text>
-      <IconStarFilled size={10}/>
-    </Group>
+  const getBadge = (onClicks?: {
+    onClick: MouseEventHandler<HTMLDivElement>;
+    onAuxClick: MouseEventHandler<HTMLDivElement>;
+  }) => (
+    <Badge
+      onClick={onClicks?.onClick}
+      onAuxClick={onClicks?.onAuxClick}
+      title={t('myEvents.group')}
+      variant="gradient"
+      gradient={{from: group.color1, to: group.color2}}
+      sx={{display: 'flex'}}
+      rightSection={!!groupRatingQuery.data?.count && (
+        <Group spacing={2}>
+          <Text>{groupRatingQuery.data.averageStars?.toFixed(1)}</Text>
+          <IconStarFilled size={10}/>
+        </Group>
+      )}
+    >
+      {group.name}
+    </Badge>
   );
+
+  const href = `/groups/${group.id}`;
 
   return useLink ? (
     <Link
       href={href}
       locale={locale}
       passHref
-      title={t('myEvents.group')}
     >
-      <Badge
-        color={group.creator.themeColor}
-        variant="outline"
-        sx={theme => ({
-          display: 'flex',
-          ':hover': {
-            backgroundColor: theme.fn.themeColor(group.creator.themeColor),
-            color: theme.white,
-          },
-        })}
-        rightSection={rightSection}
-      >
-        {group.name}
-      </Badge>
+      {getBadge()}
     </Link>
   ) : (
-    <Badge
-      color={group.creator.themeColor}
-      variant="outline"
-      title={t('myEvents.group')}
-      onClick={(e) => {
+    getBadge({
+      onClick: e => {
         e.preventDefault();
         void pushRoute(href, undefined, {locale});
-      }}
-      onAuxClick={(e) => {
+      },
+      onAuxClick: e => {
         e.preventDefault();
         window.open(`${localePrefix}${href}`);
-      }}
-      sx={theme => ({
-        cursor: 'pointer',
-        ':hover': {
-          backgroundColor: theme.fn.themeColor(group.creator.themeColor),
-          color: theme.white,
-        },
-      })}
-      rightSection={rightSection}
-    >
-      {group.name}
-    </Badge>
+      },
+    })
   );
 };

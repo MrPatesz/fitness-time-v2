@@ -13,6 +13,26 @@ export enum ThemeColor {
   ORANGE = 'orange',
 }
 
+/* TODO fix: joinRequestRouter.getAllByGroupId: JoinRequestSchema.array().parse()
+export const ThemeColor = {
+  RED: 'red',
+  PINK: 'pink',
+  GRAPE: 'grape',
+  VIOLET: 'violet',
+  INDIGO: 'indigo',
+  BLUE: 'blue',
+  CYAN: 'cyan',
+  TEAL: 'teal',
+  GREEN: 'green',
+  LIME: 'lime',
+  YELLOW: 'yellow',
+  ORANGE: 'orange',
+} as const;
+
+type ObjectValues<T> = T[keyof T];
+export type ThemeColorType = ObjectValues<typeof ThemeColor>;
+*/
+
 export enum EventStatus {
   PLANNED = 'PLANNED',
   ARCHIVE = 'ARCHIVE',
@@ -79,6 +99,8 @@ export enum InvalidateEvent {
   GroupGetById = 'group.getById',
   GroupGetPaginatedGroups = 'group.getPaginatedGroups',
   GroupChatGetMessages = 'groupChat.getMessages',
+  JoinRequestGetAllByGroupId = 'joinRequest.getAllByGroupId',
+  JoinRequestHasJoinRequest = 'joinRequest.hasJoinRequest',
   RatingGetAverageRatingForEvent = 'rating.getAverageRatingForEvent',
   RatingGetAverageRatingForUser = 'rating.getAverageRatingForUser',
   RatingGetAverageRatingForGroup = 'rating.getAverageRatingForGroup',

@@ -17,7 +17,9 @@ export const UsersComponent: FunctionComponent<{
   hideJoin: boolean;
   onJoin: (join: boolean) => void;
   eventLimit?: number | null;
-}> = ({users, hideJoin, onJoin, eventLimit}) => {
+  overrideJoined?: boolean;
+  loading?: boolean;
+}> = ({users, hideJoin, onJoin, eventLimit, overrideJoined, loading}) => {
   const theme = useMantineTheme();
   const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
   const isMobile = useMediaQuery('(max-width: 375px)');
@@ -28,11 +30,13 @@ export const UsersComponent: FunctionComponent<{
 
   const displayLimit = 5;
   const userColor = theme.fn.themeColor(theme.primaryColor);
-  const isJoined = Boolean(users.find(u => u.id === session?.user.id));
+  const isJoined = overrideJoined ?? Boolean(users.find(u => u.id === session?.user.id));
   const disableJoin = Boolean(!isJoined && eventLimit && users.length >= eventLimit);
 
   // TODO separate tooltips and modalTitle for event and group
   //  t(isParticipated ? 'eventDetails.removeParticipation' : 'eventDetails.participate')
+
+  // TODO refactor: MembersComponent and ParticipantsComponent
 
   return (
     <SimpleGrid
@@ -101,7 +105,7 @@ export const UsersComponent: FunctionComponent<{
             title={disableJoin ? t('usersComponent.full') : undefined}
           >
             <ActionIcon
-              title={t(isJoined ? 'groupDetails.leave' : 'groupDetails.join')}
+              title={t(isJoined ? 'groupDetails.leave' : 'groupDetails.join')} // TODO different tooltips to private/public groups
               radius="xl"
               variant="filled"
               color={userColor}
@@ -109,6 +113,7 @@ export const UsersComponent: FunctionComponent<{
                 event.stopPropagation();
                 onJoin(!isJoined);
               }}
+              loading={loading}
               disabled={disableJoin}
             >
               {isJoined ? <Minus/> : <Plus/>}

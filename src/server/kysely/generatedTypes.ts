@@ -4,6 +4,19 @@ export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
   ? ColumnType<S, I | undefined, U>
   : ColumnType<T, T | undefined, T>;
 export type Timestamp = ColumnType<Date, Date | string, Date | string>;
+export type Color =
+  'red'
+  | 'pink'
+  | 'grape'
+  | 'violet'
+  | 'indigo'
+  | 'blue'
+  | 'cyan'
+  | 'teal'
+  | 'green'
+  | 'lime'
+  | 'yellow'
+  | 'orange';
 export type Account = {
   id: string;
   userId: string;
@@ -43,8 +56,16 @@ export type Group = {
   id: Generated<number>;
   name: string;
   description: string;
+  isPrivate: Generated<boolean>;
+  color1: Generated<Color>;
+  color2: Generated<Color>;
   createdAt: Generated<Timestamp>;
   creatorId: string;
+};
+export type JoinRequest = {
+  createdAt: Generated<Timestamp>;
+  groupId: number;
+  userId: string;
 };
 export type Location = {
   id: Generated<number>;
@@ -78,7 +99,7 @@ export type User = {
   emailVerified: Timestamp | null;
   image: string;
   introduction: Generated<string>;
-  themeColor: Generated<string>;
+  themeColor: Generated<Color>;
   locationId: number | null;
 };
 export type VerificationToken = {
@@ -91,6 +112,7 @@ export type DB = {
   Comment: Comment;
   Event: Event;
   Group: Group;
+  JoinRequest: JoinRequest;
   Location: Location;
   Message: Message;
   Rating: Rating;
