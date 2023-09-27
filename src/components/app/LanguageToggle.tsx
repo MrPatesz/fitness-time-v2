@@ -2,9 +2,11 @@ import {ActionIcon, Text, useMantineColorScheme} from '@mantine/core';
 import {FunctionComponent} from 'react';
 import {useTranslation} from 'next-i18next';
 import {useMyRouter} from '../../hooks/useMyRouter';
+import {useMediaQuery} from '@mantine/hooks';
 
 export const LanguageToggle: FunctionComponent = () => {
   const {colorScheme} = useMantineColorScheme();
+  const isMobile = useMediaQuery('(max-width: 375px)');
   const {route, pushRoute, isDefaultLocale} = useMyRouter();
   const {t} = useTranslation('common');
 
@@ -17,7 +19,7 @@ export const LanguageToggle: FunctionComponent = () => {
       variant={dark ? 'outline' : 'default'}
       onClick={() => void pushRoute(route, undefined, {locale: isDefaultLocale ? 'hu' : 'en'})}
     >
-      <Text>
+      <Text pb={isMobile ? undefined : 4}>
         {isDefaultLocale ? '🇭🇺' : '🇺🇸'}
       </Text>
     </ActionIcon>

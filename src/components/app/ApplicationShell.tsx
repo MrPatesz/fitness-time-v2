@@ -35,6 +35,7 @@ import {CenteredLoader} from '../CenteredLoader';
 import {useAuthenticated} from '../../hooks/useAuthenticated';
 import {useMyRouter} from '../../hooks/useMyRouter';
 import {useInitializePusher} from '../../hooks/usePusher';
+import {IconShare3} from '@tabler/icons-react';
 
 const [
   feedRoute,
@@ -133,6 +134,23 @@ export const ApplicationShell: FunctionComponent<{
                 )}
               </Group>
               <Group spacing="xs">
+                <ActionIcon
+                  title={t('application.share')}
+                  size="lg"
+                  variant={theme.colorScheme === 'dark' ? 'outline' : 'default'}
+                  onClick={() => {
+                    const shareData: ShareData = {
+                      url: window.location.href,
+                      title: t('application.name'),
+                      text: t('application.shareDescription', {username: user?.name ?? t('application.someone')}),
+                    };
+                    if (navigator.canShare(shareData)) {
+                      void navigator.share(shareData);
+                    }
+                  }}
+                >
+                  <IconShare3/>
+                </ActionIcon>
                 <LanguageToggle/>
                 <ColorSchemeToggle/>
                 {authenticated && (
