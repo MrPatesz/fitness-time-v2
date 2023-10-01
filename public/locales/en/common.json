@@ -298,7 +298,7 @@
   "locationPicker": {
     "error": "An error occurred while loading places!",
     "remove": "Remove Location",
-    "residence": "Residence",
+    "residence": "Location",
     "place": "Place"
   },
   "intervalPicker": {

@@ -192,7 +192,7 @@
   },
   "common": {
     "name": "Név",
-    "location": "Helyzet",
+    "location": "Helyszín",
     "price": "Ár",
     "date": "Dátum",
     "orderBy": "Rendezés",
@@ -297,7 +297,7 @@
   },
   "locationPicker": {
     "error": "Helyek betöltése közben hiba történt!",
-    "remove": "Helyzet eltávolítása",
+    "remove": "Tartózkodás eltávolítása",
     "residence": "Tartózkodás",
     "place": "Hely"
   },
