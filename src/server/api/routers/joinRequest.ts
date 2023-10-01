@@ -34,26 +34,28 @@ export const joinRequestRouter = createTRPCRouter({
     .input(AcceptJoinRequestSchema)
     .output(z.void())
     .mutation(async ({input: {groupId, userId, accept}, ctx: {session: {user: {id: callerId}}, prisma, pusher}}) => {
-      if (accept) {
-        await prisma.group.update({
+      await prisma.$transaction([
+        prisma.group.update({
           where: {id: groupId, creatorId: callerId},
           data: {
-            members: {
+            members: accept ? {
               connect: {id: userId},
+            } : {
+              disconnect: {id: userId},
             },
           },
-        });
+        }),
+        prisma.joinRequest.delete({
+          where: {
+            groupId_userId: {groupId, userId},
+            group: {creatorId: callerId},
+          },
+        }),
+      ]);
 
+      if (accept) {
         await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.GroupGetById, groupId);
       }
-
-      await prisma.joinRequest.delete({
-        where: {
-          groupId_userId: {groupId, userId},
-          group: {creatorId: callerId},
-        },
-      });
-
       await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.JoinRequestHasJoinRequest, userId);
     }),
   mutate: protectedProcedure

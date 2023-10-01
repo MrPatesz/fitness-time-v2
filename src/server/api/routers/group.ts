@@ -151,23 +151,23 @@ export const groupRouter = createTRPCRouter({
           },
         });
       } else {
-        // TODO $transaction, at other procedures too!
         const joinRequests = await prisma.joinRequest.findMany({
           where: {groupId, group: {creatorId: callerId}},
         });
 
-        await prisma.group.update({
-          where: {id: groupId, creatorId: callerId},
-          data: {
-            ...group,
-            creator: {connect: {id: callerId}},
-            members: {connect: joinRequests.map(({userId}) => ({id: userId}))},
-          },
-        });
-
-        await prisma.joinRequest.deleteMany({
-          where: {groupId, group: {creatorId: callerId}},
-        });
+        await prisma.$transaction([
+          prisma.group.update({
+            where: {id: groupId, creatorId: callerId},
+            data: {
+              ...group,
+              creator: {connect: {id: callerId}},
+              members: {connect: joinRequests.map(({userId}) => ({id: userId}))},
+            },
+          }),
+          prisma.joinRequest.deleteMany({
+            where: {groupId, group: {creatorId: callerId}},
+          }),
+        ]);
       }
 
       await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.GroupGetById, groupId);

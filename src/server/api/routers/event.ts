@@ -100,7 +100,7 @@ export const eventRouter = createTRPCRouter({
 
       const where = {
         creatorId: createdOnly ? callerId : undefined,
-        OR: createdOnly ? undefined : [
+        OR: [
           {groupId: null},
           {group: {members: {some: {id: callerId}}}},
         ],
@@ -275,7 +275,13 @@ export const eventRouter = createTRPCRouter({
     .output(DetailedEventSchema)
     .query(async ({input: id, ctx: {session: {user: {id: callerId}}, prisma}}) => {
       const event = await prisma.event.findUnique({
-        where: {id},
+        where: {
+          id,
+          OR: [
+            {groupId: null},
+            {group: {members: {some: {id: callerId}}}},
+          ],
+        },
         include: {
           creator: true,
           participants: true,
@@ -351,7 +357,14 @@ export const eventRouter = createTRPCRouter({
     .input(z.object({event: MutateEventSchema, id: IdSchema}))
     .output(z.void())
     .mutation(async ({input, ctx: {session: {user: {id: callerId}}, prisma, pusher}}) => {
-      // TODO already x participants, should not be able to set limit to less than x
+      const participantsCount = await prisma.user.count({
+        where: {participatedEvents: {some: {id: input.id}}},
+      });
+
+      if (input.event.limit && participantsCount > input.event.limit) {
+        throw new TRPCError({code: 'BAD_REQUEST', message: 'Event has more participants than new limit!'});
+      }
+
       await prisma.event.update({
         where: {
           id: input.id,
