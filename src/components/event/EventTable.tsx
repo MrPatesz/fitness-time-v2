@@ -29,13 +29,14 @@ import {useMyRouter} from '../../hooks/useMyRouter';
 
 const DATE_TIME = 'dateTime';
 export const PAGE_SIZES: number[] = [10, 25, 50];
+export const DEFAULT_PAGE_SIZE: number = PAGE_SIZES.at(0) as number;
 
 const EventTable: FunctionComponent<{
   eventTableDisplayPlace: EventTableDisplayPlace;
 }> = ({eventTableDisplayPlace}) => {
   const [archive, setArchive] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number>(PAGE_SIZES.at(0) as number);
+  const [pageSize, setPageSize] = useState<number>(DEFAULT_PAGE_SIZE);
   const [sortBy, setSortBy] = useState<DataTableSortStatus>({columnAccessor: DATE_TIME, direction: 'desc'});
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [debouncedSearchQuery] = useDebouncedValue(searchQuery, 500);

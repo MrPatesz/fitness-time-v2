@@ -22,7 +22,7 @@ import {BasicGroupType} from '../../models/Group';
 import {api} from '../../utils/api';
 import {GroupTableDisplayPlace, InvalidateEvent, SortDirection, SortGroupByProperty} from '../../utils/enums';
 import {useLongDateFormatter} from '../../utils/formatters';
-import {PAGE_SIZES} from '../event/EventTable';
+import {DEFAULT_PAGE_SIZE, PAGE_SIZES} from '../event/EventTable';
 import {QueryComponent} from '../QueryComponent';
 import {CreateGroupForm} from './CreateGroupForm';
 import {EditGroupForm} from './EditGroupForm';
@@ -32,7 +32,7 @@ const GroupTable: FunctionComponent<{
   groupTableDisplayPlace: GroupTableDisplayPlace;
 }> = ({groupTableDisplayPlace}) => {
   const [page, setPage] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number>(PAGE_SIZES.at(0) as number);
+  const [pageSize, setPageSize] = useState<number>(DEFAULT_PAGE_SIZE);
   const [sortBy, setSortBy] = useState<DataTableSortStatus>({columnAccessor: 'createdAt', direction: 'desc'});
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [debouncedSearchQuery] = useDebouncedValue(searchQuery, 500);

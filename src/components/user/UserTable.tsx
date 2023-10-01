@@ -6,7 +6,7 @@ import {useTranslation} from 'next-i18next';
 import {FunctionComponent, useEffect, useState} from 'react';
 import {api} from '../../utils/api';
 import {InvalidateEvent, SortDirection} from '../../utils/enums';
-import {PAGE_SIZES} from '../event/EventTable';
+import {DEFAULT_PAGE_SIZE, PAGE_SIZES} from '../event/EventTable';
 import {QueryComponent} from '../QueryComponent';
 import {RichTextDisplay} from '../rich-text/RichTextDisplay';
 import UserImage from './UserImage';
@@ -14,7 +14,7 @@ import {useMyRouter} from '../../hooks/useMyRouter';
 
 const UserTable: FunctionComponent = () => {
   const [page, setPage] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number>(PAGE_SIZES.at(0) as number);
+  const [pageSize, setPageSize] = useState<number>(DEFAULT_PAGE_SIZE);
   const [sortBy, setSortBy] = useState<DataTableSortStatus>({columnAccessor: 'name', direction: 'asc'});
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [debouncedSearchQuery] = useDebouncedValue(searchQuery, 500);

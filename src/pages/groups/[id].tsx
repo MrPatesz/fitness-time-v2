@@ -68,8 +68,8 @@ export default function GroupDetailsPage() {
 
   useEffect(() => {
     if (isReady) {
-      void queryContext.groupChat.getMessages.prefetch({groupId});
-      void queryContext.event.getFeed.prefetch({groupId});
+      void queryContext.groupChat.getMessages.prefetchInfinite({groupId});
+      void queryContext.event.getFeed.prefetchInfinite({groupId});
       void queryContext.rating.getAverageRatingForGroup.prefetch(groupId);
       void queryContext.joinRequest.hasJoinRequest.prefetch({groupId});
     }

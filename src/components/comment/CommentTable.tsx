@@ -12,7 +12,7 @@ import {DetailedCommentType} from '../../models/Comment';
 import {api} from '../../utils/api';
 import {SortCommentByProperty, SortDirection} from '../../utils/enums';
 import {useLongDateFormatter} from '../../utils/formatters';
-import {PAGE_SIZES} from '../event/EventTable';
+import {DEFAULT_PAGE_SIZE, PAGE_SIZES} from '../event/EventTable';
 import {QueryComponent} from '../QueryComponent';
 import {RichTextDisplay} from '../rich-text/RichTextDisplay';
 import {CommentForm} from './CommentForm';
@@ -21,7 +21,7 @@ import {useMyRouter} from '../../hooks/useMyRouter';
 const CommentTable: FunctionComponent = () => {
   const [page, setPage] = useState<number>(1);
   // TODO useLocalStorage, same for all tables
-  const [pageSize, setPageSize] = useState<number>(PAGE_SIZES.at(0) as number);
+  const [pageSize, setPageSize] = useState<number>(DEFAULT_PAGE_SIZE);
   const [sortBy, setSortBy] = useState<DataTableSortStatus>({columnAccessor: 'postedAt', direction: 'desc'});
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [debouncedSearchQuery] = useDebouncedValue(searchQuery, 500);

@@ -36,6 +36,7 @@ import {useAuthenticated} from '../../hooks/useAuthenticated';
 import {useMyRouter} from '../../hooks/useMyRouter';
 import {useInitializePusher} from '../../hooks/usePusher';
 import {IconShare3} from '@tabler/icons-react';
+import {usePrefetchPageQueries} from '../../hooks/usePrefetchPageQueries';
 
 const [
   feedRoute,
@@ -90,6 +91,7 @@ export const ApplicationShell: FunctionComponent<{
   const [showNavbar, {close: closeNavbar, toggle: toggleNavbar}] = useDisclosure(false);
 
   useInitializePusher();
+  usePrefetchPageQueries();
 
   const isRouteActive = (testedRoute: string) => {
     if (testedRoute === '/') {
