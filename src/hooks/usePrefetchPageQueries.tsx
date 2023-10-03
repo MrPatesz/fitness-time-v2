@@ -66,13 +66,22 @@ export const usePrefetchPageQueries = () => {
         void queryContext.user.profile.prefetch();
       }
 
-      const getPaginatedEventsInput = {
+      const getPaginatedEventsInput1 = {
         ...getPaginatedInputBase('start' as SortEventByProperty),
         createdOnly: false,
         archive: false,
       };
-      if (!queryContext.event.getPaginatedEvents.getData(getPaginatedEventsInput)) {
-        void queryContext.event.getPaginatedEvents.prefetch(getPaginatedEventsInput);
+      if (!queryContext.event.getPaginatedEvents.getData(getPaginatedEventsInput1)) {
+        void queryContext.event.getPaginatedEvents.prefetch(getPaginatedEventsInput1);
+      }
+
+      const getPaginatedEventsInput2 = {
+        ...getPaginatedInputBase('start' as SortEventByProperty),
+        createdOnly: true,
+        archive: false,
+      };
+      if (!queryContext.event.getPaginatedEvents.getData(getPaginatedEventsInput2)) {
+        void queryContext.event.getPaginatedEvents.prefetch(getPaginatedEventsInput2);
       }
 
       const getPaginatedGroupsInput = {
