@@ -7,7 +7,7 @@ import {api} from '../../utils/api';
 import {closeAllModals} from '@mantine/modals';
 import {useForm} from '@mantine/form';
 import {getFirstDayOfWeek} from '../../utils/utilFunctions';
-import {DateRangePicker, DateRangePickerValue} from '@mantine/dates';
+import {DatePickerInput} from '@mantine/dates';
 import {EventWithLocationType} from '../../models/Event';
 import {useMyRouter} from '../../hooks/useMyRouter';
 
@@ -15,7 +15,7 @@ export const ExportForm: FunctionComponent = () => {
   const {t} = useTranslation('common');
   const {locale} = useMyRouter();
 
-  const {values, onSubmit, getInputProps, isValid} = useForm<{ interval: DateRangePickerValue }>({
+  const {values, onSubmit, getInputProps, isValid} = useForm<{ interval: [Date | null, Date | null] }>({
     initialValues: {
       interval: [
         dayjs().startOf('date').toDate(),
@@ -78,7 +78,8 @@ export const ExportForm: FunctionComponent = () => {
   return (
     <form onSubmit={onSubmit(() => void iCalDownload(eventsQuery.data))}>
       <Stack>
-        <DateRangePicker
+        <DatePickerInput
+          type="range"
           label={t('calendarPage.interval.label')}
           clearable={false}
           firstDayOfWeek={getFirstDayOfWeek(locale)}

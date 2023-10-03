@@ -17,8 +17,8 @@ import {useMyRouter} from '../hooks/useMyRouter';
 
 export default function MapPage() {
   const theme = useMantineTheme();
-  const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
-  const md = useMediaQuery(`(min-width: ${theme.breakpoints.md}px)`);
+  const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs})`);
+  const md = useMediaQuery(`(min-width: ${theme.breakpoints.md})`);
   const {locale, pushRoute} = useMyRouter();
   const shortDateFormatter = useShortDateFormatter();
   const {t} = useTranslation('common');

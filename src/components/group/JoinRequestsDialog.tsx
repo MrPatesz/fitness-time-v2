@@ -43,7 +43,7 @@ export const JoinRequestsDialog: FunctionComponent<{
             <Link key={joinRequest.userId} href={`/users/${joinRequest.userId}`} locale={locale} passHref>
               <Card
                 withBorder
-                p={6}
+                padding={6}
                 onClick={() => closeAllModals()}
               >
                 <Group position="apart">

@@ -21,7 +21,7 @@ export const UsersComponent: FunctionComponent<{
   loading?: boolean;
 }> = ({users, hideJoin, onJoin, eventLimit, overrideJoined, loading}) => {
   const theme = useMantineTheme();
-  const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
+  const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs})`);
   const isMobile = useMediaQuery('(max-width: 375px)');
   const {locale} = useMyRouter();
   const {data: session} = useSession();
@@ -54,7 +54,7 @@ export const UsersComponent: FunctionComponent<{
                 <Link key={member.id} href={`/users/${member.id}`} locale={locale} passHref>
                   <Card
                     withBorder
-                    p={6}
+                    padding={6}
                     onClick={() => closeAllModals()}
                   >
                     <Group>

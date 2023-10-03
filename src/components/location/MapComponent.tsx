@@ -15,10 +15,10 @@ const MapComponent: FunctionComponent<{
   }
 }> = ({distance, location, size}) => {
   return (
-    <Card withBorder p={0} sx={{...size, position: 'relative'}}>
+    <Card withBorder padding={0} sx={{...size, position: 'relative'}}>
       <Card
         withBorder
-        p={8}
+        padding={8}
         sx={{
           position: 'absolute',
           bottom: 9,

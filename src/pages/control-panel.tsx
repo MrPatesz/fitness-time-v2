@@ -1,5 +1,5 @@
 import {Tabs} from '@mantine/core';
-import {IconMessageCircle} from '@tabler/icons';
+import {IconMessageCircle} from '@tabler/icons-react';
 import {useTranslation} from 'next-i18next';
 import {serverSideTranslations} from 'next-i18next/serverSideTranslations';
 import {Share, Ticket} from 'tabler-icons-react';

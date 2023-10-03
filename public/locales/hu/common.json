@@ -302,9 +302,8 @@
     "place": "Hely"
   },
   "intervalPicker": {
-    "start": "Kezdő dátum",
-    "end": "Vég dátum",
-    "time": "Időpont"
+    "start": "Kezdés",
+    "end": "Vége"
   },
   "groupForm": {
     "name": {

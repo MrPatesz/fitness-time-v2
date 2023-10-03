@@ -9,12 +9,12 @@ export const EventGrid = forwardRef(({events}: {
   events: BasicEventType[];
 }, ref: ForwardedRef<HTMLDivElement | null>) => {
   const theme = useMantineTheme();
-  const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
-  const md = useMediaQuery(`(min-width: ${theme.breakpoints.md}px)`);
-  const xl = useMediaQuery(`(min-width: ${theme.breakpoints.xl}px)`);
-  const xxl = useMediaQuery(`(min-width: ${theme.breakpoints.xs + theme.breakpoints.lg}px)`);
-  const txl = useMediaQuery(`(min-width: ${theme.breakpoints.md + theme.breakpoints.lg}px)`);
-  const qxl = useMediaQuery(`(min-width: ${theme.breakpoints.md + theme.breakpoints.xl}px)`);
+  const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs})`);
+  const md = useMediaQuery(`(min-width: ${theme.breakpoints.md})`);
+  const xl = useMediaQuery(`(min-width: ${theme.breakpoints.xl})`);
+  const xxl = useMediaQuery(`(min-width: ${theme.breakpoints.xs + theme.breakpoints.lg})`);
+  const txl = useMediaQuery(`(min-width: ${theme.breakpoints.md + theme.breakpoints.lg})`);
+  const qxl = useMediaQuery(`(min-width: ${theme.breakpoints.md + theme.breakpoints.xl})`);
 
   if (xs === undefined) {
     return <CenteredLoader/>;

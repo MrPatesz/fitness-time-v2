@@ -56,7 +56,6 @@ export const CommentForm: FunctionComponent<{
       >
         <Stack>
           <RichTextEditor
-            id="rte"
             placeholder={t('commentForm.addComment')}
             value={getFormStringValue(form, 'text')}
             onChange={getFormStringOnChange(form, 'text')}

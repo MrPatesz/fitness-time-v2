@@ -1,5 +1,5 @@
 import {ActionIcon, useMantineColorScheme} from '@mantine/core';
-import {IconMoonStars, IconSun} from '@tabler/icons';
+import {IconMoonStars, IconSun} from '@tabler/icons-react';
 import {FunctionComponent} from 'react';
 import {useTranslation} from 'next-i18next';
 

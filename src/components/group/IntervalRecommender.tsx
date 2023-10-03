@@ -4,7 +4,7 @@ import {QueryComponent} from '../QueryComponent';
 import {getFirstDayOfWeek} from '../../utils/utilFunctions';
 import dayjs from '../../utils/dayjs';
 import {ActionIcon, Stack, useMantineTheme} from '@mantine/core';
-import {DateRangePicker, DateRangePickerValue} from '@mantine/dates';
+import {DatePickerInput} from '@mantine/dates';
 import {useTranslation} from 'next-i18next';
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -21,13 +21,13 @@ const IntervalRecommenderContent: FunctionComponent<{
 }> = ({groupId}) => {
   const longDateFormatter = useLongDateFormatter();
   const theme = useMantineTheme();
-  const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
-  const md = useMediaQuery(`(min-width: ${theme.breakpoints.md}px)`);
-  const xl = useMediaQuery(`(min-width: ${theme.breakpoints.xl}px)`);
+  const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs})`);
+  const md = useMediaQuery(`(min-width: ${theme.breakpoints.md})`);
+  const xl = useMediaQuery(`(min-width: ${theme.breakpoints.xl})`);
   const {locale} = useMyRouter();
   const {t} = useTranslation('common');
 
-  const [interval, setInterval] = useState<DateRangePickerValue>([
+  const [interval, setInterval] = useState<[Date | null, Date | null]>([
     dayjs().startOf('date').toDate(),
     dayjs().startOf('date').add(1, 'week').toDate(),
   ]);
@@ -43,7 +43,8 @@ const IntervalRecommenderContent: FunctionComponent<{
 
   return (
     <Stack h="100%">
-      <DateRangePicker
+      <DatePickerInput
+        type="range"
         label={t('intervalRecommender.searchInterval')}
         clearable={false}
         firstDayOfWeek={getFirstDayOfWeek(locale)}
@@ -81,7 +82,7 @@ const IntervalRecommenderContent: FunctionComponent<{
           height="100%"
           allDaySlot={false}
           locale={locale}
-          firstDay={getFirstDayOfWeek(locale) === 'monday' ? 1 : 0}
+          firstDay={getFirstDayOfWeek(locale)}
           eventColor={theme.fn.themeColor(theme.primaryColor)}
           eventClick={({event: {start, end}}) => openModal({
             title: t('modal.event.create'),

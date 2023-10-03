@@ -35,7 +35,7 @@ export default function FeedPage() {
   const [debouncedMaxDistance] = useDebouncedValue(maxDistance, 500);
 
   const theme = useMantineTheme();
-  const md = useMediaQuery(`(min-width: ${theme.breakpoints.md}px)`);
+  const md = useMediaQuery(`(min-width: ${theme.breakpoints.md})`);
   const {data: session} = useSession();
   const {t} = useTranslation('common');
   const {ref, entry} = useIntersection({threshold: 0.1});

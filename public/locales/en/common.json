@@ -302,9 +302,8 @@
     "place": "Place"
   },
   "intervalPicker": {
-    "start": "Start Date",
-    "end": "End Date",
-    "time": "Time"
+    "start": "Start",
+    "end": "End"
   },
   "groupForm": {
     "name": {

@@ -1,19 +1,8 @@
-import {
-  ActionIcon,
-  Box,
-  ColorSwatch,
-  Flex,
-  Group,
-  MantineNumberSize,
-  Stack,
-  Text,
-  TextInput,
-  useMantineTheme
-} from '@mantine/core';
+import {ActionIcon, Box, ColorSwatch, Flex, Group, Stack, Text, TextInput, useMantineTheme} from '@mantine/core';
 import {useDebouncedValue, useMediaQuery} from '@mantine/hooks';
 import {openConfirmModal, openModal} from '@mantine/modals';
 import {showNotification} from '@mantine/notifications';
-import {IconSearch} from '@tabler/icons';
+import {IconSearch} from '@tabler/icons-react';
 import {DataTable, DataTableSortStatus} from 'mantine-datatable';
 import {useTranslation} from 'next-i18next';
 import {FunctionComponent, useEffect, useState} from 'react';
@@ -38,7 +27,7 @@ const GroupTable: FunctionComponent<{
   const [debouncedSearchQuery] = useDebouncedValue(searchQuery, 500);
 
   const theme = useMantineTheme();
-  const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
+  const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs})`);
   const {locale, pushRoute} = useMyRouter();
   const {t} = useTranslation('common');
   const longDateFormatter = useLongDateFormatter();
@@ -133,7 +122,7 @@ const GroupTable: FunctionComponent<{
             withBorder
             withColumnBorders
             textSelectionDisabled
-            borderRadius={theme.defaultRadius as MantineNumberSize}
+            borderRadius={theme.defaultRadius}
             noRecordsText={t('groupTable.noRecords')}
             sortStatus={sortBy}
             onSortStatusChange={setSortBy}

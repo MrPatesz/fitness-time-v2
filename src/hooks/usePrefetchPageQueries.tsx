@@ -22,8 +22,8 @@ const getPaginatedInputBase = <SORT_BY_PROPERTY extends SortEventByProperty | So
 
 export const usePrefetchPageQueries = () => {
   const theme = useMantineTheme();
-  const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
-  const md = useMediaQuery(`(min-width: ${theme.breakpoints.md}px)`);
+  const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs})`);
+  const md = useMediaQuery(`(min-width: ${theme.breakpoints.md})`);
   const {authenticated, user} = useAuthenticated();
   const queryContext = api.useContext();
 

@@ -1,4 +1,4 @@
-import {Box, ColorSwatch, MantineNumberSize, Stack, TextInput, useMantineTheme} from '@mantine/core';
+import {Box, ColorSwatch, Stack, TextInput, useMantineTheme} from '@mantine/core';
 import {useDebouncedValue} from '@mantine/hooks';
 import {IconSearch} from '@tabler/icons';
 import {DataTable, DataTableSortStatus} from 'mantine-datatable';
@@ -69,7 +69,7 @@ const UserTable: FunctionComponent = () => {
             withBorder
             withColumnBorders
             textSelectionDisabled
-            borderRadius={theme.defaultRadius as MantineNumberSize}
+            borderRadius={theme.defaultRadius}
             noRecordsText={t('userTable.noRecords')}
             sortStatus={sortBy}
             onSortStatusChange={setSortBy}

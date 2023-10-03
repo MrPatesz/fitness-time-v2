@@ -27,8 +27,8 @@ import {JoinRequestsDialog} from '../../components/group/JoinRequestsDialog';
 export default function GroupDetailsPage() {
   const longDateFormatter = useLongDateFormatter();
   const theme = useMantineTheme();
-  const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
-  const md = useMediaQuery(`(min-width: ${theme.breakpoints.md}px)`);
+  const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs})`);
+  const md = useMediaQuery(`(min-width: ${theme.breakpoints.md})`);
   const {id: groupId, isReady} = usePathId<number>();
   const {data: session} = useSession();
   const {t} = useTranslation('common');

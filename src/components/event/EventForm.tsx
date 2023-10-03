@@ -1,21 +1,16 @@
-import {Button, Group, NumberInput, Stack, TextInput} from '@mantine/core';
+import {Button, Group, Stack, TextInput} from '@mantine/core';
 import {useForm} from '@mantine/form';
 import {useTranslation} from 'next-i18next';
 import {FunctionComponent} from 'react';
 import {BasicEventType, CreateEventType} from '../../models/Event';
 import {LocationPicker} from '../location/LocationPicker';
 import {RichTextField} from '../rich-text/RichTextField';
-import {IntervalPicker} from './IntervalPicker';
 import {CreateLocationType, LocationType} from '../../models/Location';
-import {
-  getFormDateOnChange,
-  getFormDateValue,
-  getFormError,
-  getFormLocationOnChange,
-  getFormLocationValue
-} from '../../utils/mantineFormUtils';
+import {getFormError, getFormLocationOnChange, getFormLocationValue} from '../../utils/mantineFormUtils';
 import {OverlayLoader} from '../OverlayLoader';
 import dayjs from '../../utils/dayjs';
+import {NullableNumberInput} from './NullableNumberInput';
+import {DateTimePicker} from '@mantine/dates';
 
 export const EventForm: FunctionComponent<{
   originalEvent: CreateEventType | BasicEventType;
@@ -61,17 +56,22 @@ export const EventForm: FunctionComponent<{
             placeholder={t('eventForm.name.placeholder')}
             {...form.getInputProps('name')}
           />
-          <IntervalPicker
-            startInfo={{
-              value: getFormDateValue(form, 'start'),
-              onChange: getFormDateOnChange(form, 'start'),
-              error: getFormError(form, 'start'),
-            }}
-            endInfo={{
-              value: getFormDateValue(form, 'end'),
-              onChange: getFormDateOnChange(form, 'end'),
-              error: getFormError(form, 'end'),
-            }}
+          <DateTimePicker
+            withAsterisk
+            clearable={false}
+            valueFormat="MMMM DD, YYYY HH:mm"
+            label={t('intervalPicker.start')}
+            minDate={new Date()}
+            {...form.getInputProps('start')}
+          />
+          <DateTimePicker
+            withAsterisk
+            clearable={false}
+            valueFormat="MMMM DD, YYYY HH:mm"
+            label={t('intervalPicker.end')}
+            minDate={form.values.start}
+            maxDate={dayjs(form.values.start).add(2, 'weeks').toDate()}
+            {...form.getInputProps('end')}
           />
           <LocationPicker
             required={true}
@@ -86,14 +86,14 @@ export const EventForm: FunctionComponent<{
             placeholder={t('eventForm.description.placeholder')}
             formInputProps={form.getInputProps('description')}
           />
-          <NumberInput
+          <NullableNumberInput
             min={1}
             label={t('eventForm.price.label')}
             placeholder={t('eventForm.price.placeholder')}
             rightSection="€"
             {...form.getInputProps('price')}
           />
-          <NumberInput
+          <NullableNumberInput
             min={2}
             label={t('eventForm.limit.label')}
             placeholder={t('eventForm.limit.placeholder')}

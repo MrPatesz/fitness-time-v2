@@ -56,9 +56,9 @@ export type Group = {
   id: Generated<number>;
   name: string;
   description: string;
-  isPrivate: Generated<boolean>;
-  color1: Generated<Color>;
-  color2: Generated<Color>;
+  isPrivate: boolean;
+  color1: Color;
+  color2: Color;
   createdAt: Generated<Timestamp>;
   creatorId: string;
 };

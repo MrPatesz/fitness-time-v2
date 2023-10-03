@@ -24,9 +24,9 @@ export default function CalendarPage() {
   const {locale, pushRoute} = useMyRouter();
   const {data: session} = useSession();
   const {t} = useTranslation('common');
-  const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
-  const md = useMediaQuery(`(min-width: ${theme.breakpoints.md}px)`);
-  const xl = useMediaQuery(`(min-width: ${theme.breakpoints.xl}px)`);
+  const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs})`);
+  const md = useMediaQuery(`(min-width: ${theme.breakpoints.md})`);
+  const xl = useMediaQuery(`(min-width: ${theme.breakpoints.xl})`);
 
   const eventsQuery = api.event.getCalendar.useQuery();
   const updateEvent = api.event.update.useMutation({
@@ -96,7 +96,7 @@ export default function CalendarPage() {
         height="100%"
         allDaySlot={false}
         locale={locale}
-        firstDay={getFirstDayOfWeek(locale) === 'monday' ? 1 : 0}
+        firstDay={getFirstDayOfWeek(locale)}
         eventColor={theme.fn.themeColor(theme.primaryColor)}
         eventClick={({event}) => void pushRoute(`/events/${event.id}`, undefined, {locale})}
         select={({start, end}) => openModal({

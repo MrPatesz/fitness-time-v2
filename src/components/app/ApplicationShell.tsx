@@ -80,7 +80,7 @@ export const ApplicationShell: FunctionComponent<{
   children: JSX.Element;
 }> = ({children}) => {
   const theme = useMantineTheme();
-  const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
+  const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs})`);
   const {route, locale, pushRoute} = useMyRouter();
   const {t} = useTranslation('common');
   const {loading, authenticated, user} = useAuthenticated({

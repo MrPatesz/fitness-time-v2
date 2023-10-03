@@ -6,13 +6,7 @@ export const getBackgroundColor = (theme: MantineTheme) => {
     : theme.colors.gray[0];
 };
 
-export const getFirstDayOfWeek = (locale: string) => {
-  if (locale === 'hu') {
-    return 'monday';
-  } else {
-    return 'sunday';
-  }
-};
+export const getFirstDayOfWeek = (locale: string) => locale === 'hu' ? 1 : 0;
 
 export const getInitials = (username: string) => {
   const names: string[] = username.split(' ');

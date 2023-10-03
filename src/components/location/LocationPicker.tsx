@@ -36,7 +36,7 @@ export const LocationPicker: FunctionComponent<{
             <Text weight={500} size="sm">{label}</Text>
             <Text weight={500} size="sm" color="red">*</Text>
           </Group>
-          <Card withBorder p={'sm'}>
+          <Card withBorder padding="sm">
             <CenteredLoader/>
           </Card>
         </Stack>

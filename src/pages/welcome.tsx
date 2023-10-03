@@ -11,7 +11,7 @@ import {ThemeColor} from '../utils/enums';
 
 export default function WelcomePage() {
   const theme = useMantineTheme();
-  const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
+  const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs})`);
   const {replaceRoute, locale, localePrefix} = useMyRouter();
   const {authenticated} = useAuthenticated();
   const {t} = useTranslation('common');

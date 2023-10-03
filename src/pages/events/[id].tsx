@@ -27,8 +27,8 @@ export default function EventDetailsPage() {
   const longDateFormatter = useLongDateFormatter();
   const priceFormatter = usePriceFormatter();
   const theme = useMantineTheme();
-  const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
-  const md = useMediaQuery(`(min-width: ${theme.breakpoints.md}px)`);
+  const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs})`);
+  const md = useMediaQuery(`(min-width: ${theme.breakpoints.md})`);
   const {id: eventId, isReady} = usePathId<number>();
   const {data: session} = useSession();
   const {t} = useTranslation('common');

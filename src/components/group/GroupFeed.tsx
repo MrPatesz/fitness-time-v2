@@ -18,7 +18,7 @@ export const GroupFeed: FunctionComponent<{
   groupId: number;
 }> = ({groupId}) => {
   const theme = useMantineTheme();
-  const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs}px)`);
+  const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs})`);
   const {t} = useTranslation('common');
   const {ref, entry} = useIntersection({threshold: 0.1});
 
