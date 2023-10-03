@@ -1,6 +1,6 @@
 import {Box, ColorSwatch, Stack, TextInput, useMantineTheme} from '@mantine/core';
 import {useDebouncedValue} from '@mantine/hooks';
-import {IconSearch} from '@tabler/icons';
+import {IconSearch} from '@tabler/icons-react';
 import {DataTable, DataTableSortStatus} from 'mantine-datatable';
 import {useTranslation} from 'next-i18next';
 import {FunctionComponent, useEffect, useState} from 'react';
