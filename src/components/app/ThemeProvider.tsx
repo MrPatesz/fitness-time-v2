@@ -14,6 +14,7 @@ import dayjs from '../../utils/dayjs';
 import {useMyRouter} from '../../hooks/useMyRouter';
 import {DatesProvider} from '@mantine/dates';
 import {getFirstDayOfWeek} from '../../utils/utilFunctions';
+import {emotionCache} from '../../utils/emotionCache';
 
 export const ThemeProvider: FunctionComponent<{
   children: JSX.Element;
@@ -51,7 +52,12 @@ export const ThemeProvider: FunctionComponent<{
 
   return (
     <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
-      <MantineProvider withGlobalStyles withNormalizeCSS theme={myTheme}>
+      <MantineProvider
+        withGlobalStyles
+        withNormalizeCSS
+        theme={myTheme}
+        emotionCache={emotionCache}
+      >
         <DatesProvider settings={{locale, firstDayOfWeek: getFirstDayOfWeek(locale)}}>
           <ModalsProvider
             modalProps={{
