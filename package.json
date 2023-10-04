@@ -1,6 +1,6 @@
 {
   "name": "fitness-time",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "build": "next build",
@@ -54,7 +54,7 @@
     "ics": "^3.5.0",
     "kysely": "^0.26.3",
     "mantine-datatable": "^6.0.0",
-    "next": "^13.5.3",
+    "next": "13.5.3",
     "next-auth": "^4.23.2",
     "next-i18next": "^14.0.3",
     "next-pwa": "^5.6.0",

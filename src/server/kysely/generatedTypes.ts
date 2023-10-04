@@ -6,18 +6,18 @@ export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
 export type Timestamp = ColumnType<Date, Date | string, Date | string>;
 
 export const Color = {
-    red: 'red',
-    pink: 'pink',
-    grape: 'grape',
-    violet: 'violet',
-    indigo: 'indigo',
-    blue: 'blue',
-    cyan: 'cyan',
-    teal: 'teal',
-    green: 'green',
-    lime: 'lime',
-    yellow: 'yellow',
-    orange: 'orange'
+  red: 'red',
+  pink: 'pink',
+  grape: 'grape',
+  violet: 'violet',
+  indigo: 'indigo',
+  blue: 'blue',
+  cyan: 'cyan',
+  teal: 'teal',
+  green: 'green',
+  lime: 'lime',
+  yellow: 'yellow',
+  orange: 'orange'
 } as const;
 export type Color = (typeof Color)[keyof typeof Color];
 export type Account = {
@@ -66,8 +66,8 @@ export type Group = {
   creatorId: string;
 };
 export type joinedGroups = {
-    A: number;
-    B: string;
+  A: number;
+  B: string;
 };
 export type JoinRequest = {
   createdAt: Generated<Timestamp>;
@@ -88,8 +88,8 @@ export type Message = {
   groupId: number;
 };
 export type participatedEvents = {
-    A: string;
-    B: number;
+  A: string;
+  B: number;
 };
 export type Rating = {
   id: Generated<number>;
@@ -119,8 +119,8 @@ export type VerificationToken = {
   expires: Timestamp;
 };
 export type DB = {
-    _joinedGroups: joinedGroups;
-    _participatedEvents: participatedEvents;
+  _joinedGroups: joinedGroups;
+  _participatedEvents: participatedEvents;
   Account: Account;
   Comment: Comment;
   Event: Event;
