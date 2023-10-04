@@ -6,6 +6,8 @@ import {CreateLocationType} from '../models/Location';
 import {useMantineTheme} from '@mantine/core';
 import {SortCommentByProperty, SortDirection, SortEventByProperty, SortGroupByProperty} from '../utils/enums';
 import {DEFAULT_PAGE_SIZE} from '../components/event/EventTable';
+import dayjs from '../utils/dayjs';
+import {useTranslation} from 'next-i18next';
 
 const getPaginatedInputBase = <SORT_BY_PROPERTY extends SortEventByProperty | SortGroupByProperty | SortCommentByProperty | undefined>(
   sortByProperty: SORT_BY_PROPERTY,
@@ -21,10 +23,11 @@ const getPaginatedInputBase = <SORT_BY_PROPERTY extends SortEventByProperty | So
 });
 
 export const usePrefetchPageQueries = () => {
+  const {authenticated, user} = useAuthenticated();
   const theme = useMantineTheme();
   const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs})`);
   const md = useMediaQuery(`(min-width: ${theme.breakpoints.md})`);
-  const {authenticated, user} = useAuthenticated();
+  const {t} = useTranslation('common');
   const queryContext = api.useContext();
 
   // TODO object as const: LocalStorageKeys, DefaultValues
@@ -60,8 +63,32 @@ export const usePrefetchPageQueries = () => {
   useEffect(() => {
     if (authenticated) {
       if (!queryContext.event.getCalendar.getData()) {
-        void queryContext.event.getCalendar.prefetch();
+        queryContext.event.getCalendar.fetch()
+          .then(participatedEvents => {
+              const upcomingEvents = participatedEvents.filter(event => {
+                const difference = dayjs(event.start).diff(dayjs(), 'hours');
+                return 24 >= difference && difference >= 0;
+              });
+              const count = upcomingEvents.length;
+              if (count > 0) {
+                Notification.requestPermission()
+                  .then(permission => {
+                    if (permission === 'granted') {
+                      new Notification(t('application.name'), {
+                        body: t('application.upcomingEvents', {
+                          count,
+                          plural: count > 1 ? 's' : '',
+                        }),
+                        icon: '/icon-192x192.png',
+                        tag: 'upcoming_events',
+                      });
+                    }
+                  }).catch(error => console.error(error));
+              }
+            }
+          ).catch(error => console.error(error));
       }
+
       if (!queryContext.user.profile.getData()) {
         void queryContext.user.profile.prefetch();
       }
@@ -105,7 +132,7 @@ export const usePrefetchPageQueries = () => {
         void queryContext.comment.getAllCreated.prefetch(getAllCreatedInput);
       }
     }
-  }, [authenticated, queryContext]);
+  }, [authenticated, queryContext, t]);
 
   useEffect(() => {
     if (authenticated) {

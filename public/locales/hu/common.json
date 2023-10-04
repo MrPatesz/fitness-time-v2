@@ -10,7 +10,8 @@
     "feed": "Folyam",
     "share": "Megosztás",
     "shareDescription": "{{username}} megosztotta veled ezt a linket a Fitness Time-ról!",
-    "someone": "Valaki"
+    "someone": "Valaki",
+    "upcomingEvents": "A következő 24 órában {{count}} eseményed lesz."
   },
   "navbar": {
     "feed": {

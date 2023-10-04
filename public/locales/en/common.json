@@ -10,7 +10,8 @@
     "feed": "Feed",
     "share": "Share",
     "shareDescription": "{{username}} shared this link with you from Fitness Time!",
-    "someone": "Someone"
+    "someone": "Someone",
+    "upcomingEvents": "You have {{count}} upcoming event{{plural}} in the next 24 hours."
   },
   "navbar": {
     "feed": {
