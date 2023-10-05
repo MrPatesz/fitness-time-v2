@@ -34,5 +34,5 @@ export const usePusher = (
         pusherClient.unbind(eventInfo.event, handleEvent);
       };
     }
-  }, [eventInfo]);
+  }, [eventInfo, onEvent]);
 };

@@ -44,7 +44,7 @@ export default function MapPage() {
     if (eventsQuery.data) {
       setCenter(eventsQuery.data.center);
     }
-  }, [eventsQuery.data?.center]);
+  }, [eventsQuery.data, setCenter]);
 
   return (
     <Stack h="100%">

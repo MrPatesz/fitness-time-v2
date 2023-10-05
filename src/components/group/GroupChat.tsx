@@ -33,7 +33,7 @@ export const GroupChat: FunctionComponent<{
     return [...messagesQuery.data.pages]
       .reverse()
       .flatMap(page => page.messages);
-  }, [messagesQuery.data?.pages]);
+  }, [messagesQuery.data]);
 
   useEffect(() => {
     scrollToBottom();
