@@ -2,12 +2,12 @@ import {useEffect, useMemo} from 'react';
 import {api} from '../utils/api';
 import {useAuthenticated} from './useAuthenticated';
 import {useLocalStorage, useMediaQuery} from '@mantine/hooks';
-import {CreateLocationType} from '../models/Location';
 import {useMantineTheme} from '@mantine/core';
 import {SortCommentByProperty, SortDirection, SortEventByProperty, SortGroupByProperty} from '../utils/enums';
 import {DEFAULT_PAGE_SIZE} from '../components/event/EventTable';
 import dayjs from '../utils/dayjs';
 import {useTranslation} from 'next-i18next';
+import {useGeolocation} from './useGeolocation';
 
 const getPaginatedInputBase = <SORT_BY_PROPERTY extends SortEventByProperty | SortGroupByProperty | SortCommentByProperty | undefined>(
   sortByProperty: SORT_BY_PROPERTY,
@@ -30,6 +30,8 @@ export const usePrefetchPageQueries = () => {
   const {t} = useTranslation('common');
   const queryContext = api.useContext();
 
+  const {location} = useGeolocation();
+
   // TODO object as const: LocalStorageKeys, DefaultValues
   const [includeArchive] = useLocalStorage<boolean>({
     key: 'include-archive',
@@ -46,10 +48,6 @@ export const usePrefetchPageQueries = () => {
   const [maxDistance] = useLocalStorage<number>({
     key: 'fluid-max-distance',
     defaultValue: 40,
-  });
-  const [center] = useLocalStorage<CreateLocationType | null>({
-    key: 'google-map-center',
-    defaultValue: null,
   });
   const [zoom] = useLocalStorage({
     key: 'google-map-zoom',
@@ -135,13 +133,13 @@ export const usePrefetchPageQueries = () => {
   }, [authenticated, queryContext, t]);
 
   useEffect(() => {
-    if (authenticated) {
-      const input = {center, maxDistance: mapMaxDistance};
+    if (authenticated && location) {
+      const input = {center: location, maxDistance: mapMaxDistance};
       if (!queryContext.event.getMap.getData(input)) {
         void queryContext.event.getMap.prefetch(input);
       }
     }
-  }, [authenticated, queryContext, center, mapMaxDistance]);
+  }, [authenticated, queryContext, location, mapMaxDistance]);
 
   useEffect(() => {
     if (authenticated) {
