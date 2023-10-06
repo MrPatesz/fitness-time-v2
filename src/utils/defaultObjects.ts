@@ -28,8 +28,8 @@ export const getDefaultCreateEvent = (initialInterval?: {
   end: Date;
 }): CreateEventType => ({
   name: '',
-  start: initialInterval?.start ?? dayjs(new Date()).add(1, 'day').toDate(),
-  end: initialInterval?.end ?? dayjs(new Date()).add(1, 'day').add(1, 'hour').toDate(),
+  start: initialInterval?.start ?? dayjs(new Date()).add(1, 'hours').toDate(),
+  end: initialInterval?.end ?? dayjs(new Date()).add(2, 'hours').toDate(),
   description: '',
   limit: null,
   price: null,

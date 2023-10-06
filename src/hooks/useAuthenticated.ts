@@ -14,5 +14,5 @@ export const useAuthenticated = (options?: UseSessionOptions<boolean> | undefine
     return {loading, authenticated, user: session.user};
   }
 
-  throw new Error('Something went wrong!'); // should never happen
+  throw new Error('Error in "useAuthenticated"'); // should never happen
 };

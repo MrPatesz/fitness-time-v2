@@ -298,8 +298,8 @@
   },
   "locationPicker": {
     "error": "An error occurred while loading places!",
-    "remove": "Remove Location",
-    "residence": "Location",
+    "remove": "Remove Residence",
+    "residence": "Residence",
     "place": "Place"
   },
   "intervalPicker": {
