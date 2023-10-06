@@ -38,6 +38,8 @@ const MapWithEvents: FunctionComponent<{
   const eventsQuery = api.event.getMap.useQuery({center, maxDistance: debouncedMaxDistance});
   usePusher({event: InvalidateEvent.EventGetMap}, () => void eventsQuery.refetch());
 
+  // TODO override center, includeArchive and myGroupsOnly checkboxes
+  
   return (
     <Stack h="100%">
       <Map
@@ -90,9 +92,14 @@ export default function MapPage() {
         <Card withBorder>
           <Text>
             {t('mapPage.absentPermission1')}&nbsp;
-            <Link href={`/profile`} locale={locale} passHref>
-              <Anchor>{t('resource.profile')}</Anchor>
-            </Link>
+            <Anchor // TODO permission on click!
+              component={Link}
+              href={`/profile`}
+              locale={locale}
+              passHref
+            >
+              {t('resource.profile')}
+            </Anchor>
             {t('mapPage.absentPermission2')}
           </Text>
         </Card>

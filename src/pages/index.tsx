@@ -1,6 +1,18 @@
-import {Box, Checkbox, Flex, Group, SimpleGrid, Slider, Stack, Text, useMantineTheme} from '@mantine/core';
+import {
+  Anchor,
+  Box,
+  Checkbox,
+  Flex,
+  Group,
+  HoverCard,
+  Overlay,
+  SimpleGrid,
+  Slider,
+  Stack,
+  Text,
+  useMantineTheme
+} from '@mantine/core';
 import {useDebouncedValue, useIntersection, useLocalStorage, useMediaQuery} from '@mantine/hooks';
-import {useSession} from 'next-auth/react';
 import {useTranslation} from 'next-i18next';
 import {serverSideTranslations} from 'next-i18next/serverSideTranslations';
 import {useEffect, useMemo} from 'react';
@@ -12,8 +24,10 @@ import {api} from '../utils/api';
 import {formatDistance} from '../utils/utilFunctions';
 import {QueryComponent} from '../components/QueryComponent';
 import {InvalidateEvent} from '../utils/enums';
-
 import {BorderComponent} from '../components/BorderComponent';
+import {useGeolocation} from '../hooks/useGeolocation';
+import Link from 'next/link';
+import {useMyRouter} from '../hooks/useMyRouter';
 
 export default function FeedPage() {
   const [includeArchive, setIncludeArchive] = useLocalStorage<boolean>({
@@ -34,16 +48,20 @@ export default function FeedPage() {
   });
   const [debouncedMaxDistance] = useDebouncedValue(maxDistance, 500);
 
+  const {locale} = useMyRouter();
   const theme = useMantineTheme();
   const md = useMediaQuery(`(min-width: ${theme.breakpoints.md})`);
-  const {data: session} = useSession();
   const {t} = useTranslation('common');
   const {ref, entry} = useIntersection({threshold: 0.1});
+  const {location, hasLocation} = useGeolocation();
 
   const feedQuery = api.event.getFeed.useInfiniteQuery({
-    maxDistance: session?.user.hasLocation && enableMaxDistance ? debouncedMaxDistance : undefined,
     includeArchive,
     myGroupsOnly,
+    distanceFilter: {
+      maxDistance: hasLocation && enableMaxDistance ? debouncedMaxDistance : null,
+      location: location ?? null,
+    },
   }, {
     getNextPageParam: (lastPage) => lastPage.nextCursor,
   });
@@ -58,8 +76,6 @@ export default function FeedPage() {
     }
   }, [entry]);
 
-  // TODO useGeolocation
-
   return (
     <Stack>
       <Flex
@@ -68,41 +84,60 @@ export default function FeedPage() {
         direction={md ? 'row' : 'column'}
         justify="center"
       >
-        {session?.user.hasLocation && (
-          <Box w={'100%'} sx={{flexGrow: 1}}>
-            <BorderComponent>
-              <Stack spacing="xs">
-                <Group position="apart">
-                  <Group spacing={4}>
-                    <Text>{t('feedPage.maxDistance')}</Text>
-                    <Text
-                      weight="bold"
-                      color={enableMaxDistance ? theme.primaryColor : 'dimmed'}
-                    >
-                      {formatDistance(maxDistance)}
-                    </Text>
-                  </Group>
-                  <Checkbox
-                    label={t('feedPage.useMaxDistance')}
-                    checked={enableMaxDistance}
-                    onChange={e => setEnableMaxDistance(e.currentTarget.checked)}
-                  />
+        <Box sx={{width: '100%', flexGrow: 1, position: 'relative'}}>
+          {!hasLocation && (
+            <HoverCard width={300} withArrow arrowSize={10} zIndex={401}>
+              <HoverCard.Target>
+                <Overlay sx={{borderRadius: theme.fn.radius(theme.defaultRadius)}}/>
+              </HoverCard.Target>
+              <HoverCard.Dropdown>
+                <Text size="sm">
+                  {t('mapPage.absentPermission1')}&nbsp;
+                  <Anchor
+                    component={Link}
+                    href={`/profile`}
+                    locale={locale}
+                    passHref
+                  >
+                    {t('resource.profile')}
+                  </Anchor>
+                  {t('mapPage.absentPermission2')}
+                </Text>
+              </HoverCard.Dropdown>
+            </HoverCard>
+          )}
+          <BorderComponent>
+            <Stack spacing="xs">
+              <Group position="apart">
+                <Group spacing={4}>
+                  <Text>{t('feedPage.maxDistance')}</Text>
+                  <Text
+                    weight="bold"
+                    color={enableMaxDistance ? theme.primaryColor : 'dimmed'}
+                  >
+                    {formatDistance(maxDistance)}
+                  </Text>
                 </Group>
-                <Slider
-                  title={t('feedPage.slider')}
-                  step={10}
-                  min={10}
-                  max={200}
-                  label={null}
-                  disabled={!enableMaxDistance}
-                  value={maxDistance}
-                  onChange={setMaxDistance}
+                <Checkbox
+                  label={t('feedPage.useMaxDistance')}
+                  checked={enableMaxDistance}
+                  onChange={e => setEnableMaxDistance(e.currentTarget.checked)}
                 />
-              </Stack>
-            </BorderComponent>
-          </Box>
-        )}
-        <SimpleGrid cols={(md && session?.user.hasLocation) ? 1 : 2} sx={{minWidth: 155}}>
+              </Group>
+              <Slider
+                title={t('feedPage.slider')}
+                step={10}
+                min={10}
+                max={200}
+                label={null}
+                disabled={!enableMaxDistance}
+                value={maxDistance}
+                onChange={setMaxDistance}
+              />
+            </Stack>
+          </BorderComponent>
+        </Box>
+        <SimpleGrid cols={md ? 1 : 2} sx={{minWidth: 155}}>
           <Checkbox
             label={t('feedPage.includeArchive')}
             checked={includeArchive}

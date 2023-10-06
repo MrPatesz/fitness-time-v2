@@ -73,6 +73,7 @@ export const UsersComponent: FunctionComponent<{
           <Tooltip
             key={user.id}
             label={user.name}
+            color={user.themeColor}
             position="bottom"
           >
             <Avatar

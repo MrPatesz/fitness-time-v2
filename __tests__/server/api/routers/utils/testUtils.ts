@@ -10,7 +10,7 @@ import PusherServer from 'pusher';
 const testKyselyClient = undefined as unknown as Kysely<DB>;
 
 const testPusherClient = {
-  trigger: (_channel: any, _event: any, _data: any) => Promise.resolve(),
+  trigger: (_channel: unknown, _event: unknown, _data: unknown) => Promise.resolve(),
 } as unknown as PusherServer;
 
 export const testPrismaClient = new PrismaClient({

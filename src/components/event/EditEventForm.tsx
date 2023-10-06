@@ -11,7 +11,10 @@ export const EditEventForm: FunctionComponent<{
 }> = ({eventId}) => {
   const {t} = useTranslation('common');
 
-  const editedEventQuery = api.event.getById.useQuery(eventId, {
+  const editedEventQuery = api.event.getById.useQuery({
+    eventId,
+    location: null,
+  }, {
     refetchOnMount: (query) => !query.isActive(),
   });
 

@@ -60,6 +60,7 @@ const NavbarLink: FunctionComponent<{
     active: boolean;
   };
   locale: string;
+  // rightSection: JSX.Element;
 }> = ({link, locale}) => (
   <Link
     href={link.route}
@@ -72,6 +73,7 @@ const NavbarLink: FunctionComponent<{
       title={link.title}
       active={link.active}
       icon={<link.icon size={20}/>}
+      // rightSection={} TODO logout button
     />
   </Link>
 );

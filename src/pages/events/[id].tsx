@@ -22,6 +22,7 @@ import {UserBadge} from '../../components/user/UserBadge';
 import {useEffect} from 'react';
 import {usePathId} from '../../hooks/usePathId';
 import {CenteredLoader} from '../../components/CenteredLoader';
+import {useGeolocation} from '../../hooks/useGeolocation';
 
 export default function EventDetailsPage() {
   const longDateFormatter = useLongDateFormatter();
@@ -32,9 +33,13 @@ export default function EventDetailsPage() {
   const {id: eventId, isReady} = usePathId<number>();
   const {data: session} = useSession();
   const {t} = useTranslation('common');
+  const {location} = useGeolocation();
 
   const queryContext = api.useContext();
-  const eventQuery = api.event.getById.useQuery(eventId!, {
+  const eventQuery = api.event.getById.useQuery({
+    eventId: eventId!,
+    location: location ?? null,
+  }, {
     enabled: isReady,
   });
   const averageRatingQuery = api.rating.getAverageRatingForEvent.useQuery(eventId!, {
