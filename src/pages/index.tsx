@@ -58,6 +58,8 @@ export default function FeedPage() {
     }
   }, [entry]);
 
+  // TODO useGeolocation
+
   return (
     <Stack>
       <Flex

@@ -13,9 +13,10 @@ import {Prisma} from '.prisma/client';
 import {IdSchema} from '../../../models/Utils';
 import {InvalidateEvent, PusherChannel} from '../../../utils/enums';
 import {PrismaClient} from '@prisma/client';
-import {CreateLocationType, MutateLocationSchema} from '../../../models/Location';
+import {CoordinatesSchema, CoordinatesType} from '../../../models/Location';
 
-const getEventDistance = async (prisma: PrismaClient, userId: string, eventId: number, location?: CreateLocationType) => {
+// TODO location shouldn't be optional
+const getEventDistance = async (prisma: PrismaClient, userId: string, eventId: number, location?: CoordinatesType) => {
   // TODO write this in kysely
   const distance: {
     distanceInKilometers: number
@@ -72,7 +73,7 @@ const filterDistantEvents = async <EventType extends {
   userId: string,
   events: EventType[],
   maxDistance: number | null,
-  center?: CreateLocationType
+  center?: CoordinatesType
 ) => {
   const eventsWithDistance = await Promise.all(events.map(async event => ({
     ...event,
@@ -204,23 +205,11 @@ export const eventRouter = createTRPCRouter({
     }),
   getMap: protectedProcedure
     .input(z.object({
-      center: MutateLocationSchema.nullable(),
+      center: CoordinatesSchema,
       maxDistance: z.number().positive(),
     }))
-    .output(z.object({
-      center: MutateLocationSchema,
-      events: BasicEventSchema.array(),
-    }))
+    .output(BasicEventSchema.array())
     .query(async ({input: {center, maxDistance}, ctx: {session: {user: {id: callerId}}, prisma}}) => {
-      let actualCenter = center;
-      if (!actualCenter) {
-        const user = await prisma.user.findUnique({
-          where: {id: callerId},
-          include: {location: true},
-        });
-        actualCenter = user?.location ?? {latitude: 47.497912, longitude: 19.040235, address: 'Budapest, Magyarország'};
-      }
-
       const events = await prisma.event.findMany({
         where: {
           creatorId: {not: callerId},
@@ -233,12 +222,9 @@ export const eventRouter = createTRPCRouter({
         include: {location: true, creator: true, group: {include: {creator: true}}},
       });
 
-      const filteredEvents = await filterDistantEvents(prisma, callerId, events, maxDistance, actualCenter);
+      const filteredEvents = await filterDistantEvents(prisma, callerId, events, maxDistance, center);
 
-      return {
-        center: actualCenter,
-        events: BasicEventSchema.array().parse(filteredEvents),
-      };
+      return BasicEventSchema.array().parse(filteredEvents);
     }),
   getCalendar: protectedProcedure
     .output(BasicEventSchema.array())

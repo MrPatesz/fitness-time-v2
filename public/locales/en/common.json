@@ -392,5 +392,9 @@
     "accept": "Accept",
     "decline": "Decline",
     "review": "Review Join Requests"
+  },
+  "mapPage": {
+    "absentPermission1": "To access this feature either give permission to your location or set your Residence on your",
+    "absentPermission2": "!"
   }
 }

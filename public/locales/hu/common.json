@@ -392,5 +392,9 @@
     "accept": "Felvesz",
     "decline": "Elutasít",
     "review": "Csatlakozási kérelmek bírálása"
+  },
+  "mapPage": {
+    "absentPermission1": "A funkció használatához adj engedélyt a tartózkodási helyedhez vagy állítsd be a Tartózkodásodat a",
+    "absentPermission2": "odon!"
   }
 }

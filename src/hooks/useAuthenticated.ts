@@ -10,9 +10,7 @@ export const useAuthenticated = (options?: UseSessionOptions<boolean> | undefine
     return {loading};
   } else if (!authenticated) {
     return {loading, authenticated};
-  } else if (session) {
-    return {loading, authenticated, user: session.user};
+  } else {
+    return {loading, authenticated, user: session!.user};
   }
-
-  throw new Error('Error in "useAuthenticated"'); // should never happen
 };
