@@ -6,10 +6,12 @@ import Head from 'next/head';
 import i18nConfig from '../../next-i18next.config.mjs';
 import {ApplicationShell} from '../components/app/ApplicationShell';
 import {ThemeProvider} from '../components/app/ThemeProvider';
-import '../styles/calendar.css';
-import '../styles/globals.css';
 import {api} from '../utils/api';
 import {Analytics} from '@vercel/analytics/react';
+import '@uploadthing/react/styles.css';
+import '../styles/uploadthing.css';
+import '../styles/calendar.css';
+import '../styles/globals.css';
 
 const App: AppType<{ session: Session | null }> = ({
                                                      Component,

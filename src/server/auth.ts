@@ -21,7 +21,6 @@ declare module 'next-auth' {
       id: string;
       name: string;
       themeColor: ThemeColor;
-      hasLocation: boolean;
       // role: UserRole;
       // image: string;
       // email: string;
@@ -33,7 +32,6 @@ declare module 'next-auth' {
     id: string;
     name: string;
     themeColor: ThemeColor;
-    locationId: number | null;
     // role: UserRole;
     // image: string;
     // email: string;
@@ -53,7 +51,6 @@ export const authOptions: NextAuthOptions = {
         session.user.id = user.id;
         session.user.name = user.name;
         session.user.themeColor = user.themeColor;
-        session.user.hasLocation = Boolean(user.locationId);
         // session.user.role = user.role;
         // session.user.image = user.image;
         // session.user.email = user.email;

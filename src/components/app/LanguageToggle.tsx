@@ -19,7 +19,7 @@ export const LanguageToggle: FunctionComponent = () => {
       variant={dark ? 'outline' : 'default'}
       onClick={() => void pushRoute(route, undefined, {locale: isDefaultLocale ? 'hu' : 'en'})}
     >
-      <Text pb={isMobile ? undefined : 4}>
+      <Text pb={isMobile ? undefined : 2}>
         {isDefaultLocale ? '🇭🇺' : '🇺🇸'}
       </Text>
     </ActionIcon>

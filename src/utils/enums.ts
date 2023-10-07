@@ -106,8 +106,10 @@ export enum InvalidateEvent {
   RatingGetAverageRatingForGroup = 'rating.getAverageRatingForGroup',
   UserGetById = 'user.getById',
   UserGetPaginatedUsers = 'user.getPaginatedUsers',
-  /* these should be invalidated locally
+  /*
+  UserProfile = 'user.profile', // use UserGetById instead
+  // these should be invalidated locally
   CommentGetAllCreated = 'comment.getAllCreated',
   RatingGetCallerRating = 'rating.getCallerRating',
-  UserProfile = 'user.profile',*/
+  */
 }

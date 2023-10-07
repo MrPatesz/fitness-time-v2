@@ -1,6 +1,12 @@
 import {z} from 'zod';
 import {PaginateUsersSchema} from '../../../models/pagination/PaginateUsers';
-import {BasicUserSchema, DetailedUserSchema, ProfileSchema, UpdateProfileSchema} from '../../../models/User';
+import {
+  BasicUserSchema,
+  DetailedUserSchema,
+  ProfileSchema,
+  UpdateProfileSchema,
+  UpdateProfileType
+} from '../../../models/User';
 import {createTRPCRouter, protectedProcedure} from '../trpc';
 import {Prisma} from '.prisma/client';
 import {InvalidateEvent, PusherChannel} from '../../../utils/enums';
@@ -110,10 +116,14 @@ export const userRouter = createTRPCRouter({
     .input(UpdateProfileSchema)
     .output(UpdateProfileSchema)
     .mutation(async ({input, ctx: {session: {user: {id: callerId}}, prisma, pusher}}) => {
+      // cannot update profile image from this endpoint
+      const newData = {...input} as Partial<UpdateProfileType>;
+      delete newData.image;
+
       const updatedUser = await prisma.user.update({
         where: {id: callerId},
         data: {
-          ...input,
+          ...newData,
           location: input.location ? {
             connectOrCreate: {
               where: {

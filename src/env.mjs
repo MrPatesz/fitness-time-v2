@@ -20,17 +20,19 @@ const server = z.object({
     process.env.VERCEL ? z.string().min(1) : z.string().url(),
   ),
   // Add `.min(1) on ID and SECRET if you want to make sure they're not empty
-  DISCORD_CLIENT_ID: z.string(),
-  DISCORD_CLIENT_SECRET: z.string(),
-  GOOGLE_CLIENT_ID: z.string(),
-  GOOGLE_CLIENT_SECRET: z.string(),
-  PUSHER_APP_ID: z.string(),
-  PUSHER_SECRET: z.string(),
-  POSTGRES_USER: z.string(),
-  POSTGRES_PASSWORD: z.string(),
-  POSTGRES_HOST: z.string(),
+  DISCORD_CLIENT_ID: z.string().nonempty(),
+  DISCORD_CLIENT_SECRET: z.string().nonempty(),
+  GOOGLE_CLIENT_ID: z.string().nonempty(),
+  GOOGLE_CLIENT_SECRET: z.string().nonempty(),
+  PUSHER_APP_ID: z.string().nonempty(),
+  PUSHER_SECRET: z.string().nonempty(),
+  POSTGRES_USER: z.string().nonempty(),
+  POSTGRES_PASSWORD: z.string().nonempty(),
+  POSTGRES_HOST: z.string().nonempty(),
   POSTGRES_PORT: z.string().transform(port => parseInt(port)),
-  POSTGRES_DATABASE: z.string(),
+  POSTGRES_DATABASE: z.string().nonempty(),
+  UPLOADTHING_SECRET: z.string().nonempty(),
+  UPLOADTHING_APP_ID: z.string().nonempty(),
 });
 
 /**
@@ -39,11 +41,10 @@ const server = z.object({
  * To expose them to the client, prefix them with `NEXT_PUBLIC_`.
  */
 const client = z.object({
-  NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: z.string().min(1),
-  NEXT_PUBLIC_PUSHER_APP_KEY: z.string().min(1),
-  NEXT_PUBLIC_PUSHER_CLUSTER: z.string().min(1),
+  NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: z.string().nonempty(),
+  NEXT_PUBLIC_PUSHER_APP_KEY: z.string().nonempty(),
+  NEXT_PUBLIC_PUSHER_CLUSTER: z.string().nonempty(),
   NEXT_PUBLIC_VERCEL_ENV: z.enum(['development', 'preview', 'production']),
-  // NEXT_PUBLIC_CLIENTVAR: z.string().min(1),
 });
 
 /**
@@ -67,11 +68,12 @@ const processEnv = {
   POSTGRES_HOST: process.env.POSTGRES_HOST,
   POSTGRES_PORT: process.env.POSTGRES_PORT,
   POSTGRES_DATABASE: process.env.POSTGRES_DATABASE,
+  UPLOADTHING_SECRET: process.env.UPLOADTHING_SECRET,
+  UPLOADTHING_APP_ID: process.env.UPLOADTHING_APP_ID,
   NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
   NEXT_PUBLIC_PUSHER_APP_KEY: process.env.NEXT_PUBLIC_PUSHER_APP_KEY,
   NEXT_PUBLIC_PUSHER_CLUSTER: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
   NEXT_PUBLIC_VERCEL_ENV: process.env.NEXT_PUBLIC_VERCEL_ENV,
-  // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
 };
 
 // Don't touch the part below

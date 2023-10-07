@@ -140,6 +140,16 @@
       "update": {
         "title": "Updated profile!",
         "message": "Your profile has been modified."
+      },
+      "image": {
+        "success": {
+          "title": "Updated profile image!",
+          "message": "Your profile image has been modified."
+        },
+        "error": {
+          "title": "Failed to update profile image!",
+          "message": "The uploaded image exceeds the 1MB limit."
+        }
       }
     },
     "joinRequest": {
@@ -274,8 +284,8 @@
   "profileForm": {
     "introduction": "Introduction",
     "displayName": {
-      "error": "Display name is required!",
-      "label": "Display Name",
+      "error": "Name is required!",
+      "label": "Name",
       "placeholder": "Other users will see this name."
     },
     "location": {
@@ -283,14 +293,17 @@
       "description": "This is used to filter events by distance. Only you can see this information."
     },
     "image": {
-      "label": "Profile Image URL",
+      "label": "Profile Image",
       "placeholder": "You can set your profile image here.",
-      "error": "Invalid image URL!"
+      "error": "Invalid image URL!",
+      "button": "Choose Image",
+      "allowedContent": "Image (1MB)"
     },
     "delete": {
       "title": "Delete Profile",
       "message": "This will permanently remove your profile with all of its associated data from our database.",
-      "warning": "None of this data can be recovered after deletion!"
+      "warning": "None of the data can be recovered after deletion!",
+      "dangerZone": "Danger Zone"
     }
   },
   "mapComponent": {

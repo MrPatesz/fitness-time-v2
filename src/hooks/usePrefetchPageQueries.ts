@@ -144,9 +144,12 @@ export const usePrefetchPageQueries = () => {
   useEffect(() => {
     if (authenticated) {
       const input = {
-        maxDistance: user.hasLocation && enableMaxDistance ? maxDistance : undefined,
         includeArchive,
         myGroupsOnly,
+        distanceFilter: {
+          maxDistance: location && enableMaxDistance ? maxDistance : null,
+          location: location ?? null,
+        },
       };
       if (!queryContext.event.getFeed.getInfiniteData(input)) {
         void queryContext.event.getFeed.prefetchInfinite(input);
@@ -155,7 +158,7 @@ export const usePrefetchPageQueries = () => {
   }, [
     authenticated,
     queryContext,
-    user?.hasLocation,
+    location,
     enableMaxDistance,
     maxDistance,
     includeArchive,

@@ -23,5 +23,32 @@ const config = withPWA({
    * @see https://github.com/vercel/next.js/issues/41980
    */
   i18n: i18nConfig.i18n,
+
+  images: {
+    remotePatterns: [
+      // UploadThing
+      {
+        protocol: 'https',
+        hostname: 'utfs.io',
+        pathname: '/f/**',
+        port: '',
+      },
+      // Google
+      {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com',
+        pathname: '/a/**',
+        port: '',
+      },
+      // Discord
+      {
+        protocol: 'https',
+        hostname: 'cdn.discordapp.com',
+        pathname: '/avatars/**',
+        port: '',
+      },
+      // add new login options' image urls
+    ],
+  },
 });
 export default config;
