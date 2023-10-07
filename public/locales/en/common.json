@@ -2,7 +2,6 @@
   "application": {
     "name": "Fitness Time",
     "shortName": "FT",
-    "welcome": "Welcome to Fitness Time!",
     "logout": "Logout",
     "colorScheme": "Change Color Scheme",
     "language": "Change Language",
@@ -12,6 +11,11 @@
     "shareDescription": "{{username}} shared this link with you from Fitness Time!",
     "someone": "Someone",
     "upcomingEvents": "You have {{count}} upcoming event{{plural}} in the next 24 hours."
+  },
+  "welcomePage": {
+    "welcome": "Welcome to Fitness Time!",
+    "description": "Fitness Time is a social media application in which users can form groups and organize events.",
+    "login": "Login"
   },
   "navbar": {
     "feed": {
@@ -47,7 +51,6 @@
     }
   },
   "button": {
-    "login": "Login",
     "logout": "Logout",
     "confirm": "Confirm",
     "cancel": "Cancel",
@@ -337,6 +340,10 @@
     }
   },
   "eventForm": {
+    "group": {
+      "label": "Group",
+      "placeholder": "Which group's event will it be?"
+    },
     "name": {
       "error": "Name is required!",
       "placeholder": "What is the event called?"

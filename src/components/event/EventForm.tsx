@@ -1,4 +1,4 @@
-import {Button, Group, Stack, TextInput} from '@mantine/core';
+import {Button, Group, Select, Stack, TextInput} from '@mantine/core';
 import {useForm} from '@mantine/form';
 import {useTranslation} from 'next-i18next';
 import {FunctionComponent} from 'react';
@@ -11,6 +11,7 @@ import {OverlayLoader} from '../OverlayLoader';
 import dayjs from '../../utils/dayjs';
 import {NullableNumberInput} from './NullableNumberInput';
 import {DateTimePicker} from '@mantine/dates';
+import {api} from '../../utils/api';
 
 export const EventForm: FunctionComponent<{
   originalEvent: CreateEventType | BasicEventType;
@@ -43,6 +44,8 @@ export const EventForm: FunctionComponent<{
       end: (value, event) => getEndError(value, event.start),
     },
   });
+
+  const groupsQuery = api.group.getJoinedGroups.useQuery(); // TODO prefetch
 
   return (
     <OverlayLoader loading={loading}>
@@ -80,6 +83,19 @@ export const EventForm: FunctionComponent<{
             location={getFormLocationValue(form)}
             setLocation={getFormLocationOnChange(form)}
             error={getFormError(form, 'location')}
+          />
+          <Select // TODO custom Select with GroupBadge
+            clearable
+            searchable
+            disabled={'id' in originalEvent}
+            label={t('eventForm.group.label')}
+            data={groupsQuery.data?.map(g => ({value: g.id.toString(), label: g.name})) ?? []}
+            placeholder={t('eventForm.group.placeholder')}
+            value={(form.getInputProps('groupId').value as number | null)?.toString() ?? ''}
+            onChange={value => {
+              const onChange = form.getInputProps('groupId').onChange as (newValue: number | null) => void;
+              onChange(value ? parseInt(value) : null);
+            }}
           />
           <RichTextField
             label={t('eventForm.description.label')}

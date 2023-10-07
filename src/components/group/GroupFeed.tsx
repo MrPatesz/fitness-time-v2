@@ -58,7 +58,7 @@ export const GroupFeed: FunctionComponent<{
                 color={theme.fn.themeColor(theme.primaryColor)}
                 onClick={() => openModal({
                   title: t('modal.event.create'),
-                  children: <CreateEventForm groupId={groupId}/>,
+                  children: <CreateEventForm initialGroupId={groupId}/>,
                   fullScreen: !xs,
                 })}
               >

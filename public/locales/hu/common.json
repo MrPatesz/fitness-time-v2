@@ -2,7 +2,6 @@
   "application": {
     "name": "Fitness Time",
     "shortName": "FT",
-    "welcome": "Üdvözöl a Fitness Time!",
     "logout": "Kijelentkezés",
     "colorScheme": "Színséma váltása",
     "language": "Nyelv váltása",
@@ -12,6 +11,11 @@
     "shareDescription": "{{username}} megosztotta veled ezt a linket a Fitness Time-ról!",
     "someone": "Valaki",
     "upcomingEvents": "A következő 24 órában {{count}} eseményed lesz."
+  },
+  "welcomePage": {
+    "welcome": "Üdvözöl a Fitness Time!",
+    "description": "Fitness Time egy közösségi média alkalmazás, amelyben a felhasználók csoportokat alkothatnak és eseményeket szervezhetnek.",
+    "login": "Bejelentkezés"
   },
   "navbar": {
     "feed": {
@@ -47,7 +51,6 @@
     }
   },
   "button": {
-    "login": "Bejelentkezés",
     "logout": "Kijelentkezés",
     "confirm": "Megerősítés",
     "cancel": "Mégse",
@@ -337,6 +340,10 @@
     }
   },
   "eventForm": {
+    "group": {
+      "label": "Csoport",
+      "placeholder": "Mely csoport eseménye lesz?"
+    },
     "name": {
       "error": "Név kötelező!",
       "placeholder": "Mi az esemény neve?"

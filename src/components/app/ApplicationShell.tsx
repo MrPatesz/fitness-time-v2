@@ -1,6 +1,7 @@
 import {
   ActionIcon,
   AppShell,
+  Box,
   Burger,
   Group,
   Header,
@@ -23,6 +24,7 @@ import {
   Logout,
   Map,
   News,
+  Plus,
   Share,
   Ticket,
   UserCircle,
@@ -37,6 +39,8 @@ import {useMyRouter} from '../../hooks/useMyRouter';
 import {useInitializePusher} from '../../hooks/usePusher';
 import {IconShare3} from '@tabler/icons-react';
 import {usePrefetchPageQueries} from '../../hooks/usePrefetchPageQueries';
+import {openModal} from '@mantine/modals';
+import {CreateEventForm} from '../event/CreateEventForm';
 
 const [
   feedRoute,
@@ -60,7 +64,6 @@ const NavbarLink: FunctionComponent<{
     active: boolean;
   };
   locale: string;
-  // rightSection: JSX.Element;
 }> = ({link, locale}) => (
   <Link
     href={link.route}
@@ -73,7 +76,6 @@ const NavbarLink: FunctionComponent<{
       title={link.title}
       active={link.active}
       icon={<link.icon size={20}/>}
-      // rightSection={} TODO logout button
     />
   </Link>
 );
@@ -159,12 +161,17 @@ export const ApplicationShell: FunctionComponent<{
                 <ColorSchemeToggle/>
                 {authenticated && (
                   <ActionIcon
-                    title={t('application.logout')}
+                    title={t('modal.event.create')}
                     size="lg"
-                    variant={theme.colorScheme === 'dark' ? 'outline' : 'default'}
-                    onClick={() => void signOut({callbackUrl: welcomeRoute})}
+                    variant="filled"
+                    color={theme.fn.themeColor(theme.primaryColor)}
+                    onClick={() => openModal({
+                      title: t('modal.event.create'),
+                      children: <CreateEventForm/>,
+                      fullScreen: !xs,
+                    })}
                   >
-                    <Logout/>
+                    <Plus/>
                   </ActionIcon>
                 )}
               </Group>
@@ -213,17 +220,29 @@ export const ApplicationShell: FunctionComponent<{
                   onClick: closeNavbar,
                 }}
               />
-              <NavbarLink
-                locale={locale}
-                link={{
-                  label: user.name,
-                  title: t('navbar.profile.title'),
-                  route: profileRoute,
-                  icon: UserCircle,
-                  active: isRouteActive(profileRoute),
-                  onClick: closeNavbar,
-                }}
-              />
+              <Group position="apart" spacing="xs" noWrap>
+                <Box sx={{flexGrow: 1}}>
+                  <NavbarLink
+                    locale={locale}
+                    link={{
+                      label: user.name,
+                      title: t('navbar.profile.title'),
+                      route: profileRoute,
+                      icon: UserCircle,
+                      active: isRouteActive(profileRoute),
+                      onClick: closeNavbar,
+                    }}
+                  />
+                </Box>
+                <ActionIcon
+                  title={t('application.logout')}
+                  size="lg"
+                  variant={theme.colorScheme === 'dark' ? 'outline' : 'default'}
+                  onClick={() => void signOut({callbackUrl: welcomeRoute})}
+                >
+                  <Logout/>
+                </ActionIcon>
+              </Group>
             </Navbar.Section>
           </Navbar>
         ) : undefined}

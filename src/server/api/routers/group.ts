@@ -124,6 +124,16 @@ export const groupRouter = createTRPCRouter({
         ({start: new Date(start), end: new Date(end)})
       );
     }),
+  getJoinedGroups: protectedProcedure
+    .output(BasicGroupSchema.array())
+    .query(async ({ctx: {prisma, session: {user: {id: callerId}}}}) => {
+      const groups = await prisma.group.findMany({
+        where: {members: {some: {id: callerId}}},
+        include: {creator: true},
+      });
+
+      return BasicGroupSchema.array().parse(groups);
+    }),
   create: protectedProcedure
     .input(MutateGroupSchema)
     .output(z.void())

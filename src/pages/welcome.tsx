@@ -1,4 +1,4 @@
-import {Button, Card, Group, Stack, Title, useMantineTheme} from '@mantine/core';
+import {Button, Card, Group, Stack, Text, Title, useMantineTheme} from '@mantine/core';
 import {signIn} from 'next-auth/react';
 import {useTranslation} from 'next-i18next';
 import {serverSideTranslations} from 'next-i18next/serverSideTranslations';
@@ -39,7 +39,7 @@ export default function WelcomePage() {
     ];
   });
 
-  return (!authenticated) && (
+  return !authenticated && (
     <Stack
       align="center"
       justify="center"
@@ -50,18 +50,23 @@ export default function WelcomePage() {
       }}
     >
       <Card withBorder w={xs ? undefined : 245}>
-        <Title order={1} align="center" pb="xl">
-          {t('application.welcome')}
-        </Title>
-        <Group position="center">
-          <Button
-            variant="gradient"
-            gradient={{from, to, deg}}
-            onClick={() => void signIn(undefined, {callbackUrl: `${localePrefix}/`})}
-          >
-            {t('button.login')}
-          </Button>
-        </Group>
+        <Stack>
+          <Title order={1} align="center">
+            {t('welcomePage.welcome')}
+          </Title>
+          <Text color="dimmed">
+            {t('welcomePage.description')}
+          </Text>
+          <Group position="center">
+            <Button
+              variant="gradient"
+              gradient={{from, to, deg}}
+              onClick={() => void signIn(undefined, {callbackUrl: `${localePrefix}/`})}
+            >
+              {t('welcomePage.login')}
+            </Button>
+          </Group>
+        </Stack>
       </Card>
     </Stack>
   );

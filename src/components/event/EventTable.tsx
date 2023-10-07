@@ -6,14 +6,13 @@ import {IconSearch} from '@tabler/icons-react';
 import {DataTable, DataTableSortStatus} from 'mantine-datatable';
 import {useTranslation} from 'next-i18next';
 import {FunctionComponent, useEffect, useState} from 'react';
-import {Pencil, Plus, Trash} from 'tabler-icons-react';
+import {Pencil, Trash} from 'tabler-icons-react';
 import {BasicEventType} from '../../models/Event';
 import {api} from '../../utils/api';
 import {EventTableDisplayPlace, InvalidateEvent, SortDirection, SortEventByProperty} from '../../utils/enums';
 import {useLongDateFormatter, usePriceFormatter} from '../../utils/formatters';
 import {QueryComponent} from '../QueryComponent';
 import {EditEventForm} from './EditEventForm';
-import {CreateEventForm} from './CreateEventForm';
 import {useMyRouter} from '../../hooks/useMyRouter';
 
 const DATE_TIME = 'dateTime';
@@ -93,19 +92,6 @@ const EventTable: FunctionComponent<{
           checked={archive}
           onChange={(e) => setArchive(e.currentTarget.checked)}
         />
-        <ActionIcon
-          title={t('modal.event.create')}
-          size={36}
-          variant="filled"
-          color={theme.fn.themeColor(theme.primaryColor)}
-          onClick={() => openModal({
-            title: t('modal.event.create'),
-            children: <CreateEventForm/>,
-            fullScreen: !xs,
-          })}
-        >
-          <Plus/>
-        </ActionIcon>
       </Flex>
       <QueryComponent
         resourceName={t('resource.events')}

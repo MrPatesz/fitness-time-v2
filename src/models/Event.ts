@@ -22,7 +22,7 @@ export const MutateEventSchema = z.object({
   limit: z.number().min(2).nullable(),
   price: z.number().min(1).nullable(),
   location: MutateLocationSchema,
-  groupId: IdSchema.nullish(),
+  groupId: IdSchema.nullable(),
 }).refine(event => new Date() < event.start, {
   message: 'Event must not start in the past',
 }).refine(event => event.start < event.end, {
@@ -37,7 +37,6 @@ export const BasicEventSchema = MutateEventSchema.innerType().innerType().innerT
   creator: BasicUserSchema,
   locationId: IdSchema,
   location: LocationSchema,
-  groupId: IdSchema.nullable(),
   group: BasicGroupSchema.nullable(),
   status: z.nativeEnum(EventStatus).optional(),
   distance: z.number().nonnegative().optional(),

@@ -86,7 +86,7 @@ const IntervalRecommenderContent: FunctionComponent<{
           eventColor={theme.fn.themeColor(theme.primaryColor)}
           eventClick={({event: {start, end}}) => openModal({
             title: t('modal.event.create'),
-            children: start && end && (<CreateEventForm initialInterval={{start, end}} groupId={groupId}/>),
+            children: start && end && (<CreateEventForm initialInterval={{start, end}} initialGroupId={groupId}/>),
             fullScreen: !xs,
             zIndex: 402,
           })}

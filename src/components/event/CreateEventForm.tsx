@@ -7,12 +7,12 @@ import {getDefaultCreateEvent} from '../../utils/defaultObjects';
 import {EventForm} from './EventForm';
 
 export const CreateEventForm: FunctionComponent<{
-  groupId?: number;
+  initialGroupId?: number;
   initialInterval?: {
     start: Date;
     end: Date;
   };
-}> = ({groupId, initialInterval}) => {
+}> = ({initialGroupId, initialInterval}) => {
   const {t} = useTranslation('common');
 
   const createEvent = api.event.create.useMutation({
@@ -28,8 +28,8 @@ export const CreateEventForm: FunctionComponent<{
 
   return (
     <EventForm
-      originalEvent={{...getDefaultCreateEvent(initialInterval), groupId}}
-      onSubmit={(data) => createEvent.mutate({...data, price: data.price ?? null, limit: data.limit ?? null})}
+      originalEvent={{...getDefaultCreateEvent(initialInterval), groupId: initialGroupId ?? null}}
+      onSubmit={createEvent.mutate}
       loading={createEvent.isLoading}
     />
   );
