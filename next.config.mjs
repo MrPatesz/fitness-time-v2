@@ -29,6 +29,12 @@ const config = withPWA({
       // UploadThing
       {
         protocol: 'https',
+        hostname: 'uploadthing.com',
+        pathname: '/f/**',
+        port: '',
+      },
+      {
+        protocol: 'https',
         hostname: 'utfs.io',
         pathname: '/f/**',
         port: '',
@@ -45,6 +51,12 @@ const config = withPWA({
         protocol: 'https',
         hostname: 'cdn.discordapp.com',
         pathname: '/avatars/**',
+        port: '',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn.discordapp.com',
+        pathname: '/embed/avatars/**',
         port: '',
       },
       // add new login options' image urls
