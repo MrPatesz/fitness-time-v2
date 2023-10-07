@@ -237,7 +237,7 @@ export const ApplicationShell: FunctionComponent<{
                 <ActionIcon
                   title={t('application.logout')}
                   size="lg"
-                  variant={theme.colorScheme === 'dark' ? 'outline' : 'default'}
+                  variant="subtle"
                   onClick={() => void signOut({callbackUrl: welcomeRoute})}
                 >
                   <Logout/>
