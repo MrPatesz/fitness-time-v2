@@ -1,17 +1,17 @@
 import {Button, Group, Select, Stack, TextInput} from '@mantine/core';
+import {DateTimePicker} from '@mantine/dates';
 import {useForm} from '@mantine/form';
 import {useTranslation} from 'next-i18next';
 import {FunctionComponent} from 'react';
 import {BasicEventType, CreateEventType} from '../../models/Event';
-import {LocationPicker} from '../location/LocationPicker';
-import {RichTextField} from '../rich-text/RichTextField';
 import {CreateLocationType, LocationType} from '../../models/Location';
-import {getFormError, getFormLocationOnChange, getFormLocationValue} from '../../utils/mantineFormUtils';
-import {OverlayLoader} from '../OverlayLoader';
-import dayjs from '../../utils/dayjs';
-import {NullableNumberInput} from './NullableNumberInput';
-import {DateTimePicker} from '@mantine/dates';
 import {api} from '../../utils/api';
+import dayjs from '../../utils/dayjs';
+import {getFormError, getFormLocationOnChange, getFormLocationValue} from '../../utils/mantineFormUtils';
+import {LocationPicker} from '../location/LocationPicker';
+import {OverlayLoader} from '../OverlayLoader';
+import {RichTextField} from '../rich-text/RichTextField';
+import {NullableNumberInput} from './NullableNumberInput';
 
 export const EventForm: FunctionComponent<{
   originalEvent: CreateEventType | BasicEventType;
@@ -66,6 +66,12 @@ export const EventForm: FunctionComponent<{
             label={t('intervalPicker.start')}
             minDate={new Date()}
             {...form.getInputProps('start')}
+            onChange={newStart => {
+              const startOnChange = form.getInputProps('start').onChange as (newValue: Date | null) => void;
+              startOnChange(newStart);
+              const endOnChange = form.getInputProps('end').onChange as (newValue: Date | null) => void;
+              endOnChange(dayjs(newStart).add(1, 'hour').toDate());
+            }}
           />
           <DateTimePicker
             withAsterisk

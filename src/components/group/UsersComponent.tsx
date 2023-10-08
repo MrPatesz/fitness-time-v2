@@ -1,16 +1,16 @@
 import {ActionIcon, Avatar, Badge, Card, Group, SimpleGrid, Stack, Text, Tooltip, useMantineTheme} from '@mantine/core';
+import {useMediaQuery} from '@mantine/hooks';
 import {closeAllModals, openModal} from '@mantine/modals';
 import {useSession} from 'next-auth/react';
 import {useTranslation} from 'next-i18next';
 import Link from 'next/link';
 import {FunctionComponent} from 'react';
 import {Minus, Plus} from 'tabler-icons-react';
+import {useMyRouter} from '../../hooks/useMyRouter';
 import {BasicUserType} from '../../models/User';
 import {useSignedNumberFormatter} from '../../utils/formatters';
 import {getInitials} from '../../utils/utilFunctions';
 import UserImage from '../user/UserImage';
-import {useMediaQuery} from '@mantine/hooks';
-import {useMyRouter} from '../../hooks/useMyRouter';
 
 export const UsersComponent: FunctionComponent<{
   users: BasicUserType[];
@@ -41,7 +41,7 @@ export const UsersComponent: FunctionComponent<{
   return (
     <SimpleGrid
       spacing="xs"
-      cols={isMobile ? 2 : 1}
+      cols={(isMobile && eventLimit) ? 2 : 1}
       sx={{alignItems: 'center'}}
     >
       <Avatar.Group
