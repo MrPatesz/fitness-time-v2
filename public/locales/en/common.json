@@ -10,7 +10,8 @@
     "share": "Share",
     "shareDescription": "{{username}} shared this link with you from Fitness Time!",
     "someone": "Someone",
-    "upcomingEvents": "You have {{count}} upcoming event{{plural}} in the next 24 hours."
+    "upcomingEvents": "You have {{count}} upcoming event{{plural}} in the next 24 hours.",
+    "collapse": "Open/Collapse"
   },
   "welcomePage": {
     "welcome": "Welcome to Fitness Time!",
@@ -123,6 +124,16 @@
       "participation": {
         "title": "Updated participation!",
         "message": "Your participation status has been modified."
+      },
+      "image": {
+        "success": {
+          "title": "Updated event image!",
+          "message": "Event image has been modified."
+        },
+        "error": {
+          "title": "Failed to update event image!",
+          "message": "The uploaded image exceeds the 2MB limit."
+        }
       }
     },
     "comment": {
@@ -262,7 +273,8 @@
   "eventDetails": {
     "participate": "Participate",
     "removeParticipation": "Remove participation",
-    "participants": "They will also be there:"
+    "participants": "Participants",
+    "modifyImages": "Modify Images"
   },
   "queryComponent": {
     "error": "An error occurred while fetching {{resourceName}}!"
@@ -300,7 +312,7 @@
       "placeholder": "You can set your profile image here.",
       "error": "Invalid image URL!",
       "button": "Choose Image",
-      "allowedContent": "Image (1MB)"
+      "allowedContent": "Image ({{size}}MB)"
     },
     "delete": {
       "title": "Delete Profile",

@@ -81,6 +81,7 @@ model Event {
   start        DateTime
   end          DateTime
   description  String    @db.VarChar(1024)
+  images       String[]  @default([]) @db.VarChar(256)
   limit        Int?
   price        Int?
   locationId   Int

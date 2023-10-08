@@ -1,25 +1,25 @@
 import {Button, Group, Loader, Stack, Text, TextInput, useMantineTheme} from '@mantine/core';
 import {useForm} from '@mantine/form';
+import {openConfirmModal} from '@mantine/modals';
 import {showNotification} from '@mantine/notifications';
+import {UseTRPCQueryResult} from '@trpc/react-query/dist/shared';
+import {Session} from 'next-auth';
+import {signOut, useSession} from 'next-auth/react';
 import {useTranslation} from 'next-i18next';
 import {FunctionComponent} from 'react';
+import {useMyRouter} from '../../hooks/useMyRouter';
 import {ProfileType, UpdateProfileType} from '../../models/User';
+import {ImageSchema} from '../../models/Utils';
 import {api} from '../../utils/api';
+import {ThemeColor} from '../../utils/enums';
+import {getFormLocationOnChange, getFormLocationValue} from '../../utils/mantineFormUtils';
+import {UploadButton} from '../../utils/uploadthing';
+import {BorderComponent} from '../BorderComponent';
 import {LocationPicker} from '../location/LocationPicker';
+import {OverlayLoader} from '../OverlayLoader';
 import {RichTextField} from '../rich-text/RichTextField';
 import {ThemeColorPicker} from './ThemeColorPicker';
 import UserImage from './UserImage';
-import {ThemeColor} from '../../utils/enums';
-import {getFormLocationOnChange, getFormLocationValue} from '../../utils/mantineFormUtils';
-import {signOut, useSession} from 'next-auth/react';
-import {Session} from 'next-auth';
-import {UseTRPCQueryResult} from '@trpc/react-query/dist/shared';
-import {OverlayLoader} from '../OverlayLoader';
-import {openConfirmModal} from '@mantine/modals';
-import {ImageSchema} from '../../models/Utils';
-import {useMyRouter} from '../../hooks/useMyRouter';
-import {UploadButton} from '../../utils/uploadthing';
-import {BorderComponent} from '../BorderComponent';
 
 export const ProfileForm: FunctionComponent<{
   profileQuery: UseTRPCQueryResult<ProfileType, unknown>;
@@ -135,7 +135,7 @@ export const ProfileForm: FunctionComponent<{
                     isUploading ?
                       <Loader color="white"/> :
                       t('profileForm.image.button'),
-                  allowedContent: t('profileForm.image.allowedContent'),
+                  allowedContent: t('profileForm.image.allowedContent', {size: 1}),
                 }}
                 appearance={{
                   button: ({isUploading}) => ({

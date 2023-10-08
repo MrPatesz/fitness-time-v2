@@ -8,21 +8,22 @@ import {serverSideTranslations} from 'next-i18next/serverSideTranslations';
 import {useEffect, useMemo} from 'react';
 import {Lock, LockOpen, Pencil} from 'tabler-icons-react';
 import i18nConfig from '../../../next-i18next.config.mjs';
+import {CenteredLoader} from '../../components/CenteredLoader';
+import {CollapsibleCard} from '../../components/CollapsibleCard';
+import {EditGroupForm} from '../../components/group/EditGroupForm';
 import {GroupChat} from '../../components/group/GroupChat';
 import {GroupFeed} from '../../components/group/GroupFeed';
+import {JoinRequestsDialog} from '../../components/group/JoinRequestsDialog';
 import {UsersComponent} from '../../components/group/UsersComponent';
 import {QueryComponent} from '../../components/QueryComponent';
 import {RatingComponent} from '../../components/RatingComponent';
 import {RichTextDisplay} from '../../components/rich-text/RichTextDisplay';
-import {api} from '../../utils/api';
-import {useLongDateFormatter} from '../../utils/formatters';
-import {EditGroupForm} from '../../components/group/EditGroupForm';
-import {InvalidateEvent} from '../../utils/enums';
 import {UserBadge} from '../../components/user/UserBadge';
 import {usePathId} from '../../hooks/usePathId';
-import {CenteredLoader} from '../../components/CenteredLoader';
 import {usePusher} from '../../hooks/usePusher';
-import {JoinRequestsDialog} from '../../components/group/JoinRequestsDialog';
+import {api} from '../../utils/api';
+import {InvalidateEvent} from '../../utils/enums';
+import {useLongDateFormatter} from '../../utils/formatters';
 
 export default function GroupDetailsPage() {
   const longDateFormatter = useLongDateFormatter();
@@ -177,11 +178,11 @@ export default function GroupDetailsPage() {
           </Group>
           {isMember ? (
             <>
-              <RichTextDisplay
-                bordered
-                richText={groupQuery.data.description}
-                maxHeight={100}
-              />
+              {groupQuery.data.description && (
+                <CollapsibleCard label={t('groupForm.description.label')}>
+                  <RichTextDisplay richText={groupQuery.data.description}/>
+                </CollapsibleCard>
+              )}
               <SimpleGrid cols={md ? 2 : 1}>
                 <GroupFeed groupId={groupId}/>
                 <GroupChat groupId={groupId}/>

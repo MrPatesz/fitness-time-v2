@@ -5,16 +5,16 @@ import {
   MantineProvider,
   MantineThemeOverride
 } from '@mantine/core';
+import {DatesProvider} from '@mantine/dates';
 import {useLocalStorage} from '@mantine/hooks';
 import {ModalsProvider} from '@mantine/modals';
 import {Notifications} from '@mantine/notifications';
 import {useSession} from 'next-auth/react';
 import {FunctionComponent, useEffect, useMemo} from 'react';
-import dayjs from '../../utils/dayjs';
 import {useMyRouter} from '../../hooks/useMyRouter';
-import {DatesProvider} from '@mantine/dates';
-import {getFirstDayOfWeek} from '../../utils/utilFunctions';
+import dayjs from '../../utils/dayjs';
 import {emotionCache} from '../../utils/emotionCache';
+import {getFirstDayOfWeek} from '../../utils/utilFunctions';
 
 export const ThemeProvider: FunctionComponent<{
   children: JSX.Element;
@@ -67,7 +67,7 @@ export const ThemeProvider: FunctionComponent<{
               yOffset: 0,
             }}
           >
-            <Notifications/>
+            <Notifications zIndex={402}/>
             {children}
           </ModalsProvider>
         </DatesProvider>

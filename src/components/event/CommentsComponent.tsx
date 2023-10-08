@@ -1,13 +1,14 @@
-import {api} from '../../utils/api';
-import {QueryComponent} from '../QueryComponent';
 import {Card, ScrollArea, Stack} from '@mantine/core';
+import {useTranslation} from 'next-i18next';
+import {usePathId} from '../../hooks/usePathId';
+import {api} from '../../utils/api';
+import {EVENT_IMAGE_SIZE} from '../../utils/constants';
+import {InvalidateEvent} from '../../utils/enums';
 import {getBackgroundColor} from '../../utils/utilFunctions';
+import {CenteredLoader} from '../CenteredLoader';
 import {AddComment} from '../comment/AddComment';
 import {CommentCard} from '../comment/CommentCard';
-import {useTranslation} from 'next-i18next';
-import {InvalidateEvent} from '../../utils/enums';
-import {usePathId} from '../../hooks/usePathId';
-import {CenteredLoader} from '../CenteredLoader';
+import {QueryComponent} from '../QueryComponent';
 
 export const CommentsComponent = () => {
   const {id: eventId, isReady} = usePathId<number>();
@@ -34,7 +35,7 @@ export const CommentsComponent = () => {
           <AddComment eventId={eventId}/>
           {!!commentsQuery.data?.length && (
             <ScrollArea>
-              <Stack sx={{maxHeight: 300}}>
+              <Stack sx={{maxHeight: EVENT_IMAGE_SIZE - 86}}>
                 {commentsQuery.data.map(comment => (
                   <CommentCard key={comment.id} comment={comment}/>
                 ))}

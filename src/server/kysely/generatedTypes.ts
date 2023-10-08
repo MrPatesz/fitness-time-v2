@@ -49,6 +49,7 @@ export type Event = {
   start: Timestamp;
   end: Timestamp;
   description: string;
+  images: Generated<string[]>;
   limit: number | null;
   price: number | null;
   locationId: number;

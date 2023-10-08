@@ -1,10 +1,10 @@
 import {z} from 'zod';
+import dayjs from '../utils/dayjs';
 import {EventStatus} from '../utils/enums';
 import {BasicGroupSchema} from './Group';
 import {LocationSchema, MutateLocationSchema} from './Location';
 import {BasicUserSchema} from './User';
-import {DescriptionSchema, IdSchema, NameSchema} from './Utils';
-import dayjs from '../utils/dayjs';
+import {DescriptionSchema, IdSchema, ImageSchema, NameSchema} from './Utils';
 
 export const IntervalSchema = z.object({
   start: z.date(),
@@ -51,6 +51,7 @@ export const EventWithLocationSchema = BasicEventSchema
 
 export const DetailedEventSchema = BasicEventSchema.and(z.object({
   participants: z.lazy(() => BasicUserSchema.array()),
+  images: ImageSchema.array(),
 }));
 
 export type CreateEventType = z.infer<typeof MutateEventSchema>;
@@ -58,3 +59,5 @@ export type CreateEventType = z.infer<typeof MutateEventSchema>;
 export type BasicEventType = z.infer<typeof BasicEventSchema>;
 
 export type EventWithLocationType = z.infer<typeof EventWithLocationSchema>;
+
+export type DetailedEventType = z.infer<typeof DetailedEventSchema>;

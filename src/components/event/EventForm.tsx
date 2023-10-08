@@ -96,7 +96,8 @@ export const EventForm: FunctionComponent<{
             disabled={'id' in originalEvent}
             label={t('eventForm.group.label')}
             data={groupsQuery.data?.map(g => ({value: g.id.toString(), label: g.name})) ?? []}
-            placeholder={t('eventForm.group.placeholder')}
+            placeholder={'id' in originalEvent ? undefined : t('eventForm.group.placeholder')}
+            // TODO description
             value={(form.getInputProps('groupId').value as number | null)?.toString() ?? ''}
             onChange={value => {
               const onChange = form.getInputProps('groupId').onChange as (newValue: number | null) => void;

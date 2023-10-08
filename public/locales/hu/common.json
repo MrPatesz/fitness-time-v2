@@ -10,7 +10,8 @@
     "share": "Megosztás",
     "shareDescription": "{{username}} megosztotta veled ezt a linket a Fitness Time-ról!",
     "someone": "Valaki",
-    "upcomingEvents": "A következő 24 órában {{count}} eseményed lesz."
+    "upcomingEvents": "A következő 24 órában {{count}} eseményed lesz.",
+    "collapse": "Kinyit/összecsuk"
   },
   "welcomePage": {
     "welcome": "Üdvözöl a Fitness Time!",
@@ -123,6 +124,16 @@
       "participation": {
         "title": "Részvétel módosítva!",
         "message": "A részvételi státuszod múdosult."
+      },
+      "image": {
+        "success": {
+          "title": "Esemény képe módosítva!",
+          "message": "Az esemény képe módosult."
+        },
+        "error": {
+          "title": "Sikertelen az esemény képének frissítése!",
+          "message": "A feltöltött kép meghaladja a 2MB-os limitet."
+        }
       }
     },
     "comment": {
@@ -150,7 +161,7 @@
           "message": "A profilképed módosult."
         },
         "error": {
-          "title": "Sikertelen a profilkép firssítése!",
+          "title": "Sikertelen a profilkép frissítése!",
           "message": "A feltöltött kép meghaladja az 1MB-os limitet."
         }
       }
@@ -262,7 +273,8 @@
   "eventDetails": {
     "participate": "Részvétel",
     "removeParticipation": "Részvétel eltávolítása",
-    "participants": "Ők is ott lesznek:"
+    "participants": "Résztvevők",
+    "modifyImages": "Képek módosítása"
   },
   "queryComponent": {
     "error": "{{resourceName}} betöltése közben hiba történt!"
@@ -300,7 +312,7 @@
       "placeholder": "Itt állíthatod be a profilképedet.",
       "error": "Hibás kép URL!",
       "button": "Kép választása",
-      "allowedContent": "Kép (1MB)"
+      "allowedContent": "Kép ({{size}}MB)"
     },
     "delete": {
       "title": "Profil törlése",
