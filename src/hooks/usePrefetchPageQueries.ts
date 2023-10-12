@@ -142,12 +142,17 @@ export const usePrefetchPageQueries = () => {
 
   useEffect(() => {
     if (authenticated && location) {
-      const input = {center: location, maxDistance: mapMaxDistance};
+      const input = {
+        center: location,
+        maxDistance: mapMaxDistance,
+        includeArchive,
+        myGroupsOnly,
+      };
       if (!queryContext.event.getMap.getData(input)) {
         void queryContext.event.getMap.prefetch(input);
       }
     }
-  }, [authenticated, queryContext, location, mapMaxDistance]);
+  }, [authenticated, queryContext, location, mapMaxDistance, includeArchive, myGroupsOnly]);
 
   useEffect(() => {
     if (authenticated) {

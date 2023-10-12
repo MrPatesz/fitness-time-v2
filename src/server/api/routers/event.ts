@@ -1,3 +1,4 @@
+import {PrismaClient} from '@prisma/client';
 import {TRPCError} from '@trpc/server';
 import {z} from 'zod';
 import {
@@ -7,13 +8,12 @@ import {
   IntervalSchema,
   MutateEventSchema,
 } from '../../../models/Event';
+import {CoordinatesSchema, CoordinatesType} from '../../../models/Location';
 import {PaginateEventsSchema} from '../../../models/pagination/PaginateEvents';
-import {createTRPCRouter, protectedProcedure} from '../trpc';
-import {Prisma} from '.prisma/client';
 import {IdSchema} from '../../../models/Utils';
 import {InvalidateEvent, PusherChannel} from '../../../utils/enums';
-import {PrismaClient} from '@prisma/client';
-import {CoordinatesSchema, CoordinatesType} from '../../../models/Location';
+import {createTRPCRouter, protectedProcedure} from '../trpc';
+import {Prisma} from '.prisma/client';
 
 const getEventDistance = async (prisma: PrismaClient, eventId: number, location: CoordinatesType) => {
   // TODO write this in kysely
@@ -185,17 +185,28 @@ export const eventRouter = createTRPCRouter({
     .input(z.object({
       center: CoordinatesSchema,
       maxDistance: z.number().positive(),
+      includeArchive: z.boolean(),
+      myGroupsOnly: z.boolean(),
     }))
     .output(BasicEventSchema.array())
-    .query(async ({input: {center, maxDistance}, ctx: {session: {user: {id: callerId}}, prisma}}) => {
+    .query(async ({
+                    input: {includeArchive, myGroupsOnly, center, maxDistance},
+                    ctx: {session: {user: {id: callerId}}, prisma}
+                  }) => {
       const events = await prisma.event.findMany({
         where: {
           creatorId: {not: callerId},
-          OR: [
-            {groupId: null},
-            {group: {members: {some: {id: callerId}}}},
-          ],
-          start: {gt: new Date()},
+          ...(myGroupsOnly ? ({
+            group: {members: {some: {id: callerId}}},
+          }) : ({
+            OR: [
+              {groupId: null},
+              {group: {members: {some: {id: callerId}}}},
+            ],
+          })),
+          ...(includeArchive ? undefined : ({
+            start: {gt: new Date()},
+          })),
         },
         include: {location: true, creator: true, group: {include: {creator: true}}},
       });

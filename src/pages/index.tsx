@@ -6,7 +6,6 @@ import {
   Group,
   HoverCard,
   Overlay,
-  SimpleGrid,
   Slider,
   Stack,
   Text,
@@ -137,7 +136,7 @@ export default function FeedPage() {
             </Stack>
           </BorderComponent>
         </Box>
-        <SimpleGrid cols={md ? 1 : 2} sx={{minWidth: 155}}>
+        <Flex gap="md" direction={md ? 'column' : 'row'} sx={{minWidth: 155}}>
           <Checkbox
             label={t('feedPage.includeArchive')}
             checked={includeArchive}
@@ -148,7 +147,7 @@ export default function FeedPage() {
             checked={myGroupsOnly}
             onChange={e => setMyGroupsOnly(e.currentTarget.checked)}
           />
-        </SimpleGrid>
+        </Flex>
       </Flex>
       <QueryComponent
         resourceName={t('resource.feed')}

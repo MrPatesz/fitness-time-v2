@@ -1,4 +1,4 @@
-import {Anchor, Card, Stack, Text, useMantineTheme} from '@mantine/core';
+import {Anchor, Box, Card, Checkbox, Group, Progress, Stack, Text, useMantineTheme} from '@mantine/core';
 import {useDebouncedValue, useLocalStorage, useMediaQuery} from '@mantine/hooks';
 import {CircleF, MarkerF} from '@react-google-maps/api';
 import {useTranslation} from 'next-i18next';
@@ -24,7 +24,16 @@ const MapWithEvents: FunctionComponent<{
   const md = useMediaQuery(`(min-width: ${theme.breakpoints.md})`);
   const {locale, pushRoute} = useMyRouter();
   const shortDateFormatter = useShortDateFormatter();
+  const {t} = useTranslation('common');
 
+  const [includeArchive, setIncludeArchive] = useLocalStorage<boolean>({
+    key: 'include-archive',
+    defaultValue: true,
+  });
+  const [myGroupsOnly, setMyGroupsOnly] = useLocalStorage<boolean>({
+    key: 'my-groups-only',
+    defaultValue: false,
+  });
   const [zoom, setZoom] = useLocalStorage({
     key: 'google-map-zoom',
     defaultValue: 12,
@@ -35,43 +44,70 @@ const MapWithEvents: FunctionComponent<{
   }, [zoom, xs, md]);
   const [debouncedMaxDistance] = useDebouncedValue(maxDistance, 500);
 
-  const eventsQuery = api.event.getMap.useQuery({center, maxDistance: debouncedMaxDistance});
+  const eventsQuery = api.event.getMap.useQuery({
+    center,
+    maxDistance: debouncedMaxDistance,
+    includeArchive,
+    myGroupsOnly,
+  });
   usePusher({event: InvalidateEvent.EventGetMap}, () => void eventsQuery.refetch());
 
-  // TODO override center, includeArchive and myGroupsOnly checkboxes
-  
+  // TODO override center, show maxDistance
+
   return (
     <Stack h="100%">
-      <Map
-        zoom={zoom}
-        onZoom={setZoom}
-        mapContainerStyle={{width: '100%', height: '100%'}}
-        center={{
-          lat: center.latitude,
-          lng: center.longitude,
-        }}
-      >
-        <CircleF
-          radius={maxDistance * 1000}
-          center={{lat: center.latitude, lng: center.longitude}}
-          options={{
-            fillColor: theme.fn.themeColor(theme.primaryColor),
-            strokeColor: theme.fn.themeColor(theme.primaryColor),
-          }}
+      <Group position="center">
+        <Checkbox
+          label={t('feedPage.includeArchive')}
+          checked={includeArchive}
+          onChange={e => setIncludeArchive(e.currentTarget.checked)}
         />
-        <CircleF
-          radius={maxDistance * 10}
-          center={{lat: center.latitude, lng: center.longitude}}
+        <Checkbox
+          label={t('feedPage.myGroupsOnly')}
+          checked={myGroupsOnly}
+          onChange={e => setMyGroupsOnly(e.currentTarget.checked)}
         />
-        {eventsQuery.data?.map(event => (
-          <MarkerF
-            key={event.id}
-            title={`${event.name}\n${event.creator.name}\n${shortDateFormatter.format(event.start)}\n${event.description}`}
-            position={{lat: event.location.latitude, lng: event.location.longitude}}
-            onClick={() => void pushRoute(`/events/${event.id}`, undefined, {locale})}
+      </Group>
+      <Box sx={{position: 'relative', height: '100%'}}>
+        {eventsQuery.isFetching && (
+          <Progress
+            animate
+            size="xs"
+            value={100}
+            sx={{position: 'absolute', left: 0, right: 0, zIndex: 3}}
           />
-        ))}
-      </Map>
+        )}
+        <Map
+          zoom={zoom}
+          onZoom={setZoom}
+          mapContainerStyle={{width: '100%', height: '100%'}}
+          center={{
+            lat: center.latitude,
+            lng: center.longitude,
+          }}
+        >
+          <CircleF
+            radius={maxDistance * 1000}
+            center={{lat: center.latitude, lng: center.longitude}}
+            options={{
+              fillColor: theme.fn.themeColor(theme.primaryColor),
+              strokeColor: theme.fn.themeColor(theme.primaryColor),
+            }}
+          />
+          <CircleF
+            radius={maxDistance * 10}
+            center={{lat: center.latitude, lng: center.longitude}}
+          />
+          {eventsQuery.data?.map(event => (
+            <MarkerF
+              key={event.id}
+              title={`${event.name}\n${event.creator.name}\n${shortDateFormatter.format(event.start)}\n${event.description}`}
+              position={{lat: event.location.latitude, lng: event.location.longitude}}
+              onClick={() => void pushRoute(`/events/${event.id}`, undefined, {locale})}
+            />
+          ))}
+        </Map>
+      </Box>
     </Stack>
   );
 };
