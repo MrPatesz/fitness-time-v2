@@ -16,7 +16,7 @@ export const RichTextField: FunctionComponent<{
   const xs = useMediaQuery(`(min-width: ${theme.breakpoints.xs})`);
   const {t} = useTranslation('common');
 
-  const [open, setOpen] = useState(false);
+  const [opened, setOpened] = useState(false);
 
   const value = formInputProps.value as string | undefined;
   const onChange = formInputProps.onChange as (newValue: string) => void;
@@ -44,7 +44,7 @@ export const RichTextField: FunctionComponent<{
             <ActionIcon
               title={t('button.richText')}
               variant="transparent"
-              onClick={() => setOpen(true)}
+              onClick={() => setOpened(true)}
             >
               <PencilPlus/>
             </ActionIcon>
@@ -53,10 +53,11 @@ export const RichTextField: FunctionComponent<{
       />
       <Modal
         size="xl"
+        centered={true}
         zIndex={401}
-        opened={open}
         fullScreen={!xs}
-        onClose={() => setOpen(false)}
+        opened={opened}
+        onClose={() => setOpened(false)}
         title={label ? t('modal.edit', {propertyName: label}) : t('modal.comment.edit')}
       >
         <RichTextEditor
