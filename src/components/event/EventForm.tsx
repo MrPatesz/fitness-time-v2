@@ -45,7 +45,7 @@ export const EventForm: FunctionComponent<{
     },
   });
 
-  const groupsQuery = api.group.getJoinedGroups.useQuery(); // TODO prefetch
+  const groupsQuery = api.group.getJoinedGroups.useQuery();
 
   return (
     <OverlayLoader loading={loading}>

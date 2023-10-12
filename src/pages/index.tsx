@@ -15,19 +15,19 @@ import {
 import {useDebouncedValue, useIntersection, useLocalStorage, useMediaQuery} from '@mantine/hooks';
 import {useTranslation} from 'next-i18next';
 import {serverSideTranslations} from 'next-i18next/serverSideTranslations';
+import Link from 'next/link';
 import {useEffect, useMemo} from 'react';
 import i18nConfig from '../../next-i18next.config.mjs';
+import {BorderComponent} from '../components/BorderComponent';
 import {CenteredLoader} from '../components/CenteredLoader';
 import {EventGrid} from '../components/event/EventGrid';
+import {QueryComponent} from '../components/QueryComponent';
+import {useGeolocation} from '../hooks/useGeolocation';
+import {useMyRouter} from '../hooks/useMyRouter';
 import {BasicEventType} from '../models/Event';
 import {api} from '../utils/api';
-import {formatDistance} from '../utils/utilFunctions';
-import {QueryComponent} from '../components/QueryComponent';
 import {InvalidateEvent} from '../utils/enums';
-import {BorderComponent} from '../components/BorderComponent';
-import {useGeolocation} from '../hooks/useGeolocation';
-import Link from 'next/link';
-import {useMyRouter} from '../hooks/useMyRouter';
+import {formatDistance} from '../utils/utilFunctions';
 
 export default function FeedPage() {
   const [includeArchive, setIncludeArchive] = useLocalStorage<boolean>({
@@ -53,13 +53,13 @@ export default function FeedPage() {
   const md = useMediaQuery(`(min-width: ${theme.breakpoints.md})`);
   const {t} = useTranslation('common');
   const {ref, entry} = useIntersection({threshold: 0.1});
-  const {location, hasLocation} = useGeolocation();
+  const {location, error} = useGeolocation(enableMaxDistance);
 
   const feedQuery = api.event.getFeed.useInfiniteQuery({
     includeArchive,
     myGroupsOnly,
     distanceFilter: {
-      maxDistance: hasLocation && enableMaxDistance ? debouncedMaxDistance : null,
+      maxDistance: location && enableMaxDistance ? debouncedMaxDistance : null,
       location: location ?? null,
     },
   }, {
@@ -85,7 +85,7 @@ export default function FeedPage() {
         justify="center"
       >
         <Box sx={{width: '100%', flexGrow: 1, position: 'relative'}}>
-          {!hasLocation && (
+          {error && (
             <HoverCard width={300} withArrow arrowSize={10} zIndex={401}>
               <HoverCard.Target>
                 <Overlay sx={{borderRadius: theme.fn.radius(theme.defaultRadius)}}/>

@@ -1,20 +1,20 @@
-import {serverSideTranslations} from 'next-i18next/serverSideTranslations';
-import i18nConfig from '../../next-i18next.config.mjs';
-import {api} from '../utils/api';
 import {Anchor, Card, Stack, Text, useMantineTheme} from '@mantine/core';
-import {Map} from '../components/location/Map';
-import {FunctionComponent, useMemo} from 'react';
-import {CircleF, MarkerF} from '@react-google-maps/api';
-import {useShortDateFormatter} from '../utils/formatters';
 import {useDebouncedValue, useLocalStorage, useMediaQuery} from '@mantine/hooks';
-import {usePusher} from '../hooks/usePusher';
-import {InvalidateEvent} from '../utils/enums';
-import {useMyRouter} from '../hooks/useMyRouter';
-import {CoordinatesType} from '../models/Location';
-import {useGeolocation} from '../hooks/useGeolocation';
-import {CenteredLoader} from '../components/CenteredLoader';
-import Link from 'next/link';
+import {CircleF, MarkerF} from '@react-google-maps/api';
 import {useTranslation} from 'next-i18next';
+import {serverSideTranslations} from 'next-i18next/serverSideTranslations';
+import Link from 'next/link';
+import {FunctionComponent, useMemo} from 'react';
+import i18nConfig from '../../next-i18next.config.mjs';
+import {CenteredLoader} from '../components/CenteredLoader';
+import {Map} from '../components/location/Map';
+import {useGeolocation} from '../hooks/useGeolocation';
+import {useMyRouter} from '../hooks/useMyRouter';
+import {usePusher} from '../hooks/usePusher';
+import {CoordinatesType} from '../models/Location';
+import {api} from '../utils/api';
+import {InvalidateEvent} from '../utils/enums';
+import {useShortDateFormatter} from '../utils/formatters';
 
 const MapWithEvents: FunctionComponent<{
   center: CoordinatesType;
@@ -80,13 +80,13 @@ export default function MapPage() {
   const {locale} = useMyRouter();
   const {t} = useTranslation('common');
 
-  const {loading, location, hasLocation} = useGeolocation();
+  const {loading, location} = useGeolocation();
 
   return (
     <>
       {loading ? (
         <CenteredLoader/>
-      ) : hasLocation ? (
+      ) : location ? (
         <MapWithEvents center={location}/>
       ) : (
         <Card withBorder>

@@ -1,12 +1,12 @@
-import {useEffect, useMemo} from 'react';
-import {api} from '../utils/api';
-import {useAuthenticated} from './useAuthenticated';
-import {useLocalStorage, useMediaQuery} from '@mantine/hooks';
 import {useMantineTheme} from '@mantine/core';
-import {SortCommentByProperty, SortDirection, SortEventByProperty, SortGroupByProperty} from '../utils/enums';
-import {DEFAULT_PAGE_SIZE} from '../components/event/EventTable';
-import dayjs from '../utils/dayjs';
+import {useLocalStorage, useMediaQuery} from '@mantine/hooks';
 import {useTranslation} from 'next-i18next';
+import {useEffect, useMemo} from 'react';
+import {DEFAULT_PAGE_SIZE} from '../components/event/EventTable';
+import {api} from '../utils/api';
+import dayjs from '../utils/dayjs';
+import {SortCommentByProperty, SortDirection, SortEventByProperty, SortGroupByProperty} from '../utils/enums';
+import {useAuthenticated} from './useAuthenticated';
 import {useGeolocation} from './useGeolocation';
 
 const getPaginatedInputBase = <SORT_BY_PROPERTY extends SortEventByProperty | SortGroupByProperty | SortCommentByProperty | undefined>(
@@ -29,8 +29,6 @@ export const usePrefetchPageQueries = () => {
   const md = useMediaQuery(`(min-width: ${theme.breakpoints.md})`);
   const {t} = useTranslation('common');
   const queryContext = api.useContext();
-
-  const {location} = useGeolocation();
 
   // TODO object as const: LocalStorageKeys, DefaultValues
   const [includeArchive] = useLocalStorage<boolean>({
@@ -58,33 +56,12 @@ export const usePrefetchPageQueries = () => {
     return 40000 / Math.pow(2, zoom + increment);
   }, [zoom, xs, md]);
 
+  const {location} = useGeolocation(enableMaxDistance);
+
   useEffect(() => {
     if (authenticated) {
-      if (!queryContext.event.getCalendar.getData()) {
-        queryContext.event.getCalendar.fetch()
-          .then(participatedEvents => {
-              const upcomingEvents = participatedEvents.filter(event => {
-                const difference = dayjs(event.start).diff(dayjs(), 'hours');
-                return 24 >= difference && difference >= 0;
-              });
-              const count = upcomingEvents.length;
-              if (count > 0) {
-                Notification.requestPermission()
-                  .then(permission => {
-                    if (permission === 'granted') {
-                      new Notification(t('application.name'), {
-                        body: t('application.upcomingEvents', {
-                          count,
-                          plural: count > 1 ? 's' : '',
-                        }),
-                        icon: '/icon-192x192.png',
-                        tag: 'upcoming_events',
-                      });
-                    }
-                  }).catch(error => console.error(error));
-              }
-            }
-          ).catch(error => console.error(error));
+      if (!queryContext.group.getJoinedGroups.getData()) {
+        void queryContext.group.getJoinedGroups.prefetch();
       }
 
       if (!queryContext.user.profile.getData()) {
@@ -128,6 +105,37 @@ export const usePrefetchPageQueries = () => {
       const getAllCreatedInput = getPaginatedInputBase('postedAt' as SortCommentByProperty);
       if (!queryContext.comment.getAllCreated.getData(getAllCreatedInput)) {
         void queryContext.comment.getAllCreated.prefetch(getAllCreatedInput);
+      }
+    }
+  }, [authenticated, queryContext]);
+
+  useEffect(() => {
+    if (authenticated) {
+      if (!queryContext.event.getCalendar.getData()) {
+        queryContext.event.getCalendar.fetch()
+          .then(participatedEvents => {
+              const upcomingEvents = participatedEvents.filter(event => {
+                const difference = dayjs(event.start).diff(dayjs(), 'hours');
+                return 24 >= difference && difference >= 0;
+              });
+              const count = upcomingEvents.length;
+              if (count > 0) {
+                Notification.requestPermission()
+                  .then(permission => {
+                    if (permission === 'granted') {
+                      new Notification(t('application.name'), {
+                        body: t('application.upcomingEvents', {
+                          count,
+                          plural: count > 1 ? 's' : '',
+                        }),
+                        icon: '/icon-192x192.png',
+                        tag: 'upcoming_events',
+                      });
+                    }
+                  }).catch(error => console.error(error));
+              }
+            }
+          ).catch(error => console.error(error));
       }
     }
   }, [authenticated, queryContext, t]);

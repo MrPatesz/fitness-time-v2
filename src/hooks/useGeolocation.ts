@@ -2,36 +2,49 @@ import {useEffect, useState} from 'react';
 import {CoordinatesSchema, CoordinatesType} from '../models/Location';
 import {api} from '../utils/api';
 
-export const useGeolocation = () => {
+export const useGeolocation = (enableGeolocation = true) => {
   const [geolocation, setGeolocation] = useState<CoordinatesType | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const profileQuery = api.user.profile.useQuery();
 
   useEffect(() => {
-    window.navigator.geolocation.getCurrentPosition(
-      ({coords: {longitude, latitude}}) => {
-        setGeolocation({
-          longitude,
-          latitude,
-        });
-        setIsLoading(false);
-      },
-      () => {
-        setIsLoading(false);
-      },
-    );
-  }, []);
+    if (!enableGeolocation) return;
+
+    const onSettled = () => setIsLoading(false);
+    window.navigator.permissions.query({name: 'geolocation'})
+      .then((result) => {
+          switch (result.state) {
+            case 'granted':
+            case 'prompt':
+              window.navigator.geolocation.getCurrentPosition(
+                ({coords: {longitude, latitude}}) => {
+                  setGeolocation({
+                    longitude,
+                    latitude,
+                  });
+                  onSettled();
+                },
+                onSettled
+              );
+              break;
+            case 'denied':
+              onSettled();
+              break;
+          }
+        }
+      )
+      .catch(onSettled);
+  }, [enableGeolocation]);
 
   const result = CoordinatesSchema.safeParse(geolocation ?? profileQuery.data?.location);
-  const hasLocation = result.success;
-  const loading = !hasLocation && (isLoading || profileQuery.isLoading);
+  const loading = isLoading || profileQuery.isLoading; // TODO isFetching?
 
-  if (loading) {
+  if (result.success) {
+    return {loading: false, location: result.data};
+  } else if (loading) {
     return {loading};
-  } else if (!hasLocation) {
-    return {loading, hasLocation};
   } else {
-    return {loading, hasLocation, location: result.data};
+    return {loading, error: true};
   }
 };
