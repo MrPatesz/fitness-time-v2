@@ -1,7 +1,7 @@
-import {FunctionComponent} from 'react';
 import {Card} from '@mantine/core';
-import {getBackgroundColor} from '../utils/utilFunctions';
+import {FunctionComponent} from 'react';
 import {ThemeColor} from '../utils/enums';
+import {getBackgroundColor} from '../utils/utilFunctions';
 
 export const BorderComponent: FunctionComponent<{
   children: JSX.Element;
@@ -11,6 +11,7 @@ export const BorderComponent: FunctionComponent<{
     <Card
       withBorder
       sx={theme => ({
+        overflow: 'visible',
         backgroundColor: getBackgroundColor(theme),
         borderColor: borderColor ? `${theme.fn.themeColor(borderColor)} !important` : undefined,
       })}
