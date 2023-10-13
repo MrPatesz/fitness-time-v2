@@ -1,4 +1,4 @@
-import {Anchor, Box, Card, Checkbox, Group, Progress, Stack, Text, useMantineTheme} from '@mantine/core';
+import {Anchor, Box, Card, Checkbox, Flex, Group, Progress, Stack, Text, useMantineTheme} from '@mantine/core';
 import {useDebouncedValue, useLocalStorage, useMediaQuery} from '@mantine/hooks';
 import {CircleF, MarkerF} from '@react-google-maps/api';
 import {useTranslation} from 'next-i18next';
@@ -15,6 +15,7 @@ import {CoordinatesType} from '../models/Location';
 import {api} from '../utils/api';
 import {InvalidateEvent} from '../utils/enums';
 import {useShortDateFormatter} from '../utils/formatters';
+import {formatDistance} from '../utils/utilFunctions';
 
 const MapWithEvents: FunctionComponent<{
   center: CoordinatesType;
@@ -52,22 +53,38 @@ const MapWithEvents: FunctionComponent<{
   });
   usePusher({event: InvalidateEvent.EventGetMap}, () => void eventsQuery.refetch());
 
-  // TODO override center, show maxDistance
+  // TODO LocationPicker to override center?
 
   return (
     <Stack h="100%">
-      <Group position="center">
-        <Checkbox
-          label={t('feedPage.includeArchive')}
-          checked={includeArchive}
-          onChange={e => setIncludeArchive(e.currentTarget.checked)}
-        />
-        <Checkbox
-          label={t('feedPage.myGroupsOnly')}
-          checked={myGroupsOnly}
-          onChange={e => setMyGroupsOnly(e.currentTarget.checked)}
-        />
-      </Group>
+      <Flex
+        justify={xs ? 'space-between' : 'center'}
+        direction={xs ? 'row' : 'column'}
+        gap="xs"
+      >
+        <Group
+          noWrap
+          position="center"
+          spacing={4}
+        >
+          <Text>{t('feedPage.maxDistance')}</Text>
+          <Text weight="bold" color={theme.primaryColor}>
+            {formatDistance(maxDistance)}
+          </Text>
+        </Group>
+        <Group noWrap position="center">
+          <Checkbox
+            label={t('feedPage.includeArchive')}
+            checked={includeArchive}
+            onChange={e => setIncludeArchive(e.currentTarget.checked)}
+          />
+          <Checkbox
+            label={t('feedPage.myGroupsOnly')}
+            checked={myGroupsOnly}
+            onChange={e => setMyGroupsOnly(e.currentTarget.checked)}
+          />
+        </Group>
+      </Flex>
       <Box sx={{position: 'relative', height: '100%'}}>
         {eventsQuery.isFetching && (
           <Progress
