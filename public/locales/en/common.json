@@ -186,8 +186,9 @@
     }
   },
   "modal": {
-    "members": {
-      "title": "Members"
+    "users": {
+      "members": "Members",
+      "participants": "Participants"
     },
     "group": {
       "edit": "Edit Group",

@@ -186,8 +186,9 @@
     }
   },
   "modal": {
-    "members": {
-      "title": "Tagok"
+    "users": {
+      "members": "Tagok",
+      "participants": "Résztvevők"
     },
     "group": {
       "edit": "Csoport szerkesztése",

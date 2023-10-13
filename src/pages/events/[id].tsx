@@ -2,7 +2,6 @@ import {Carousel} from '@mantine/carousel';
 import {ActionIcon, Box, Flex, Group, Stack, Text, useMantineTheme} from '@mantine/core';
 import {useMediaQuery} from '@mantine/hooks';
 import {openModal} from '@mantine/modals';
-import {showNotification} from '@mantine/notifications';
 import {useSession} from 'next-auth/react';
 import {useTranslation} from 'next-i18next';
 import {serverSideTranslations} from 'next-i18next/serverSideTranslations';
@@ -15,8 +14,8 @@ import {CollapsibleCard} from '../../components/CollapsibleCard';
 import {CommentsComponent} from '../../components/event/CommentsComponent';
 import {EditEventForm} from '../../components/event/EditEventForm';
 import {ModifyImagesDialog} from '../../components/event/ModifyImagesDialog';
+import {ParticipantsComponent} from '../../components/event/ParticipantsComponent';
 import {GroupBadge} from '../../components/group/GroupBadge';
-import {UsersComponent} from '../../components/group/UsersComponent';
 import MapComponent from '../../components/location/MapComponent';
 import {QueryComponent} from '../../components/QueryComponent';
 import {RatingComponent} from '../../components/RatingComponent';
@@ -56,13 +55,6 @@ export default function EventDetailsPage() {
   const rate = api.rating.rate.useMutation({
     onSuccess: () => void userRatingQuery.refetch(),
   });
-  const participate = api.event.participate.useMutation({
-    onSuccess: () => showNotification({
-      color: 'green',
-      title: t('notification.event.participation.title'),
-      message: t('notification.event.participation.message'),
-    }),
-  });
 
   useEffect(() => {
     if (isReady) {
@@ -79,7 +71,7 @@ export default function EventDetailsPage() {
       resourceName={t('resource.eventDetails')}
       query={eventQuery}
       eventInfo={{event: InvalidateEvent.EventGetById, id: eventId}}
-      loading={participate.isLoading}
+      // loading={participate.isLoading}
     >
       {eventQuery.data && (
         <Stack h="100%">
@@ -90,7 +82,7 @@ export default function EventDetailsPage() {
                   {eventQuery.data.name}
                 </Text>
                 <UserBadge useLink user={eventQuery.data.creator}/>
-                {eventQuery.data.group && ( // TODO GroupBadge and UserBadge component, how to differentiate?
+                {eventQuery.data.group && (
                   <GroupBadge useLink group={eventQuery.data.group}/>
                 )}
               </Group>
@@ -125,15 +117,7 @@ export default function EventDetailsPage() {
               )}
             </Stack>
             <Stack align="end">
-              <UsersComponent
-                users={eventQuery.data.participants}
-                hideJoin={eventQuery.data.creatorId === session?.user.id || eventQuery.data.status === EventStatus.ARCHIVE}
-                onJoin={(join) => participate.mutate({
-                  id: eventId,
-                  participate: join,
-                })}
-                eventLimit={eventQuery.data.limit}
-              />
+              <ParticipantsComponent event={eventQuery.data}/>
               {eventQuery.data.creatorId === session?.user.id && (
                 <Group spacing="xs">
                   {eventQuery.data.status === EventStatus.PLANNED && (

@@ -10,7 +10,7 @@ import {useMyRouter} from '../../hooks/useMyRouter';
 import {BasicUserType} from '../../models/User';
 import {useSignedNumberFormatter} from '../../utils/formatters';
 import {getInitials} from '../../utils/utilFunctions';
-import UserImage from '../user/UserImage';
+import UserImage from './UserImage';
 
 export const UsersComponent: FunctionComponent<{
   users: BasicUserType[];
@@ -33,10 +33,7 @@ export const UsersComponent: FunctionComponent<{
   const isJoined = overrideJoined ?? Boolean(users.find(u => u.id === session?.user.id));
   const disableJoin = Boolean(!isJoined && eventLimit && users.length >= eventLimit);
 
-  // TODO separate tooltips and modalTitle for event and group
-  //  t(isParticipated ? 'eventDetails.removeParticipation' : 'eventDetails.participate')
-
-  // TODO refactor: MembersComponent and ParticipantsComponent
+  // TODO move more logic into MembersComponent and ParticipantsComponent
 
   return (
     <SimpleGrid
@@ -47,7 +44,7 @@ export const UsersComponent: FunctionComponent<{
       <Avatar.Group
         sx={{cursor: 'pointer'}}
         onClick={() => openModal({
-          title: t('modal.members.title'),
+          title: t(eventLimit === undefined ? 'modal.users.members' : 'modal.users.participants'),
           children: (
             <Stack spacing="xs">
               {users.map(member => (
@@ -106,7 +103,13 @@ export const UsersComponent: FunctionComponent<{
             title={disableJoin ? t('usersComponent.full') : undefined}
           >
             <ActionIcon
-              title={t(isJoined ? 'groupDetails.leave' : 'groupDetails.join')} // TODO different tooltips to private/public groups
+              title={t(
+                eventLimit === undefined ? (
+                  isJoined ? 'groupDetails.leave' : 'groupDetails.join'
+                ) : (
+                  isJoined ? 'eventDetails.removeParticipation' : 'eventDetails.participate'
+                )
+              )}
               radius="xl"
               variant="filled"
               color={userColor}

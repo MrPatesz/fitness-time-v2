@@ -1,7 +1,6 @@
 import {ActionIcon, Box, Group, SimpleGrid, Stack, Text, useMantineTheme} from '@mantine/core';
 import {useMediaQuery} from '@mantine/hooks';
 import {openModal} from '@mantine/modals';
-import {showNotification} from '@mantine/notifications';
 import {useSession} from 'next-auth/react';
 import {useTranslation} from 'next-i18next';
 import {serverSideTranslations} from 'next-i18next/serverSideTranslations';
@@ -14,13 +13,12 @@ import {EditGroupForm} from '../../components/group/EditGroupForm';
 import {GroupChat} from '../../components/group/GroupChat';
 import {GroupFeed} from '../../components/group/GroupFeed';
 import {JoinRequestsDialog} from '../../components/group/JoinRequestsDialog';
-import {UsersComponent} from '../../components/group/UsersComponent';
+import {MembersComponent} from '../../components/group/MembersComponent';
 import {QueryComponent} from '../../components/QueryComponent';
 import {RatingComponent} from '../../components/RatingComponent';
 import {RichTextDisplay} from '../../components/rich-text/RichTextDisplay';
 import {UserBadge} from '../../components/user/UserBadge';
 import {usePathId} from '../../hooks/usePathId';
-import {usePusher} from '../../hooks/usePusher';
 import {api} from '../../utils/api';
 import {InvalidateEvent} from '../../utils/enums';
 import {useLongDateFormatter} from '../../utils/formatters';
@@ -40,31 +38,6 @@ export default function GroupDetailsPage() {
   });
   const groupRatingQuery = api.rating.getAverageRatingForGroup.useQuery(groupId!, {
     enabled: isReady,
-  });
-  const hasJoinRequest = api.joinRequest.hasJoinRequest.useQuery({groupId: groupId!}, {
-    enabled: isReady && groupQuery.data?.isPrivate && groupQuery.data?.creatorId !== session?.user.id,
-  });
-  usePusher({
-    event: InvalidateEvent.JoinRequestHasJoinRequest,
-    id: session?.user.id,
-  }, () => void hasJoinRequest.refetch());
-
-  const joinGroup = api.group.join.useMutation({
-    onSuccess: (_, {join}) => showNotification({
-      color: 'green',
-      title: t(join ? 'notification.group.join.title' : 'notification.group.leave.title'),
-      message: t(join ? 'notification.group.join.message' : 'notification.group.leave.message'),
-    }),
-  });
-  const mutateJoinRequest = api.joinRequest.mutate.useMutation({
-    onSuccess: (_, {join}) => {
-      void hasJoinRequest.refetch();
-      showNotification({
-        color: 'green',
-        title: t(join ? 'notification.joinRequest.create.title' : 'notification.joinRequest.delete.title'),
-        message: t(join ? 'notification.joinRequest.create.message' : 'notification.joinRequest.delete.message'),
-      });
-    },
   });
 
   useEffect(() => {
@@ -91,7 +64,7 @@ export default function GroupDetailsPage() {
       resourceName={t('resource.groupDetails')}
       query={groupQuery}
       eventInfo={{event: InvalidateEvent.GroupGetById, id: groupId}}
-      loading={joinGroup.isLoading}
+      // loading={joinGroup.isLoading}
     >
       {groupQuery.data && (
         <Stack h="100%">
@@ -145,18 +118,12 @@ export default function GroupDetailsPage() {
               </QueryComponent>
             </Stack>
             <Stack align="end">
-              <UsersComponent
-                users={groupQuery.data.members}
-                hideJoin={isCreator}
-                overrideJoined={isMember ? undefined : hasJoinRequest.data}
-                loading={joinGroup.isLoading || mutateJoinRequest.isLoading}
-                onJoin={(join) => {
-                  if (isPrivate && !isMember) {
-                    mutateJoinRequest.mutate({groupId, join});
-                  } else {
-                    joinGroup.mutate({id: groupId, join});
-                  }
-                }}
+              <MembersComponent
+                members={groupQuery.data.members}
+                isPrivate={isPrivate}
+                isCreator={isCreator}
+                isMember={isMember}
+                groupId={groupId}
               />
               {isCreator && (
                 <ActionIcon
