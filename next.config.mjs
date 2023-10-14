@@ -1,6 +1,6 @@
 // @ts-check
-import i18nConfig from './next-i18next.config.mjs';
 import createWithPWA from 'next-pwa';
+import i18nConfig from './next-i18next.config.mjs';
 
 /**
  * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.
@@ -15,6 +15,7 @@ const withPWA = createWithPWA({
 
 const config = withPWA({
   reactStrictMode: true,
+  output: 'standalone',
 
   /**
    * If you have the "experimental: { appDir: true }" setting enabled, then you

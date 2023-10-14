@@ -6,12 +6,17 @@ import {z} from 'zod';
  * This way you can ensure the app isn't built with invalid env vars.
  */
 const server = z.object({
-  POSTGRES_PRISMA_URL: z.string().url(),
+  // Env
   NODE_ENV: z.enum(['development', 'test', 'production']),
-  NEXTAUTH_SECRET:
-    process.env.NODE_ENV === 'production'
-      ? z.string().min(1)
-      : z.string().min(1).optional(),
+  // Prisma
+  POSTGRES_PRISMA_URL: z.string().url(),
+  // Kysely
+  POSTGRES_USER: z.string().min(1),
+  POSTGRES_PASSWORD: z.string().min(1),
+  POSTGRES_HOST: z.string().min(1),
+  POSTGRES_PORT: z.string().transform(port => parseInt(port)),
+  POSTGRES_DATABASE: z.string().min(1),
+  // Next Auth
   NEXTAUTH_URL: z.preprocess(
     // This makes Vercel deployments not fail if you don't set NEXTAUTH_URL
     // Since NextAuth.js automatically uses the VERCEL_URL if present.
@@ -19,20 +24,22 @@ const server = z.object({
     // VERCEL_URL doesn't include `https` so it cant be validated as a URL
     process.env.VERCEL ? z.string().min(1) : z.string().url(),
   ),
-  // Add `.min(1) on ID and SECRET if you want to make sure they're not empty
-  DISCORD_CLIENT_ID: z.string().nonempty(),
-  DISCORD_CLIENT_SECRET: z.string().nonempty(),
-  GOOGLE_CLIENT_ID: z.string().nonempty(),
-  GOOGLE_CLIENT_SECRET: z.string().nonempty(),
-  PUSHER_APP_ID: z.string().nonempty(),
-  PUSHER_SECRET: z.string().nonempty(),
-  POSTGRES_USER: z.string().nonempty(),
-  POSTGRES_PASSWORD: z.string().nonempty(),
-  POSTGRES_HOST: z.string().nonempty(),
-  POSTGRES_PORT: z.string().transform(port => parseInt(port)),
-  POSTGRES_DATABASE: z.string().nonempty(),
-  UPLOADTHING_SECRET: z.string().nonempty(),
-  UPLOADTHING_APP_ID: z.string().nonempty(),
+  NEXTAUTH_SECRET:
+    process.env.NODE_ENV === 'production'
+      ? z.string().min(1)
+      : z.string().min(1).optional(),
+  // Next Auth Discord Provider
+  DISCORD_CLIENT_ID: z.string().min(1),
+  DISCORD_CLIENT_SECRET: z.string().min(1),
+  // Next Auth Google Provider
+  GOOGLE_CLIENT_ID: z.string().min(1),
+  GOOGLE_CLIENT_SECRET: z.string().min(1),
+  // Pusher
+  PUSHER_APP_ID: z.string().min(1),
+  PUSHER_SECRET: z.string().min(1),
+  // Upload Thing
+  UPLOADTHING_APP_ID: z.string().min(1),
+  UPLOADTHING_SECRET: z.string().min(1),
 });
 
 /**
@@ -41,10 +48,13 @@ const server = z.object({
  * To expose them to the client, prefix them with `NEXT_PUBLIC_`.
  */
 const client = z.object({
-  NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: z.string().nonempty(),
-  NEXT_PUBLIC_PUSHER_APP_KEY: z.string().nonempty(),
-  NEXT_PUBLIC_PUSHER_CLUSTER: z.string().nonempty(),
+  // Env
   NEXT_PUBLIC_VERCEL_ENV: z.enum(['development', 'preview', 'production']),
+  // Pusher
+  NEXT_PUBLIC_PUSHER_CLUSTER: z.string().min(1),
+  NEXT_PUBLIC_PUSHER_APP_KEY: z.string().min(1),
+  // Google Maps Api
+  NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: z.string().min(1),
 });
 
 /**
@@ -53,27 +63,38 @@ const client = z.object({
  * @type {Record<keyof z.infer<typeof server> | keyof z.infer<typeof client>, string | undefined>}
  */
 const processEnv = {
-  POSTGRES_PRISMA_URL: process.env.POSTGRES_PRISMA_URL,
+  // Env
+  NEXT_PUBLIC_VERCEL_ENV: process.env.NEXT_PUBLIC_VERCEL_ENV,
+  // Pusher
+  NEXT_PUBLIC_PUSHER_CLUSTER: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
+  NEXT_PUBLIC_PUSHER_APP_KEY: process.env.NEXT_PUBLIC_PUSHER_APP_KEY,
+  // Google Maps Api
+  NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
+  // Env
   NODE_ENV: process.env.NODE_ENV,
-  NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
-  NEXTAUTH_URL: process.env.NEXTAUTH_URL,
-  DISCORD_CLIENT_ID: process.env.DISCORD_CLIENT_ID,
-  DISCORD_CLIENT_SECRET: process.env.DISCORD_CLIENT_SECRET,
-  GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
-  GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
-  PUSHER_APP_ID: process.env.PUSHER_APP_ID,
-  PUSHER_SECRET: process.env.PUSHER_SECRET,
+  // Prisma
+  POSTGRES_PRISMA_URL: process.env.POSTGRES_PRISMA_URL,
+  // Kysely
   POSTGRES_USER: process.env.POSTGRES_USER,
   POSTGRES_PASSWORD: process.env.POSTGRES_PASSWORD,
   POSTGRES_HOST: process.env.POSTGRES_HOST,
   POSTGRES_PORT: process.env.POSTGRES_PORT,
   POSTGRES_DATABASE: process.env.POSTGRES_DATABASE,
-  UPLOADTHING_SECRET: process.env.UPLOADTHING_SECRET,
+  // Next Auth
+  NEXTAUTH_URL: process.env.NEXTAUTH_URL,
+  NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
+  // Next Auth Discord Provider
+  DISCORD_CLIENT_ID: process.env.DISCORD_CLIENT_ID,
+  DISCORD_CLIENT_SECRET: process.env.DISCORD_CLIENT_SECRET,
+  // Next Auth Google Provider
+  GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+  GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+  // Pusher
+  PUSHER_APP_ID: process.env.PUSHER_APP_ID,
+  PUSHER_SECRET: process.env.PUSHER_SECRET,
+  // Upload Thing
   UPLOADTHING_APP_ID: process.env.UPLOADTHING_APP_ID,
-  NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
-  NEXT_PUBLIC_PUSHER_APP_KEY: process.env.NEXT_PUBLIC_PUSHER_APP_KEY,
-  NEXT_PUBLIC_PUSHER_CLUSTER: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
-  NEXT_PUBLIC_VERCEL_ENV: process.env.NEXT_PUBLIC_VERCEL_ENV,
+  UPLOADTHING_SECRET: process.env.UPLOADTHING_SECRET,
 };
 
 // Don't touch the part below

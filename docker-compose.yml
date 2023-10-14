@@ -1,0 +1,43 @@
+version: "3.9"
+services:
+  app:
+    platform: "linux/amd64"
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        # Env
+        NEXT_PUBLIC_VERCEL_ENV: "production"
+        # Pusher
+        NEXT_PUBLIC_PUSHER_CLUSTER: ""
+        NEXT_PUBLIC_PUSHER_APP_KEY: ""
+        # Google Maps Api
+        NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: ""
+    working_dir: /app
+    ports:
+      - "3000:3000"
+    image: t3-app
+    environment:
+      # Prisma
+      - POSTGRES_PRISMA_URL=
+      # Kysely
+      - POSTGRES_USER=
+      - POSTGRES_PASSWORD=
+      - POSTGRES_HOST=
+      - POSTGRES_PORT=
+      - POSTGRES_DATABASE=
+      # Next Auth
+      - NEXTAUTH_URL=
+      - NEXTAUTH_SECRET=
+      # Next Auth Discord Provider
+      - DISCORD_CLIENT_ID=
+      - DISCORD_CLIENT_SECRET=
+      # Next Auth Google Provider
+      - GOOGLE_CLIENT_ID=
+      - GOOGLE_CLIENT_SECRET=
+      # Pusher
+      - PUSHER_APP_ID=
+      - PUSHER_SECRET=
+      # Upload Thing
+      - UPLOADTHING_APP_ID=
+      - UPLOADTHING_SECRET=
