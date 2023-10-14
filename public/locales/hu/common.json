@@ -11,7 +11,8 @@
     "shareDescription": "{{username}} megosztotta veled ezt a linket a Fitness Time-ról!",
     "someone": "Valaki",
     "upcomingEvents": "A következő 24 órában {{count}} eseményed lesz.",
-    "collapse": "Kinyit/összecsuk"
+    "collapse": "Kinyit/összecsuk",
+    "install": "Fitness Time telepítése"
   },
   "welcomePage": {
     "welcome": "Üdvözöl a Fitness Time!",

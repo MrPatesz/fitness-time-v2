@@ -13,6 +13,8 @@ import {
   useMantineTheme
 } from '@mantine/core';
 import {useDisclosure, useMediaQuery} from '@mantine/hooks';
+import {openModal} from '@mantine/modals';
+import {IconShare3} from '@tabler/icons-react';
 import {signOut} from 'next-auth/react';
 import {useTranslation} from 'next-i18next';
 import Link from 'next/link';
@@ -30,17 +32,16 @@ import {
   UserCircle,
   Users
 } from 'tabler-icons-react';
-import {getBackgroundColor} from '../../utils/utilFunctions';
-import {ColorSchemeToggle} from './ColorSchemeToggle';
-import {LanguageToggle} from './LanguageToggle';
-import {CenteredLoader} from '../CenteredLoader';
 import {useAuthenticated} from '../../hooks/useAuthenticated';
 import {useMyRouter} from '../../hooks/useMyRouter';
-import {useInitializePusher} from '../../hooks/usePusher';
-import {IconShare3} from '@tabler/icons-react';
 import {usePrefetchPageQueries} from '../../hooks/usePrefetchPageQueries';
-import {openModal} from '@mantine/modals';
+import {useInitializePusher} from '../../hooks/usePusher';
+import {getBackgroundColor} from '../../utils/utilFunctions';
+import {CenteredLoader} from '../CenteredLoader';
 import {CreateEventForm} from '../event/CreateEventForm';
+import {ColorSchemeToggle} from './ColorSchemeToggle';
+import {InstallButton} from './InstallButton';
+import {LanguageToggle} from './LanguageToggle';
 
 const [
   feedRoute,
@@ -140,6 +141,7 @@ export const ApplicationShell: FunctionComponent<{
                 )}
               </Group>
               <Group spacing="xs">
+                {authenticated && <InstallButton/>}
                 <ActionIcon
                   title={t('application.share')}
                   size="lg"

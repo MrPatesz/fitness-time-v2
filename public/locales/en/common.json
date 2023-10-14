@@ -11,7 +11,8 @@
     "shareDescription": "{{username}} shared this link with you from Fitness Time!",
     "someone": "Someone",
     "upcomingEvents": "You have {{count}} upcoming event{{plural}} in the next 24 hours.",
-    "collapse": "Open/Collapse"
+    "collapse": "Open/Collapse",
+    "install": "Install Fitness Time"
   },
   "welcomePage": {
     "welcome": "Welcome to Fitness Time!",
