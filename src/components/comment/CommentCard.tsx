@@ -1,21 +1,21 @@
 import {ActionIcon, Card, Group, Stack, Text, Tooltip, useMantineTheme} from '@mantine/core';
 import {openConfirmModal, openModal} from '@mantine/modals';
 import {showNotification} from '@mantine/notifications';
+import {IconPencil, IconTrash} from '@tabler/icons-react';
 import {useSession} from 'next-auth/react';
 import {useTranslation} from 'next-i18next';
 import Link from 'next/link';
 import {FunctionComponent} from 'react';
-import {Pencil, Trash} from 'tabler-icons-react';
+import {useMyRouter} from '../../hooks/useMyRouter';
 import {BasicCommentType} from '../../models/Comment';
 import {BasicMessageType} from '../../models/Message';
 import {api} from '../../utils/api';
 import dayjs from '../../utils/dayjs';
 import {useLongDateFormatter} from '../../utils/formatters';
+import {OverlayLoader} from '../OverlayLoader';
 import {RichTextDisplay} from '../rich-text/RichTextDisplay';
 import UserImage from '../user/UserImage';
 import {CommentForm} from './CommentForm';
-import {OverlayLoader} from '../OverlayLoader';
-import {useMyRouter} from '../../hooks/useMyRouter';
 
 export const CommentCard: FunctionComponent<{
   comment: BasicCommentType | BasicMessageType;
@@ -70,7 +70,7 @@ export const CommentCard: FunctionComponent<{
                     size: 'xl'
                   })}
                 >
-                  <Pencil/>
+                  <IconPencil/>
                 </ActionIcon>
                 <ActionIcon
                   title={t('modal.comment.delete.title')}
@@ -90,7 +90,7 @@ export const CommentCard: FunctionComponent<{
                     onConfirm: () => deleteComment.mutate(comment.id),
                   })}
                 >
-                  <Trash/>
+                  <IconTrash/>
                 </ActionIcon>
               </Group>
             )}

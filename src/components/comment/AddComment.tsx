@@ -1,14 +1,14 @@
 import {ActionIcon, Flex, useMantineTheme} from '@mantine/core';
 import {useForm} from '@mantine/form';
 import {showNotification} from '@mantine/notifications';
+import {IconSend} from '@tabler/icons-react';
 import {useTranslation} from 'next-i18next';
 import {FunctionComponent} from 'react';
-import {Send} from 'tabler-icons-react';
 import {MutateCommentType} from '../../models/Comment';
 import {api} from '../../utils/api';
 import {defaultCreateComment} from '../../utils/defaultObjects';
-import {RichTextField} from '../rich-text/RichTextField';
 import {OverlayLoader} from '../OverlayLoader';
+import {RichTextField} from '../rich-text/RichTextField';
 
 export const AddComment: FunctionComponent<{
   eventId: number;
@@ -48,7 +48,7 @@ export const AddComment: FunctionComponent<{
             color={theme.primaryColor}
             variant="filled"
           >
-            <Send/>
+            <IconSend/>
           </ActionIcon>
         </Flex>
       </form>

@@ -1,11 +1,11 @@
 import {ActionIcon, Avatar, Badge, Card, Group, SimpleGrid, Stack, Text, Tooltip, useMantineTheme} from '@mantine/core';
 import {useMediaQuery} from '@mantine/hooks';
 import {closeAllModals, openModal} from '@mantine/modals';
+import {IconMinus, IconPlus} from '@tabler/icons-react';
 import {useSession} from 'next-auth/react';
 import {useTranslation} from 'next-i18next';
 import Link from 'next/link';
 import {FunctionComponent} from 'react';
-import {Minus, Plus} from 'tabler-icons-react';
 import {useMyRouter} from '../../hooks/useMyRouter';
 import {BasicUserType} from '../../models/User';
 import {useSignedNumberFormatter} from '../../utils/formatters';
@@ -120,7 +120,7 @@ export const UsersComponent: FunctionComponent<{
               loading={loading}
               disabled={disableJoin}
             >
-              {isJoined ? <Minus/> : <Plus/>}
+              {isJoined ? <IconMinus/> : <IconPlus/>}
             </ActionIcon>
           </Avatar>
         )}

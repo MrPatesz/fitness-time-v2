@@ -1,11 +1,11 @@
 import {ActionIcon, Card, Group, Stack, Text, TextInput} from '@mantine/core';
 import {Autocomplete} from '@react-google-maps/api';
+import {IconX} from '@tabler/icons-react';
 import {useTranslation} from 'next-i18next';
 import {FunctionComponent, useEffect, useState} from 'react';
-import {X} from 'tabler-icons-react';
+import {useGoogleMaps} from '../../hooks/useGoogleMaps';
 import {CreateLocationType} from '../../models/Location';
 import {CenteredLoader} from '../CenteredLoader';
-import {useGoogleMaps} from '../../hooks/useGoogleMaps';
 
 export const LocationPicker: FunctionComponent<{
   label: string;
@@ -80,7 +80,7 @@ export const LocationPicker: FunctionComponent<{
                 variant="transparent"
                 onClick={() => setLocation(null)}
               >
-                <X/>
+                <IconX/>
               </ActionIcon>
             }
           />

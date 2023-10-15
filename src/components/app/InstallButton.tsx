@@ -1,7 +1,7 @@
 import {ActionIcon, useMantineTheme} from '@mantine/core';
+import {IconDownload} from '@tabler/icons-react';
 import {useTranslation} from 'next-i18next';
 import {useEffect, useState} from 'react';
-import {Download} from 'tabler-icons-react';
 
 const BEFORE_INSTALL_PROMPT = 'beforeinstallprompt' as const;
 const APP_INSTALLED = 'appinstalled' as const;
@@ -37,7 +37,7 @@ export const InstallButton = () => {
           variant={theme.colorScheme === 'dark' ? 'outline' : 'default'}
           onClick={onClick}
         >
-          <Download/>
+          <IconDownload/>
         </ActionIcon>
       )}
     </>

@@ -1,11 +1,11 @@
 import {ActionIcon, Box, Group, SimpleGrid, Stack, Text, useMantineTheme} from '@mantine/core';
 import {useMediaQuery} from '@mantine/hooks';
 import {openModal} from '@mantine/modals';
+import {IconLock, IconLockOpen, IconPencil} from '@tabler/icons-react';
 import {useSession} from 'next-auth/react';
 import {useTranslation} from 'next-i18next';
 import {serverSideTranslations} from 'next-i18next/serverSideTranslations';
 import {useEffect, useMemo} from 'react';
-import {Lock, LockOpen, Pencil} from 'tabler-icons-react';
 import i18nConfig from '../../../next-i18next.config.mjs';
 import {CenteredLoader} from '../../components/CenteredLoader';
 import {CollapsibleCard} from '../../components/CollapsibleCard';
@@ -87,10 +87,10 @@ export default function GroupDetailsPage() {
                           children: <JoinRequestsDialog groupId={groupId}/>,
                         })}
                       >
-                        <Lock size={lockSize}/>
+                        <IconLock size={lockSize}/>
                       </ActionIcon>
                     ) : (
-                      <Lock size={lockSize}/>
+                      <IconLock size={lockSize}/>
                     )}
                   </Box>
                 ) : (
@@ -98,7 +98,7 @@ export default function GroupDetailsPage() {
                     title={t('groupDetails.public')}
                     sx={{height: lockSize}}
                   >
-                    <LockOpen size={lockSize}/>
+                    <IconLockOpen size={lockSize}/>
                   </Box>
                 )}
                 <Text weight="bold" size="xl">
@@ -138,7 +138,7 @@ export default function GroupDetailsPage() {
                     fullScreen: !xs,
                   })}
                 >
-                  <Pencil/>
+                  <IconPencil/>
                 </ActionIcon>
               )}
             </Stack>

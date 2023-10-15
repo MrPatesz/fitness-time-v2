@@ -2,12 +2,12 @@ import {Carousel} from '@mantine/carousel';
 import {ActionIcon, Box, Flex, Group, Stack, Text, useMantineTheme} from '@mantine/core';
 import {useMediaQuery} from '@mantine/hooks';
 import {openModal} from '@mantine/modals';
+import {IconCameraPlus, IconPencil} from '@tabler/icons-react';
 import {useSession} from 'next-auth/react';
 import {useTranslation} from 'next-i18next';
 import {serverSideTranslations} from 'next-i18next/serverSideTranslations';
 import Image from 'next/image';
 import {useEffect} from 'react';
-import {CameraPlus, Pencil} from 'tabler-icons-react';
 import i18nConfig from '../../../next-i18next.config.mjs';
 import {CenteredLoader} from '../../components/CenteredLoader';
 import {CollapsibleCard} from '../../components/CollapsibleCard';
@@ -132,7 +132,7 @@ export default function EventDetailsPage() {
                         fullScreen: !xs,
                       })}
                     >
-                      <Pencil/>
+                      <IconPencil/>
                     </ActionIcon>
                   )}
                   <ActionIcon
@@ -147,7 +147,7 @@ export default function EventDetailsPage() {
                       size: 3 * EVENT_IMAGE_SIZE + 4 * 16,
                     })}
                   >
-                    <CameraPlus/>
+                    <IconCameraPlus/>
                   </ActionIcon>
                 </Group>
               )}

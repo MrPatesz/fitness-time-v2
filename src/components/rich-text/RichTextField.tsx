@@ -1,9 +1,9 @@
 import {ActionIcon, Group, Modal, TextInput, useMantineTheme} from '@mantine/core';
 import {UseFormReturnType} from '@mantine/form';
 import {useMediaQuery} from '@mantine/hooks';
+import {IconPencilPlus, IconX} from '@tabler/icons-react';
 import {useTranslation} from 'next-i18next';
 import {FunctionComponent, useState} from 'react';
-import {PencilPlus, X} from 'tabler-icons-react';
 import RichTextEditor from './RichTextEditor';
 
 export const RichTextField: FunctionComponent<{
@@ -39,14 +39,14 @@ export const RichTextField: FunctionComponent<{
               variant="transparent"
               onClick={() => onChange('')}
             >
-              <X/>
+              <IconX/>
             </ActionIcon>
             <ActionIcon
               title={t('button.richText')}
               variant="transparent"
               onClick={() => setOpened(true)}
             >
-              <PencilPlus/>
+              <IconPencilPlus/>
             </ActionIcon>
           </Group>
         )}

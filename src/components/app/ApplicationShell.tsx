@@ -14,24 +14,23 @@ import {
 } from '@mantine/core';
 import {useDisclosure, useMediaQuery} from '@mantine/hooks';
 import {openModal} from '@mantine/modals';
-import {IconShare3} from '@tabler/icons-react';
+import {
+  IconAdjustments,
+  IconCalendarEvent,
+  IconLogout,
+  IconMap,
+  IconNews,
+  IconPlus,
+  IconShare,
+  IconShare3,
+  IconTicket,
+  IconUserCircle,
+  IconUsers
+} from '@tabler/icons-react';
 import {signOut} from 'next-auth/react';
 import {useTranslation} from 'next-i18next';
 import Link from 'next/link';
 import {FunctionComponent} from 'react';
-import {
-  Adjustments,
-  CalendarEvent,
-  IconProps,
-  Logout,
-  Map,
-  News,
-  Plus,
-  Share,
-  Ticket,
-  UserCircle,
-  Users
-} from 'tabler-icons-react';
 import {useAuthenticated} from '../../hooks/useAuthenticated';
 import {useMyRouter} from '../../hooks/useMyRouter';
 import {usePrefetchPageQueries} from '../../hooks/usePrefetchPageQueries';
@@ -57,7 +56,7 @@ const [
 
 const NavbarLink: FunctionComponent<{
   link: {
-    icon: FunctionComponent<IconProps>;
+    icon: FunctionComponent<{ size: number }>;
     label: string;
     title: string;
     route: string;
@@ -173,7 +172,7 @@ export const ApplicationShell: FunctionComponent<{
                       fullScreen: !xs,
                     })}
                   >
-                    <Plus/>
+                    <IconPlus/>
                   </ActionIcon>
                 )}
               </Group>
@@ -187,17 +186,22 @@ export const ApplicationShell: FunctionComponent<{
           <Navbar width={{base: 211}} p="xs" hiddenBreakpoint={breakpoint} hidden={!showNavbar} zIndex={401}>
             <Navbar.Section grow>
               {[
-                {label: t('navbar.feed.label'), title: t('navbar.feed.title'), route: feedRoute, icon: News},
+                {label: t('navbar.feed.label'), title: t('navbar.feed.title'), route: feedRoute, icon: IconNews},
                 {
                   label: t('navbar.calendar.label'),
                   title: t('navbar.calendar.title'),
                   route: calendarRoute,
-                  icon: CalendarEvent
+                  icon: IconCalendarEvent
                 },
-                {label: t('navbar.map.label'), title: t('navbar.map.title'), route: mapRoute, icon: Map},
-                {label: t('navbar.events.label'), title: t('navbar.events.title'), route: eventsRoute, icon: Ticket},
-                {label: t('navbar.groups.label'), title: t('navbar.groups.title'), route: groupsRoute, icon: Share},
-                {label: t('navbar.users.label'), title: t('navbar.users.title'), route: usersRoute, icon: Users},
+                {label: t('navbar.map.label'), title: t('navbar.map.title'), route: mapRoute, icon: IconMap},
+                {
+                  label: t('navbar.events.label'),
+                  title: t('navbar.events.title'),
+                  route: eventsRoute,
+                  icon: IconTicket
+                },
+                {label: t('navbar.groups.label'), title: t('navbar.groups.title'), route: groupsRoute, icon: IconShare},
+                {label: t('navbar.users.label'), title: t('navbar.users.title'), route: usersRoute, icon: IconUsers},
               ].map((link) => (
                 <NavbarLink
                   key={link.label}
@@ -217,7 +221,7 @@ export const ApplicationShell: FunctionComponent<{
                   label: t('navbar.controlPanel.label'),
                   title: t('navbar.controlPanel.title'),
                   route: controlPanelRoute,
-                  icon: Adjustments,
+                  icon: IconAdjustments,
                   active: isRouteActive(controlPanelRoute),
                   onClick: closeNavbar,
                 }}
@@ -230,7 +234,7 @@ export const ApplicationShell: FunctionComponent<{
                       label: user.name,
                       title: t('navbar.profile.title'),
                       route: profileRoute,
-                      icon: UserCircle,
+                      icon: IconUserCircle,
                       active: isRouteActive(profileRoute),
                       onClick: closeNavbar,
                     }}
@@ -242,7 +246,7 @@ export const ApplicationShell: FunctionComponent<{
                   variant="subtle"
                   onClick={() => void signOut({callbackUrl: welcomeRoute})}
                 >
-                  <Logout/>
+                  <IconLogout/>
                 </ActionIcon>
               </Group>
             </Navbar.Section>

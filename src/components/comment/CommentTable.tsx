@@ -2,12 +2,12 @@ import {ActionIcon, Box, Group, Stack, Text, TextInput, useMantineTheme} from '@
 import {useDebouncedValue} from '@mantine/hooks';
 import {openConfirmModal, openModal} from '@mantine/modals';
 import {showNotification} from '@mantine/notifications';
-import {IconSearch} from '@tabler/icons-react';
+import {IconPencil, IconSearch, IconTrash} from '@tabler/icons-react';
 import {DataTable, DataTableSortStatus} from 'mantine-datatable';
 import {useTranslation} from 'next-i18next';
 import Link from 'next/link';
 import {FunctionComponent, useEffect, useState} from 'react';
-import {Pencil, Trash} from 'tabler-icons-react';
+import {useMyRouter} from '../../hooks/useMyRouter';
 import {DetailedCommentType} from '../../models/Comment';
 import {api} from '../../utils/api';
 import {SortCommentByProperty, SortDirection} from '../../utils/enums';
@@ -16,7 +16,6 @@ import {DEFAULT_PAGE_SIZE, PAGE_SIZES} from '../event/EventTable';
 import {QueryComponent} from '../QueryComponent';
 import {RichTextDisplay} from '../rich-text/RichTextDisplay';
 import {CommentForm} from './CommentForm';
-import {useMyRouter} from '../../hooks/useMyRouter';
 
 const CommentTable: FunctionComponent = () => {
   const [page, setPage] = useState<number>(1);
@@ -169,7 +168,7 @@ const CommentTable: FunctionComponent = () => {
                         },
                       })}
                     >
-                      <Pencil/>
+                      <IconPencil/>
                     </ActionIcon>
                     <ActionIcon
                       title={t('modal.comment.delete.title')}
@@ -185,7 +184,7 @@ const CommentTable: FunctionComponent = () => {
                         },
                       })}
                     >
-                      <Trash/>
+                      <IconTrash/>
                     </ActionIcon>
                   </Group>
                 ),

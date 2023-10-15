@@ -2,18 +2,17 @@ import {ActionIcon, Box, Checkbox, Flex, Group, Stack, Text, TextInput, useManti
 import {useDebouncedValue, useMediaQuery} from '@mantine/hooks';
 import {openConfirmModal, openModal} from '@mantine/modals';
 import {showNotification} from '@mantine/notifications';
-import {IconSearch} from '@tabler/icons-react';
+import {IconPencil, IconSearch, IconTrash} from '@tabler/icons-react';
 import {DataTable, DataTableSortStatus} from 'mantine-datatable';
 import {useTranslation} from 'next-i18next';
 import {FunctionComponent, useEffect, useState} from 'react';
-import {Pencil, Trash} from 'tabler-icons-react';
+import {useMyRouter} from '../../hooks/useMyRouter';
 import {BasicEventType} from '../../models/Event';
 import {api} from '../../utils/api';
 import {EventTableDisplayPlace, InvalidateEvent, SortDirection, SortEventByProperty} from '../../utils/enums';
 import {useLongDateFormatter, usePriceFormatter} from '../../utils/formatters';
 import {QueryComponent} from '../QueryComponent';
 import {EditEventForm} from './EditEventForm';
-import {useMyRouter} from '../../hooks/useMyRouter';
 
 const DATE_TIME = 'dateTime';
 export const PAGE_SIZES: number[] = [10, 25, 50];
@@ -198,7 +197,7 @@ const EventTable: FunctionComponent<{
                         },
                       })}
                     >
-                      <Pencil/>
+                      <IconPencil/>
                     </ActionIcon>
                     <ActionIcon
                       title={t('modal.event.delete.title')}
@@ -214,7 +213,7 @@ const EventTable: FunctionComponent<{
                         },
                       })}
                     >
-                      <Trash/>
+                      <IconTrash/>
                     </ActionIcon>
                   </Group>
                 ),

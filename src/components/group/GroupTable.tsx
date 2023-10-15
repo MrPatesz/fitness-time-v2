@@ -2,11 +2,11 @@ import {ActionIcon, Box, ColorSwatch, Flex, Group, Stack, Text, TextInput, useMa
 import {useDebouncedValue, useMediaQuery} from '@mantine/hooks';
 import {openConfirmModal, openModal} from '@mantine/modals';
 import {showNotification} from '@mantine/notifications';
-import {IconSearch} from '@tabler/icons-react';
+import {IconLock, IconLockOpen, IconPencil, IconPlus, IconSearch, IconTrash} from '@tabler/icons-react';
 import {DataTable, DataTableSortStatus} from 'mantine-datatable';
 import {useTranslation} from 'next-i18next';
 import {FunctionComponent, useEffect, useState} from 'react';
-import {Lock, LockOpen, Pencil, Plus, Trash} from 'tabler-icons-react';
+import {useMyRouter} from '../../hooks/useMyRouter';
 import {BasicGroupType} from '../../models/Group';
 import {api} from '../../utils/api';
 import {GroupTableDisplayPlace, InvalidateEvent, SortDirection, SortGroupByProperty} from '../../utils/enums';
@@ -15,7 +15,6 @@ import {DEFAULT_PAGE_SIZE, PAGE_SIZES} from '../event/EventTable';
 import {QueryComponent} from '../QueryComponent';
 import {CreateGroupForm} from './CreateGroupForm';
 import {EditGroupForm} from './EditGroupForm';
-import {useMyRouter} from '../../hooks/useMyRouter';
 
 const GroupTable: FunctionComponent<{
   groupTableDisplayPlace: GroupTableDisplayPlace;
@@ -94,7 +93,7 @@ const GroupTable: FunctionComponent<{
             size: 'lg',
           })}
         >
-          <Plus/>
+          <IconPlus/>
         </ActionIcon>
       </Flex>
       <QueryComponent
@@ -153,7 +152,7 @@ const GroupTable: FunctionComponent<{
               {
                 accessor: 'isPrivate',
                 title: t('groupTable.visibility'),
-                render: ({isPrivate}) => isPrivate ? <Lock/> : <LockOpen/>,
+                render: ({isPrivate}) => isPrivate ? <IconLock/> : <IconLockOpen/>,
               },
               {
                 accessor: 'colors',
@@ -197,7 +196,7 @@ const GroupTable: FunctionComponent<{
                         },
                       })}
                     >
-                      <Pencil/>
+                      <IconPencil/>
                     </ActionIcon>
                     <ActionIcon
                       title={t('modal.group.delete.title')}
@@ -213,7 +212,7 @@ const GroupTable: FunctionComponent<{
                         },
                       })}
                     >
-                      <Trash/>
+                      <IconTrash/>
                     </ActionIcon>
                   </Group>
                 ),

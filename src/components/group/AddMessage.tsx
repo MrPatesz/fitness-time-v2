@@ -1,8 +1,8 @@
 import {ActionIcon, Flex, TextInput, useMantineTheme} from '@mantine/core';
 import {useForm} from '@mantine/form';
+import {IconSend} from '@tabler/icons-react';
 import {useTranslation} from 'next-i18next';
 import {FunctionComponent} from 'react';
-import {Send} from 'tabler-icons-react';
 import {CreateMessageType} from '../../models/Message';
 import {api} from '../../utils/api';
 import {defaultCreateComment} from '../../utils/defaultObjects';
@@ -39,7 +39,7 @@ export const AddMessage: FunctionComponent<{
             type="submit"
             disabled={!form.isValid() || !form.isDirty()}
           >
-            <Send/>
+            <IconSend/>
           </ActionIcon>
         </Flex>
       </form>

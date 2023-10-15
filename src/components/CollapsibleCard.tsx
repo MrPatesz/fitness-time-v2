@@ -1,7 +1,7 @@
 import {ActionIcon, Card, Collapse, Group, Text} from '@mantine/core';
+import {IconChevronDown, IconChevronUp} from '@tabler/icons-react';
 import {useTranslation} from 'next-i18next';
 import {FunctionComponent, useState} from 'react';
-import {ChevronDown, ChevronUp} from 'tabler-icons-react';
 import {getBackgroundColor} from '../utils/utilFunctions';
 
 export const CollapsibleCard: FunctionComponent<{
@@ -26,7 +26,7 @@ export const CollapsibleCard: FunctionComponent<{
           variant="transparent"
           onClick={() => setOpened(o => !o)}
         >
-          {opened ? <ChevronUp/> : <ChevronDown/>}
+          {opened ? <IconChevronUp/> : <IconChevronDown/>}
         </ActionIcon>
       </Group>
       <Collapse in={opened}>

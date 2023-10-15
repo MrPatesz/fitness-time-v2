@@ -1,17 +1,17 @@
 import {ActionIcon, Box, Card, Group, ScrollArea, Stack, Text, useMantineTheme} from '@mantine/core';
 import {useIntersection, useMediaQuery} from '@mantine/hooks';
 import {openModal} from '@mantine/modals';
+import {IconPlus} from '@tabler/icons-react';
 import {useTranslation} from 'next-i18next';
 import {FunctionComponent, useEffect, useMemo} from 'react';
-import {Plus} from 'tabler-icons-react';
 import {BasicEventType} from '../../models/Event';
 import {api} from '../../utils/api';
+import {InvalidateEvent} from '../../utils/enums';
 import {getBackgroundColor} from '../../utils/utilFunctions';
 import {CenteredLoader} from '../CenteredLoader';
-import {EventCard} from '../event/EventCard';
 import {CreateEventForm} from '../event/CreateEventForm';
+import {EventCard} from '../event/EventCard';
 import {QueryComponent} from '../QueryComponent';
-import {InvalidateEvent} from '../../utils/enums';
 import {IntervalRecommender} from './IntervalRecommender';
 
 export const GroupFeed: FunctionComponent<{
@@ -62,7 +62,7 @@ export const GroupFeed: FunctionComponent<{
                   fullScreen: !xs,
                 })}
               >
-                <Plus/>
+                <IconPlus/>
               </ActionIcon>
             </Group>
           </Group>

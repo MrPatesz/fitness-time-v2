@@ -1,20 +1,20 @@
-import {FunctionComponent, useState} from 'react';
-import {api} from '../../utils/api';
-import {QueryComponent} from '../QueryComponent';
-import {getFirstDayOfWeek} from '../../utils/utilFunctions';
-import dayjs from '../../utils/dayjs';
-import {ActionIcon, Stack, useMantineTheme} from '@mantine/core';
-import {DatePickerInput} from '@mantine/dates';
-import {useTranslation} from 'next-i18next';
+import interactionPlugin from '@fullcalendar/interaction';
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
-import {Wand} from 'tabler-icons-react';
-import {openModal} from '@mantine/modals';
-import {useLongDateFormatter} from '../../utils/formatters';
-import interactionPlugin from '@fullcalendar/interaction';
-import {CreateEventForm} from '../event/CreateEventForm';
+import {ActionIcon, Stack, useMantineTheme} from '@mantine/core';
+import {DatePickerInput} from '@mantine/dates';
 import {useMediaQuery} from '@mantine/hooks';
+import {openModal} from '@mantine/modals';
+import {IconWand} from '@tabler/icons-react';
+import {useTranslation} from 'next-i18next';
+import {FunctionComponent, useState} from 'react';
 import {useMyRouter} from '../../hooks/useMyRouter';
+import {api} from '../../utils/api';
+import dayjs from '../../utils/dayjs';
+import {useLongDateFormatter} from '../../utils/formatters';
+import {getFirstDayOfWeek} from '../../utils/utilFunctions';
+import {CreateEventForm} from '../event/CreateEventForm';
+import {QueryComponent} from '../QueryComponent';
 
 const IntervalRecommenderContent: FunctionComponent<{
   groupId: number;
@@ -124,7 +124,7 @@ export const IntervalRecommender: FunctionComponent<{
         fullScreen: true,
       })}
     >
-      <Wand/>
+      <IconWand/>
     </ActionIcon>
   );
 };
