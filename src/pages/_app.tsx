@@ -1,3 +1,5 @@
+import '@uploadthing/react/styles.css';
+import {Analytics} from '@vercel/analytics/react';
 import {type Session} from 'next-auth';
 import {SessionProvider} from 'next-auth/react';
 import {appWithTranslation} from 'next-i18next';
@@ -6,12 +8,10 @@ import Head from 'next/head';
 import i18nConfig from '../../next-i18next.config.mjs';
 import {ApplicationShell} from '../components/app/ApplicationShell';
 import {ThemeProvider} from '../components/app/ThemeProvider';
-import {api} from '../utils/api';
-import {Analytics} from '@vercel/analytics/react';
-import '@uploadthing/react/styles.css';
-import '../styles/uploadthing.css';
 import '../styles/calendar.css';
 import '../styles/globals.css';
+import '../styles/uploadthing.css';
+import {api} from '../utils/api';
 
 const App: AppType<{ session: Session | null }> = ({
                                                      Component,
@@ -20,7 +20,7 @@ const App: AppType<{ session: Session | null }> = ({
   return (
     <>
       <Head>
-        <title>Fitness Time</title>
+        <title>Social Time</title>
       </Head>
       <SessionProvider session={session}>
         <ThemeProvider>

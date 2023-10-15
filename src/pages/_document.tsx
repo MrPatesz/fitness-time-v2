@@ -25,7 +25,7 @@ export default class _Document extends Document {
           <meta name="theme-color" content="#1A1B1E"/>
           <meta
             name="description"
-            content="Fitness Time is a social media application in which users can form groups and organize events."
+            content="Social Time is a social media application in which users can form groups and organize events."
           />
         </Head>
         <body>

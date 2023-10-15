@@ -1,22 +1,22 @@
 {
   "application": {
-    "name": "Fitness Time",
-    "shortName": "FT",
+    "name": "Social Time",
+    "shortName": "ST",
     "logout": "Kijelentkezés",
     "colorScheme": "Színséma váltása",
     "language": "Nyelv váltása",
     "menu": "Menü",
     "feed": "Folyam",
     "share": "Megosztás",
-    "shareDescription": "{{username}} megosztotta veled ezt a linket a Fitness Time-ról!",
+    "shareDescription": "{{username}} megosztotta veled ezt a linket a Social Time-ról!",
     "someone": "Valaki",
     "upcomingEvents": "A következő 24 órában {{count}} eseményed lesz.",
     "collapse": "Kinyit/összecsuk",
-    "install": "Fitness Time telepítése"
+    "install": "Social Time telepítése"
   },
   "welcomePage": {
-    "welcome": "Üdvözöl a Fitness Time!",
-    "description": "Fitness Time egy közösségi média alkalmazás, amelyben a felhasználók csoportokat alkothatnak és eseményeket szervezhetnek.",
+    "welcome": "Üdvözöl a Social Time!",
+    "description": "A Social Time egy közösségi média alkalmazás, amelyben a felhasználók csoportokat alkothatnak és eseményeket szervezhetnek.",
     "login": "Bejelentkezés"
   },
   "navbar": {

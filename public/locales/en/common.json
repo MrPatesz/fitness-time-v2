@@ -1,22 +1,22 @@
 {
   "application": {
-    "name": "Fitness Time",
-    "shortName": "FT",
+    "name": "Social Time",
+    "shortName": "ST",
     "logout": "Logout",
     "colorScheme": "Change Color Scheme",
     "language": "Change Language",
     "menu": "Menu",
     "feed": "Feed",
     "share": "Share",
-    "shareDescription": "{{username}} shared this link with you from Fitness Time!",
+    "shareDescription": "{{username}} shared this link with you from Social Time!",
     "someone": "Someone",
     "upcomingEvents": "You have {{count}} upcoming event{{plural}} in the next 24 hours.",
     "collapse": "Open/Collapse",
-    "install": "Install Fitness Time"
+    "install": "Install Social Time"
   },
   "welcomePage": {
-    "welcome": "Welcome to Fitness Time!",
-    "description": "Fitness Time is a social media application in which users can form groups and organize events.",
+    "welcome": "Welcome to Social Time!",
+    "description": "Social Time is a social media application in which users can form groups and organize events.",
     "login": "Login"
   },
   "navbar": {

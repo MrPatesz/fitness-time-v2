@@ -1,15 +1,15 @@
+import {Button, Group, Stack, Text} from '@mantine/core';
+import {DatePickerInput} from '@mantine/dates';
+import {useForm} from '@mantine/form';
+import {closeAllModals} from '@mantine/modals';
+import {createEvents, DateArray} from 'ics';
 import {useTranslation} from 'next-i18next';
 import {FunctionComponent} from 'react';
-import dayjs from '../../utils/dayjs';
-import {createEvents, DateArray} from 'ics';
-import {Button, Group, Stack, Text} from '@mantine/core';
-import {api} from '../../utils/api';
-import {closeAllModals} from '@mantine/modals';
-import {useForm} from '@mantine/form';
-import {getFirstDayOfWeek} from '../../utils/utilFunctions';
-import {DatePickerInput} from '@mantine/dates';
-import {EventWithLocationType} from '../../models/Event';
 import {useMyRouter} from '../../hooks/useMyRouter';
+import {EventWithLocationType} from '../../models/Event';
+import {api} from '../../utils/api';
+import dayjs from '../../utils/dayjs';
+import {getFirstDayOfWeek} from '../../utils/utilFunctions';
 
 export const ExportForm: FunctionComponent = () => {
   const {t} = useTranslation('common');
@@ -50,7 +50,7 @@ export const ExportForm: FunctionComponent = () => {
       };
     });
 
-    const filename = 'FitnessTimeEvents.ics';
+    const filename = 'SocialTimeEvents.ics';
     const file: File = await new Promise((resolve, reject) => {
       createEvents(iCalEvents, (error, value) => {
         if (error) {
