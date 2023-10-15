@@ -16,7 +16,6 @@ import {createTRPCRouter, protectedProcedure} from '../trpc';
 import {Prisma} from '.prisma/client';
 
 const getEventDistance = async (prisma: PrismaClient, eventId: number, location: CoordinatesType) => {
-  // TODO write this in kysely
   const [{distanceInKilometers}] = await prisma.$queryRaw<[{
     distanceInKilometers: number
   }]>`

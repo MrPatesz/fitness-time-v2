@@ -45,6 +45,7 @@ export const event1: Event = {
   updatedAt: new Date(),
   locationId: location1.id,
   creatorId: user1.id,
+  images: [],
 };
 export const event2: Event = {
   ...event1,

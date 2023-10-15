@@ -20,12 +20,6 @@ services:
     environment:
       # Prisma
       - POSTGRES_PRISMA_URL=
-      # Kysely
-      - POSTGRES_USER=
-      - POSTGRES_PASSWORD=
-      - POSTGRES_HOST=
-      - POSTGRES_PORT=
-      - POSTGRES_DATABASE=
       # Next Auth
       - NEXTAUTH_URL=
       - NEXTAUTH_SECRET=

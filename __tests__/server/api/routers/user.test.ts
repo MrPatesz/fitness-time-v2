@@ -8,7 +8,7 @@ describe('userRouter', () => {
   let caller: ReturnType<typeof getTestCaller>;
 
   beforeEach(async () => {
-    caller = getTestCaller({...user1, hasLocation: false});
+    caller = getTestCaller({...user1, themeColor: user1.themeColor as ThemeColor});
 
     await testPrismaClient.$connect();
     await testPrismaClient.user.createMany({data: users});

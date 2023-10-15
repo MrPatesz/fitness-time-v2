@@ -12,7 +12,6 @@ import {type Session} from 'next-auth';
 import superjson from 'superjson';
 import {getServerAuthSession} from '../auth';
 import {prisma} from '../db';
-import {kysely} from '../kysely/kysely';
 import {pusher} from '../pusher';
 
 /**
@@ -42,7 +41,6 @@ const createInnerTRPCContext = (opts: CreateContextOptions) => {
   return {
     session: opts.session,
     prisma,
-    kysely,
     pusher,
   };
 };

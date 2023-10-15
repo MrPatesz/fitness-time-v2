@@ -5,7 +5,7 @@ import {
   DetailedCommentSchema,
   MutateCommentType
 } from '../../../../src/models/Comment';
-import {SortCommentByProperty, SortDirection} from '../../../../src/utils/enums';
+import {SortCommentByProperty, SortDirection, ThemeColor} from '../../../../src/utils/enums';
 import {
   comment1,
   comment2,
@@ -27,7 +27,7 @@ describe('commentRouter', () => {
   let caller: ReturnType<typeof getTestCaller>;
 
   beforeEach(async () => {
-    caller = getTestCaller({...user2, hasLocation: false});
+    caller = getTestCaller({...user2, themeColor: user2.themeColor as ThemeColor});
 
     await testPrismaClient.$connect();
     await testPrismaClient.user.createMany({data: users});
