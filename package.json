@@ -8,12 +8,8 @@
     "postinstall": "prisma generate",
     "lint": "next lint",
     "start": "next start",
-    "db-seed": "SET NODE_ENV=development&& prisma db seed",
     "test": "jest --verbose --coverage --runInBand",
     "docker": "docker compose up"
-  },
-  "prisma": {
-    "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -91,7 +87,6 @@
     "prisma": "^5.4.2",
     "ts-jest": "^29.1.1",
     "ts-node": "^10.9.1",
-    "tsx": "^3.13.0",
     "typescript": "^5.2.2"
   },
   "ct3aMetadata": {
