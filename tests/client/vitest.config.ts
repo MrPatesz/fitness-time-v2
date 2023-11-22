@@ -6,6 +6,6 @@ export default defineProject({
   test: {
     environment: 'jsdom',
     globals: true,
-    setupFiles: ['./vitest.setup.ts']
+    setupFiles: ['dotenv/config', './vitest.setup.ts'],
   }
 });
