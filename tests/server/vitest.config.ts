@@ -5,5 +5,6 @@ export default defineProject({
     environment: 'node',
     globals: true,
     setupFiles: ['dotenv/config'],
+    threads: false,
   }
 });
