@@ -1,6 +1,6 @@
 import {DetailedUserSchema, ProfileSchema, UpdateProfileSchema} from '../../../../src/models/User';
 import {ThemeColor} from '../../../../src/utils/enums';
-import {user1, user2, users} from '../../mocks/data';
+import {location1, locations, user1, user2, users} from '../../mocks/data';
 import {getTestCaller, testPrismaClient} from '../../mocks/utils';
 
 describe('userRouter', () => {
@@ -10,11 +10,13 @@ describe('userRouter', () => {
     caller = getTestCaller(user1);
 
     await testPrismaClient.$connect();
+    await testPrismaClient.location.createMany({data: locations});
     await testPrismaClient.user.createMany({data: users});
   });
 
   afterEach(async () => {
     await testPrismaClient.user.deleteMany();
+    await testPrismaClient.location.deleteMany();
     await testPrismaClient.$disconnect();
   });
 
@@ -78,6 +80,19 @@ describe('userRouter', () => {
 
       // Assert
       await expect(updateCall()).rejects.toThrow();
+    });
+    it('updates the user\'s location', async () => {
+      // Arrange
+      const expected = UpdateProfileSchema.parse({
+        ...user1,
+        location: location1,
+      });
+
+      // Act
+      const result = await caller.user.update(expected);
+
+      // Assert
+      expect(result).toEqual(expected);
     });
   });
 });
