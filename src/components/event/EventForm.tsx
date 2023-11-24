@@ -8,10 +8,10 @@ import {CreateLocationType, LocationType} from '../../models/Location';
 import {api} from '../../utils/api';
 import dayjs from '../../utils/dayjs';
 import {getFormError, getFormLocationOnChange, getFormLocationValue} from '../../utils/mantineFormUtils';
-import {LocationPicker} from '../location/LocationPicker';
+import {LocationPicker} from '../inputs/LocationPicker';
 import {OverlayLoader} from '../OverlayLoader';
 import {RichTextField} from '../rich-text/RichTextField';
-import {NullableNumberInput} from './NullableNumberInput';
+import {NullableNumberInput} from '../inputs/NullableNumberInput';
 
 export const EventForm: FunctionComponent<{
   originalEvent: CreateEventType | BasicEventType;

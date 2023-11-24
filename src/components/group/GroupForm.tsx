@@ -5,7 +5,7 @@ import {FunctionComponent} from 'react';
 import {BasicGroupType, CreateGroupType} from '../../models/Group';
 import {RichTextField} from '../rich-text/RichTextField';
 import {OverlayLoader} from '../OverlayLoader';
-import {ThemeColorPicker} from '../user/ThemeColorPicker';
+import {ThemeColorPicker} from '../inputs/ThemeColorPicker';
 
 export const GroupForm: FunctionComponent<{
   originalGroup: CreateGroupType | BasicGroupType;

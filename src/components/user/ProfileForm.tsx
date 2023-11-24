@@ -15,10 +15,10 @@ import {ThemeColor} from '../../utils/enums';
 import {getFormLocationOnChange, getFormLocationValue} from '../../utils/mantineFormUtils';
 import {UploadButton} from '../../utils/uploadthing';
 import {BorderComponent} from '../BorderComponent';
-import {LocationPicker} from '../location/LocationPicker';
+import {LocationPicker} from '../inputs/LocationPicker';
 import {OverlayLoader} from '../OverlayLoader';
 import {RichTextField} from '../rich-text/RichTextField';
-import {ThemeColorPicker} from './ThemeColorPicker';
+import {ThemeColorPicker} from '../inputs/ThemeColorPicker';
 import UserImage from './UserImage';
 
 export const ProfileForm: FunctionComponent<{

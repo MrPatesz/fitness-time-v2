@@ -52,6 +52,7 @@ describe('EventCard', () => {
     // Assert
     expect(groupName).toBeVisible();
   });
+
   it('displays free badge when price is null', () => {
     // Arrange
     renderEventCard({price: null});
@@ -72,6 +73,7 @@ describe('EventCard', () => {
     // Assert
     expect(freeBadge).toBeNull();
   });
+
   it('displays limit badge when limit is not null', () => {
     // Arrange
     renderEventCard({limit: 5});
@@ -91,5 +93,27 @@ describe('EventCard', () => {
 
     // Assert
     expect(limitBadge).toBeNull();
+  });
+
+  it('displays distance badge when distance is not undefined', () => {
+    // Arrange
+    const distance = 268;
+    renderEventCard({distance});
+
+    // Act
+    const distanceBadge = screen.getByText(`${distance} km`);
+
+    // Assert
+    expect(distanceBadge).toBeVisible();
+  });
+  it('does not display distance badge when distance is undefined', () => {
+    // Arrange
+    renderEventCard({distance: undefined});
+
+    // Act
+    const distanceBadge = screen.queryByText(/\d+ km/);
+
+    // Assert
+    expect(distanceBadge).toBeNull();
   });
 });
