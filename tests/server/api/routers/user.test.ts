@@ -1,7 +1,7 @@
 import {DetailedUserSchema, ProfileSchema, UpdateProfileSchema} from '../../../../src/models/User';
 import {ThemeColor} from '../../../../src/utils/enums';
-import {location1, locations, user1, user2, users} from '../../mocks/data';
-import {getTestCaller, testPrismaClient} from '../../mocks/utils';
+import {location1, locations, user1, user2, users} from '../../../mockData';
+import {getTestCaller, testPrismaClient} from '../mocks';
 
 describe('userRouter', () => {
   let caller: ReturnType<typeof getTestCaller>;

@@ -19,8 +19,8 @@ import {
   user1,
   user2,
   users
-} from '../../mocks/data';
-import {getTestCaller, testPrismaClient} from '../../mocks/utils';
+} from '../../../mockData';
+import {getTestCaller, testPrismaClient} from '../mocks';
 
 describe('commentRouter', () => {
   let caller: ReturnType<typeof getTestCaller>;

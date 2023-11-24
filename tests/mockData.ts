@@ -1,5 +1,5 @@
-import {Comment, Event, Location, User} from '@prisma/client';
-import {ThemeColor} from '../../../src/utils/enums';
+import {Comment, Event, Group, Location, User} from '@prisma/client';
+import {ThemeColor} from '../src/utils/enums';
 
 export const user1: User = {
   id: '101',
@@ -80,3 +80,14 @@ export const comment3: Comment = {
   userId: user2.id,
 };
 export const comments: Comment[] = [comment1, comment2, comment3];
+
+export const group1: Group = {
+  id: 501,
+  name: 'group1',
+  creatorId: '101',
+  description: 'user1\'s group',
+  isPrivate: false,
+  color1: ThemeColor.YELLOW,
+  color2: ThemeColor.RED,
+  createdAt: new Date(),
+}
