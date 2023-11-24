@@ -33,13 +33,26 @@ describe('EventForm', () => {
   });
   it('has enabled reset button after form becomes dirty', () => {
     // Arrange
-    const descInput = screen.getByLabelText('eventForm.description.label');
-    fireEvent.change(descInput, {target: {value: 'test event'}});
+    const nameInput = screen.getByLabelText('common.name *');
+    fireEvent.change(nameInput, {target: {value: 'test event'}});
 
     // Act
     const resetButton = screen.getByText('button.reset').closest('button');
 
     // Assert
     expect(resetButton).not.toBeDisabled();
+  });
+  it('resets the form after pressing the reset button', () => {
+    // Arrange
+    const nameInput = screen.getByLabelText('common.name *');
+    fireEvent.change(nameInput, {target: {value: 'test event'}});
+
+    // Act
+    const resetButton = screen.getByText('button.reset').closest('button');
+    fireEvent.click(resetButton!);
+
+    // Assert
+    expect(resetButton).toBeDisabled();
+    expect(nameInput).toHaveAttribute('value', '');
   });
 });
