@@ -1,27 +1,19 @@
 import {Card, Progress} from '@mantine/core';
 import {UseTRPCQueryResult} from '@trpc/react-query/shared';
 import {useTranslation} from 'next-i18next';
-import {FunctionComponent, PropsWithChildren, useEffect} from 'react';
-import {CenteredLoader} from './CenteredLoader';
+import {FunctionComponent, PropsWithChildren} from 'react';
 import {EventInfo, usePusher} from '../hooks/usePusher';
+import {CenteredLoader} from './CenteredLoader';
 import {OverlayLoader} from './OverlayLoader';
 
-// TODO generic component: query.data has to match setState arg
-// TODO consider passing in a function to render children -> .data won't be undefined there, but more renders
+// TODO consider passing in a function to render children -> .data won't be undefined there, but might be more renders?
 export const QueryComponent: FunctionComponent<PropsWithChildren<{
   query: UseTRPCQueryResult<unknown, unknown>;
   resourceName: string;
-  setState?: (newState: unknown) => void;
   eventInfo?: EventInfo;
   loading?: boolean;
-}>> = ({resourceName, query, children, setState, eventInfo, loading}) => {
+}>> = ({resourceName, query, children, eventInfo, loading}) => {
   const {t} = useTranslation('common');
-
-  useEffect(() => {
-    if (setState && query.data) {
-      setState(query.data);
-    }
-  }, [query.data, setState]);
 
   usePusher(eventInfo, () => void query.refetch());
 
