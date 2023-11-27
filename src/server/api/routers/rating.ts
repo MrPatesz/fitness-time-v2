@@ -79,32 +79,24 @@ export const ratingRouter = createTRPCRouter({
     }))
     .output(z.void())
     .mutation(async ({input: {createRating, eventId}, ctx: {session: {user: {id: callerId}}, prisma, pusher}}) => {
-      // TODO don’t let user rate event that is not participated by them
-      const foundRating = await prisma.rating.findFirst({
-        where: {userId: callerId, eventId},
+      const rating = await prisma.rating.upsert({
+        where: {
+          eventId_userId: {userId: callerId, eventId},
+          event: {participants: {some: {id: callerId}}},
+        },
+        create: {
+          stars: createRating.stars,
+          event: {connect: {id: eventId}},
+          user: {connect: {id: callerId}},
+        },
+        update: {stars: createRating.stars},
         include: {event: true},
       });
 
-      // TODO refactor with upsert
-      if (foundRating) {
-        await prisma.rating.update({
-          where: {id: foundRating.id},
-          data: {stars: createRating.stars},
-        });
-      } else {
-        await prisma.rating.create({
-          data: {
-            ...createRating,
-            event: {connect: {id: eventId}},
-            user: {connect: {id: callerId}},
-          },
-        });
-      }
-
       await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.RatingGetAverageRatingForEvent, eventId);
-      await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.RatingGetAverageRatingForUser, callerId);
-      if (foundRating?.event.groupId) {
-        await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.RatingGetAverageRatingForGroup, foundRating.event.groupId);
+      await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.RatingGetAverageRatingForUser, rating.event.creatorId);
+      if (rating.event.groupId) {
+        await pusher.trigger(PusherChannel.INVALIDATE, InvalidateEvent.RatingGetAverageRatingForGroup, rating.event.groupId);
       }
     }),
 });

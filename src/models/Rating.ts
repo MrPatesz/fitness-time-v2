@@ -8,7 +8,6 @@ export const MutateRatingSchema = z.object({
 });
 
 export const BasicRatingSchema = MutateRatingSchema.extend({
-  id: IdSchema,
   eventId: IdSchema,
   userId: z.string(),
 });

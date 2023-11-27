@@ -136,12 +136,13 @@ model Message {
 }
 
 model Rating {
-  id      Int    @id @default(autoincrement())
   stars   Float
   eventId Int
   event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
   userId  String
   user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, userId])
 }
 
 model JoinRequest {
