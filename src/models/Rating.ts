@@ -1,7 +1,7 @@
 import {z} from 'zod';
 import {IdSchema} from './Utils';
 
-export const StarsSchema = z.number().min(0.5).max(5);
+export const StarsSchema = z.number().step(0.5).min(0.5).max(5);
 
 export const MutateRatingSchema = z.object({
   stars: StarsSchema,

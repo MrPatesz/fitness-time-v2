@@ -13,10 +13,9 @@ export const InstallButton = () => {
   const [onClick, setOnClick] = useState<(() => void) | undefined>(undefined);
 
   useEffect(() => {
-    const beforeInstallPrompt = (event: Event) => {
-      setOnClick(() => {
-        return () => void (event as unknown as { prompt: () => Promise<void> }).prompt();
-      });
+    const beforeInstallPrompt = (event: Event & { prompt?: () => Promise<void> }) => {
+      const newOnClick = () => void event.prompt?.();
+      setOnClick(() => newOnClick);
     };
     const appInstalled = () => setOnClick(undefined);
 
