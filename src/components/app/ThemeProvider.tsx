@@ -47,6 +47,10 @@ export const ThemeProvider: FunctionComponent<{
   }, [session?.user.themeColor, setThemeColor]);
 
   useEffect(() => {
+    document.documentElement.style.setProperty('--fc-border-color', colorScheme === 'dark' ? '#2c2e33' : '#e9ecef');
+  }, [colorScheme]);
+
+  useEffect(() => {
     dayjs.locale(locale);
   }, [locale]);
 

@@ -1,7 +1,3 @@
-:root {
-    --fc-border-color: #2c2e33; /* TODO should be #e9ecef for light theme */
-}
-
 .mantine-Modal-body {
     height: calc(100% - 54px);
 }
