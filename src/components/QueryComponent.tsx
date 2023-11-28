@@ -12,7 +12,7 @@ export const QueryComponent: FunctionComponent<PropsWithChildren<{
   resourceName: string;
   eventInfo?: EventInfo;
   loading?: boolean;
-}>> = ({resourceName, query, children, eventInfo, loading}) => {
+}>> = ({children, query, resourceName, eventInfo, loading}) => {
   const {t} = useTranslation('common');
 
   usePusher(eventInfo, () => void query.refetch());
