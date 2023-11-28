@@ -9,3 +9,11 @@
 .fc-event-main {
     cursor: pointer;
 }
+
+section[role=dialog] {
+    overflow: visible;
+}
+
+.mantine-Modal-header {
+    border-radius: 0.5rem;
+}
