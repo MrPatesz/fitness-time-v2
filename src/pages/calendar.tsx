@@ -58,6 +58,10 @@ export default function CalendarPage() {
             click: () => openModal({
               title: t('calendarPage.iCalExport'),
               children: <ExportForm/>,
+              styles: {
+                content: {overflow: 'visible !important'},
+                header: {borderRadius: '0.5rem'},
+              },
             }),
           },
         }}

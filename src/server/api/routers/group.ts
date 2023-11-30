@@ -7,21 +7,23 @@ import {IdSchema} from '../../../models/Utils';
 import {InvalidateEvent, PusherChannel} from '../../../utils/enums';
 import {TRPCError} from '@trpc/server';
 
+const HALF_HOUR = 1800000 as const; // 30 * 60 * 1000
+
 type Range = { start: number, end: number };
 type DateRange = { start: Date, end: Date };
 
 const calculateFreeIntervals = (events: Array<DateRange>, intervalStart: Date, intervalEnd: Date) => {
+  const gaps: Array<DateRange> = [];
   const ranges: Array<Range> = [
     {start: intervalStart.getTime(), end: intervalStart.getTime()},
     ...events.map(e => ({start: e.start.getTime(), end: e.end.getTime()})),
     {start: intervalEnd.getTime(), end: intervalEnd.getTime()},
   ];
-  let previousRange: Range;
-  const gaps: Array<DateRange> = [];
 
+  let previousRange: Range = ranges.shift()!;
   ranges.forEach(({start, end}) => {
     // gap must be at least 30 minutes long
-    if (previousRange && (start - previousRange.end > 30 * 60 * 1000)) {
+    if (start - previousRange.end > HALF_HOUR) {
       gaps.push({
         start: new Date(previousRange.end),
         end: new Date(start),
