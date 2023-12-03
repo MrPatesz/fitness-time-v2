@@ -29,8 +29,8 @@ Social Time is a social media application in which users can form groups and org
 
 ### Environment Variables
 
-- Add a '.env' file in the project root directory.
-- '.env.example' file shows what variables are needed.
+- Add a `.env` file in the project root directory.
+- `.env.example` file shows what environment variables are needed.
 - Fill environment variables with API keys from Database and Services.
 
 ### Install Dependencies
