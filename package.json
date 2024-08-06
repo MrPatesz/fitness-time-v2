@@ -5,9 +5,10 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev",
-    "postinstall": "prisma generate",
     "lint": "next lint",
     "start": "next start",
+    "preinstall": "npx only-allow pnpm",
+    "postinstall": "prisma generate",
     "docker": "docker compose up",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -63,7 +64,6 @@
     "pusher-js": "^8.3.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-query": "^3.39.3",
     "sanitize-html": "^2.11.0",
     "sharp": "^0.32.6",
     "superjson": "2.0.0",
@@ -87,11 +87,13 @@
     "eslint-config-next": "13.5.3",
     "jsdom": "^22.1.0",
     "next-router-mock": "^0.9.10",
+    "prettier": "^3.3.3",
     "prisma": "^5.17.0",
     "typescript": "^5.2.2",
     "vitest": "^0.34.6"
   },
   "ct3aMetadata": {
     "initVersion": "7.5.1"
-  }
+  },
+  "packageManager": "pnpm@8.15.7"
 }
