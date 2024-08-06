@@ -1,10 +1,9 @@
-import {PrismaClient} from '@prisma/client';
+import {PrismaClient, Color} from '@prisma/client';
 import {Session} from 'next-auth';
 import PusherServer from 'pusher';
 import {env} from '../../../src/env.mjs';
 import {appRouter} from '../../../src/server/api/root';
 import {ThemeColor} from '../../../src/utils/enums';
-import {$Enums} from '.prisma/client';
 
 const testPusherClient = {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -15,7 +14,7 @@ export const testPrismaClient = new PrismaClient({
   datasources: {db: {url: env.TESTING_DATABASE_URL}},
 });
 
-export const getTestCaller = (user: (Omit<Session['user'], 'themeColor'> & { themeColor: $Enums.Color }) | null) => {
+export const getTestCaller = (user: (Omit<Session['user'], 'themeColor'> & { themeColor: Color }) | null) => {
   const session = user ? ({
     expires: new Date().toISOString(),
     user: {...user, themeColor: user.themeColor as ThemeColor}
