@@ -161,6 +161,9 @@ dependencies:
   superjson:
     specifier: 2.0.0
     version: 2.0.0
+  typesafe-react:
+    specifier: ^5.0.5
+    version: 5.0.5
   uploadthing:
     specifier: ^5.7.1
     version: 5.7.1(zod@3.22.4)
@@ -7806,6 +7809,11 @@ packages:
     engines: {node: '>=12.20'}
     dev: false
 
+  /type-fest@4.24.0:
+    resolution: {integrity: sha512-spAaHzc6qre0TlZQQ2aA/nGMe+2Z/wyGk5Z+Ru2VUfdNwT6kWO6TjevOlpebsATEG1EIQ2sOiDszud3lO5mt/Q==}
+    engines: {node: '>=16'}
+    dev: false
+
   /typed-array-buffer@1.0.0:
     resolution: {integrity: sha512-Y8KTSIglk9OZEr8zywiIHG/kmQ7KWyjseXs1CbSo8vC42w7hg2HgYTxSWwP0+is7bWDc1H+Fo026CpHFwm8tkw==}
     engines: {node: '>= 0.4'}
@@ -7839,6 +7847,15 @@ packages:
       call-bind: 1.0.5
       for-each: 0.3.3
       is-typed-array: 1.1.12
+
+  /typesafe-react@5.0.5:
+    resolution: {integrity: sha512-CuvdlHaWHR8rLLSyOER+CheBHy/9exbP9eiOX4v6PkjAEkRiUe5qLYCuQKSYcjkcHJSrNB2EzyG5RsAjs6D+Rw==}
+    requiresBuild: true
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      type-fest: 4.24.0
+    dev: false
 
   /typescript@5.2.2:
     resolution: {integrity: sha512-mI4WrpHsbCIcwT9cF4FZvr80QUeKvsUsUvKDoR+X/7XHQH98xYD8YHZg7ANtz2GtZt/CBq2QJ0thkGJMHfqc1w==}

@@ -1,8 +1,8 @@
-import {useEffect} from 'react';
-import {InvalidateEvent, PusherChannel} from '../utils/enums';
-import {pusherClient} from '../utils/pusher';
-import {z} from 'zod';
-import {IdSchema} from '../models/Utils';
+import { useEffect } from 'react';
+import { InvalidateEvent, PusherChannel } from '../utils/enums';
+import { pusherClient } from '../utils/pusher';
+import { z } from 'zod';
+import { IdSchema } from '../models/Utils';
 
 export interface EventInfo {
   event: InvalidateEvent;
@@ -12,18 +12,20 @@ export interface EventInfo {
 export const useInitializePusher = () => {
   useEffect(() => {
     pusherClient.subscribe(PusherChannel.INVALIDATE);
-    return () => pusherClient.unsubscribe(PusherChannel.INVALIDATE);
+    return () => {
+      pusherClient.unsubscribe(PusherChannel.INVALIDATE);
+    };
   }, []);
 };
 
-export const usePusher = (
-  eventInfo: EventInfo | undefined,
-  onEvent: () => void,
-) => {
+export const usePusher = (eventInfo: EventInfo | undefined, onEvent: () => void) => {
   useEffect(() => {
     if (eventInfo) {
       const handleEvent = (rawData: unknown) => {
-        const data = z.union([IdSchema, z.string().min(1)]).optional().parse(rawData);
+        const data = z
+          .union([IdSchema, z.string().min(1)])
+          .optional()
+          .parse(rawData);
         if (!data || data === eventInfo.id) {
           onEvent();
         }
