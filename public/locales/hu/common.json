@@ -314,7 +314,11 @@
       "placeholder": "Itt állíthatod be a profilképedet.",
       "error": "Hibás kép URL!",
       "button": "Kép választása",
-      "allowedContent": "Kép ({{size}}MB)"
+      "allowedContent": "Kép ({{size}}MB)",
+      "remove": {
+        "title": "Kép eltávolítása",
+        "message": "El szeretnéd távolítani a profilképedet?"
+      }
     },
     "delete": {
       "title": "Profil törlése",

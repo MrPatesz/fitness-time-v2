@@ -314,7 +314,11 @@
       "placeholder": "You can set your profile image here.",
       "error": "Invalid image URL!",
       "button": "Choose Image",
-      "allowedContent": "Image ({{size}}MB)"
+      "allowedContent": "Image ({{size}}MB)",
+      "remove": {
+        "title": "Remove Image",
+        "message": "Would you like to remove your profile image?"
+      }
     },
     "delete": {
       "title": "Delete Profile",

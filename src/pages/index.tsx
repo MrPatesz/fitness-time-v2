@@ -32,7 +32,7 @@ export default function FeedPage() {
   const [includeArchive, setIncludeArchive] = useLocalStorage<boolean>({
     key: 'include-archive',
     defaultValue: true,
-  });
+  }); // TODO should be search param
   const [myGroupsOnly, setMyGroupsOnly] = useLocalStorage<boolean>({
     key: 'my-groups-only',
     defaultValue: false,
