@@ -1,34 +1,34 @@
-import {Button, Group, Select, Stack, TextInput} from '@mantine/core';
-import {DateTimePicker} from '@mantine/dates';
-import {useForm} from '@mantine/form';
-import {useTranslation} from 'next-i18next';
-import {FunctionComponent} from 'react';
-import {BasicEventType, CreateEventType} from '../../models/Event';
-import {CreateLocationType, LocationType} from '../../models/Location';
-import {api} from '../../utils/api';
+import { Button, Group, Select, Stack, TextInput } from '@mantine/core';
+import { DateTimePicker } from '@mantine/dates';
+import { useForm } from '@mantine/form';
+import { useTranslation } from 'next-i18next';
+import { FunctionComponent } from 'react';
+import { BasicEventType, CreateEventType } from '../../models/Event';
+import { CreateLocationType, LocationType } from '../../models/Location';
+import { api } from '../../utils/api';
 import dayjs from '../../utils/dayjs';
-import {getFormError, getFormLocationOnChange, getFormLocationValue} from '../../utils/mantineFormUtils';
-import {LocationPicker} from '../inputs/LocationPicker';
-import {OverlayLoader} from '../OverlayLoader';
-import {RichTextField} from '../rich-text/RichTextField';
-import {NullableNumberInput} from '../inputs/NullableNumberInput';
+import {
+  getFormError,
+  getFormLocationOnChange,
+  getFormLocationValue,
+} from '../../utils/mantineFormUtils';
+import { LocationPicker } from '../inputs/LocationPicker';
+import { OverlayLoader } from '../OverlayLoader';
+import { RichTextField } from '../rich-text/RichTextField';
+import { NullableNumberInput } from '../inputs/NullableNumberInput';
 
 export const EventForm: FunctionComponent<{
   originalEvent: CreateEventType | BasicEventType;
   onSubmit: (event: CreateEventType | BasicEventType) => void;
   loading: boolean;
-}> = ({originalEvent, onSubmit, loading}) => {
-  const {t} = useTranslation('common');
+}> = ({ originalEvent, onSubmit, loading }) => {
+  const { t } = useTranslation('common');
 
-  const getStartError = (start: Date) => start > new Date() ? null : t('eventForm.start.error');
+  const getStartError = (start: Date) => (start > new Date() ? null : t('eventForm.start.error'));
   const getEndError = (end: Date, start: Date) =>
-    (
-      end > new Date() &&
-      end > start &&
-      dayjs(start).add(2, 'weeks').toDate() > end
-    ) ?
+    end > new Date() && end > start && dayjs(start).add(2, 'weeks').toDate() > end ?
       null
-      : t('eventForm.end.error');
+    : t('eventForm.end.error');
 
   const form = useForm<CreateEventType | BasicEventType>({
     initialValues: originalEvent,
@@ -38,8 +38,9 @@ export const EventForm: FunctionComponent<{
       end: getEndError(originalEvent.end, originalEvent.start),
     },
     validate: {
-      name: (value) => value.trim() ? null : t('eventForm.name.error'),
-      location: (value: CreateLocationType | LocationType) => Boolean(value?.address) ? null : t('eventForm.location.error'),
+      name: (value) => (value.trim() ? null : t('eventForm.name.error')),
+      location: (value: CreateLocationType | LocationType) =>
+        Boolean(value?.address) ? null : t('eventForm.location.error'),
       start: getStartError,
       end: (value, event) => getEndError(value, event.start),
     },
@@ -66,10 +67,14 @@ export const EventForm: FunctionComponent<{
             label={t('intervalPicker.start')}
             minDate={new Date()}
             {...form.getInputProps('start')}
-            onChange={newStart => {
-              const startOnChange = form.getInputProps('start').onChange as (newValue: Date | null) => void;
+            onChange={(newStart) => {
+              const startOnChange = form.getInputProps('start').onChange as (
+                newValue: Date | null
+              ) => void;
               startOnChange(newStart);
-              const endOnChange = form.getInputProps('end').onChange as (newValue: Date | null) => void;
+              const endOnChange = form.getInputProps('end').onChange as (
+                newValue: Date | null
+              ) => void;
               endOnChange(dayjs(newStart).add(1, 'hour').toDate());
             }}
           />
@@ -93,14 +98,22 @@ export const EventForm: FunctionComponent<{
           <Select // TODO custom Select with GroupBadge
             clearable
             searchable
+            allowDeselect={false}
+            readOnly={Boolean(originalEvent.groupId)}
             disabled={'id' in originalEvent}
             label={t('eventForm.group.label')}
-            data={groupsQuery.data?.map(g => ({value: g.id.toString(), label: g.name})) ?? []}
-            placeholder={'id' in originalEvent ? undefined : t('eventForm.group.placeholder')}
+            data={groupsQuery.data?.map((g) => ({ value: g.id.toString(), label: g.name })) ?? []}
+            placeholder={
+              'id' in originalEvent ?
+                undefined // TODO not a group event
+              : t('eventForm.group.placeholder')
+            }
             // TODO description
             value={(form.getInputProps('groupId').value as number | null)?.toString() ?? ''}
-            onChange={value => {
-              const onChange = form.getInputProps('groupId').onChange as (newValue: number | null) => void;
+            onChange={(value) => {
+              const onChange = form.getInputProps('groupId').onChange as (
+                newValue: number | null
+              ) => void;
               onChange(value ? parseInt(value) : null);
             }}
           />
@@ -123,11 +136,7 @@ export const EventForm: FunctionComponent<{
             {...form.getInputProps('limit')}
           />
           <Group position="right">
-            <Button
-              variant="default"
-              onClick={() => form.reset()}
-              disabled={!form.isDirty()}
-            >
+            <Button variant="default" onClick={() => form.reset()} disabled={!form.isDirty()}>
               {t('button.reset')}
             </Button>
             <Button type="submit" disabled={!form.isValid() || !form.isDirty()}>
