@@ -1,49 +1,43 @@
 import { useEffect, useState } from 'react';
 import { CoordinatesSchema, CoordinatesType } from '../models/Location';
 import { api } from '../utils/api';
-import { when } from 'typesafe-react';
 
 export const useGeolocation = (enableGeolocation = true) => {
   const [geolocation, setGeolocation] = useState<CoordinatesType | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   const profileQuery = api.user.profile.useQuery();
 
   useEffect(() => {
-    if (!enableGeolocation) return;
-
-    const onSettled = () => setIsLoading(false);
+    if (!enableGeolocation) {
+      return;
+    }
 
     void (async () => {
       try {
-        const result = await window.navigator.permissions.query({
+        const { state } = await window.navigator.permissions.query({
           name: 'geolocation',
         });
 
-        const onGranted = () => {
-          const onSuccess: PositionCallback = ({ coords: { longitude, latitude } }) => {
-            setGeolocation({
-              longitude,
-              latitude,
-            });
-            onSettled();
-          };
-          window.navigator.geolocation.getCurrentPosition(onSuccess, onSettled);
-        };
+        if (state === 'denied') {
+          return;
+        }
 
-        when(result.state, {
-          granted: onGranted,
-          prompt: onGranted,
-          denied: onSettled,
-        });
+        window.navigator.geolocation.getCurrentPosition(({ coords: { longitude, latitude } }) =>
+          setGeolocation({
+            longitude,
+            latitude,
+          })
+        );
       } catch (_) {
-        onSettled();
+      } finally {
+        setIsLoading(false);
       }
     })();
   }, [enableGeolocation]);
 
   const result = CoordinatesSchema.safeParse(geolocation ?? profileQuery.data?.location);
-  const loading = isLoading || profileQuery.isLoading; // TODO isFetching?
+  const loading = isLoading || profileQuery.isLoading;
 
   if (result.success) {
     return { loading: false, location: result.data };
